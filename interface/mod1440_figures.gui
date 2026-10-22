@@ -23,7 +23,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "nf_fig_0"
 			position = { x = 14 y = 56 }
-			size = { width = 600 height = 388 }
+			size = { width = 600 height = 418 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			iconType = { name = "nf_fh_0_0" position = { x = 8 y = 8 } spriteType = "GFX_1440p_SG_head_584x28" }
 			instantTextboxType = { name = "nf_fh_0_0_t" position = { x = 16 y = 13 } font = "hoi_16mbs" text = "MOD1440_NF_FH_0_0_T" maxWidth = 220 maxHeight = 20 format = left }
@@ -36,6 +36,7 @@ guiTypes = {
 			instantTextboxType = { name = "nf_t11_l" position = { x = 16 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_11" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
 			instantTextboxType = { name = "nf_t11_ly" position = { x = 16 y = 40 } font = "hoi_16mbs" text = "MOD1440_NF_T11_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
 			instantTextboxType = { name = "nf_t11_v" position = { x = 166 y = 38 } font = "hoi_18mbs" text = "MOD1440_NF_T11_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t11_vn" position = { x = 166 y = 38 } font = "hoi_18mbs" text = "MOD1440_NF_T11_VN" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
 			instantTextboxType = { name = "nf_t11_x" position = { x = 266 y = 40 } font = "hoi_16mbs" text = "MOD1440_NF_T11_X" maxWidth = 96 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
 			instantTextboxType = { name = "nf_t11_m_up" position = { x = 364 y = 38 } font = "hoi_18mbs" text = "MOD1440_NF_T11_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			instantTextboxType = { name = "nf_t11_m_down" position = { x = 364 y = 38 } font = "hoi_18mbs" text = "MOD1440_NF_T11_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
@@ -292,7 +293,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "nf_fig_1"
 			position = { x = 620 y = 56 }
-			size = { width = 600 height = 388 }
+			size = { width = 600 height = 418 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			iconType = { name = "nf_fh_1_0" position = { x = 8 y = 8 } spriteType = "GFX_1440p_SG_head_584x28" }
 			instantTextboxType = { name = "nf_fh_1_0_t" position = { x = 16 y = 13 } font = "hoi_16mbs" text = "MOD1440_NF_FH_1_0_T" maxWidth = 220 maxHeight = 20 format = left }
@@ -362,20 +363,21 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t10_band" position = { x = 8 y = 114 } spriteType = "GFX_1440p_SG_stripe_584x26" }
-			iconType = { name = "nf_t10_pick" position = { x = 8 y = 114 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t10" position = { x = 8 y = 114 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T10_TT" }
-			instantTextboxType = { name = "nf_t10_l" position = { x = 16 y = 118 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_10" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_ly" position = { x = 16 y = 118 } font = "hoi_16mbs" text = "MOD1440_NF_T10_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_v" position = { x = 166 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T10_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_m_up" position = { x = 364 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T10_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_m_down" position = { x = 364 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T10_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_m_same" position = { x = 364 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_y_up" position = { x = 438 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T10_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_y_down" position = { x = 438 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T10_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t10_y_same" position = { x = 438 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t31_band" position = { x = 8 y = 114 } spriteType = "GFX_1440p_SG_stripe_584x26" }
+			iconType = { name = "nf_t31_pick" position = { x = 8 y = 114 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t31" position = { x = 8 y = 114 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T31_TT" }
+			instantTextboxType = { name = "nf_t31_l" position = { x = 16 y = 118 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_31" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_ly" position = { x = 16 y = 118 } font = "hoi_16mbs" text = "MOD1440_NF_T31_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_v" position = { x = 166 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T31_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_x" position = { x = 266 y = 118 } font = "hoi_16mbs" text = "MOD1440_NF_T31_X" maxWidth = 96 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t31_m_up" position = { x = 364 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T31_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_m_down" position = { x = 364 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T31_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_m_same" position = { x = 364 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_y_up" position = { x = 438 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T31_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_y_down" position = { x = 438 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_T31_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t31_y_same" position = { x = 438 y = 116 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
-				name = "nf_sp10_grid"
+				name = "nf_sp31_grid"
 				position = { x = 520 y = 118 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
@@ -383,62 +385,63 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_fh_1_1" position = { x = 8 y = 144 } spriteType = "GFX_1440p_SG_head_584x28" }
-			instantTextboxType = { name = "nf_fh_1_1_t" position = { x = 16 y = 149 } font = "hoi_16mbs" text = "MOD1440_NF_FH_1_1_T" maxWidth = 220 maxHeight = 20 format = left }
-			iconType = { name = "nf_t9_pick" position = { x = 8 y = 172 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t9" position = { x = 8 y = 172 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T9_TT" }
-			instantTextboxType = { name = "nf_t9_l" position = { x = 16 y = 176 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_9" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_ly" position = { x = 16 y = 176 } font = "hoi_16mbs" text = "MOD1440_NF_T9_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_v" position = { x = 166 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_T9_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_m_up" position = { x = 364 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_T9_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_m_down" position = { x = 364 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_T9_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_m_same" position = { x = 364 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_y_up" position = { x = 438 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_T9_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_y_down" position = { x = 438 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_T9_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t9_y_same" position = { x = 438 y = 174 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t32_pick" position = { x = 8 y = 140 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t32" position = { x = 8 y = 140 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T32_TT" }
+			instantTextboxType = { name = "nf_t32_l" position = { x = 16 y = 144 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_32" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_ly" position = { x = 16 y = 144 } font = "hoi_16mbs" text = "MOD1440_NF_T32_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_v" position = { x = 166 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_T32_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_x" position = { x = 266 y = 144 } font = "hoi_16mbs" text = "MOD1440_NF_T32_X" maxWidth = 96 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t32_m_up" position = { x = 364 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_T32_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_m_down" position = { x = 364 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_T32_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_m_same" position = { x = 364 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_y_up" position = { x = 438 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_T32_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_y_down" position = { x = 438 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_T32_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t32_y_same" position = { x = 438 y = 142 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
-				name = "nf_sp9_grid"
-				position = { x = 520 y = 176 }
+				name = "nf_sp32_grid"
+				position = { x = 520 y = 144 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
 				add_horizontal = yes
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t16_band" position = { x = 8 y = 198 } spriteType = "GFX_1440p_SG_stripe_584x26" }
-			iconType = { name = "nf_t16_pick" position = { x = 8 y = 198 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t16" position = { x = 8 y = 198 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T16_TT" }
-			instantTextboxType = { name = "nf_t16_l" position = { x = 16 y = 202 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_16" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_ly" position = { x = 16 y = 202 } font = "hoi_16mbs" text = "MOD1440_NF_T16_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_v" position = { x = 166 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_T16_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_m_up" position = { x = 364 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_T16_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_m_down" position = { x = 364 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_T16_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_m_same" position = { x = 364 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_y_up" position = { x = 438 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_T16_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_y_down" position = { x = 438 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_T16_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t16_y_same" position = { x = 438 y = 200 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t39_band" position = { x = 8 y = 166 } spriteType = "GFX_1440p_SG_stripe_584x26" }
+			iconType = { name = "nf_t39_pick" position = { x = 8 y = 166 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t39" position = { x = 8 y = 166 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T39_TT" }
+			instantTextboxType = { name = "nf_t39_l" position = { x = 16 y = 170 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_39" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_ly" position = { x = 16 y = 170 } font = "hoi_16mbs" text = "MOD1440_NF_T39_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_v" position = { x = 166 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_T39_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_m_up" position = { x = 364 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_T39_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_m_down" position = { x = 364 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_T39_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_m_same" position = { x = 364 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_y_up" position = { x = 438 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_T39_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_y_down" position = { x = 438 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_T39_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t39_y_same" position = { x = 438 y = 168 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			gridboxtype = {
+				name = "nf_sp39_grid"
+				position = { x = 520 y = 170 }
+				size = { width = 72 height = 18 }
+				slotsize = { width = 6 height = 18 }
+				add_horizontal = yes
+				max_slots_horizontal = 12
+				format = "UPPER_LEFT"
+			}
+			iconType = { name = "nf_fh_1_1" position = { x = 8 y = 196 } spriteType = "GFX_1440p_SG_head_584x28" }
+			instantTextboxType = { name = "nf_fh_1_1_t" position = { x = 16 y = 201 } font = "hoi_16mbs" text = "MOD1440_NF_FH_1_1_T" maxWidth = 220 maxHeight = 20 format = left }
+			iconType = { name = "nf_t16_pick" position = { x = 8 y = 224 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t16" position = { x = 8 y = 224 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T16_TT" }
+			instantTextboxType = { name = "nf_t16_l" position = { x = 16 y = 228 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_16" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_ly" position = { x = 16 y = 228 } font = "hoi_16mbs" text = "MOD1440_NF_T16_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_v" position = { x = 166 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T16_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_m_up" position = { x = 364 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T16_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_m_down" position = { x = 364 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T16_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_m_same" position = { x = 364 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_y_up" position = { x = 438 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T16_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_y_down" position = { x = 438 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T16_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t16_y_same" position = { x = 438 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
 				name = "nf_sp16_grid"
-				position = { x = 520 y = 202 }
-				size = { width = 72 height = 18 }
-				slotsize = { width = 6 height = 18 }
-				add_horizontal = yes
-				max_slots_horizontal = 12
-				format = "UPPER_LEFT"
-			}
-			iconType = { name = "nf_t17_pick" position = { x = 8 y = 224 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t17" position = { x = 8 y = 224 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T17_TT" }
-			instantTextboxType = { name = "nf_t17_l" position = { x = 16 y = 228 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_17" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_ly" position = { x = 16 y = 228 } font = "hoi_16mbs" text = "MOD1440_NF_T17_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_v" position = { x = 166 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T17_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_m_up" position = { x = 364 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T17_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_m_down" position = { x = 364 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T17_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_m_same" position = { x = 364 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_y_up" position = { x = 438 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T17_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_y_down" position = { x = 438 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_T17_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t17_y_same" position = { x = 438 y = 226 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			gridboxtype = {
-				name = "nf_sp17_grid"
 				position = { x = 520 y = 228 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
@@ -446,20 +449,20 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t18_band" position = { x = 8 y = 250 } spriteType = "GFX_1440p_SG_stripe_584x26" }
-			iconType = { name = "nf_t18_pick" position = { x = 8 y = 250 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t18" position = { x = 8 y = 250 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T18_TT" }
-			instantTextboxType = { name = "nf_t18_l" position = { x = 16 y = 254 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_18" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_ly" position = { x = 16 y = 254 } font = "hoi_16mbs" text = "MOD1440_NF_T18_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_v" position = { x = 166 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T18_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_m_up" position = { x = 364 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T18_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_m_down" position = { x = 364 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T18_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_m_same" position = { x = 364 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_y_up" position = { x = 438 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T18_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_y_down" position = { x = 438 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T18_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t18_y_same" position = { x = 438 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t17_band" position = { x = 8 y = 250 } spriteType = "GFX_1440p_SG_stripe_584x26" }
+			iconType = { name = "nf_t17_pick" position = { x = 8 y = 250 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t17" position = { x = 8 y = 250 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T17_TT" }
+			instantTextboxType = { name = "nf_t17_l" position = { x = 16 y = 254 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_17" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_ly" position = { x = 16 y = 254 } font = "hoi_16mbs" text = "MOD1440_NF_T17_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_v" position = { x = 166 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T17_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_m_up" position = { x = 364 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T17_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_m_down" position = { x = 364 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T17_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_m_same" position = { x = 364 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_y_up" position = { x = 438 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T17_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_y_down" position = { x = 438 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T17_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t17_y_same" position = { x = 438 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
-				name = "nf_sp18_grid"
+				name = "nf_sp17_grid"
 				position = { x = 520 y = 254 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
@@ -467,19 +470,19 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t19_pick" position = { x = 8 y = 276 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t19" position = { x = 8 y = 276 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T19_TT" }
-			instantTextboxType = { name = "nf_t19_l" position = { x = 16 y = 280 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_19" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_ly" position = { x = 16 y = 280 } font = "hoi_16mbs" text = "MOD1440_NF_T19_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_v" position = { x = 166 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T19_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_m_up" position = { x = 364 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T19_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_m_down" position = { x = 364 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T19_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_m_same" position = { x = 364 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_y_up" position = { x = 438 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T19_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_y_down" position = { x = 438 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T19_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t19_y_same" position = { x = 438 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t18_pick" position = { x = 8 y = 276 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t18" position = { x = 8 y = 276 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T18_TT" }
+			instantTextboxType = { name = "nf_t18_l" position = { x = 16 y = 280 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_18" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_ly" position = { x = 16 y = 280 } font = "hoi_16mbs" text = "MOD1440_NF_T18_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_v" position = { x = 166 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T18_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_m_up" position = { x = 364 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T18_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_m_down" position = { x = 364 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T18_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_m_same" position = { x = 364 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_y_up" position = { x = 438 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T18_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_y_down" position = { x = 438 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T18_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t18_y_same" position = { x = 438 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
-				name = "nf_sp19_grid"
+				name = "nf_sp18_grid"
 				position = { x = 520 y = 280 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
@@ -487,20 +490,20 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t27_band" position = { x = 8 y = 302 } spriteType = "GFX_1440p_SG_stripe_584x26" }
-			iconType = { name = "nf_t27_pick" position = { x = 8 y = 302 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t27" position = { x = 8 y = 302 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T27_TT" }
-			instantTextboxType = { name = "nf_t27_l" position = { x = 16 y = 306 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_27" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_ly" position = { x = 16 y = 306 } font = "hoi_16mbs" text = "MOD1440_NF_T27_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_v" position = { x = 166 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T27_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_m_up" position = { x = 364 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T27_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_m_down" position = { x = 364 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T27_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_m_same" position = { x = 364 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_y_up" position = { x = 438 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T27_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_y_down" position = { x = 438 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T27_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t27_y_same" position = { x = 438 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t19_band" position = { x = 8 y = 302 } spriteType = "GFX_1440p_SG_stripe_584x26" }
+			iconType = { name = "nf_t19_pick" position = { x = 8 y = 302 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t19" position = { x = 8 y = 302 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T19_TT" }
+			instantTextboxType = { name = "nf_t19_l" position = { x = 16 y = 306 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_19" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_ly" position = { x = 16 y = 306 } font = "hoi_16mbs" text = "MOD1440_NF_T19_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_v" position = { x = 166 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T19_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_m_up" position = { x = 364 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T19_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_m_down" position = { x = 364 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T19_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_m_same" position = { x = 364 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_y_up" position = { x = 438 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T19_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_y_down" position = { x = 438 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T19_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t19_y_same" position = { x = 438 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
-				name = "nf_sp27_grid"
+				name = "nf_sp19_grid"
 				position = { x = 520 y = 306 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
@@ -508,19 +511,19 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t28_pick" position = { x = 8 y = 328 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t28" position = { x = 8 y = 328 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T28_TT" }
-			instantTextboxType = { name = "nf_t28_l" position = { x = 16 y = 332 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_28" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_ly" position = { x = 16 y = 332 } font = "hoi_16mbs" text = "MOD1440_NF_T28_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_v" position = { x = 166 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T28_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_m_up" position = { x = 364 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T28_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_m_down" position = { x = 364 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T28_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_m_same" position = { x = 364 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_y_up" position = { x = 438 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T28_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_y_down" position = { x = 438 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T28_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t28_y_same" position = { x = 438 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t27_pick" position = { x = 8 y = 328 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t27" position = { x = 8 y = 328 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T27_TT" }
+			instantTextboxType = { name = "nf_t27_l" position = { x = 16 y = 332 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_27" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_ly" position = { x = 16 y = 332 } font = "hoi_16mbs" text = "MOD1440_NF_T27_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_v" position = { x = 166 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T27_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_m_up" position = { x = 364 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T27_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_m_down" position = { x = 364 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T27_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_m_same" position = { x = 364 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_y_up" position = { x = 438 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T27_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_y_down" position = { x = 438 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T27_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t27_y_same" position = { x = 438 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
-				name = "nf_sp28_grid"
+				name = "nf_sp27_grid"
 				position = { x = 520 y = 332 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
@@ -528,21 +531,41 @@ guiTypes = {
 				max_slots_horizontal = 12
 				format = "UPPER_LEFT"
 			}
-			iconType = { name = "nf_t29_band" position = { x = 8 y = 354 } spriteType = "GFX_1440p_SG_stripe_584x26" }
-			iconType = { name = "nf_t29_pick" position = { x = 8 y = 354 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
-			buttonType = { name = "nf_t29" position = { x = 8 y = 354 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T29_TT" }
-			instantTextboxType = { name = "nf_t29_l" position = { x = 16 y = 358 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_29" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_ly" position = { x = 16 y = 358 } font = "hoi_16mbs" text = "MOD1440_NF_T29_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_v" position = { x = 166 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T29_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_m_up" position = { x = 364 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T29_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_m_down" position = { x = 364 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T29_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_m_same" position = { x = 364 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_y_up" position = { x = 438 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T29_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_y_down" position = { x = 438 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T29_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_t29_y_same" position = { x = 438 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t28_band" position = { x = 8 y = 354 } spriteType = "GFX_1440p_SG_stripe_584x26" }
+			iconType = { name = "nf_t28_pick" position = { x = 8 y = 354 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t28" position = { x = 8 y = 354 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T28_TT" }
+			instantTextboxType = { name = "nf_t28_l" position = { x = 16 y = 358 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_28" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_ly" position = { x = 16 y = 358 } font = "hoi_16mbs" text = "MOD1440_NF_T28_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_v" position = { x = 166 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T28_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_m_up" position = { x = 364 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T28_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_m_down" position = { x = 364 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T28_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_m_same" position = { x = 364 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_y_up" position = { x = 438 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T28_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_y_down" position = { x = 438 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T28_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t28_y_same" position = { x = 438 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			gridboxtype = {
+				name = "nf_sp28_grid"
+				position = { x = 520 y = 358 }
+				size = { width = 72 height = 18 }
+				slotsize = { width = 6 height = 18 }
+				add_horizontal = yes
+				max_slots_horizontal = 12
+				format = "UPPER_LEFT"
+			}
+			iconType = { name = "nf_t29_pick" position = { x = 8 y = 380 } spriteType = "GFX_1440p_SG_pick_584x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t29" position = { x = 8 y = 380 } quadTextureSprite = "GFX_1440p_SG_hit_584x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_T29_TT" }
+			instantTextboxType = { name = "nf_t29_l" position = { x = 16 y = 384 } font = "hoi_16mbs" text = "MOD1440_H_SERIES_29" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_ly" position = { x = 16 y = 384 } font = "hoi_16mbs" text = "MOD1440_NF_T29_LY" maxWidth = 150 maxHeight = 20 format = left alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_v" position = { x = 166 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T29_V" maxWidth = 92 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_m_up" position = { x = 364 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T29_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_m_down" position = { x = 364 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T29_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_m_same" position = { x = 364 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_y_up" position = { x = 438 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T29_Y_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_y_down" position = { x = 438 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T29_Y_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t29_y_same" position = { x = 438 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			gridboxtype = {
 				name = "nf_sp29_grid"
-				position = { x = 520 y = 358 }
+				position = { x = 520 y = 384 }
 				size = { width = 72 height = 18 }
 				slotsize = { width = 6 height = 18 }
 				add_horizontal = yes
@@ -553,7 +576,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "nf_res"
 			position = { x = 1226 y = 56 }
-			size = { width = 440 height = 388 }
+			size = { width = 440 height = 418 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			iconType = { name = "nf_rh" position = { x = 8 y = 8 } spriteType = "GFX_1440p_SG_head_424x28" }
 			instantTextboxType = { name = "nf_rh_t" position = { x = 16 y = 13 } font = "hoi_16mbs" text = "MOD1440_NF_RH_T" maxWidth = 220 maxHeight = 20 format = left }
@@ -650,75 +673,193 @@ guiTypes = {
 			instantTextboxType = { name = "nf_t26_m_up" position = { x = 356 y = 194 } font = "hoi_18mbs" text = "MOD1440_NF_T26_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			instantTextboxType = { name = "nf_t26_m_down" position = { x = 356 y = 194 } font = "hoi_18mbs" text = "MOD1440_NF_T26_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 			instantTextboxType = { name = "nf_t26_m_same" position = { x = 356 y = 194 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
-			instantTextboxType = { name = "nf_legend" position = { x = 16 y = 234 } font = "hoi_16mbs" text = "MOD1440_NF_LEGEND" maxWidth = 408 maxHeight = 130 format = left }
+			iconType = { name = "nf_eh" position = { x = 8 y = 222 } spriteType = "GFX_1440p_SG_head_424x28" }
+			instantTextboxType = { name = "nf_eh_t" position = { x = 16 y = 227 } font = "hoi_16mbs" text = "MOD1440_NF_EH_T" maxWidth = 220 maxHeight = 20 format = left }
+			instantTextboxType = { name = "nf_eh_0" position = { x = 164 y = 227 } font = "hoi_16mbs" text = "MOD1440_NF_EH_0" maxWidth = 60 maxHeight = 20 format = right pdx_tooltip = "MOD1440_NF_EH_0_TT" }
+			instantTextboxType = { name = "nf_eh_1" position = { x = 228 y = 227 } font = "hoi_16mbs" text = "MOD1440_NF_EH_1" maxWidth = 56 maxHeight = 20 format = right pdx_tooltip = "MOD1440_NF_EH_1_TT" }
+			instantTextboxType = { name = "nf_eh_2" position = { x = 288 y = 227 } font = "hoi_16mbs" text = "MOD1440_NF_EH_2" maxWidth = 64 maxHeight = 20 format = right pdx_tooltip = "MOD1440_NF_EH_2_TT" }
+			instantTextboxType = { name = "nf_eh_3" position = { x = 368 y = 227 } font = "hoi_16mbs" text = "MOD1440_NF_EH_3" maxWidth = 60 maxHeight = 20 format = right pdx_tooltip = "MOD1440_NF_EH_3_TT" }
+			iconType = { name = "nf_t33_pick" position = { x = 8 y = 250 } spriteType = "GFX_1440p_SG_pick_424x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t33" position = { x = 8 y = 250 } quadTextureSprite = "GFX_1440p_SG_hit_424x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_EQ_TT" }
+			instantTextboxType = { name = "nf_t33_l" position = { x = 16 y = 254 } font = "hoi_16mbs" text = "MOD1440_NF_EQ_NAME_0" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t33_ly" position = { x = 16 y = 254 } font = "hoi_16mbs" text = "MOD1440_NF_T33_LY" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_eq_s_0" position = { x = 164 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_S_0" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_s0_0" position = { x = 164 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d_0" position = { x = 228 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_D_0" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d0_0" position = { x = 228 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b_0" position = { x = 288 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_B_0" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_bn_0" position = { x = 288 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_BN_0" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b0_0" position = { x = 288 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t33_m_up" position = { x = 356 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T33_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t33_m_down" position = { x = 356 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_T33_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t33_m_same" position = { x = 356 y = 252 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t34_band" position = { x = 8 y = 276 } spriteType = "GFX_1440p_SG_stripe_424x26" }
+			iconType = { name = "nf_t34_pick" position = { x = 8 y = 276 } spriteType = "GFX_1440p_SG_pick_424x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t34" position = { x = 8 y = 276 } quadTextureSprite = "GFX_1440p_SG_hit_424x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_EQ_TT" }
+			instantTextboxType = { name = "nf_t34_l" position = { x = 16 y = 280 } font = "hoi_16mbs" text = "MOD1440_NF_EQ_NAME_1" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t34_ly" position = { x = 16 y = 280 } font = "hoi_16mbs" text = "MOD1440_NF_T34_LY" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_eq_s_1" position = { x = 164 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_S_1" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_s0_1" position = { x = 164 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d_1" position = { x = 228 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_D_1" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d0_1" position = { x = 228 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b_1" position = { x = 288 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_B_1" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_bn_1" position = { x = 288 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_BN_1" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b0_1" position = { x = 288 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t34_m_up" position = { x = 356 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T34_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t34_m_down" position = { x = 356 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_T34_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t34_m_same" position = { x = 356 y = 278 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t35_pick" position = { x = 8 y = 302 } spriteType = "GFX_1440p_SG_pick_424x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t35" position = { x = 8 y = 302 } quadTextureSprite = "GFX_1440p_SG_hit_424x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_EQ_TT" }
+			instantTextboxType = { name = "nf_t35_l" position = { x = 16 y = 306 } font = "hoi_16mbs" text = "MOD1440_NF_EQ_NAME_2" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t35_ly" position = { x = 16 y = 306 } font = "hoi_16mbs" text = "MOD1440_NF_T35_LY" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_eq_s_2" position = { x = 164 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_S_2" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_s0_2" position = { x = 164 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d_2" position = { x = 228 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_D_2" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d0_2" position = { x = 228 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b_2" position = { x = 288 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_B_2" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_bn_2" position = { x = 288 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_BN_2" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b0_2" position = { x = 288 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t35_m_up" position = { x = 356 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T35_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t35_m_down" position = { x = 356 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_T35_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t35_m_same" position = { x = 356 y = 304 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t36_band" position = { x = 8 y = 328 } spriteType = "GFX_1440p_SG_stripe_424x26" }
+			iconType = { name = "nf_t36_pick" position = { x = 8 y = 328 } spriteType = "GFX_1440p_SG_pick_424x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t36" position = { x = 8 y = 328 } quadTextureSprite = "GFX_1440p_SG_hit_424x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_EQ_TT" }
+			instantTextboxType = { name = "nf_t36_l" position = { x = 16 y = 332 } font = "hoi_16mbs" text = "MOD1440_NF_EQ_NAME_3" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t36_ly" position = { x = 16 y = 332 } font = "hoi_16mbs" text = "MOD1440_NF_T36_LY" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_eq_s_3" position = { x = 164 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_S_3" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_s0_3" position = { x = 164 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d_3" position = { x = 228 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_D_3" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d0_3" position = { x = 228 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b_3" position = { x = 288 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_B_3" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_bn_3" position = { x = 288 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_BN_3" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b0_3" position = { x = 288 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t36_m_up" position = { x = 356 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T36_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t36_m_down" position = { x = 356 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_T36_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t36_m_same" position = { x = 356 y = 330 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t37_pick" position = { x = 8 y = 354 } spriteType = "GFX_1440p_SG_pick_424x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t37" position = { x = 8 y = 354 } quadTextureSprite = "GFX_1440p_SG_hit_424x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_EQ_TT" }
+			instantTextboxType = { name = "nf_t37_l" position = { x = 16 y = 358 } font = "hoi_16mbs" text = "MOD1440_NF_EQ_NAME_4" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t37_ly" position = { x = 16 y = 358 } font = "hoi_16mbs" text = "MOD1440_NF_T37_LY" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_eq_s_4" position = { x = 164 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_S_4" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_s0_4" position = { x = 164 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d_4" position = { x = 228 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_D_4" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d0_4" position = { x = 228 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b_4" position = { x = 288 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_B_4" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_bn_4" position = { x = 288 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_BN_4" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b0_4" position = { x = 288 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t37_m_up" position = { x = 356 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T37_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t37_m_down" position = { x = 356 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_T37_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t37_m_same" position = { x = 356 y = 356 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			iconType = { name = "nf_t38_band" position = { x = 8 y = 380 } spriteType = "GFX_1440p_SG_stripe_424x26" }
+			iconType = { name = "nf_t38_pick" position = { x = 8 y = 380 } spriteType = "GFX_1440p_SG_pick_424x26" alwaystransparent = yes }
+			buttonType = { name = "nf_t38" position = { x = 8 y = 380 } quadTextureSprite = "GFX_1440p_SG_hit_424x26" clicksound = click_default pdx_tooltip = "MOD1440_NF_EQ_TT" }
+			instantTextboxType = { name = "nf_t38_l" position = { x = 16 y = 384 } font = "hoi_16mbs" text = "MOD1440_NF_EQ_NAME_5" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_t38_ly" position = { x = 16 y = 384 } font = "hoi_16mbs" text = "MOD1440_NF_T38_LY" maxWidth = 136 maxHeight = 20 format = left alwaystransparent = yes fixedsize = yes }
+			instantTextboxType = { name = "nf_eq_s_5" position = { x = 164 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_S_5" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_s0_5" position = { x = 164 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 60 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d_5" position = { x = 228 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_D_5" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_d0_5" position = { x = 228 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 56 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b_5" position = { x = 288 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_B_5" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_bn_5" position = { x = 288 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_BN_5" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_eq_b0_5" position = { x = 288 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_EQ_ZERO" maxWidth = 64 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t38_m_up" position = { x = 356 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T38_M_UP" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t38_m_down" position = { x = 356 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_T38_M_DOWN" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
+			instantTextboxType = { name = "nf_t38_m_same" position = { x = 356 y = 382 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 72 maxHeight = 22 format = right alwaystransparent = yes }
 		}
 		containerWindowType = {
 			name = "nf_graph"
-			position = { x = 14 y = 450 }
-			size = { width = 1652 height = 322 }
+			position = { x = 14 y = 480 }
+			size = { width = 1652 height = 336 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			instantTextboxType = { name = "h_name_0" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_0" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_0" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_0" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_0" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_0" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_1" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_1" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_1" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_1" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_1" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_1" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_2" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_2" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_2" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_2" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_2" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_2" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_3" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_3" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_3" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_3" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_3" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_3" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_4" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_4" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_4" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_4" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_4" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_4" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_5" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_5" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_5" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_5" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_5" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_5" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_6" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_6" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_6" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_6" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_6" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_6" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_7" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_7" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_7" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_7" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_7" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_7" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_8" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_8" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_8" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_8" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_8" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_8" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_9" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_9" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_9" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_9" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_9" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_9" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_10" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_10" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_10" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_10" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_10" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_10" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_11" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_11" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_11" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_11" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_11" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_11" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_12" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_12" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_12" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_12" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_12" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_12" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_13" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_13" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_13" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_13" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_13" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_13" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_14" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_14" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_14" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_14" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_14" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_14" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_15" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_15" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_15" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_15" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_15" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_15" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_16" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_16" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_16" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_16" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_16" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_16" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_17" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_17" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_17" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_17" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_17" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_17" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_18" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_18" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_18" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_18" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_18" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_18" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_19" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_19" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_19" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_19" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_19" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_19" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_20" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_20" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_20" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_20" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_20" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_20" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_21" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_21" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_21" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_21" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_21" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_21" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_22" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_22" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_22" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_22" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_22" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_22" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_23" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_23" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_23" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_23" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_23" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_23" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_24" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_24" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_24" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_24" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_24" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_24" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_25" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_25" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_25" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_25" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_25" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_25" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_26" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_26" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_26" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_26" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_26" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_26" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_27" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_27" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_27" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_27" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_27" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_27" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_28" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_28" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_28" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_28" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_28" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_28" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_29" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_29" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_29" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_29" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_29" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_29" maxWidth = 312 maxHeight = 20 format = left }
 			instantTextboxType = { name = "h_name_30" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_30" maxWidth = 312 maxHeight = 30 format = left }
-			instantTextboxType = { name = "h_unit_30" position = { x = 14 y = 42 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_30" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_unit_30" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_30" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_31" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_31" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_31" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_31" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_31" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_31" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_32" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_32" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_32" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_32" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_32" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_32" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_33" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_33" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_33" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_33" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_33" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_33" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_34" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_34" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_34" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_34" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_34" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_34" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_35" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_35" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_35" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_35" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_35" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_35" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_36" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_36" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_36" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_36" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_36" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_36" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_37" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_37" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_37" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_37" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_37" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_37" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_38" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_38" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_38" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_38" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_note_38" position = { x = 14 y = 60 } font = "hoi_16mbs" text = "MOD1440_H_NOTE_38" maxWidth = 312 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_name_39" position = { x = 14 y = 10 } font = "hoi_24header" text = "MOD1440_H_NAME_39" maxWidth = 312 maxHeight = 30 format = left }
+			instantTextboxType = { name = "h_unit_39" position = { x = 14 y = 40 } font = "hoi_16mbs" text = "MOD1440_H_UNIT_39" maxWidth = 312 maxHeight = 20 format = left }
 			iconType = { name = "h_nums_head" position = { x = 330 y = 8 } spriteType = "GFX_1440p_SG_head_826x26" }
 			instantTextboxType = { name = "h_latest_l" position = { x = 330 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_LATEST_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_LATEST_TT" }
 			instantTextboxType = { name = "h_latest_0" position = { x = 330 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_LATEST_0" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_LATEST_TT" }
@@ -738,34 +879,42 @@ guiTypes = {
 			instantTextboxType = { name = "h_max_l" position = { x = 684 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_MAX_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MAX_TT" }
 			instantTextboxType = { name = "h_max_0" position = { x = 684 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_MAX_0" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_MAX_TT" }
 			instantTextboxType = { name = "h_max_1" position = { x = 684 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_MAX_1" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_MAX_TT" }
+			instantTextboxType = { name = "h_max32_l" position = { x = 684 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_MAX32_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MAX32_TT" }
+			instantTextboxType = { name = "h_max_d" position = { x = 684 y = 58 } font = "hoi_16mbs" text = "MOD1440_H_MAX_D" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MAX_TT" }
+			instantTextboxType = { name = "h_max_d32" position = { x = 684 y = 58 } font = "hoi_16mbs" text = "MOD1440_H_MAX_D32" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MAX_TT" }
 			instantTextboxType = { name = "h_min_l" position = { x = 802 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_MIN_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MIN_TT" }
 			instantTextboxType = { name = "h_min_0" position = { x = 802 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_MIN_0" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_MIN_TT" }
 			instantTextboxType = { name = "h_min_1" position = { x = 802 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_MIN_1" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_MIN_TT" }
+			instantTextboxType = { name = "h_min_d" position = { x = 802 y = 58 } font = "hoi_16mbs" text = "MOD1440_H_MIN_D" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MIN_TT" }
+			instantTextboxType = { name = "h_min_d32" position = { x = 802 y = 58 } font = "hoi_16mbs" text = "MOD1440_H_MIN_D32" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MIN_TT" }
 			instantTextboxType = { name = "h_change_l" position = { x = 920 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_CHANGE_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_CHANGE_TT" }
 			instantTextboxType = { name = "h_change_0" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_CHANGE_0" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_CHANGE_TT" }
 			instantTextboxType = { name = "h_change_0r" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_CHANGE_0R" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_CHANGE_TT" }
 			instantTextboxType = { name = "h_change_1" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_CHANGE_1" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_CHANGE_TT" }
 			instantTextboxType = { name = "h_change_1r" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_CHANGE_1R" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_CHANGE_TT" }
 			instantTextboxType = { name = "h_change_same" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_NF_SAME" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_CHANGE_TT" }
+			instantTextboxType = { name = "h_sum_l" position = { x = 920 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_SUM_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_SUM_TT" }
+			instantTextboxType = { name = "h_sum_0" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_SUM_0" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_SUM_TT" }
+			instantTextboxType = { name = "h_sum_1" position = { x = 920 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_SUM_1" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_SUM_TT" }
 			instantTextboxType = { name = "h_months_l" position = { x = 1038 y = 12 } font = "hoi_16mbs" text = "MOD1440_H_MONTHS_L" maxWidth = 118 maxHeight = 18 format = centre pdx_tooltip = "MOD1440_H_MONTHS_TT" }
 			instantTextboxType = { name = "h_months" position = { x = 1038 y = 36 } font = "hoi_18mbs" text = "MOD1440_H_MONTHS" maxWidth = 118 maxHeight = 24 format = centre pdx_tooltip = "MOD1440_H_MONTHS_TT" }
 			buttonType = { name = "h_range_24" position = { x = 1172 y = 10 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_H_RANGE_24" pdx_tooltip = "MOD1440_H_RANGE_24_TT" }
 			buttonType = { name = "h_range_60" position = { x = 1276 y = 10 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_H_RANGE_60" pdx_tooltip = "MOD1440_H_RANGE_60_TT" }
 			buttonType = { name = "h_range_120" position = { x = 1380 y = 10 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_H_RANGE_120" pdx_tooltip = "MOD1440_H_RANGE_120_TT" }
 			buttonType = { name = "h_zoom" position = { x = 1498 y = 10 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_H_ZOOM" pdx_tooltip = "MOD1440_H_ZOOM_TT" }
-			instantTextboxType = { name = "h_scale_0_0" position = { x = 14 y = 262 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_0_0" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_0_1" position = { x = 14 y = 262 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_0_1" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_1_0" position = { x = 14 y = 212 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_1_0" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_1_1" position = { x = 14 y = 212 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_1_1" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_2_0" position = { x = 14 y = 162 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_2_0" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_2_1" position = { x = 14 y = 162 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_2_1" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_3_0" position = { x = 14 y = 112 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_3_0" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_3_1" position = { x = 14 y = 112 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_3_1" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_4_0" position = { x = 14 y = 62 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_4_0" maxWidth = 50 maxHeight = 24 format = right }
-			instantTextboxType = { name = "h_scale_4_1" position = { x = 14 y = 62 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_4_1" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_0_0" position = { x = 14 y = 274 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_0_0" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_0_1" position = { x = 14 y = 274 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_0_1" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_1_0" position = { x = 14 y = 224 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_1_0" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_1_1" position = { x = 14 y = 224 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_1_1" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_2_0" position = { x = 14 y = 174 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_2_0" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_2_1" position = { x = 14 y = 174 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_2_1" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_3_0" position = { x = 14 y = 124 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_3_0" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_3_1" position = { x = 14 y = 124 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_3_1" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_4_0" position = { x = 14 y = 74 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_4_0" maxWidth = 50 maxHeight = 24 format = right }
+			instantTextboxType = { name = "h_scale_4_1" position = { x = 14 y = 74 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_4_1" maxWidth = 50 maxHeight = 24 format = right }
 			containerWindowType = {
 				name = "h_chart"
-				position = { x = 70 y = 72 }
+				position = { x = 70 y = 84 }
 				size = { width = 1568 height = 220 }
 				background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 				iconType = { name = "h_band_1" position = { x = 4 y = 50 } spriteType = "GFX_1440p_SG_stripe_1560x50" }
@@ -798,25 +947,26 @@ guiTypes = {
 					format = "UPPER_LEFT"
 				}
 			}
-			instantTextboxType = { name = "h_from" position = { x = 74 y = 296 } font = "hoi_16mbs" text = "MOD1440_H_FROM" maxWidth = 300 maxHeight = 20 format = left }
-			instantTextboxType = { name = "h_to" position = { x = 1334 y = 296 } font = "hoi_16mbs" text = "MOD1440_H_TO" maxWidth = 300 maxHeight = 20 format = right }
-			instantTextboxType = { name = "h_none" position = { x = 90 y = 152 } font = "hoi_18mbs" text = "MOD1440_H_NONE" maxWidth = 1000 maxHeight = 24 format = left }
+			instantTextboxType = { name = "h_from" position = { x = 74 y = 308 } font = "hoi_16mbs" text = "MOD1440_H_FROM" maxWidth = 300 maxHeight = 20 format = left }
+			instantTextboxType = { name = "h_to" position = { x = 1334 y = 308 } font = "hoi_16mbs" text = "MOD1440_H_TO" maxWidth = 300 maxHeight = 20 format = right }
+			instantTextboxType = { name = "h_none" position = { x = 90 y = 164 } font = "hoi_18mbs" text = "MOD1440_H_NONE" maxWidth = 1000 maxHeight = 24 format = left }
 		}
-		instantTextboxType = { name = "h_year_0" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_0" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_1" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_1" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_2" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_2" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_3" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_3" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_4" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_4" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_5" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_5" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_6" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_6" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_7" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_7" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_8" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_8" maxWidth = 40 maxHeight = 18 format = centre }
-		instantTextboxType = { name = "h_year_9" position = { x = 100 y = 723 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_9" maxWidth = 40 maxHeight = 18 format = centre }
-		iconType = { name = "h_zero" position = { x = 88 y = 721 } spriteType = "GFX_1440p_SG_line_1560x2" alwaystransparent = yes }
+		instantTextboxType = { name = "h_year_0" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_0" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_1" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_1" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_2" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_2" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_3" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_3" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_4" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_4" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_5" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_5" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_6" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_6" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_7" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_7" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_8" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_8" maxWidth = 40 maxHeight = 18 format = centre }
+		instantTextboxType = { name = "h_year_9" position = { x = 100 y = 765 } font = "hoi_16mbs" text = "MOD1440_H_YEAR_9" maxWidth = 40 maxHeight = 18 format = centre }
+		iconType = { name = "h_zero" position = { x = 88 y = 763 } spriteType = "GFX_1440p_SG_line_1560x2" alwaystransparent = yes }
+		instantTextboxType = { name = "h_scale_zero" position = { x = 28 y = 754 } font = "hoi_16mbs" text = "MOD1440_H_SCALE_ZERO" maxWidth = 50 maxHeight = 20 format = right alwaystransparent = yes }
 		containerWindowType = {
 			name = "nf_col0"
-			position = { x = 14 y = 778 }
-			size = { width = 404 height = 418 }
+			position = { x = 14 y = 822 }
+			size = { width = 404 height = 374 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			instantTextboxType = { name = "nf_col0_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_NF_COL0_TITLE" maxWidth = 376 maxHeight = 30 format = left }
 			instantTextboxType = { name = "nf_c0_count" position = { x = 270 y = 16 } font = "hoi_16mbs" text = "MOD1440_NF_C0_COUNT" maxWidth = 120 maxHeight = 20 format = right fixedsize = yes }
@@ -824,7 +974,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "nf_l0"
 				position = { x = 8 y = 44 }
-				size = { width = 388 height = 372 }
+				size = { width = 388 height = 320 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 78
 				smooth_scrolling = yes
@@ -842,8 +992,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "nf_col1"
-			position = { x = 430 y = 778 }
-			size = { width = 404 height = 418 }
+			position = { x = 430 y = 822 }
+			size = { width = 404 height = 374 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			instantTextboxType = { name = "nf_col1_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_NF_COL1_TITLE" maxWidth = 376 maxHeight = 30 format = left }
 			instantTextboxType = { name = "nf_c1_count" position = { x = 270 y = 16 } font = "hoi_16mbs" text = "MOD1440_NF_C1_COUNT" maxWidth = 120 maxHeight = 20 format = right fixedsize = yes }
@@ -851,7 +1001,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "nf_l1"
 				position = { x = 8 y = 44 }
-				size = { width = 388 height = 372 }
+				size = { width = 388 height = 320 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 78
 				smooth_scrolling = yes
@@ -869,8 +1019,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "nf_col2"
-			position = { x = 846 y = 778 }
-			size = { width = 404 height = 418 }
+			position = { x = 846 y = 822 }
+			size = { width = 404 height = 374 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			instantTextboxType = { name = "nf_col2_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_NF_COL2_TITLE" maxWidth = 376 maxHeight = 30 format = left }
 			instantTextboxType = { name = "nf_c2_count" position = { x = 270 y = 16 } font = "hoi_16mbs" text = "MOD1440_NF_C2_COUNT" maxWidth = 120 maxHeight = 20 format = right fixedsize = yes }
@@ -878,7 +1028,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "nf_l2"
 				position = { x = 8 y = 44 }
-				size = { width = 388 height = 372 }
+				size = { width = 388 height = 320 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 78
 				smooth_scrolling = yes
@@ -896,8 +1046,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "nf_col3"
-			position = { x = 1262 y = 778 }
-			size = { width = 404 height = 418 }
+			position = { x = 1262 y = 822 }
+			size = { width = 404 height = 374 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			instantTextboxType = { name = "nf_col3_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_NF_COL3_TITLE" maxWidth = 376 maxHeight = 30 format = left }
 			instantTextboxType = { name = "nf_c3_count" position = { x = 270 y = 16 } font = "hoi_16mbs" text = "MOD1440_NF_C3_COUNT" maxWidth = 120 maxHeight = 20 format = right fixedsize = yes }
@@ -905,7 +1055,7 @@ guiTypes = {
 			containerWindowType = {
 				name = "nf_l3"
 				position = { x = 8 y = 44 }
-				size = { width = 388 height = 372 }
+				size = { width = 388 height = 320 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 78
 				smooth_scrolling = yes
@@ -926,136 +1076,231 @@ guiTypes = {
 		name = "mod1440_figures_col_24"
 		size = { width = 65 height = 220 }
 		iconType = { name = "h_bar24" position = { x = 4 y = 0 } spriteType = "GFX_1440p_SG_column_57x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_loss24" position = { x = 4 y = 0 } spriteType = "GFX_1440p_SG_column_loss_57x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_gold24" position = { x = 4 y = 0 } spriteType = "GFX_1440p_SG_column_gold_57x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_red24" position = { x = 4 y = 0 } spriteType = "GFX_1440p_SG_column_red_57x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_mask24" position = { x = 4 y = 0 } spriteType = "GFX_1440p_SG_mask_57x200" alwaystransparent = yes }
+		iconType = { name = "h_maskn24" position = { x = 4 y = 0 } spriteType = "GFX_1440p_SG_mask_57x200" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_col_60"
 		size = { width = 26 height = 220 }
 		iconType = { name = "h_bar60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_SG_column_22x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_loss60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_SG_column_loss_22x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_gold60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_SG_column_gold_22x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_red60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_SG_column_red_22x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_mask60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_SG_mask_22x200" alwaystransparent = yes }
+		iconType = { name = "h_maskn60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_SG_mask_22x200" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_col_120"
 		size = { width = 13 height = 220 }
 		iconType = { name = "h_bar120" position = { x = 1 y = 0 } spriteType = "GFX_1440p_SG_column_11x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_loss120" position = { x = 1 y = 0 } spriteType = "GFX_1440p_SG_column_loss_11x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_gold120" position = { x = 1 y = 0 } spriteType = "GFX_1440p_SG_column_gold_11x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_red120" position = { x = 1 y = 0 } spriteType = "GFX_1440p_SG_column_red_11x200" pdx_tooltip = "MOD1440_H_BAR_TT" }
+		iconType = { name = "h_mask120" position = { x = 1 y = 0 } spriteType = "GFX_1440p_SG_mask_11x200" alwaystransparent = yes }
+		iconType = { name = "h_maskn120" position = { x = 1 y = 0 } spriteType = "GFX_1440p_SG_mask_11x200" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_11"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp11" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr11" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm11" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn11" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_14"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp14" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr14" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm14" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn14" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_6"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp6" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr6" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm6" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn6" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_7"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp7" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr7" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm7" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn7" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_30"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp30" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr30" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm30" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn30" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_15"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp15" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr15" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm15" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn15" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_3"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp3" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr3" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm3" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn3" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_4"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp4" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr4" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm4" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn4" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_5"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp5" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr5" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm5" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn5" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_8"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp8" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr8" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm8" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn8" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_12"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp12" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr12" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm12" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn12" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_13"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp13" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr13" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm13" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn13" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_0"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp0" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr0" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm0" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn0" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_1"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp1" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr1" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm1" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn1" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_2"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp2" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr2" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm2" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn2" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
-		name = "mod1440_figures_spark_10"
+		name = "mod1440_figures_spark_31"
 		size = { width = 6 height = 18 }
-		iconType = { name = "nf_sp10" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_sp31" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_loss_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr31" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm31" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn31" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
-		name = "mod1440_figures_spark_9"
+		name = "mod1440_figures_spark_32"
 		size = { width = 6 height = 18 }
-		iconType = { name = "nf_sp9" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_sp32" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_loss_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr32" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm32" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn32" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_figures_spark_39"
+		size = { width = 6 height = 18 }
+		iconType = { name = "nf_sp39" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr39" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm39" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn39" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_16"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp16" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr16" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm16" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn16" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_17"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp17" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr17" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm17" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn17" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_18"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp18" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr18" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm18" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn18" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_19"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp19" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr19" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm19" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn19" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_27"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp27" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr27" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm27" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn27" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_28"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp28" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr28" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm28" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn28" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_spark_29"
 		size = { width = 6 height = 18 }
 		iconType = { name = "nf_sp29" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spr29" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_4x18" pdx_tooltip = "MOD1440_NF_SP_TT" }
+		iconType = { name = "nf_spm29" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
+		iconType = { name = "nf_spn29" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_mask_4x18" alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_figures_row_0"

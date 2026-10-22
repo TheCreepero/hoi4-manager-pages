@@ -1872,6 +1872,9 @@ NF_COLUMNS = [("Politics and Diplomacy", ["politics", "occupation"]), ("Industry
 # How a value of a list row is written: the kind a row carries in its list (0 is the head of a group)
 NF_FORMATS = ["+=%1", "-=%1", "+=%2", "+=2", "+=0", "%1", "%2"]
 RESOURCES = ["oil", "aluminium", "rubber", "tungsten", "steel", "chromium", "coal"]
+# --- D9 --- the Equipment table: six vanilla archetypes every army fields (rule 6, decision 4 of 2026-10-22)
+NF_EQUIP = ["infantry_equipment", "support_equipment", "artillery_equipment", "anti_tank_equipment", "anti_air_equipment",
+            "motorized_equipment"]
 
 # A figure is (caption, value of the country, factor, unit, decimals, rise): the value is written down on the
 # first of each month, times the factor (100 turns a 0 to 1 share into a percentage). decimals is how the
@@ -1907,6 +1910,14 @@ SERIES = [
     ("Navy experience", "navy_experience", 1, "", 1, "+"),
     ("Air experience", "air_experience", 1, "", 1, "+"),
     ("Ruling party popularity", "party_popularity_100@ruling_party", 1, "in percent", 1, "+"),
+    # --- D9 (2026-10-22, scratch/phases/D9/design.json): nine more. 31 the dead of every war, the mod's own total
+    # that never falls (the game's casualties_k counts only the wars in progress); 32 the dead of the month before
+    # the record; 33 to 38 the equipment balances of the Equipment table (stock less what the field is short of);
+    # 39 surrender progress. 31 and 32 are back-filled from series 10 on a save of an earlier build (mod1440_h_cas_fill).
+    ("Casualties, all wars", "mod1440_h_cas_sum", 1, "in thousands", 1, "-"),
+    ("Casualties in the month", "mod1440_h_cas_mon", 1, "in thousands", 1, "-"),
+] + [("$%s$ balance" % kind, "mod1440_nf_eq_b_%d" % k, 1, "in thousands", 1, "+") for k, kind in enumerate(NF_EQUIP)] + [
+    ("Surrender progress", "surrender_progress", 100, "in percent", 1, "-"),
 ]
 H_OLD = 12              # series a save of the build before 2026-10-16 has
 # A resource balance can be -1 or lower, so its series (20 to 26) pad with a number below every balance, and a month
@@ -1914,6 +1925,12 @@ H_OLD = 12              # series a save of the build before 2026-10-16 has
 H_RES = list(range(20, 27))
 H_RES_PAD = -2100000
 H_RES_LOW = -2000000
+# --- D9 --- the casualty series (drawn in the strength bar's colour), the equipment balances (which pad as the
+# resource balances do: a balance goes below zero), the series of the month (its deadliest month drawn in gold)
+H_CAS_SUM, H_CAS_MON, H_SURRENDER = 31, 32, 39
+H_LOSS = [H_CAS_SUM, H_CAS_MON]
+H_EQ = list(range(33, 39))
+H_DEEP = H_RES + H_EQ
 
 # A share on a plate, as the Records' pages use it (tools/build_records.py): the National Figures page had it first.
 NF_GAP = 5                      # between the tiles of a band of ten
@@ -1969,9 +1986,14 @@ def label_token(name, i, label):
 # The two tables of figures, left to right: (head, series) per group, two groups per card.
 NF_TABLES = [
     [("Government", [11, 14, 6, 7, 30, 15]), ("Industry and research", [3, 4, 5, 8, 12, 13])],
-    [("Manpower", [0, 1, 2, 10]), ("Stock and experience", [9, 16, 17, 18, 19, 27, 28, 29])],
+    # D9: Manpower and war with the two casualty rows and surrender progress; the game's casualties (series 10, still
+    # written down) is the grey extra of the total, infantry equipment (series 9, still written down) went to the
+    # Equipment table (decisions 1 and 5 of 2026-10-22)
+    [("Manpower and war", [0, 1, 2, H_CAS_SUM, H_CAS_MON, H_SURRENDER]), ("Stock and experience", [16, 17, 18, 19, 27, 28, 29])],
 ]
-NF_SPARKS = [n for table in NF_TABLES for _head, rows in table for n in rows]     # the 24 rows with a sparkline
+NF_SPARKS = [n for table in NF_TABLES for _head, rows in table for n in rows]     # the 25 rows with a sparkline
+# D9: a Now that can be below zero gets a red twin with its sign (a second cue beside the colour)
+NF_NOW_NEG = {11: ("political_power", "[?political_power|0]")}
 
 # A row of a table: (its value today, a grey value beside it or None, tooltip). Every value is a dynamic variable
 # of the game's documentation/dynamic_variables_documentation.md (country scope).
@@ -2004,6 +2026,15 @@ NF_ROWS = {
     27: ("[?army_experience|1]", None, "Army experience, which templates, doctrines and designs cost. The top bar shows it too."),
     28: ("[?navy_experience|1]", None, "Navy experience, which ship designs and doctrines cost. The top bar shows it too."),
     29: ("[?air_experience|1]", None, "Air experience, which aircraft designs and doctrines cost. The top bar shows it too."),
+    # --- D9 ---
+    H_CAS_SUM: ("[?mod1440_h_cas_sum|1]K", "[?casualties_k|1]K in wars",
+                "Men lost in all your wars, ended or not. The game's own number, in grey beside it, counts only the wars you are "
+                "in now and drops a war's dead when it ends; this page adds its rise each day (since "
+                "[?mod1440_h_cas_from.GetDateStringNoHourLong]) and keeps it. A rise is red."),
+    H_CAS_MON: ("[?mod1440_h_cas_mon|1]K", "worst [?mod1440_h_cas_worst|1]K",
+                "Men lost this month so far; beside it the deadliest month written down. On the graph each column holds the "
+                "dead of the month that ends on its date. A rise is red."),
+    H_SURRENDER: ("[?surrender_progress|%1]", None, "How close you are to capitulation: at 100% the country surrenders. A rise is red."),
 }
 
 # A window of its own on the screen (no parent_window_token, Engine Facts X7; phase D8, 2026-10-21): beside the
@@ -2015,7 +2046,7 @@ NF_CARD_GAP = 6                              # between the cards of a band
 NF_HEAD_H = 28                          # the head bar of a table
 NF_ROW = 26                             # a row of a table and of a list of modifiers
 # band 1: two tables of figures and the resources
-NF_FIG_Y, NF_FIG_H, NF_FIG_W = 56, 388, 600
+NF_FIG_Y, NF_FIG_H, NF_FIG_W = 56, 418, 600     # D9: 418 (was 388), thirteen rows and two head bars a card
 NF_FROW_W = NF_FIG_W - 16               # a row of a figure table: 584
 NF_RES_X = 14 + 2 * (NF_FIG_W + NF_CARD_GAP)                 # 1226
 NF_RES_W = NF_IN - 2 * (NF_FIG_W + NF_CARD_GAP)              # 440
@@ -2029,14 +2060,18 @@ NF_C_SPARK = 512                        # twelve columns 4 px wide on 6 px steps
 NF_SPARK_N, NF_SPARK_STEP, NF_SPARK_W, NF_SPARK_H = 12, 6, 4, 18
 # the columns of the resource table: right edges of Balance, Made, Used, Import, Export, Month, 52 px each
 NF_R_COLS = [164, 216, 268, 320, 372, 420]
+# D9: the Equipment table under the resources: the name in a box of 136 px (the game's name of the kind), right
+# edges of Stock, Short, Balance and Month (scratch/phases/D9/layout.json)
+NF_E_NAME_W = 136
+NF_E_COLS = [(216, 60), (276, 56), (344, 64), (420, 60)]
 # band 2: the graph
-NF_GRAPH_Y, NF_GRAPH_H = NF_FIG_Y + NF_FIG_H + NF_CARD_GAP, 322      # 450
+NF_GRAPH_Y, NF_GRAPH_H = NF_FIG_Y + NF_FIG_H + NF_CARD_GAP, 336      # 480 (D9: 336 high, was 322)
 NF_NUM_X, NF_NUM_W = 330, 118           # the seven numbers of the chosen figure: a head bar and one row
 NF_RANGE_X, NF_RANGE_W, NF_ZOOM_X = 1172, 100, 1498
 # band 3: four lists of modifiers
 NF_COL_Y = NF_GRAPH_Y + NF_GRAPH_H + NF_CARD_GAP                     # 778
-NF_COL_W, NF_COL_H = 404, NF_H - 14 - NF_COL_Y                 # 404 x 418
-NF_LIST_ROWS = 14
+NF_COL_W, NF_COL_H = 404, NF_H - 14 - NF_COL_Y                 # 404 x 374 (D9, was 418)
+NF_LIST_ROWS = 12       # D9: twelve rows (decision 7 of 2026-10-22), the rest scrolls
 NF_LIST_W = NF_COL_W - 16               # a list in its card, with its scrollbar
 # The count beside a card's title (D8 fix round 2): a fixed box after the longest title, "Navy, Air and Research"
 # and "Politics and Diplomacy", 242 px in hoi_24header from x 14, plus 14 px; right-aligned to the card's margin.
@@ -2046,7 +2081,7 @@ NF_COUNT_W = NF_COL_W - 14 - NF_COUNT_X       # 120
 NF_ROW_W = NF_LIST_W - 30               # a row of it: 358
 
 H_KEEP = 120            # months kept: ten years
-H_CHART_X, H_CHART_Y = 70, 72           # the frame of the graph in its card
+H_CHART_X, H_CHART_Y = 70, 84           # the frame of the graph in its card (D9: 12 px lower, for the dates)
 H_CHART_W, H_CHART_H = 1560, 200        # the columns: as wide in every range
 H_STEPS = H_CHART_H     # heights a column can have (the "steps" of the column sprite): one per pixel
 H_AXIS = 20             # under the columns: the years
@@ -2062,7 +2097,7 @@ def h_floor(n):
     down of a newer series, which has the padding below it for the months before it was written down."""
     if n < H_OLD:
         return None
-    return H_RES_LOW if n in H_RES else -1
+    return H_RES_LOW if n in H_DEEP else -1
 
 
 def h_known(n, index):
@@ -2123,10 +2158,15 @@ def figure_tables():
         inner = ""
         y = 8
         for g, (title, rows) in enumerate(groups):
-            caps = [(NF_C_NOW - 60, 60, "Now", "right", "Today's value; beside it in grey what goes with it."),
-                    (NF_C_MONTH - 66, 66, "Month", "right", "The change since the month before: the newest month written down less the one before."),
-                    (NF_C_YEAR - 66, 66, "Year", "right", "The change since twelve months before."),
-                    (NF_C_SPARK, 72, "12 months", "left", "The last twelve months, a column each, from the lowest of them to the highest.")] if g == 0 else []
+            # D9: the legend that stood under the resources is in these tooltips
+            caps = [(NF_C_NOW - 60, 60, "Now", "right", "Today's value; beside it in grey what goes with it. Below zero it is red, with its sign. "
+                     "A click on a row draws its months on the graph below."),
+                    (NF_C_MONTH - 66, 66, "Month", "right", "The change since the month before: the newest month written down less the one before. "
+                     "§GGreen§! is a gain, §Rred§! a loss; for casualties, surrender and costs the other way round."),
+                    (NF_C_YEAR - 66, 66, "Year", "right", "The change since twelve months before. §GGreen§! is a gain, §Rred§! a loss; for "
+                     "casualties, surrender and costs the other way round."),
+                    (NF_C_SPARK, 72, "12 months", "left", "The last twelve months, a column each, from the lowest of them to the highest. "
+                     "When a month is below zero, the months above it stand on a zero level and those below hang §Rred§! from it.")] if g == 0 else []
             inner += head_bar("nf_fh_%d_%d" % (c, g), 8, y, NF_FROW_W, title, caps)
             y += NF_HEAD_H
             for r, n in enumerate(rows):
@@ -2145,6 +2185,10 @@ def figure_tables():
                 inner += plain(name + "_l", 8 + NF_C_NAME, ry + 4, NF_C_NAME_W, label, FONT_SMALL, height=20)
                 inner += plain(name + "_ly", 8 + NF_C_NAME, ry + 4, NF_C_NAME_W, B.key(name + "_ly", "§Y%s§!" % caption), FONT_SMALL, height=20)
                 inner += plain(name + "_v", 8 + NF_C_NOW - 92, ry + 2, 92, B.key(name + "_v", now), FONT_LABEL, "right", 22)
+                if n in NF_NOW_NEG:     # D9: below zero, red with its sign
+                    below = "check_variable = { %s < 0 }" % NF_NOW_NEG[n][0]
+                    inner += plain(name + "_vn", 8 + NF_C_NOW - 92, ry + 2, 92, B.key(name + "_vn", "§R%s§!" % NF_NOW_NEG[n][1]), FONT_LABEL, "right", 22)
+                    triggers += block(name + "_v_visible", "NOT = { %s }\n" % below) + block(name + "_vn_visible", below + "\n")
                 if extra:
                     inner += ar_text(name + "_x", 8 + NF_C_EXTRA, ry + 4, NF_C_EXTRA_W, B.key(name + "_x", "§g%s§!" % extra), FONT_SMALL, height=20, fixed=True)
                 for part, right, has in (("m", NF_C_MONTH, "hm"), ("y", NF_C_YEAR, "hy")):
@@ -2157,11 +2201,26 @@ def figure_tables():
                           '\tslotsize = { width = %d height = %d }\n\tadd_horizontal = yes\n\tmax_slots_horizontal = %d\n\tformat = "UPPER_LEFT"\n}\n'
                           % (n, 8 + NF_C_SPARK, ry + 4, NF_SPARK_N * NF_SPARK_STEP, NF_SPARK_H, NF_SPARK_STEP, NF_SPARK_H, NF_SPARK_N))
                 lists += block("nf_sp%d_grid" % n, 'array = mod1440_h_sp_%d\nentry_container = "mod1440_figures_spark_%d"\n' % (n, n))
+                # D9: a month below zero hangs red from the zero level (mod1440_h_spz_<n>, a height of the column): the
+                # red bar fills to the zero level and a mask of the column's own background covers it up to the month's
+                # height; a month above it fills to its height and the mask covers it up to the zero level. The sign of
+                # each month is in mod1440_h_spn_<n>; a figure that never goes below zero has a zero level of 0.
+                tip = B.key("nf_sp_tt", "A month of the last twelve: the lowest of them stands lowest, the highest full; below zero a month hangs red.")
+                colour = "spark_loss" if n in H_LOSS else "spark"
+                neg = "check_variable = { mod1440_h_spn_%d^i = 1 }" % n
                 sparks += row("mod1440_figures_spark_%d" % n, NF_SPARK_STEP, NF_SPARK_H, (
-                    'iconType = { name = "nf_sp%d" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_%dx%d" pdx_tooltip = "%s" }\n'
-                    % (n, NF_SPARK_W, NF_SPARK_H, B.key("nf_sp_tt", "A month of the last twelve: the lowest of them stands lowest, the highest full."))))
-                properties += block("nf_sp%d" % n, "frame = v\n")
-                triggers += block("nf_sp%d_visible" % n, "check_variable = { v > -1 }\n")
+                    'iconType = { name = "nf_sp%d" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_%s_%dx%d" pdx_tooltip = "%s" }\n'
+                    % (n, colour, NF_SPARK_W, NF_SPARK_H, tip)
+                    + 'iconType = { name = "nf_spr%d" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_spark_red_%dx%d" pdx_tooltip = "%s" }\n'
+                    % (n, NF_SPARK_W, NF_SPARK_H, tip)
+                    + through("nf_spm%d" % n, 0, 0, "GFX_1440p_SG_spark_mask_%dx%d" % (NF_SPARK_W, NF_SPARK_H))
+                    + through("nf_spn%d" % n, 0, 0, "GFX_1440p_SG_spark_mask_%dx%d" % (NF_SPARK_W, NF_SPARK_H))))
+                properties += (block("nf_sp%d" % n, "frame = v\n") + block("nf_spr%d" % n, "frame = mod1440_h_spz_%d\n" % n)
+                               + block("nf_spm%d" % n, "frame = mod1440_h_spz_%d\n" % n) + block("nf_spn%d" % n, "frame = v\n"))
+                triggers += (block("nf_sp%d_visible" % n, "check_variable = { v > -1 }\nNOT = { %s }\n" % neg)
+                             + block("nf_spr%d_visible" % n, "check_variable = { v > -1 }\n%s\n" % neg)
+                             + block("nf_spm%d_visible" % n, "check_variable = { v > -1 }\nNOT = { %s }\ncheck_variable = { mod1440_h_spz_%d > 0 }\n" % (neg, n))
+                             + block("nf_spn%d_visible" % n, "check_variable = { v > -1 }\n%s\n" % neg))
             y += len(rows) * NF_ROW + 4
         cards += box("nf_fig_%d" % c, 14 + c * (NF_FIG_W + NF_CARD_GAP), NF_FIG_Y, NF_FIG_W, NF_FIG_H, inner, CARD_BG)
 
@@ -2195,10 +2254,11 @@ def figure_tables():
         out, more = nf_change("%s_m" % name, 8 + NF_R_COLS[5], ry + 2, "mod1440_h_tab_dm^%d" % n, "mod1440_h_tab_hm^%d" % n, "+", 0, "")
         inner += out
         triggers += more
-    inner += text("nf_legend", 16, 8 + NF_HEAD_H + len(RESOURCES) * NF_ROW + 16, NF_RROW_W - 16, B.key(
-        "nf_legend", "A click on a row draws its months below. §gMonth§!, §gYear§!: the change since the month and the year "
-        "before. §g12 months§!: a column a month, from the year's lowest to its highest. §GGreen§! is a gain, §Rred§! a loss; "
-        "for casualties and costs the other way round."), FONT_SMALL, height=130)
+    # D9: the legend that stood here is in the tooltips of the column heads; the Equipment table takes its place
+    part, more, clicked = equipment_table(8 + NF_HEAD_H + len(RESOURCES) * NF_ROW + 4)
+    inner += part
+    triggers += more
+    effects += clicked
     cards += box("nf_res", NF_RES_X, NF_FIG_Y, NF_RES_W, NF_FIG_H, inner, CARD_BG)
     triggers += resource_triggers()
     return cards, sparks, lists, triggers, properties, effects
@@ -2209,6 +2269,83 @@ def resource_triggers():
                    for r, resource in enumerate(RESOURCES)
                    for cname, variable in (("made", "resource_produced"), ("used", "resource_consumed"),
                                            ("in", "resource_imported"), ("out", "resource_exported")))
+
+
+# --- D9 ---
+def equipment_table(y):
+    """The Equipment table under the resources, from card y: a head bar and a row per kind of NF_EQUIP with its stock,
+    what the field is short of, the balance (green above zero, red below with its sign) and its change in a month.
+    The values are the daily count mod1440_nf_equip (in thousands), so the numbers of a row always agree; a row
+    draws its balance on the graph (series 33 to 38). Returns the widgets, triggers and effects."""
+    out, triggers, effects = "", "", ""
+    tips = [("Stock", "In the stockpile, in thousands."),
+            ("Short", "What your divisions in the field lack of it, in thousands: what they need less what they hold, as Army "
+                      "Readiness counts it. Divisions in training are not counted."),
+            ("Balance", "The stock less what the field is short of, in thousands: §Rred§! below zero, when the field lacks more "
+                        "than the stockpile holds."),
+            ("Month", "The change of the balance since the month before.")]
+    caps = [(right - width, width, caption, "right", tip) for (right, width), (caption, tip) in zip(NF_E_COLS, tips)]
+    out += head_bar("nf_eh", 8, y, NF_RROW_W, "Equipment", caps)
+    y += NF_HEAD_H
+    (s_right, s_w), (d_right, d_w), (b_right, b_w), (m_right, _m_w) = NF_E_COLS
+    for k, kind in enumerate(NF_EQUIP):
+        n = H_EQ[k]
+        ry = y + k * NF_ROW
+        name = "nf_t%d" % n
+        if k % 2:
+            out += icon(name + "_band", 8, ry, STRIPE % (NF_RROW_W, NF_ROW))
+        band, more, clicked = nf_pick(n, 8, ry, NF_RROW_W, name)
+        out += band
+        triggers += more
+        effects += clicked
+        out += button(name, 8, ry, "GFX_1440p_SG_hit_%dx%d" % (NF_RROW_W, NF_ROW), tooltip=B.key("nf_eq_tt", (
+            "This kind of equipment: in stock, what your divisions in the field are short of, and the balance of the two. "
+            "Counted each day.\\nClick to see the balance's months on the graph.")))
+        # the game's name of the kind, in a box of its own size (another mod may make it longer, W28)
+        out += ar_text(name + "_l", 16, ry + 4, NF_E_NAME_W, B.key("nf_eq_name_%d" % k, "$%s$" % kind), FONT_SMALL, height=20, fixed=True)
+        out += ar_text(name + "_ly", 16, ry + 4, NF_E_NAME_W, B.key(name + "_ly", "§Y$%s$§!" % kind), FONT_SMALL, height=20, fixed=True)
+        s, d, b = ("mod1440_nf_eq_%s_%d" % (part, k) for part in "sdb")
+        for widget, right, width, words, shown in (
+                ("nf_eq_s_%d" % k, s_right, s_w, "[?%s|1]K" % s, "check_variable = { %s > 0 }" % s),
+                ("nf_eq_s0_%d" % k, s_right, s_w, "0", "NOT = { check_variable = { %s > 0 } }" % s),
+                ("nf_eq_d_%d" % k, d_right, d_w, "§R[?%s|1]K§!" % d, "check_variable = { %s > 0 }" % d),
+                ("nf_eq_d0_%d" % k, d_right, d_w, DASH, "NOT = { check_variable = { %s > 0 } }" % d),
+                ("nf_eq_b_%d" % k, b_right, b_w, "§G[?%s|=1]K§!" % b, "check_variable = { %s > 0 }" % b),
+                ("nf_eq_bn_%d" % k, b_right, b_w, "§R[?%s|=1]K§!" % b, "check_variable = { %s < 0 }" % b),
+                ("nf_eq_b0_%d" % k, b_right, b_w, "0", "check_variable = { %s = 0 }" % b)):
+            key = B.key("nf_same", DASH) if words == DASH else B.key("nf_eq_zero", "0") if words == "0" else B.key(widget, words)
+            out += plain(widget, 8 + right - width, ry + 2, width, key, FONT_LABEL, "right", 22)
+            triggers += block(widget + "_visible", shown + "\n")
+        part, more = nf_change("%s_m" % name, 8 + m_right, ry + 2, "mod1440_h_tab_dm^%d" % n, "mod1440_h_tab_hm^%d" % n, "+", 1, "K")
+        out += part
+        triggers += more
+    return out, triggers, effects
+
+
+def equipment_count():
+    """The daily count of the Equipment table, for the country in scope: per kind the stock, the shortfall of the
+    divisions in the field (what they need less what they hold, never below 0; X29: divisions in training are not
+    counted) and the balance, in thousands. Six blocks of three variables, no loop (rule 5)."""
+    body = ""
+    for k, kind in enumerate(NF_EQUIP):
+        s, d, b = ("mod1440_nf_eq_%s_%d" % (part, k) for part in "sdb")
+        body += (tmp("nf_es", "num_equipment@" + kind) + tmp("nf_ed", "num_target_equipment_in_armies@" + kind)
+                 + tmp("nf_ef", "num_equipment_in_armies@" + kind) + "subtract_from_temp_variable = { nf_ed = nf_ef }\n"
+                 + iff("check_variable = { nf_ed < 0 }", tmp("nf_ed", 0))
+                 + setv(s, "nf_es") + "divide_variable = { %s = 1000 }\n" % s
+                 + setv(d, "nf_ed") + "divide_variable = { %s = 1000 }\n" % d
+                 + setv(b, "nf_es") + "subtract_from_variable = { %s = nf_ed }\ndivide_variable = { %s = 1000 }\n" % (b, b))
+    return ("# National Figures: the Equipment table of the country in scope (D9), each day for a player and before each\n"
+            "# monthly record: stock, shortfall in the field and balance of six kinds, in thousands.\n"
+            + block("mod1440_nf_equip", body))
+# --- end D9 ---
+
+
+# --- D9 --- the note under a figure's name on the graph: the deadliest month of the month's casualties (the month on
+# the graph whose column is gold), what the total counts, what an equipment balance is
+H_NOTES = {H_CAS_SUM: "§gThe dead of every war, ended or not§!",
+           H_CAS_MON: "§YDeadliest: the month to [?mod1440_h_max_date.GetDateStringNoHourLong]§!"}
+H_NOTES.update({n: "§gIn stock less what the field is short of§!" for n in H_EQ})
 
 
 def h_first_x(step):
@@ -2227,9 +2364,12 @@ def figure_graph():
         # the name, and under it in grey what the columns show
         chosen = "check_variable = { mod1440_h_series = %d }\n" % n
         inner += text("h_name_%d" % n, 14, 10, 312, B.key("h_name_%d" % n, caption), FONT_CARD, height=30)
-        inner += text("h_unit_%d" % n, 14, 42, 312, B.key("h_unit_%d" % n, "§gThe last [?mod1440_h_yrs|0] years of [?mod1440_h_total|0] months%s§!"
+        inner += text("h_unit_%d" % n, 14, 40, 312, B.key("h_unit_%d" % n, "§gThe last [?mod1440_h_yrs|0] years of [?mod1440_h_total|0] months%s§!"
                                                            % (", " + unit if unit else "")), FONT_SMALL, height=20)
         triggers += block("h_name_%d_visible" % n, chosen) + block("h_unit_%d_visible" % n, chosen + some)
+        if n in H_NOTES:        # D9: a third line, the figure's note
+            inner += text("h_note_%d" % n, 14, 60, 312, B.key("h_note_%d" % n, H_NOTES[n]), FONT_SMALL, height=20)
+            triggers += block("h_note_%d_visible" % n, chosen + some)
 
     def number(name, x, y, width, variable, font, fmt, signed=False, when="", tooltip=None):
         """A number of the chosen figure with its own decimals, and a change in the colours of its figure: one text
@@ -2259,13 +2399,37 @@ def figure_graph():
               ("min", "Lowest", "mod1440_h_min", False, "", "The lowest month on the graph: [?mod1440_h_min_date.GetDateStringNoHourLong]."),
               ("change", "Over the range", "mod1440_h_change", True, "", "The newest month less the oldest month on the graph.")]
     inner += icon("h_nums_head", NF_NUM_X, 8, "GFX_1440p_SG_head_%dx26" % (NF_NUM_W * (len(plates) + 1)))
+    # D9: the month's casualties (series 32) read Deadliest for Highest and In the range, the sum of the months on the
+    # graph, for Over the range; Highest and Lowest give their month under the number ("to" it for a monthly count)
+    month = "check_variable = { mod1440_h_series = %d }" % H_CAS_MON
+    other = "NOT = { %s }" % month
+    twins = {"max": ("Deadliest", "The deadliest month on the graph: the month to [?mod1440_h_max_date.GetDateStringNoHourLong]."),
+             "change": ("In the range", "The dead of the months on the graph, added up.")}
     for k, (name, label, variable, signed, when, tip) in enumerate(plates):
         x = NF_NUM_X + k * NF_NUM_W
         tooltip = B.key("h_%s_tt" % name, tip)
         inner += text("h_%s_l" % name, x, 12, NF_NUM_W, B.key("h_%s_l" % name, "§g%s§!" % label), FONT_SMALL, "centre", 18, tooltip=tooltip)
+        if name == "change":
+            when += other + "\n"
         part, more = number("h_" + name, x, 36, NF_NUM_W, variable, FONT_LABEL, "centre", signed, when, tooltip)
         inner += part
         triggers += more
+        if name in twins:
+            twin = "sum" if name == "change" else name + "32"
+            words, twin_tip = twins[name]
+            twin_tt = B.key("h_%s_tt" % twin, twin_tip)
+            inner += text("h_%s_l" % twin, x, 12, NF_NUM_W, B.key("h_%s_l" % twin, "§g%s§!" % words), FONT_SMALL, "centre", 18, tooltip=twin_tt)
+            triggers += block("h_%s_l_visible" % name, other + "\n") + block("h_%s_l_visible" % twin, month + "\n")
+            if name == "change":
+                part, more = number("h_sum", x, 36, NF_NUM_W, "mod1440_h_sum", FONT_LABEL, "centre", False, month + "\n", twin_tt)
+                inner += part
+                triggers += more
+        if name in ("max", "min"):
+            for suffix, words, shown in (("d", "§g[?mod1440_h_%s_date.GetDateStringNoHour]§!" % name, other),
+                                         ("d32", "§gto [?mod1440_h_%s_date.GetDateStringNoHour]§!" % name, month)):
+                inner += text("h_%s_%s" % (name, suffix), x, 58, NF_NUM_W, B.key("h_%s_%s" % (name, suffix), words), FONT_SMALL, "centre", 18,
+                              tooltip=tooltip)
+                triggers += block("h_%s_%s_visible" % (name, suffix), some + shown + "\n")
     x = NF_NUM_X + len(plates) * NF_NUM_W
     tooltip = B.key("h_months_tt", "Months on the graph, of the months written down for this figure (120 at most).")
     inner += text("h_months_l", x, 12, NF_NUM_W, B.key("h_months_l", "§gMonths§!"), FONT_SMALL, "centre", 18, tooltip=tooltip)
@@ -2304,12 +2468,34 @@ def figure_graph():
                   '\tslotsize = { width = %d height = %d }\n\tadd_horizontal = yes\n\tmax_slots_horizontal = %d\n\tformat = "UPPER_LEFT"\n}\n'
                   % (span, H_INSET, H_CHART_W, H_CHART_H + H_AXIS, step, H_CHART_H + H_AXIS, span))
         lists += block("h_grid_%d" % span, 'array = mod1440_h_bars_%d\nentry_container = "mod1440_figures_col_%d"\n' % (span, span))
-        # a column: a month that was not written down for this figure (-1) is left out
-        columns += row("mod1440_figures_col_%d" % span, step, H_CHART_H + H_AXIS, (
-            'iconType = { name = "h_bar%d" position = { x = %d y = 0 } spriteType = "GFX_1440p_SG_column_%dx%d" pdx_tooltip = "%s" }\n'
-            % (span, (step - width) // 2, width, H_CHART_H, tip)))
-        properties += block("h_bar%d" % span, "frame = v\n")
-        triggers += block("h_bar%d_visible" % span, "check_variable = { v > -1 }\n")
+        # a column: a month that was not written down for this figure (-1) is left out. D9: the casualty series in the
+        # strength bar's colour, the deadliest month of series 32 in gold; a month below zero hangs red from the zero
+        # level (mod1440_h_zero_h): the red bar fills to the zero level and a mask of the column's own background
+        # covers it up to the month's height; a month above zero fills to its height and the mask covers it up to the
+        # zero level. The sign of each month is in mod1440_h_neg_<span>; a figure that never goes below zero has a
+        # zero level of 0 and draws as before.
+        at = (step - width) // 2
+        cells = ""
+        for widget, sprite, has_tip in (("h_bar", "column", True), ("h_loss", "column_loss", True), ("h_gold", "column_gold", True),
+                                        ("h_red", "column_red", True), ("h_mask", "mask", False), ("h_maskn", "mask", False)):
+            if has_tip:
+                cells += ('iconType = { name = "%s%d" position = { x = %d y = 0 } spriteType = "GFX_1440p_SG_%s_%dx%d" pdx_tooltip = "%s" }\n'
+                          % (widget, span, at, sprite, width, H_CHART_H, tip))
+            else:
+                cells += through("%s%d" % (widget, span), at, 0, "GFX_1440p_SG_%s_%dx%d" % (sprite, width, H_CHART_H))
+        columns += row("mod1440_figures_col_%d" % span, step, H_CHART_H + H_AXIS, cells)
+        known = "check_variable = { v > -1 }\n"
+        neg = "check_variable = { mod1440_h_neg_%d^i = 1 }" % span
+        gold = "check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i }"
+        loss = is_one("mod1440_h_loss")
+        for widget, frame, shown in (("h_bar", "v", "NOT = { %s }\nNOT = { %s }\n" % (neg, loss)),
+                                     ("h_loss", "v", "%s\nNOT = { AND = { %s } }\n" % (loss, gold)),
+                                     ("h_gold", "v", gold + "\n"),
+                                     ("h_red", "mod1440_h_zero_h", neg + "\n"),
+                                     ("h_mask", "mod1440_h_zero_h", "NOT = { %s }\ncheck_variable = { mod1440_h_zero_h > 0 }\n" % neg),
+                                     ("h_maskn", "v", neg + "\n")):
+            properties += block("%s%d" % (widget, span), "frame = %s\n" % frame)
+            triggers += block("%s%d_visible" % (widget, span), known + shown)
     inner += box("h_chart", H_CHART_X, H_CHART_Y, H_CHART_W + 2 * H_INSET, H_CHART_H + H_AXIS, chart, CARD_BG)
     below = H_CHART_Y + H_CHART_H + H_AXIS + 4
     inner += text("h_from", H_CHART_X + H_INSET, below, 300, B.key("h_from", "[?mod1440_h_first.GetDateStringNoHourLong]"), FONT_SMALL, height=20)
@@ -2337,6 +2523,10 @@ def figure_graph():
         14 + H_CHART_X + H_INSET, H_CHART_TOP + H_CHART_H - 1, H_CHART_W)
     properties += block("h_zero", "y = mod1440_h_zero_y\n")
     triggers += block("h_zero_visible", is_one("mod1440_h_zero") + "\n")
+    # D9: the scale's own 0 beside the zero line, moved with it
+    page += plain("h_scale_zero", 14 + 14, H_CHART_TOP + H_CHART_H - 10, H_CHART_X - 20, B.key("h_scale_zero", "0"), FONT_SMALL, "right", 20)
+    properties += block("h_scale_zero", "y = mod1440_h_zero_sy\n")
+    triggers += block("h_scale_zero_visible", is_one("mod1440_h_zero") + "\n")
     # the years of the months on the graph get a mark under the first month of each year after the first
     place = ("".join(setv("mod1440_h_yl_%d" % k, 0) for k in range(H_YEARS)) + tmp("h_before", 0) + tmp("h_slot", 0)
         + block("for_each_loop", (
@@ -2544,8 +2734,42 @@ def national_figures():
         + block("mod1440_nf_fill", "mod1440_rec_odd = yes\n" + fill + frames))
     # Each day while the page is open: the lists and the graph, so that a page left open in a saved game is right
     # again after a day at most.
-    daily = iff(is_one("mod1440_nf_shown"), "mod1440_nf_fill = yes\nmod1440_h_draw = yes\n")
+    # D9: before that, every day, the casualty step (the total that never falls and the month so far) and the count of
+    # the Equipment table, for the player only (the hook's limit) and without a loop (rule 5)
+    daily = "mod1440_h_cas_step = yes\nmod1440_nf_equip = yes\n" + iff(is_one("mod1440_nf_shown"), "mod1440_nf_fill = yes\nmod1440_h_draw = yes\n")
     return gui, script, script_effects, daily, place
+
+
+# --- D9 --- the casualties of every war
+CAS_FIRST = "if = { limit = { NOT = { check_variable = { mod1440_h_cas_ver = 1 } } } mod1440_h_cas_fill = yes }\n"
+
+
+def casualty_script():
+    """The total of every war (series 31) and the dead of the month (series 32): the daily step on the game's
+    casualties_k, which counts only the wars in progress and falls when a war ends, and the back-fill of a save of an
+    earlier build from series 10, once (mod1440_h_cas_ver)."""
+    fill = ("clear_array = mod1440_h_%d\nclear_array = mod1440_h_%d\n" % (H_CAS_SUM, H_CAS_MON) + tmp("h_cs", 0) + tmp("h_cp", 0)
+            + block("for_each_loop", (
+                "array = mod1440_h_10\nvalue = h_cv\nindex = h_ci\n"
+                + iff("check_variable = { h_ci = 0 }", tmp("h_cs", "h_cv") + "add_to_array = { array = mod1440_h_%d value = -1 }\n" % H_CAS_MON)
+                + els(tmp("h_cd", "h_cv") + "subtract_from_temp_variable = { h_cd = h_cp }\n" + iff("check_variable = { h_cd < 0 }", tmp("h_cd", 0))
+                      + "add_to_temp_variable = { h_cs = h_cd }\nadd_to_array = { mod1440_h_%d = h_cd }\n" % H_CAS_MON)
+                + "add_to_array = { mod1440_h_%d = h_cs }\n" % H_CAS_SUM + tmp("h_cp", "h_cv")))
+            # what the game's number rose by since the last month written down belongs to this month
+            + tmp("h_cd", "casualties_k") + "subtract_from_temp_variable = { h_cd = h_cp }\n" + iff("check_variable = { h_cd < 0 }", tmp("h_cd", 0))
+            + setv("mod1440_h_cas_sum", "h_cs") + "add_to_variable = { mod1440_h_cas_sum = h_cd }\n" + setv("mod1440_h_cas_mon", "h_cd")
+            + setv("mod1440_h_cas_last", "casualties_k") + setv("mod1440_h_cas_from", "global.date") + setv("mod1440_h_cas_ver", 1))
+    step = (CAS_FIRST + tmp("h_ct", "casualties_k") + tmp("h_cd", "h_ct") + "subtract_from_temp_variable = { h_cd = mod1440_h_cas_last }\n"
+            + iff("check_variable = { h_cd > 0 }", "add_to_variable = { mod1440_h_cas_sum = h_cd }\nadd_to_variable = { mod1440_h_cas_mon = h_cd }\n")
+            + setv("mod1440_h_cas_last", "h_ct"))
+    return ("# National Figures (D9): series 31 and 32 of a save without them, once, from series 10 (the game's casualties_k on\n"
+            "# the first of each month): the total adds each rise of series 10 and nothing for a fall; the month is the rise\n"
+            "# (-1 for the first month). Then the total, the month so far and the baseline from today's casualties_k.\n"
+            + block("mod1440_h_cas_fill", fill)
+            + "\n# National Figures (D9): each day for a player, and before each monthly record: a rise of the game's casualties_k\n"
+            "# since the day before is added to the total (mod1440_h_cas_sum) and to the month so far (mod1440_h_cas_mon); a\n"
+            "# fall (a war ended) only moves the baseline mod1440_h_cas_last. The total never falls.\n"
+            + block("mod1440_h_cas_step", step))
 
 
 def history_script(place):
@@ -2556,11 +2780,18 @@ def history_script(place):
         pad += (tmp("h_p", "mod1440_h_date^num") + "subtract_from_temp_variable = { h_p = mod1440_h_%d^num }\n" % n
                 + iff("check_variable = { h_p > 0 }", block("for_loop_effect", (
                     "start = 0\nend = h_p\nvalue = h_q\nadd_to_array = { array = mod1440_h_%d value = %d index = 0 }\n"
-                    % (n, H_RES_PAD if n in H_RES else -1)))))
-    record = "".join(
-        ("add_to_array = { mod1440_h_%d = %s }\n" % (n, value)) if factor == 1 else (
-            "set_temp_variable = { h_v = %s }\nmultiply_temp_variable = { h_v = %d }\nadd_to_array = { mod1440_h_%d = h_v }\n" % (value, factor, n))
-        for n, (caption, value, factor, unit, decimals, rise) in enumerate(SERIES))
+                    % (n, H_RES_PAD if n in H_DEEP else -1)))))
+    record = ""
+    for n, (caption, value, factor, unit, decimals, rise) in enumerate(SERIES):
+        if n == H_CAS_MON:
+            # D9: the dead since the record before; the first record of a game has no month before it (-1, no column)
+            record += (tmp("h_v", value) + iff("check_variable = { mod1440_h_date^num = 0 }", tmp("h_v", -1))
+                       + "add_to_array = { mod1440_h_%d = h_v }\n" % n)
+        elif factor == 1:
+            record += "add_to_array = { mod1440_h_%d = %s }\n" % (n, value)
+        else:
+            record += "set_temp_variable = { h_v = %s }\nmultiply_temp_variable = { h_v = %d }\nadd_to_array = { mod1440_h_%d = h_v }\n" % (value, factor, n)
+    record += setv("mod1440_h_cas_mon", 0)
     forget = "".join("remove_from_array = { array = mod1440_h_%d index = 0 }\n" % n for n in range(len(SERIES)))
     # the modifiers as they are on the first of the month, for the Changed view
     was = "clear_array = mod1440_nf_was\n" + "".join("add_to_array = { mod1440_nf_was = %s }\n" % value for value in NF_MODIFIERS)
@@ -2585,7 +2816,11 @@ def history_script(place):
                 + iff("check_variable = { h_j > -1 }", iff(h_known(n, "h_j"), tmp("h_sv", "%s^h_j" % s)))
                 + "add_to_array = { mod1440_h_spin = h_sv }\n"))
                 + "mod1440_h_spark = yes\nclear_array = mod1440_h_sp_%d\n" % n
-                + block("for_each_loop", "array = mod1440_h_spout\nvalue = h_sv\nadd_to_array = { mod1440_h_sp_%d = h_sv }\n" % n))
+                + block("for_each_loop", "array = mod1440_h_spout\nvalue = h_sv\nadd_to_array = { mod1440_h_sp_%d = h_sv }\n" % n)
+                # D9: the sign of each month and the zero level of this sparkline
+                + "clear_array = mod1440_h_spn_%d\n" % n
+                + block("for_each_loop", "array = mod1440_h_spsign\nvalue = h_sv\nadd_to_array = { mod1440_h_spn_%d = h_sv }\n" % n)
+                + setv("mod1440_h_spz_%d" % n, "mod1440_h_spz"))
         low = h_floor(n)
         copies += iff("check_variable = { mod1440_h_series = %d }" % n, (
             block("for_loop_effect", "start = 0\nend = h_cnt\nvalue = h_k\n" + tmp("h_j", "h_k") + "add_to_temp_variable = { h_j = h_from }\n"
@@ -2593,7 +2828,9 @@ def history_script(place):
             + setv("mod1440_h_dec", decimals) + setv("mod1440_h_rise", 1 if rise == "+" else 0) + tmp("h_floor", H_RES_PAD - 1 if low is None else low)
             + block("for_each_loop", "array = %s\nvalue = h_v\n" % s + iff("check_variable = { h_v > h_floor }", "add_to_temp_variable = { h_total = 1 }\n"))
             + "".join(setv("mod1440_h_%s" % part, "mod1440_h_tab_%s^%d" % (part, n)) for part in ("dm", "dy"))
-            + setv("mod1440_h_has_m", "mod1440_h_tab_hm^%d" % n) + setv("mod1440_h_has_y", "mod1440_h_tab_hy^%d" % n)), "if" if n == 0 else "else_if")
+            + setv("mod1440_h_has_m", "mod1440_h_tab_hm^%d" % n) + setv("mod1440_h_has_y", "mod1440_h_tab_hy^%d" % n)
+            # D9: the casualty series in the strength bar's colour, the deadliest month of the month's series in gold
+            + setv("mod1440_h_loss", 1 if n in H_LOSS else 0) + setv("mod1440_h_gold", 1 if n == H_CAS_MON else 0)), "if" if n == 0 else "else_if")
     counts = "check_variable = { h_v > h_floor }"
     spans = "".join(iff("check_variable = { h_span = %d }" % span, tmp("h_step", step) + tmp("h_off", h_first_x(step))
                         + setv("mod1440_h_rf_%d" % span, 2), "if" if k == 0 else "else_if")
@@ -2622,14 +2859,18 @@ def history_script(place):
              + "".join(setv("mod1440_h_s%d" % k, "mod1440_h_s%d" % (k - 1)) + "add_to_variable = { mod1440_h_s%d = h_quarter }\n" % k for k in (1, 2, 3))
              + setv("mod1440_h_s4", "h_top")
              # a 2 px line at zero while the foot is below it
-             + setv("mod1440_h_zero", 0)
+             + setv("mod1440_h_zero", 0) + setv("mod1440_h_zero_h", 0)
              + iff("check_variable = { h_base < 0 } check_variable = { h_top > -0.001 } check_variable = { h_range > 0 }", (
                  setv("mod1440_h_zero", 1) + tmp("h_z", 0) + "subtract_from_temp_variable = { h_z = h_base }\n"
                  "divide_temp_variable = { h_z = h_range }\nmultiply_temp_variable = { h_z = %d }\n" % H_CHART_H
-                 + setv("mod1440_h_zero_y", H_CHART_TOP + H_CHART_H - 1) + "subtract_from_variable = { mod1440_h_zero_y = h_z }\n")))
-    bars = ("".join("clear_array = mod1440_h_bars_%d\n" % r[0] for r in H_RANGES) + block("for_each_loop", (
-        "array = mod1440_h_now\nvalue = h_v\n" + tmp("h_bar", -1) + iff(counts, (
-            tmp("h_bar", 0)
+                 + setv("mod1440_h_zero_y", H_CHART_TOP + H_CHART_H - 1) + "subtract_from_variable = { mod1440_h_zero_y = h_z }\n"
+                 # D9: the zero level as a column height (the masks and the red columns), and the scale's own 0 beside it
+                 + setv("mod1440_h_zero_h", "h_z") + setv("mod1440_h_zero_sy", "mod1440_h_zero_y") + "subtract_from_variable = { mod1440_h_zero_sy = 10 }\n"))
+             # D9: zoomed in on a figure below zero all along, the zero level stands over the top: every month hangs
+             + iff("check_variable = { h_top < 0 }", setv("mod1440_h_zero_h", H_CHART_H), "else_if"))
+    bars = ("".join("clear_array = mod1440_h_bars_%d\nclear_array = mod1440_h_neg_%d\n" % (r[0], r[0]) for r in H_RANGES) + block("for_each_loop", (
+        "array = mod1440_h_now\nvalue = h_v\n" + tmp("h_bar", -1) + tmp("h_ng", 0) + iff(counts, (
+            tmp("h_bar", 0) + iff("check_variable = { h_v < 0 }", tmp("h_ng", 1))
             + iff("check_variable = { h_range > 0 }", tmp("h_bar", "h_v") + "subtract_from_temp_variable = { h_bar = h_base }\n"
                   "divide_temp_variable = { h_bar = h_range }\nmultiply_temp_variable = { h_bar = %d }\n" % H_STEPS)
             # every month the same: the columns stand at full height
@@ -2637,29 +2878,41 @@ def history_script(place):
             # from the lowest month, the lowest keeps a sliver: it was written down
             + iff("NOT = { check_variable = { h_base = 0 } }", iff("check_variable = { h_bar < 4 }", tmp("h_bar", 4)))
             + iff("check_variable = { h_bar < 0 }", tmp("h_bar", 0)) + iff("check_variable = { h_bar > %d }" % H_STEPS, tmp("h_bar", H_STEPS))))
-        + "".join(iff("check_variable = { h_span = %d }" % r[0], "add_to_array = { mod1440_h_bars_%d = h_bar }\n" % r[0], "if" if k == 0 else "else_if")
+        + "".join(iff("check_variable = { h_span = %d }" % r[0], "add_to_array = { mod1440_h_bars_%d = h_bar }\nadd_to_array = { mod1440_h_neg_%d = h_ng }\n"
+                      % (r[0], r[0]), "if" if k == 0 else "else_if")
                   for k, r in enumerate(H_RANGES)))))
     spark = (
         "# National Figures: the sparkline of a row, from mod1440_h_spin (twelve months, the padding %d for a month not\n" % H_RES_PAD
         + "# written down) into mod1440_h_spout: heights 2 to %d between the lowest and the highest of the twelve, %d for\n" % (NF_SPARK_H, NF_SPARK_H)
-        + "# twelve equal months that are not 0, -1 for no column.\n"
+        + "# twelve equal months that are not 0, -1 for no column. D9: the sign of each month into mod1440_h_spsign (1 below\n"
+        + "# zero) and the zero level into mod1440_h_spz: the height of zero between the lowest and the highest, 0 when no\n"
+        + "# month is below zero, %d when every month is.\n" % NF_SPARK_H
         + block("mod1440_h_spark", (
             tmp("h_shi", H_RES_PAD) + tmp("h_slo", -H_RES_PAD)
             + block("for_each_loop", "array = mod1440_h_spin\nvalue = h_sv\n" + iff("check_variable = { h_sv > %d }" % H_RES_LOW, (
                 iff("check_variable = { h_sv > h_shi }", tmp("h_shi", "h_sv")) + iff("check_variable = { h_sv < h_slo }", tmp("h_slo", "h_sv")))))
             + tmp("h_sr", "h_shi") + "subtract_from_temp_variable = { h_sr = h_slo }\n" + "clear_array = mod1440_h_spout\n"
-            + block("for_each_loop", "array = mod1440_h_spin\nvalue = h_sv\n" + tmp("h_sh", -1) + iff("check_variable = { h_sv > %d }" % H_RES_LOW, (
-                tmp("h_sh", 0)
+            + "clear_array = mod1440_h_spsign\n" + setv("mod1440_h_spz", 0)
+            + iff("check_variable = { h_slo < 0 } check_variable = { h_sr > 0 }", (
+                setv("mod1440_h_spz", 0) + "subtract_from_variable = { mod1440_h_spz = h_slo }\ndivide_variable = { mod1440_h_spz = h_sr }\n"
+                "multiply_variable = { mod1440_h_spz = %d }\nadd_to_variable = { mod1440_h_spz = 2 }\n" % (NF_SPARK_H - 2)))
+            + iff("check_variable = { h_slo < 0 }", setv("mod1440_h_spz", NF_SPARK_H), "else_if")
+            + block("for_each_loop", "array = mod1440_h_spin\nvalue = h_sv\n" + tmp("h_sh", -1) + tmp("h_sn", 0) + iff("check_variable = { h_sv > %d }" % H_RES_LOW, (
+                tmp("h_sh", 0) + iff("check_variable = { h_sv < 0 }", tmp("h_sn", 1))
                 + iff("check_variable = { h_sr > 0 }", tmp("h_sh", "h_sv") + "subtract_from_temp_variable = { h_sh = h_slo }\n"
                       "divide_temp_variable = { h_sh = h_sr }\nmultiply_temp_variable = { h_sh = %d }\nadd_to_temp_variable = { h_sh = 2 }\n" % (NF_SPARK_H - 2))
-                + iff("NOT = { check_variable = { h_sv = 0 } }", tmp("h_sh", NF_SPARK_H), "else_if")))
-                + "add_to_array = { mod1440_h_spout = h_sh }\n"))))
+                # twelve equal months: full above zero; below zero they hang from the top (the zero level) to the foot
+                + iff("check_variable = { h_sv > 0 }", tmp("h_sh", NF_SPARK_H), "else_if")))
+                + "add_to_array = { mod1440_h_spout = h_sh }\nadd_to_array = { mod1440_h_spsign = h_sn }\n"))))
     effects = (
-        "# History: writes today's figures of the country in scope down, and forgets the oldest month past ten years;\n"
+        casualty_script() + "\n" + equipment_count() + "\n"
+        + "# History: writes today's figures of the country in scope down, and forgets the oldest month past ten years;\n"
         "# then the summed modifiers as they are today, for the Changed view of National Figures. Runs at the start of a\n"
-        "# game for every country and on the first of each month for a player.\n"
+        "# game for every country and on the first of each month for a player. D9: first the casualty step and the\n"
+        "# Equipment table's count, so that series 31 to 38 have today's values.\n"
         + block("mod1440_h_record", (
-            record + "add_to_array = { mod1440_h_date = global.date }\nadd_to_array = { mod1440_h_year = global.year }\n" + pad
+            "mod1440_h_cas_step = yes\nmod1440_nf_equip = yes\n"
+            + record + "add_to_array = { mod1440_h_date = global.date }\nadd_to_array = { mod1440_h_year = global.year }\n" + pad
             + iff("check_variable = { mod1440_h_date^num > %d }" % H_KEEP, forget
                   + "remove_from_array = { array = mod1440_h_date index = 0 }\nremove_from_array = { array = mod1440_h_year index = 0 }\n")
             + was
@@ -2669,7 +2922,7 @@ def history_script(place):
         + "# months in the range as column heights, 0 to %d, between the foot of the graph (zero, or the lowest month) and\n" % H_STEPS
         + "# its top. A month of a newer figure that was not written down (its padding) is drawn as no column and counts for nothing.\n"
         + block("mod1440_h_draw", (
-            pad + tmp("h_n", "mod1440_h_date^num")
+            CAS_FIRST + pad + tmp("h_n", "mod1440_h_date^num")
             + "".join(tmp("h_i%d" % k, "h_n") + "subtract_from_temp_variable = { h_i%d = %d }\n" % (k, k) for k in (1, 2, 13))
             + "".join("clear_array = mod1440_h_tab_%s\n" % part for part in ("now", "dm", "hm", "dy", "hy"))
             + table
@@ -2681,12 +2934,17 @@ def history_script(place):
             + block("find_highest_in_array", "array = mod1440_h_now\nvalue = h_max\nindex = h_at\n")
             # the lowest month, the first month and how many count, with a loop of the page's own: no script of the
             # game uses find_lowest_in_array
-            + tmp("h_min", "h_max") + tmp("h_min_at", 0) + tmp("h_valid", 0) + tmp("h_first", 0)
+            + tmp("h_min", "h_max") + tmp("h_min_at", 0) + tmp("h_valid", 0) + tmp("h_first", 0) + tmp("h_sum", 0)
             + block("for_each_loop", "array = mod1440_h_now\nvalue = h_v\nindex = h_vi\n" + iff(counts, (
-                iff("check_variable = { h_valid = 0 }", tmp("h_first", "h_v"))
+                iff("check_variable = { h_valid = 0 }", tmp("h_first", "h_v")) + "add_to_temp_variable = { h_sum = h_v }\n"
                 + "add_to_temp_variable = { h_valid = 1 }\n" + iff("check_variable = { h_v < h_min }", tmp("h_min", "h_v") + tmp("h_min_at", "h_vi")))))
             + iff("check_variable = { h_valid = 0 }", tmp("h_max", 0) + tmp("h_min", 0) + tmp("h_at", 0))
             + setv("mod1440_h_max", "h_max") + setv("mod1440_h_min", "h_min") + setv("mod1440_h_valid", "h_valid") + setv("mod1440_h_total", "h_total")
+            # D9: the month of the highest column (gold for the month's casualties), the sum of the months on the graph
+            # (In the range), and the deadliest month written down of series 32 (the row's grey extra)
+            + setv("mod1440_h_max_i", "h_at") + setv("mod1440_h_sum", "h_sum")
+            + tmp("h_w", 0) + block("find_highest_in_array", "array = mod1440_h_%d\nvalue = h_w\n" % H_CAS_MON)
+            + iff("check_variable = { h_w < 0 }", tmp("h_w", 0)) + setv("mod1440_h_cas_worst", "h_w")
             + iff("check_variable = { h_cnt > 0 }", setv("mod1440_h_max_date", "mod1440_h_sdate^h_at") + setv("mod1440_h_min_date", "mod1440_h_sdate^h_min_at"))
             + scale + bars
             + place
@@ -2701,41 +2959,71 @@ def history_script(place):
     return effects, monthly
 
 
-# The scenes draw the page as Germany might stand on 1 July 1938 after 31 months, with made-up figures (those of the
-# design's mock-ups, scratch/phases/D4/mock_figures.py): Military factories chosen, the 2-year range of the fit, the
-# lists of What applies; the capture "changed" draws the Changed view.
-NF_SCENE_CHOSEN = 4
+# --- D9 --- The scenes draw the page as Germany might stand on 15 March 1942 after 75 months, with the made-up figures
+# of the design's mock-ups (scratch/phases/D9/work/data.py): a war from September 1939 to June 1941, a second from
+# December 1941, infantry equipment short since the second began. Casualties in the month chosen, 5 years, What
+# applies; the capture "changed" draws the Changed view, the captures "total" and "infantry" of the history scene
+# draw Casualties, all wars and the infantry equipment balance.
+NF_SCENE_CHOSEN = H_CAS_MON
+NF_SCENE_SPAN = 60
+NF_SAMPLE_N = 75                # months written down: index j is the first of the month January 1936 + j
+NF_MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+                  "November", "December"]
+
+
+def nf_sample_series():
+    """The made-up months of series 31, 32 and 33 (None: not written down) and the dead of each calendar month."""
+    loss = [0.0] * NF_SAMPLE_N
+    for k, v in enumerate([42.5, 18.0, 6.2, 4.1, 3.0, 2.2, 3.5, 9.4, 96.8, 182.4, 12.3, 8.8, 7.5, 9.2, 6.1, 5.4, 4.8, 31.6,
+                           88.2, 120.5, 40.3, 15.7]):
+        loss[44 + k] = v                # September 1939 to June 1941
+    for m, v in ((71, 30.0), (72, 60.0), (73, 70.0)):
+        loss[m] = v                     # December 1941 to February 1942
+    total = [round(sum(loss[:j]), 1) for j in range(NF_SAMPLE_N)]
+    month = [None] + [loss[j - 1] for j in range(1, NF_SAMPLE_N)]
+    infantry = []
+    for j in range(NF_SAMPLE_N):
+        v = (2.0 + j * 0.25 if j < 30 else 9.5 - (j - 30) * 0.2 if j < 44 else 6.7 - (j - 44) * 0.9 if j < 56
+             else -4.1 + (j - 56) * 1.0 if j < 68 else 7.9 + (j - 68) * 0.6 if j < 71 else 9.1 - (j - 70) * 5.4)
+        infantry.append(round(v, 1))
+    return {H_CAS_SUM: total, H_CAS_MON: month, H_EQ[0]: infantry}, loss
+
+
+NF_SAMPLE_SERIES, NF_SAMPLE_LOSS = nf_sample_series()
+_T, _M = NF_SAMPLE_SERIES[H_CAS_SUM], NF_SAMPLE_SERIES[H_CAS_MON]
 NF_SAMPLE = {   # series: (now, extra, change in a month, in a year, the twelve months of the sparkline)
-    11: ("412", "+2.15 a day", -38, 105, [300, 330, 365, 290, 330, 360, 400, 250, 300, 380, 450, 412]),
-    14: ("87.4", "+0.92 a day", 12.0, 44.0, [40, 45, 50, 55, 60, 50, 58, 64, 70, 75, 75, 87]),
-    6: ("74.0%", "+0.10% a week", -1.0, -7.0, [81, 81, 80, 80, 79, 78, 78, 77, 76, 76, 75, 74]),
-    7: ("52.0%", "+0.25% a week", 2.0, 17.0, [35, 36, 38, 39, 41, 43, 44, 46, 47, 49, 50, 52]),
-    30: ("72.0%", None, 1.0, 12.0, [60, 61, 62, 63, 64, 65, 67, 68, 69, 70, 71, 72]),
-    15: ("27", "25 cores", 1, 3, [24, 24, 24, 24, 24, 24, 24, 25, 26, 26, 26, 27]),
-    3: ("£civ_factory 52", "11 free", 1, 9, [43, 44, 45, 45, 46, 47, 48, 49, 49, 50, 51, 52]),
-    4: ("£mil_factory 61", "2 idle", 0, 15, [48, 50, 52, 54, 56, 58, 58, 59, 60, 60, 61, 61]),
-    5: ("£nav_dockyard_texticon 14", "0 idle", 0, 2, [12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 14]),
-    8: ("412.6K", "of 520.0K", -8.4, 96.2, [316, 330, 345, 360, 372, 380, 391, 400, 410, 418, 421, 412]),
-    12: ("5", None, 0, 1, [4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5]),
-    13: ("98", None, 3, 31, [67, 70, 72, 75, 78, 80, 83, 86, 89, 92, 95, 98]),
-    0: ("1902.3K", "28.8K training", -45.1, 312.4, [1590, 1630, 1680, 1720, 1760, 1800, 1840, 1880, 1910, 1940, 1947, 1902]),
-    1: ("1104.2K", None, 40.0, 410.2, [694, 720, 760, 790, 820, 860, 900, 940, 980, 1020, 1064, 1104]),
-    2: ("74", None, 3, 31, [43, 46, 48, 51, 53, 56, 59, 62, 65, 68, 71, 74]),
-    10: ("0.0K", None, 0, 0, [0] * 12),
-    9: ("41200", None, 2100, 15200, [26000, 27100, 28500, 29800, 31000, 32500, 34000, 35400, 36800, 38200, 39100, 41200]),
-    16: ("214", None, -12, 18, [196, 200, 204, 208, 212, 216, 220, 224, 228, 230, 226, 214]),
-    17: ("412", None, 6, 40, [372, 375, 378, 382, 386, 390, 394, 398, 401, 404, 406, 412]),
-    18: ("61", None, 1, 8, [53, 54, 55, 55, 56, 57, 57, 58, 59, 59, 60, 61]),
-    19: ("1840", None, 120, 920, [920, 1000, 1080, 1160, 1240, 1320, 1400, 1480, 1560, 1640, 1720, 1840]),
-    27: ("48.0", None, 12.0, -12.0, [60, 66, 70, 40, 46, 52, 58, 20, 26, 30, 36, 48]),
-    28: ("12.4", None, 3.0, 10.1, [2, 3, 4, 5, 6, 7, 8, 9, 9, 10, 9, 12]),
-    29: ("30.0", None, 5.0, 18.0, [12, 14, 16, 17, 19, 20, 22, 23, 24, 25, 25, 30]),
+    11: ("86", "+1.85 a day", -42, 60, [120, 60, 10, -45, -80, -50, 0, 30, 55, 70, 128, 86]),
+    14: ("64.2", "+0.92 a day", 8.0, -12.0, [76, 70, 58, 50, 44, 40, 46, 52, 60, 66, 56, 64]),
+    6: ("62.0%", "-0.05% a week", -1.0, -9.0, [71, 70, 70, 69, 68, 67, 66, 66, 65, 64, 63, 62]),
+    7: ("71.5%", "+0.10% a week", 2.5, -4.5, [76, 75, 74, 72, 70, 68, 66, 65, 66, 67, 69, 71.5]),
+    30: ("81.0%", None, 0.0, 3.0, [78, 78, 79, 79, 79, 80, 80, 80, 81, 81, 81, 81]),
+    15: ("44", "31 cores", 2, 6, [38, 38, 38, 39, 40, 41, 41, 42, 42, 42, 42, 44]),
+    3: ("£civ_factory 61", "8 free", 1, 6, [55, 55, 56, 56, 57, 58, 58, 59, 59, 60, 60, 61]),
+    4: ("£mil_factory 88", "0 idle", 2, 19, [69, 71, 72, 74, 76, 78, 80, 82, 84, 85, 86, 88]),
+    5: ("£nav_dockyard_texticon 16", "1 idle", 0, 1, [15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 16]),
+    8: ("212.4K", "of 610.0K", -38.2, -120.5, [332, 350, 371, 390, 402, 360, 330, 300, 280, 262, 250, 212]),
+    12: ("6", None, 0, 1, [5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6]),
+    13: ("164", None, 3, 27, [137, 140, 142, 145, 147, 150, 152, 155, 157, 159, 161, 164]),
+    0: ("412.8K", "64.2K training", -88.4, -620.3, [1033, 1010, 980, 960, 940, 900, 880, 820, 760, 640, 501, 412]),
+    1: ("3124.6K", None, 92.0, 880.1, [2244, 2300, 2380, 2450, 2520, 2600, 2680, 2760, 2840, 2950, 3032, 3124]),
+    2: ("188", None, 4, 42, [146, 150, 154, 158, 162, 166, 170, 174, 178, 181, 184, 188]),
+    H_CAS_SUM: ("909.9K", "191.4K in wars", round(_T[74] - _T[73], 1), round(_T[74] - _T[62], 1), _T[63:75]),
+    H_CAS_MON: ("31.4K", "worst 182.4K", round(_M[74] - _M[73], 1), round(_M[74] - _M[62], 1), _M[63:75]),
+    H_SURRENDER: ("4.0%", None, 1.5, 4.0, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2.5, 4.0]),
+    16: ("96", None, -18, -110, [206, 200, 190, 182, 170, 160, 150, 140, 130, 120, 114, 96]),
+    17: ("520", None, 4, 48, [472, 476, 480, 484, 488, 492, 496, 500, 504, 508, 516, 520]),
+    18: ("88", None, -2, 9, [79, 80, 81, 82, 83, 84, 85, 86, 87, 89, 90, 88]),
+    19: ("3210", None, -140, 860, [2350, 2420, 2500, 2600, 2700, 2800, 2900, 3000, 3100, 3200, 3350, 3210]),
+    27: ("74.0", None, 12.0, 30.0, [44, 50, 56, 30, 36, 42, 48, 54, 60, 66, 62, 74]),
+    28: ("18.4", None, 2.0, 6.1, [12, 13, 13, 14, 14, 15, 15, 16, 16, 17, 16, 18]),
+    29: ("52.0", None, -6.0, 22.0, [30, 32, 34, 36, 38, 40, 44, 48, 52, 56, 58, 52]),
 }
-# the chosen figure, Military factories, 1 January 1936 to 1 July 1938
-NF_SAMPLE_MONTHS = [28, 28, 29, 30, 31, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 43, 44, 46, 48, 50, 52, 54, 56, 58, 58, 59, 60, 60, 61, 61]
 # the resources: balance, made, used, import, export, balance a month before
-NF_SAMPLE_RES = [(-18, 9, 27, 0, 0, -12), (-6, 32, 38, 0, 0, -4), (-21, 0, 21, 0, 0, -18), (-9, 3, 12, 0, 0, -9),
-                 (58, 182, 124, 0, 0, 66), (-11, 4, 15, 0, 0, -7), (172, 264, 52, 0, 40, 180)]
+NF_SAMPLE_RES = [(-24, 18, 42, 0, 0, -18), (-8, 36, 44, 0, 0, -6), (-26, 0, 26, 0, 0, -21), (-11, 3, 14, 0, 0, -9),
+                 (44, 196, 152, 0, 0, 58), (-14, 4, 18, 0, 0, -11), (160, 270, 70, 0, 40, 172)]
+# the Equipment table: stock, short, balance, change of the balance in a month, in thousands
+NF_SAMPLE_EQ = [(0.0, 12.4, -12.4, -5.1), (1.2, 0.0, 1.2, 0.3), (3.4, 0.6, 2.8, -0.4), (0.8, 0.0, 0.8, 0.1),
+                (0.0, 1.1, -1.1, -0.2), (4.6, 2.2, 2.4, -1.0)]
 # the lists of What applies: (group, applies, of, [(label, value, colour)]); colour + green, - red, 0 white
 NF_SAMPLE_LISTS = [
     [("Politics", 12, [("Political power per day", "+2.15", "+"), ("Political Power Gain", "+15.0%", "+"),
@@ -2824,21 +3112,149 @@ def nf_sample_lists(view):
     return windows, rows
 
 
+def nf_date(j, short=False):
+    """The date of the record j of the made-up months (the first of the month January 1936 + j)."""
+    year, month = 1936 + j // 12, j % 12
+    return "%d.%d.1" % (year, month + 1) if short else "1 %s, %d" % (NF_MONTH_NAMES[month], year)
+
+
+def nf_spark_sample(values):
+    """The sparkline of twelve made-up months as mod1440_h_spark draws it: per widget the rows it shows in ("only")
+    and its fills. A month below zero hangs red from the zero level."""
+    valid = [v for v in values if v is not None]
+    hi, lo = max(valid), min(valid)
+    sr = hi - lo
+    zero = 0.0
+    if lo < 0:
+        zero = (2 + (NF_SPARK_H - 2) * (0 - lo) / float(sr)) if sr > 0 else float(NF_SPARK_H)
+    only = {"sp": [], "spr": [], "spm": [], "spn": []}
+    fills = {"sp": [], "spr": [], "spm": [], "spn": []}
+    for i, v in enumerate(values):
+        if v is None:
+            continue
+        h = (2 + (NF_SPARK_H - 2) * (v - lo) / float(sr)) if sr > 0 else (float(NF_SPARK_H) if v > 0 else 0.0)
+        parts = (("spr", zero), ("spn", h)) if v < 0 else (("sp", h),) + ((("spm", zero),) if zero > 0 else ())
+        for part, height in parts:
+            only[part].append(i)
+            fills[part].append(round(height / NF_SPARK_H, 3))
+    return only, fills
+
+
+def nf_graph_sample(n, span):
+    """The graph of series n over the last span months of the made-up months, as mod1440_h_draw draws it (no zoom):
+    the page's widgets the script hides, the samples, the places of the year marks and the zero line, the column
+    window's "only" and fills, and the rows of the three grids."""
+    caption, variable, factor, unit, dec, rise = SERIES[n]
+    months = NF_SAMPLE_SERIES[n]
+    first = max(0, len(months) - span)
+    shown = months[first:]
+    valid = [v for v in shown if v is not None]
+    hi, lo = max(valid), min(valid)
+    base = lo if lo < 0 else 0.0
+    top = hi if hi >= 0 else 0.0
+    rng = top - base
+    zero_on = base < 0 and top > -0.001 and rng > 0
+    zero = -base / rng * H_CHART_H if zero_on else 0.0
+    at_max = shown.index(hi)
+    at_min = shown.index(lo)
+    month = n == H_CAS_MON
+    hide = ["h_name_%d" % k for k in range(len(SERIES)) if k != n] + ["h_unit_%d" % k for k in range(len(SERIES)) if k != n]
+    hide += ["h_note_%d" % k for k in H_NOTES if k != n] + ["h_none"]
+    if not zero_on:
+        hide += ["h_zero", "h_scale_zero"]
+    # mod1440_h_total counts the months written down: the first record of series 32 (-1, no month before it) is not one
+    total = len([v for v in months if v is not None])
+    samples = {"h_unit_%d" % n: "§gThe last %d years of %d months%s§!" % (span // 12, total, ", " + unit if unit else ""),
+               "h_from": nf_date(first), "h_to": nf_date(len(months) - 1), "h_months": "%d of %d" % (len(valid), total)}
+    if month:
+        samples["h_note_%d" % n] = "§YDeadliest: the month to %s§!" % nf_date(first + at_max)
+
+    def number(v):
+        return ("%." + str(dec) + "f") % v
+
+    def change(name, value):
+        """A signed number of the plates: the variant the trigger shows, the others hidden."""
+        variants = ["h_%s_%d%s" % (name, d, r) for d in (0, 1) for r in ("", "r")] + ["h_%s_same" % name]
+        shown_one = "h_%s_same" % name if value == 0 else "h_%s_%d%s" % (name, dec, "" if rise == "+" else "r")
+        hide.extend(w for w in variants if w != shown_one)
+        if value:
+            good = (value > 0) == (rise == "+")
+            samples[shown_one] = ("§G%s§!" if good else "§R%s§!") % (("%+." + str(dec) + "f") % value)
+
+    for name, value in (("latest", shown[-1]), ("max", hi), ("min", lo)):
+        hide.append("h_%s_%d" % (name, 1 - dec))
+        samples["h_%s_%d" % (name, dec)] = number(value)
+    change("dm", round(months[-1] - months[-2], 3))
+    change("dy", round(months[-1] - months[-13], 3))
+    if month:
+        hide += ["h_change_%d%s" % (d, r) for d in (0, 1) for r in ("", "r")] + ["h_change_same", "h_sum_%d" % (1 - dec)]
+        hide += ["h_max_l", "h_change_l", "h_max_d", "h_min_d"]
+        samples["h_sum_%d" % dec] = number(sum(valid))
+        samples["h_max_d32"] = "§gto %s§!" % nf_date(first + at_max, True)
+        samples["h_min_d32"] = "§gto %s§!" % nf_date(first + at_min, True)
+    else:
+        change("change", round(valid[-1] - valid[0], 3))
+        hide += ["h_sum_0", "h_sum_1", "h_max32_l", "h_sum_l", "h_max_d32", "h_min_d32"]
+        samples["h_max_d"] = "§g%s§!" % nf_date(first + at_max, True)
+        samples["h_min_d"] = "§g%s§!" % nf_date(first + at_min, True)
+    for k in range(5):
+        hide.append("h_scale_%d_%d" % (k, 1 - dec))
+        samples["h_scale_%d_%d" % (k, dec)] = number(top if k == 4 else base + k * rng / 4.0)
+    # the year marks under the first month of each year after the first month on the graph
+    step = [r[1] for r in H_RANGES if r[0] == span][0]
+    place = {}
+    marks = [i for i in range(1, len(shown)) if (first + i) % 12 == 0]
+    for k, i in enumerate(marks):
+        place["h_year_%d" % k] = [h_first_x(step) + i * step, H_CHART_TOP + H_CHART_H + 1]
+        samples["h_year_%d" % k] = str(1936 + (first + i) // 12)
+    hide += ["h_year_%d" % k for k in range(len(marks), H_YEARS)]
+    if zero_on:
+        y = int(round(H_CHART_TOP + H_CHART_H - 1 - zero))
+        place["h_zero"] = [14 + H_CHART_X + H_INSET, y]
+        place["h_scale_zero"] = [28, y - 10]
+    # the columns: one row per month on the graph
+    widgets = ["h_bar", "h_loss", "h_gold", "h_red", "h_mask", "h_maskn"]
+    only = {w: [] for w in widgets}
+    fills = {w: [] for w in widgets}
+    for i, v in enumerate(shown):
+        if v is None:
+            continue
+        h = (v - base) / rng * H_CHART_H if rng > 0 else (H_CHART_H if v else 0)
+        if base != 0 and h < 4:
+            h = 4
+        h = max(0, min(H_CHART_H, h))
+        if n in H_LOSS:
+            parts = [("h_gold", h)] if (month and i == at_max) else [("h_loss", h)]
+        elif v < 0:
+            parts = [("h_red", zero), ("h_maskn", h)]
+        else:
+            parts = [("h_bar", h)] + ([("h_mask", zero)] if zero > 0 else [])
+        for w, height in parts:
+            only[w].append(i)
+            fills[w].append(round(height / float(H_CHART_H), 3))
+    col = "mod1440_figures_col_%d" % span
+    column = {"only": {col: {"%s%d" % (w, span): only[w] for w in widgets}},
+              "fills": {col: {"%s%d" % (w, span): fills[w] for w in widgets if fills[w]}}}
+    rows = {"h_grid_%d" % r[0]: (len(shown) if r[0] == span else 0) for r in H_RANGES}
+    return hide, samples, place, column, rows
+
+
+def nf_page_hide(n):
+    """What script hides in the tables while series n is chosen: the pick bands and yellow names of the other rows,
+    the white name of the chosen one."""
+    figures = [k for k in range(len(SERIES)) if k in NF_SPARKS or k in H_DEEP]
+    return (["nf_t%d_pick" % k for k in figures if k != n] + ["nf_t%d_ly" % k for k in figures if k != n] + ["nf_t%d_l" % n]
+            + ["nf_last_none"] + ["nf_c%d_since" % c for c in range(len(NF_COLUMNS))] + ["nf_c%d_none" % c for c in range(len(NF_COLUMNS))])
+
+
 def nf_scene():
-    """The windows of the National Figures page for its two scenes, their samples, the bars' fills and the state of
-    the Changed view."""
+    """The windows of the National Figures page for its two scenes, their samples, the bars' fills, the state of the
+    Changed view and the states of the graph of two other figures (captures of the history scene)."""
     n = NF_SCENE_CHOSEN
-    figures = [k for k in range(len(SERIES)) if k in NF_SPARKS or k in H_RES]
-    hide = ["nf_t%d_pick" % k for k in figures if k != n] + ["nf_t%d_ly" % k for k in figures if k != n] + ["nf_t%d_l" % n]
-    hide += ["h_name_%d" % k for k in range(len(SERIES)) if k != n] + ["h_unit_%d" % k for k in range(len(SERIES)) if k != n]
-    hide += ["h_none", "nf_last_none", "h_zero"] + ["h_year_%d" % k for k in range(2, H_YEARS)]
-    for name in ("latest", "max", "min"):
-        hide.append("h_%s_1" % name)
-    for name in ("dm", "dy", "change"):
-        hide += ["h_%s_0r" % name, "h_%s_1" % name, "h_%s_1r" % name]
-    hide += ["h_dm_0", "h_dy_same", "h_change_same"]        # no change in the month: its dash
-    hide += ["h_scale_%d_1" % k for k in range(5)]
-    samples = {}
+    span = NF_SCENE_SPAN
+    graph_hide, graph_samples, place, column, rows = nf_graph_sample(n, span)
+    hide = []           # the tables' widgets script hides, whichever figure is chosen
+    samples = dict(graph_samples)
     for k, (now, extra, dm, dy, spark) in NF_SAMPLE.items():
         decimals, rise = SERIES[k][4], SERIES[k][5]
         samples["nf_t%d_v" % k] = now
@@ -2846,6 +3262,7 @@ def nf_scene():
             samples["nf_t%d_x" % k] = "§g%s§!" % extra
         nf_sample_change("nf_t%d_m" % k, dm, decimals, rise, h_suffix(k), hide, samples)
         nf_sample_change("nf_t%d_y" % k, dy, decimals, rise, h_suffix(k), hide, samples)
+    hide += ["nf_t%d_vn" % k for k in NF_NOW_NEG]      # political power is above zero in the sample
     for r, (balance, made, used, bought, sold, before) in enumerate(NF_SAMPLE_RES):
         samples["nf_res_balance_%d" % r] = ("§G%+d§!" if balance >= 0 else "§R%+d§!") % balance
         for cname, value in (("made", made), ("used", used), ("in", bought), ("out", sold)):
@@ -2854,47 +3271,58 @@ def nf_scene():
             else:
                 hide.append("nf_res_%s_%d" % (cname, r))
         nf_sample_change("nf_t%d_m" % H_RES[r], balance - before, 0, "+", "", hide, samples)
-    months = NF_SAMPLE_MONTHS
-    shown = months[-24:]
-    samples.update({"nf_last": "§gWritten down on the first of each month, the last on 1 July, 1938§!",
-                    "h_unit_%d" % n: "§gThe last 2 years of 31 months§!", "h_from": "1 August, 1936", "h_to": "1 July, 1938",
-                    "h_latest_0": "61", "h_dy_0": "§G+15§!", "h_max_0": "61", "h_min_0": "%d" % min(shown),
-                    "h_change_0": "§G+%d§!" % (shown[-1] - shown[0]), "h_months": "24 of 31", "h_year_0": "1937", "h_year_1": "1938"})
-    for k in range(5):
-        samples["h_scale_%d_0" % k] = "%d" % (max(shown) * k // 4)
-    step = H_RANGES[0][1]
-    first = len(months) - 24
-    januaries = [i for i in range(24) if (first + i) % 12 == 0]
-    place = {"h_year_%d" % k: [h_first_x(step) + i * step, H_CHART_TOP + H_CHART_H + 1] for k, i in enumerate(januaries)}
-    rows = {"h_grid_24": 24, "h_grid_60": 0, "h_grid_120": 0}
-    list_rows = {"h_grid_%d" % span: "mod1440_figures_col_%d" % span for span, step_, width, caption in H_RANGES}
+    for k, (stock, short, balance, dm) in enumerate(NF_SAMPLE_EQ):
+        if stock > 0:
+            samples["nf_eq_s_%d" % k] = "%.1fK" % stock
+            hide.append("nf_eq_s0_%d" % k)
+        else:
+            hide.append("nf_eq_s_%d" % k)
+        if short > 0:
+            samples["nf_eq_d_%d" % k] = "§R%.1fK§!" % short
+            hide.append("nf_eq_d0_%d" % k)
+        else:
+            hide.append("nf_eq_d_%d" % k)
+        shown_b = "nf_eq_b_%d" % k if balance > 0 else "nf_eq_bn_%d" % k if balance < 0 else "nf_eq_b0_%d" % k
+        hide += [w for w in ("nf_eq_b_%d" % k, "nf_eq_bn_%d" % k, "nf_eq_b0_%d" % k) if w != shown_b]
+        if balance:
+            samples[shown_b] = ("§G%+.1fK§!" if balance > 0 else "§R%+.1fK§!") % balance
+        nf_sample_change("nf_t%d_m" % H_EQ[k], dm, 1, "+", "K", hide, samples)
+    table_hide = hide
+    hide = nf_page_hide(n) + graph_hide + table_hide
+    samples["nf_last"] = "§gWritten down on the first of each month, the last on 1 March, 1942§!"
+    list_rows = {"h_grid_%d" % s: "mod1440_figures_col_%d" % s for s, step_, width, caption in H_RANGES}
+    spark_windows = {}
     for k in NF_SPARKS:
         rows["nf_sp%d_grid" % k] = NF_SPARK_N
         list_rows["nf_sp%d_grid" % k] = "mod1440_figures_spark_%d" % k
+        only, fills = nf_spark_sample(NF_SAMPLE[k][4])
+        spark_windows["mod1440_figures_spark_%d" % k] = {
+            "only": {"nf_%s%d" % (part, k): rows_ for part, rows_ in only.items()},
+            "fills": {"nf_%s%d" % (part, k): f for part, f in fills.items() if f}}
     lists, list_counts = nf_sample_lists("applies")
     rows.update(list_counts)
     for c in range(len(NF_COLUMNS)):
         list_rows["nf_l%d_grid" % c] = "mod1440_figures_row_%d" % c
         samples["nf_c%d_count" % c] = "§g%d of %d apply§!" % (sum(len(g[2]) for g in NF_SAMPLE_LISTS[c]), sum(g[1] for g in NF_SAMPLE_LISTS[c]))
-    hide += ["nf_c%d_since" % c for c in range(len(NF_COLUMNS))] + ["nf_c%d_none" % c for c in range(len(NF_COLUMNS))]
     applies_hide = list(hide)
-    fills = {"mod1440_figures_col_24": {"h_bar24": [round(v / float(max(shown)), 3) for v in shown]}}
-    for k in NF_SPARKS:
-        spark = NF_SAMPLE[k][4]
-        lo, hi = min(spark), max(spark)
-        fills["mod1440_figures_spark_%d" % k] = {"nf_sp%d" % k: [
-            round((1.0 if v else 0.0) if hi == lo else (2 + (NF_SPARK_H - 2) * (v - lo) / float(hi - lo)) / NF_SPARK_H, 3) for v in spark]}
+    frames = {"nf_view_applies": 2, "h_range_%d" % span: 2}
     windows = [{"name": "mod1440_figures", "at": [NF_X, NF_Y], "freeWindow": True, "rows": rows, "listRows": list_rows,
-                "hide": applies_hide, "place": place, "frames": {"nf_view_applies": 2, "h_range_24": 2},
-                "drawIn": ["", "all", "changed", "ten_years", "oil"],
-                "_note": "A window of its own at its screen position (D8, X7). Germany on 1 July 1938 after 31 months, made-up figures as the design's mock-ups: Military factories chosen, the 2-year range, What applies. Script hides the pick bands and names of the other figures, the changes of the sign a row does not have and the ways of writing a number it does not use; the two range grids not in use are empty."}]
-    windows += [{"name": "mod1440_figures_col_%d" % span, "skip": True} for span, step_, width, caption in H_RANGES]
-    windows += [{"name": "mod1440_figures_spark_%d" % k, "skip": True} for k in NF_SPARKS]
+                "hide": applies_hide, "place": place, "frames": frames,
+                "drawIn": ["", "all", "changed", "ten_years", "oil", "total", "infantry"],
+                "_note": "A window of its own at its screen position (D8, X7). Germany on 15 March 1942 after 75 months, made-up figures as the D9 design's mock-ups: Casualties in the month chosen, 5 years, What applies. Script hides the pick bands and names of the other figures, the changes of the sign a row does not have, the ways of writing a number it does not use, the twins of a value by its sign; the two range grids not in use are empty."}]
+    col = "mod1440_figures_col_%d" % span
+    for s, step_, width, caption in H_RANGES:
+        name = "mod1440_figures_col_%d" % s
+        w = {"name": name, "skip": True}
+        if name == col:
+            w["only"] = column["only"][col]
+            w["fills"] = column["fills"][col]
+        windows.append(w)
+    for k in NF_SPARKS:
+        name = "mod1440_figures_spark_%d" % k
+        windows.append({"name": name, "skip": True, "only": spark_windows[name]["only"], "fills": spark_windows[name]["fills"]})
     for name, row_hide, only, row_samples in lists:
         windows.append({"name": name, "skip": True, "hide": row_hide, "only": only})
-    for w in windows:
-        if w["name"] in fills:
-            w["fills"] = fills[w["name"]]
     windows.append({"name": "mod1440_figures_handle", "at": [HANDLE_X - 6, HANDLE_Y + 78], "drawIn": ["closed"],
                     "_note": "Docked to Politics (the tab's corner at -6,78), shown only while the page is closed: the state closed."})
     scene_samples = {"mod1440_figures": samples}
@@ -2905,7 +3333,7 @@ def nf_scene():
     changed_rows.update(changed_counts)
     changed_hide = {"mod1440_figures": [h for h in hide if not h.startswith("nf_c") or "_none" in h]
                     + ["nf_c%d_count" % c for c in range(len(NF_COLUMNS))]}
-    changed_samples = {"mod1440_figures": {"nf_c%d_since" % c: "§g%d since 1938.6.1§!" % sum(len(g[1]) for g in NF_SAMPLE_CHANGED[c])
+    changed_samples = {"mod1440_figures": {"nf_c%d_since" % c: "§g%d since 1942.3.1§!" % sum(len(g[1]) for g in NF_SAMPLE_CHANGED[c])
                                            for c in range(len(NF_COLUMNS))}}
     changed_only = {}
     for name, row_hide, only, row_samples in changed_lists:
@@ -2914,9 +3342,23 @@ def nf_scene():
         changed_samples[name] = row_samples
     changed = {"name": "changed", "steps": [{"clickWidget": "mod1440_figures/nf_view_changed", "wait": 1.0}],
                "hide": changed_hide, "only": changed_only, "rows": changed_rows, "samples": changed_samples,
-               "frames": {"mod1440_figures": {"nf_view_changed": 2, "h_range_24": 2}},
+               "frames": {"mod1440_figures": {"nf_view_changed": 2, "h_range_%d" % span: 2}},
                "_note": "The Changed view as the renderer draws it with the design's made-up month; in a check of 1 January 1936 the lists say that the first comparison comes on the first of next month (or, after effect mod1440_chk_changed, list the made-up changes)."}
-    return windows, scene_samples, fills, changed
+    # D9: two more figures on the graph, for the history scene: the total of every war, and the infantry equipment balance
+    # with its months below zero hanging red (the renderer draws them with --state total and --state infantry)
+    graphs = []
+    for name, k, note in (("total", H_CAS_SUM, "Casualties, all wars on the graph over the same made-up months: the total never falls when the first war ends (June 1941)."),
+                          ("infantry", H_EQ[0], "The infantry equipment balance over the made-up months: green above the zero line, red hanging below it, the scale's own 0.")):
+        g_hide, g_samples, g_place, g_column, g_rows = nf_graph_sample(k, span)
+        state_hide = nf_page_hide(k) + g_hide + table_hide
+        state_rows = dict(rows)
+        state_rows.update(g_rows)
+        graphs.append({"name": name, "steps": [{"clickWidget": "mod1440_figures/nf_t%d" % k, "scene": "national_figures", "wait": 1.0}],
+                       "hide": {"mod1440_figures": state_hide}, "samples": {"mod1440_figures": g_samples},
+                       "place": {"mod1440_figures": g_place}, "rows": state_rows,
+                       "only": g_column["only"], "fills": g_column["fills"],
+                       "frames": {"mod1440_figures": frames}, "_note": note})
+    return windows, scene_samples, changed, graphs
 
 
 # --- D8 --- the free page (scratch/phases/D8/design.json, openInGame)
@@ -2931,17 +3373,37 @@ NF_CHECKLIST_D8 = [
 NF_CHECKLIST = NF_CHECKLIST_D8 + [
     "The page stands beside the politics panel (1680x1210 from screen 550,78) and takes clicks; the Figures button and Shift+M open it, the close button, Shift+M and Escape close it (the first Escape the page, the second Politics)",
     "The title strip: 'Written down on the first of each month, the last on 1 January, 1936'; 'Modifiers:' and three buttons What applies, All modifiers, Changed, the chosen one with the second frame and a yellow caption",
-    "Two tables of figures: Government and Industry and research; Manpower and Stock and experience; each head bar in yellow, the first with the column heads Now, Month, Year, 12 months; every second row on a darker band",
+    "Two tables of figures: Government and Industry and research; Manpower and war and Stock and experience (D9); each head bar in yellow, the first with the column heads Now, Month, Year, 12 months; every second row on a darker band",
     "Compare each Now with the game: political power and command power and their daily gain with the top bar's tooltips; stability and war support and their weekly change with the top bar; ruling party popularity with the politics panel's party ring (Germany 1936: 40.0%); states and cores with the state list; factories and free/idle with the top bar's tooltips (35 civilian, 28 military, 10 dockyards); fuel with the top bar; free manpower with the top bar, training with Army Readiness; divisions, equipment, convoys, trains, ships, planes as before; army, navy and air experience with the top bar's experience tooltips",
     "On 1 January 1936 (one month) the Month and Year columns are empty and every sparkline has one column at full height on the right",
     "A click on a row of either table and of the resource table draws its figure: the row on the lighter band with its name yellow, the graph's name and its line 'The last 2 years of 1 months'",
-    "The resource card: the seven rows with the game's icons, Balance, Made, Used, Import, Export against the logistics tab (Germany 1936: balances 3, 104, -5, 3, 177, 1, 195); the legend under them",
+    "The resource card: the seven rows with the game's icons, Balance, Made, Used, Import, Export against the logistics tab (Germany 1936: balances 3, 104, -5, 3, 177, 1, 195); no legend under them (D9: its words are in the column heads' tooltips), the Equipment table in its place",
     "The graph: the seven numbers in one row under a head bar; the buttons 2 years (chosen), 5 years, 10 years and Zoom in; 24 column slots of 57 px across 1560 px; one column on 1 January 1936; the tooltip of a column, of Highest and of Lowest give the month",
     "The 5 years and 10 years buttons: the columns become 22 and 11 px wide on 26 and 13 px steps, and the other two grids draw nothing (no column and no tooltip of another range)",
     "After `effect mod1440_chk_months` (tools/check_effects.py): 120 months, the fit range 10 years; every table row has its Month, Year and twelve sparkline columns; a click on a resource row draws a balance that goes below zero from its lowest month, with the zero line across the graph (an orange 2 px line) at the scale's 0",
-    "What applies: only the modifiers that are not 0 (Germany 1936: 11, 8, 10 and 7 rows with the heads); All modifiers: every one, those that are 0 in grey; each list scrolls; 14 rows show",
+    "What applies: only the modifiers that are not 0 (Germany 1936: 11, 8, 10 and 7 rows with the heads); All modifiers: every one, those that are 0 in grey; each list scrolls; 12 rows show (D9, was 14), the cards 374 high from page y 822",
     "Changed on 1 January 1936: each card reads '0 since 1936.1.1' with an empty list (the startup record is the comparison of day 1; the line 'The first comparison comes on the first of next month.' shows only for a save without that record); after `effect mod1440_chk_changed`: the changed modifiers with the change (green or red in the modifier's own sense) and the value now in grey, the heads 'change' and 'now', the cards '<n> since 1936.1.1' at the right of the title strip, clear of the title on all four cards (Politics and Diplomacy, Navy, Air and Research)",
     "Every figure row's tooltip, a sparkline's tooltip and the column heads' tooltips",
+] + [
+    # --- D9 --- (scratch/phases/D9/design.json; the check effects of tools/check_effects.py)
+    "D9 band 1: three cards 418 high at page y 56 (600, 600, 440 wide); Manpower and war lists Free manpower, Manpower in the field, Divisions, Casualties, all wars (grey extra '0.0K in wars'), Casualties in the month (grey 'worst 0.0K'), Surrender progress; Stock and experience has no Infantry equipment row (7 rows); card 1 keeps 26 px free at its foot; nothing overlaps or is cut",
+    "D9, against the game on 1 January 1936: Casualties, all wars 0.0K and its grey 'in wars' 0.0K (the war screen has no war); Surrender progress 0.0% (war screen); Casualties in the month 0.0K",
+    "D9 Equipment table under the resources: head bar 'Equipment' with Stock, Short, Balance, Month; six rows with the game's names (Infantry Equipment, Support Equipment, Towed Artillery, Towed Anti-Tank, Towed Anti-Aircraft, Truck) in 136 px boxes; compare each Stock with the production tab's stockpile of that kind (in thousands), each Short with Army Readiness's shortfall of the kind (a grey dash when the field lacks nothing), and Balance = Stock less Short, green with '+' above zero",
+    "D9: `effect mod1440_chk_equip_short` (made-up values until the next day's count): Infantry Equipment reads Stock 0, Short 12.4K in red, Balance -12.4K in red with its minus sign; Towed Anti-Aircraft Short 1.1K, Balance -1.1K red",
+    "D9: `effect mod1440_chk_pp_negative` (political power -200): the Political power row's Now reads -200 (or the game's number) in red with its sign",
+    "D9: a click on an Equipment row chooses it (lighter band, yellow name) and draws its balance: name '<kind> balance', the line 'In stock less what the field is short of' under the unit line",
+    "D9: the column heads' tooltips carry the legend's words (Now: red below zero; Month and Year: green a gain, red a loss, the other way round for casualties, surrender and costs; 12 months: red months below zero); the Equipment heads' tooltips (Stock, Short as Army Readiness counts it, Balance, Month)",
+    "D9 graph card: 336 high at page y 480; the frame of the columns at page y 564 (12 px lower than before); the year marks, From and To dates follow; the range buttons and Zoom in at page y 490",
+]
+NF_HISTORY_CHECKLIST_D9 = [
+    "D9: after `effect mod1440_chk_months` (130 made-up months): choose Casualties in the month: columns in the strength bar's brown, the deadliest month's column gold, under the name the yellow line 'Deadliest: the month to <date>' naming the gold column's date; the plates read Deadliest (not Highest) and In the range (the sum of the months on the graph, not Over the range), with 'to <yyyy.m.d>' under Deadliest and Lowest; the column of the first record (-1) is missing",
+    "D9: after `effect mod1440_chk_months`: Casualties, all wars rises during the made-up war and stays level after it (never falls), in brown, with the line 'The dead of every war, ended or not'; game.log has 'MOD1440 check: casualties' with series 10 back to 0 while 31 keeps its last value",
+    "D9: after `effect mod1440_chk_months`, the Infantry Equipment row: months above zero green from the zero line up, months below zero red hanging from the zero line down, the orange zero line and the scale's own '0' at its left on the same height; the dates under Highest and Lowest (yyyy.m.d) match the highest and lowest columns' tooltips. If the red columns stand from the foot instead, or green columns show their lower part dark-masked wrongly, the mask layer failed (fallback in build.json)",
+    "D9: after `effect mod1440_chk_months`, the Political power row's sparkline: months below zero hang red from a zero level, months above stand on it; a sparkline of a figure never below zero is drawn as before",
+    "D9: a column's tooltip on a red (negative) column gives its date and value; hovering the masked lower part of a green column still shows a tooltip",
+    "D9 back-fill: `effect mod1440_chk_months_d4` (a save of the build before D9: 31 series, a war in series 10 that rises and ends, no series 31 to 39, no mod1440_h_cas_ver), then close and open the page: Casualties, all wars and Casualties in the month have months back to the first, the total never falls when series 10 does; game.log 'MOD1440 check: backfill' shows cas_ver 1 and the counts of 31 and 32 equal to the months; the equipment balances and surrender progress say 'Nothing is written down for this figure yet' until a record",
+    "D9 daily step: `effect mod1440_chk_cas_rise` adds 12.0K to Casualties, all wars and to Casualties in the month; `effect mod1440_chk_cas_fall` (the game's value 50K lower than the day before, a war ended) changes neither; game.log 'MOD1440 check: cas' lines give the sums",
+    "D9: 2, 5 and 10 years with a casualty series and with the infantry balance: the brown, gold, red and mask columns follow the range (57, 22, 11 px); the other grids draw nothing",
 ]
 NF_SCENE = nf_scene()
 # --- end D4 round 2 ---
@@ -3487,7 +3949,7 @@ SCENES = {
         "phase": "D4", "file": "mod1440_figures.gui", "screenshot": "reference/vanilla/politics.jpg",
         "windows": NF_SCENE[0], "samples": NF_SCENE[1],
         "setup": [{"move": "open_politics"}, {"key": "shift+m", "wait": 1.5, "_note": "the page is hidden until asked for"}],
-        "captures": [{"name": "all", "steps": [{"clickWidget": "mod1440_figures/nf_view_all", "wait": 1.0}]}, NF_SCENE[3]],
+        "captures": [{"name": "all", "steps": [{"clickWidget": "mod1440_figures/nf_view_all", "wait": 1.0}]}, NF_SCENE[2]],
         "states": [{"name": "closed", "_note": "Politics with the page closed (the default): the Figures handle in the title strip at screen 353,90, no page."}],
         "teardown": [{"clickWidget": "mod1440_figures/nf_view_applies", "wait": 0.8},
                      {"key": "shift+m", "wait": 0.8, "_note": "hide it again: the page remembers per country whether it is open"}],
@@ -3496,7 +3958,9 @@ SCENES = {
         "crop": [540, 64, 1700, 1234],
         "manual": ["The advisor and law picker opened from the panel: it stands above the page",
                    "More than one month in the user's game: the Month and Year columns, the sparklines, the fit range growing from 2 to 5 years, and the Changed view after a real first of the month",
-                   "Speed 5 with the page open: no stutter from the 24 sparklines, the graph and the four lists"],
+                   "Speed 5 with the page open: no stutter from the 25 sparklines, the graph and the four lists",
+                   "D9, the user's game: a war that ends; the next days Casualties, all wars keeps its number while the grey 'in wars' falls, and the next first of the month writes a column of the month's dead",
+                   "D9, the user's game: a save of the build before D9 with a finished war; the first opening back-fills Casualties, all wars and Casualties in the month from the old Casualties months"],
         "checklist": NF_CHECKLIST,
     },
     "history": {
@@ -3505,9 +3969,10 @@ SCENES = {
         "setup": [{"move": "open_politics"}, {"key": "shift+m", "wait": 1.5},
                   {"clickWidget": "mod1440_figures/nf_t4", "scene": "national_figures", "wait": 1.0}],
         "captures": [{"name": "ten_years", "steps": [{"clickWidget": "mod1440_figures/h_range_120", "scene": "national_figures", "wait": 1.0}]},
-                     {"name": "oil", "steps": [{"clickWidget": "mod1440_figures/nf_t20", "scene": "national_figures", "wait": 1.0}]}],
+                     {"name": "oil", "steps": [{"clickWidget": "mod1440_figures/nf_t20", "scene": "national_figures", "wait": 1.0}]}] + NF_SCENE[3],
         "teardown": [{"clickWidget": "mod1440_figures/nf_t0", "scene": "national_figures", "wait": 0.8}, {"key": "shift+m", "wait": 0.8}],
-        "expect": ["mod1440_figures/h_zoom", "mod1440_figures/nf_t4", "mod1440_figures/h_range_120"],
+        "expect": ["mod1440_figures/h_zoom", "mod1440_figures/nf_t4", "mod1440_figures/h_range_120", "mod1440_figures/nf_t31",
+                   "mod1440_figures/nf_t33"],
         "crop": [540, 64, 1700, 800],
         "manual": ["More than one month: the graph gets a column on the first of each month, which no check lets pass"],
         "checklist": ["A click on a table row draws its figure; the chosen row has the lighter band and a yellow name",
@@ -3517,7 +3982,7 @@ SCENES = {
                       "After `effect mod1440_chk_months`: 120 months, the 10-year range by default, year marks 1937 to 1946 under the first column of each year; 2 years and 5 years show the last 24 and 60 months with the marks under their Januaries; Zoom in starts the columns at the lowest month",
                       "After `effect mod1440_chk_months`, a resource row: a balance below zero draws from its lowest month and the orange zero line stands at the scale's 0",
                       "After `effect mod1440_chk_months_twenty` (a save of the 2026-10-16 build): the eleven new figures say 'Nothing is written down for this figure yet' and their table rows have no Month, Year or sparkline",
-                      "The seven numbers against the columns; the tooltips of Highest and Lowest name their month"],
+                      "The seven numbers against the columns; the tooltips of Highest and Lowest name their month"] + NF_HISTORY_CHECKLIST_D9,
     },
     # --- end D4 round 2 ---
     "top_bar": tb_scene(),      # d7-top-bar

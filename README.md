@@ -6,8 +6,8 @@ Manager pages and a Records window for Hearts of Iron IV at 2560x1440: scripted 
 
 - **Army Readiness** (Shift+M on Recruit & Deploy): manpower, the army's counts, every kind of land equipment with stock, in the field, needed, short and a bar, and one row per general with troops.
 - **States** (Shift+M on Construction): one row per controlled state, sorted by any column, a click moves the camera there; totals of the listed states.
-- **National Figures** (Shift+M on Politics): the country's summed modifiers in six groups, factories, fuel, party popularity, resources, occupation and diplomacy.
-- **History**, the second page of National Figures: twelve figures written down on the first of each month and drawn as columns, with their change in a month and in a year.
+- **National Figures** (Shift+M on Politics): the country's figures in tables with their change in a month and in a year and a sparkline each; the summed modifiers in four lists; resources; an equipment table whose balance (stock less what the field is short of) goes below zero in red.
+- **History**, the graph of National Figures: forty figures written down on the first of each month and drawn as columns, among them the casualties of every war as a total that never falls and the dead of each month with the deadliest in gold; a figure below zero hangs red from a zero line.
 - **Top bar strip**: value chips in the free middle of the top bar, chosen by the player among eighteen values; the choice is kept with the country.
 - **The Records** (Shift+J, a handle in the top bar): the **War Diary** (a dated log of wars, peace, capitulations, territory, landings, government, promotions), the **Officers** (every general and admiral with the service record the mod keeps and the decorations the player awards), the **Government** (who holds which office since when, parties, laws, faction) and the **Wars** (one file per enemy and per finished war, with flags, heads of government, figures and lines).
 - **The state card** in the state view and **unit honours**: lines the mod writes into a division's own history when a capital falls or on the player's click.

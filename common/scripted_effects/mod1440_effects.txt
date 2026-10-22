@@ -11032,10 +11032,168 @@ mod1440_nf_fill = {
 	}
 }
 
+# National Figures (D9): series 31 and 32 of a save without them, once, from series 10 (the game's casualties_k on
+# the first of each month): the total adds each rise of series 10 and nothing for a fall; the month is the rise
+# (-1 for the first month). Then the total, the month so far and the baseline from today's casualties_k.
+mod1440_h_cas_fill = {
+	clear_array = mod1440_h_31
+	clear_array = mod1440_h_32
+	set_temp_variable = { h_cs = 0 }
+	set_temp_variable = { h_cp = 0 }
+	for_each_loop = {
+		array = mod1440_h_10
+		value = h_cv
+		index = h_ci
+		if = {
+			limit = { check_variable = { h_ci = 0 } }
+			set_temp_variable = { h_cs = h_cv }
+			add_to_array = { array = mod1440_h_32 value = -1 }
+		}
+		else = {
+			set_temp_variable = { h_cd = h_cv }
+			subtract_from_temp_variable = { h_cd = h_cp }
+			if = {
+				limit = { check_variable = { h_cd < 0 } }
+				set_temp_variable = { h_cd = 0 }
+			}
+			add_to_temp_variable = { h_cs = h_cd }
+			add_to_array = { mod1440_h_32 = h_cd }
+		}
+		add_to_array = { mod1440_h_31 = h_cs }
+		set_temp_variable = { h_cp = h_cv }
+	}
+	set_temp_variable = { h_cd = casualties_k }
+	subtract_from_temp_variable = { h_cd = h_cp }
+	if = {
+		limit = { check_variable = { h_cd < 0 } }
+		set_temp_variable = { h_cd = 0 }
+	}
+	set_variable = { mod1440_h_cas_sum = h_cs }
+	add_to_variable = { mod1440_h_cas_sum = h_cd }
+	set_variable = { mod1440_h_cas_mon = h_cd }
+	set_variable = { mod1440_h_cas_last = casualties_k }
+	set_variable = { mod1440_h_cas_from = global.date }
+	set_variable = { mod1440_h_cas_ver = 1 }
+}
+
+# National Figures (D9): each day for a player, and before each monthly record: a rise of the game's casualties_k
+# since the day before is added to the total (mod1440_h_cas_sum) and to the month so far (mod1440_h_cas_mon); a
+# fall (a war ended) only moves the baseline mod1440_h_cas_last. The total never falls.
+mod1440_h_cas_step = {
+	if = { limit = { NOT = { check_variable = { mod1440_h_cas_ver = 1 } } } mod1440_h_cas_fill = yes }
+	set_temp_variable = { h_ct = casualties_k }
+	set_temp_variable = { h_cd = h_ct }
+	subtract_from_temp_variable = { h_cd = mod1440_h_cas_last }
+	if = {
+		limit = { check_variable = { h_cd > 0 } }
+		add_to_variable = { mod1440_h_cas_sum = h_cd }
+		add_to_variable = { mod1440_h_cas_mon = h_cd }
+	}
+	set_variable = { mod1440_h_cas_last = h_ct }
+}
+
+# National Figures: the Equipment table of the country in scope (D9), each day for a player and before each
+# monthly record: stock, shortfall in the field and balance of six kinds, in thousands.
+mod1440_nf_equip = {
+	set_temp_variable = { nf_es = num_equipment@infantry_equipment }
+	set_temp_variable = { nf_ed = num_target_equipment_in_armies@infantry_equipment }
+	set_temp_variable = { nf_ef = num_equipment_in_armies@infantry_equipment }
+	subtract_from_temp_variable = { nf_ed = nf_ef }
+	if = {
+		limit = { check_variable = { nf_ed < 0 } }
+		set_temp_variable = { nf_ed = 0 }
+	}
+	set_variable = { mod1440_nf_eq_s_0 = nf_es }
+	divide_variable = { mod1440_nf_eq_s_0 = 1000 }
+	set_variable = { mod1440_nf_eq_d_0 = nf_ed }
+	divide_variable = { mod1440_nf_eq_d_0 = 1000 }
+	set_variable = { mod1440_nf_eq_b_0 = nf_es }
+	subtract_from_variable = { mod1440_nf_eq_b_0 = nf_ed }
+	divide_variable = { mod1440_nf_eq_b_0 = 1000 }
+	set_temp_variable = { nf_es = num_equipment@support_equipment }
+	set_temp_variable = { nf_ed = num_target_equipment_in_armies@support_equipment }
+	set_temp_variable = { nf_ef = num_equipment_in_armies@support_equipment }
+	subtract_from_temp_variable = { nf_ed = nf_ef }
+	if = {
+		limit = { check_variable = { nf_ed < 0 } }
+		set_temp_variable = { nf_ed = 0 }
+	}
+	set_variable = { mod1440_nf_eq_s_1 = nf_es }
+	divide_variable = { mod1440_nf_eq_s_1 = 1000 }
+	set_variable = { mod1440_nf_eq_d_1 = nf_ed }
+	divide_variable = { mod1440_nf_eq_d_1 = 1000 }
+	set_variable = { mod1440_nf_eq_b_1 = nf_es }
+	subtract_from_variable = { mod1440_nf_eq_b_1 = nf_ed }
+	divide_variable = { mod1440_nf_eq_b_1 = 1000 }
+	set_temp_variable = { nf_es = num_equipment@artillery_equipment }
+	set_temp_variable = { nf_ed = num_target_equipment_in_armies@artillery_equipment }
+	set_temp_variable = { nf_ef = num_equipment_in_armies@artillery_equipment }
+	subtract_from_temp_variable = { nf_ed = nf_ef }
+	if = {
+		limit = { check_variable = { nf_ed < 0 } }
+		set_temp_variable = { nf_ed = 0 }
+	}
+	set_variable = { mod1440_nf_eq_s_2 = nf_es }
+	divide_variable = { mod1440_nf_eq_s_2 = 1000 }
+	set_variable = { mod1440_nf_eq_d_2 = nf_ed }
+	divide_variable = { mod1440_nf_eq_d_2 = 1000 }
+	set_variable = { mod1440_nf_eq_b_2 = nf_es }
+	subtract_from_variable = { mod1440_nf_eq_b_2 = nf_ed }
+	divide_variable = { mod1440_nf_eq_b_2 = 1000 }
+	set_temp_variable = { nf_es = num_equipment@anti_tank_equipment }
+	set_temp_variable = { nf_ed = num_target_equipment_in_armies@anti_tank_equipment }
+	set_temp_variable = { nf_ef = num_equipment_in_armies@anti_tank_equipment }
+	subtract_from_temp_variable = { nf_ed = nf_ef }
+	if = {
+		limit = { check_variable = { nf_ed < 0 } }
+		set_temp_variable = { nf_ed = 0 }
+	}
+	set_variable = { mod1440_nf_eq_s_3 = nf_es }
+	divide_variable = { mod1440_nf_eq_s_3 = 1000 }
+	set_variable = { mod1440_nf_eq_d_3 = nf_ed }
+	divide_variable = { mod1440_nf_eq_d_3 = 1000 }
+	set_variable = { mod1440_nf_eq_b_3 = nf_es }
+	subtract_from_variable = { mod1440_nf_eq_b_3 = nf_ed }
+	divide_variable = { mod1440_nf_eq_b_3 = 1000 }
+	set_temp_variable = { nf_es = num_equipment@anti_air_equipment }
+	set_temp_variable = { nf_ed = num_target_equipment_in_armies@anti_air_equipment }
+	set_temp_variable = { nf_ef = num_equipment_in_armies@anti_air_equipment }
+	subtract_from_temp_variable = { nf_ed = nf_ef }
+	if = {
+		limit = { check_variable = { nf_ed < 0 } }
+		set_temp_variable = { nf_ed = 0 }
+	}
+	set_variable = { mod1440_nf_eq_s_4 = nf_es }
+	divide_variable = { mod1440_nf_eq_s_4 = 1000 }
+	set_variable = { mod1440_nf_eq_d_4 = nf_ed }
+	divide_variable = { mod1440_nf_eq_d_4 = 1000 }
+	set_variable = { mod1440_nf_eq_b_4 = nf_es }
+	subtract_from_variable = { mod1440_nf_eq_b_4 = nf_ed }
+	divide_variable = { mod1440_nf_eq_b_4 = 1000 }
+	set_temp_variable = { nf_es = num_equipment@motorized_equipment }
+	set_temp_variable = { nf_ed = num_target_equipment_in_armies@motorized_equipment }
+	set_temp_variable = { nf_ef = num_equipment_in_armies@motorized_equipment }
+	subtract_from_temp_variable = { nf_ed = nf_ef }
+	if = {
+		limit = { check_variable = { nf_ed < 0 } }
+		set_temp_variable = { nf_ed = 0 }
+	}
+	set_variable = { mod1440_nf_eq_s_5 = nf_es }
+	divide_variable = { mod1440_nf_eq_s_5 = 1000 }
+	set_variable = { mod1440_nf_eq_d_5 = nf_ed }
+	divide_variable = { mod1440_nf_eq_d_5 = 1000 }
+	set_variable = { mod1440_nf_eq_b_5 = nf_es }
+	subtract_from_variable = { mod1440_nf_eq_b_5 = nf_ed }
+	divide_variable = { mod1440_nf_eq_b_5 = 1000 }
+}
+
 # History: writes today's figures of the country in scope down, and forgets the oldest month past ten years;
 # then the summed modifiers as they are today, for the Changed view of National Figures. Runs at the start of a
-# game for every country and on the first of each month for a player.
+# game for every country and on the first of each month for a player. D9: first the casualty step and the
+# Equipment table's count, so that series 31 to 38 have today's values.
 mod1440_h_record = {
+	mod1440_h_cas_step = yes
+	mod1440_nf_equip = yes
 	add_to_array = { mod1440_h_0 = manpower_k }
 	add_to_array = { mod1440_h_1 = deployed_total_manpower_k }
 	add_to_array = { mod1440_h_2 = num_divisions }
@@ -11071,6 +11229,23 @@ mod1440_h_record = {
 	add_to_array = { mod1440_h_28 = navy_experience }
 	add_to_array = { mod1440_h_29 = air_experience }
 	add_to_array = { mod1440_h_30 = party_popularity_100@ruling_party }
+	add_to_array = { mod1440_h_31 = mod1440_h_cas_sum }
+	set_temp_variable = { h_v = mod1440_h_cas_mon }
+	if = {
+		limit = { check_variable = { mod1440_h_date^num = 0 } }
+		set_temp_variable = { h_v = -1 }
+	}
+	add_to_array = { mod1440_h_32 = h_v }
+	add_to_array = { mod1440_h_33 = mod1440_nf_eq_b_0 }
+	add_to_array = { mod1440_h_34 = mod1440_nf_eq_b_1 }
+	add_to_array = { mod1440_h_35 = mod1440_nf_eq_b_2 }
+	add_to_array = { mod1440_h_36 = mod1440_nf_eq_b_3 }
+	add_to_array = { mod1440_h_37 = mod1440_nf_eq_b_4 }
+	add_to_array = { mod1440_h_38 = mod1440_nf_eq_b_5 }
+	set_temp_variable = { h_v = surrender_progress }
+	multiply_temp_variable = { h_v = 100 }
+	add_to_array = { mod1440_h_39 = h_v }
+	set_variable = { mod1440_h_cas_mon = 0 }
 	add_to_array = { mod1440_h_date = global.date }
 	add_to_array = { mod1440_h_year = global.year }
 	set_temp_variable = { h_p = mod1440_h_date^num }
@@ -11282,6 +11457,105 @@ mod1440_h_record = {
 			add_to_array = { array = mod1440_h_30 value = -1 index = 0 }
 		}
 	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_31^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_31 value = -1 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_32^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_32 value = -1 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_33^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_33 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_34^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_34 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_35^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_35 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_36^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_36 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_37^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_37 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_38^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_38 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_39^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_39 value = -1 index = 0 }
+		}
+	}
 	if = {
 		limit = { check_variable = { mod1440_h_date^num > 120 } }
 		remove_from_array = { array = mod1440_h_0 index = 0 }
@@ -11315,6 +11589,15 @@ mod1440_h_record = {
 		remove_from_array = { array = mod1440_h_28 index = 0 }
 		remove_from_array = { array = mod1440_h_29 index = 0 }
 		remove_from_array = { array = mod1440_h_30 index = 0 }
+		remove_from_array = { array = mod1440_h_31 index = 0 }
+		remove_from_array = { array = mod1440_h_32 index = 0 }
+		remove_from_array = { array = mod1440_h_33 index = 0 }
+		remove_from_array = { array = mod1440_h_34 index = 0 }
+		remove_from_array = { array = mod1440_h_35 index = 0 }
+		remove_from_array = { array = mod1440_h_36 index = 0 }
+		remove_from_array = { array = mod1440_h_37 index = 0 }
+		remove_from_array = { array = mod1440_h_38 index = 0 }
+		remove_from_array = { array = mod1440_h_39 index = 0 }
 		remove_from_array = { array = mod1440_h_date index = 0 }
 		remove_from_array = { array = mod1440_h_year index = 0 }
 	}
@@ -11432,7 +11715,9 @@ mod1440_h_record = {
 
 # National Figures: the sparkline of a row, from mod1440_h_spin (twelve months, the padding -2100000 for a month not
 # written down) into mod1440_h_spout: heights 2 to 18 between the lowest and the highest of the twelve, 18 for
-# twelve equal months that are not 0, -1 for no column.
+# twelve equal months that are not 0, -1 for no column. D9: the sign of each month into mod1440_h_spsign (1 below
+# zero) and the zero level into mod1440_h_spz: the height of zero between the lowest and the highest, 0 when no
+# month is below zero, 18 when every month is.
 mod1440_h_spark = {
 	set_temp_variable = { h_shi = -2100000 }
 	set_temp_variable = { h_slo = 2100000 }
@@ -11454,13 +11739,32 @@ mod1440_h_spark = {
 	set_temp_variable = { h_sr = h_shi }
 	subtract_from_temp_variable = { h_sr = h_slo }
 	clear_array = mod1440_h_spout
+	clear_array = mod1440_h_spsign
+	set_variable = { mod1440_h_spz = 0 }
+	if = {
+		limit = { check_variable = { h_slo < 0 } check_variable = { h_sr > 0 } }
+		set_variable = { mod1440_h_spz = 0 }
+		subtract_from_variable = { mod1440_h_spz = h_slo }
+		divide_variable = { mod1440_h_spz = h_sr }
+		multiply_variable = { mod1440_h_spz = 16 }
+		add_to_variable = { mod1440_h_spz = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { h_slo < 0 } }
+		set_variable = { mod1440_h_spz = 18 }
+	}
 	for_each_loop = {
 		array = mod1440_h_spin
 		value = h_sv
 		set_temp_variable = { h_sh = -1 }
+		set_temp_variable = { h_sn = 0 }
 		if = {
 			limit = { check_variable = { h_sv > -2000000 } }
 			set_temp_variable = { h_sh = 0 }
+			if = {
+				limit = { check_variable = { h_sv < 0 } }
+				set_temp_variable = { h_sn = 1 }
+			}
 			if = {
 				limit = { check_variable = { h_sr > 0 } }
 				set_temp_variable = { h_sh = h_sv }
@@ -11470,11 +11774,12 @@ mod1440_h_spark = {
 				add_to_temp_variable = { h_sh = 2 }
 			}
 			else_if = {
-				limit = { NOT = { check_variable = { h_sv = 0 } } }
+				limit = { check_variable = { h_sv > 0 } }
 				set_temp_variable = { h_sh = 18 }
 			}
 		}
 		add_to_array = { mod1440_h_spout = h_sh }
+		add_to_array = { mod1440_h_spsign = h_sn }
 	}
 }
 
@@ -11482,6 +11787,7 @@ mod1440_h_spark = {
 # months in the range as column heights, 0 to 200, between the foot of the graph (zero, or the lowest month) and
 # its top. A month of a newer figure that was not written down (its padding) is drawn as no column and counts for nothing.
 mod1440_h_draw = {
+	if = { limit = { NOT = { check_variable = { mod1440_h_cas_ver = 1 } } } mod1440_h_cas_fill = yes }
 	set_temp_variable = { h_p = mod1440_h_date^num }
 	subtract_from_temp_variable = { h_p = mod1440_h_12^num }
 	if = {
@@ -11691,6 +11997,105 @@ mod1440_h_draw = {
 			add_to_array = { array = mod1440_h_30 value = -1 index = 0 }
 		}
 	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_31^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_31 value = -1 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_32^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_32 value = -1 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_33^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_33 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_34^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_34 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_35^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_35 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_36^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_36 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_37^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_37 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_38^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_38 value = -2100000 index = 0 }
+		}
+	}
+	set_temp_variable = { h_p = mod1440_h_date^num }
+	subtract_from_temp_variable = { h_p = mod1440_h_39^num }
+	if = {
+		limit = { check_variable = { h_p > 0 } }
+		for_loop_effect = {
+			start = 0
+			end = h_p
+			value = h_q
+			add_to_array = { array = mod1440_h_39 value = -1 index = 0 }
+		}
+	}
 	set_temp_variable = { h_n = mod1440_h_date^num }
 	set_temp_variable = { h_i1 = h_n }
 	subtract_from_temp_variable = { h_i1 = 1 }
@@ -11760,6 +12165,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_0 = h_sv }
 	}
+	clear_array = mod1440_h_spn_0
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_0 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_0 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -11817,6 +12229,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_1 = h_sv }
 	}
+	clear_array = mod1440_h_spn_1
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_1 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_1 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -11874,6 +12293,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_2 = h_sv }
 	}
+	clear_array = mod1440_h_spn_2
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_2 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_2 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -11931,6 +12357,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_3 = h_sv }
 	}
+	clear_array = mod1440_h_spn_3
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_3 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_3 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -11988,6 +12421,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_4 = h_sv }
 	}
+	clear_array = mod1440_h_spn_4
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_4 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_4 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12045,6 +12485,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_5 = h_sv }
 	}
+	clear_array = mod1440_h_spn_5
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_5 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_5 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12102,6 +12549,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_6 = h_sv }
 	}
+	clear_array = mod1440_h_spn_6
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_6 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_6 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12159,6 +12613,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_7 = h_sv }
 	}
+	clear_array = mod1440_h_spn_7
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_7 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_7 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12216,6 +12677,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_8 = h_sv }
 	}
+	clear_array = mod1440_h_spn_8
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_8 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_8 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12248,31 +12716,6 @@ mod1440_h_draw = {
 	add_to_array = { mod1440_h_tab_hm = h_hm }
 	add_to_array = { mod1440_h_tab_dy = h_dy }
 	add_to_array = { mod1440_h_tab_hy = h_hy }
-	clear_array = mod1440_h_spin
-	for_loop_effect = {
-		start = 0
-		end = 12
-		value = h_k
-		set_temp_variable = { h_j = h_n }
-		subtract_from_temp_variable = { h_j = 12 }
-		add_to_temp_variable = { h_j = h_k }
-		set_temp_variable = { h_sv = -2100000 }
-		if = {
-			limit = { check_variable = { h_j > -1 } }
-			if = {
-				limit = { always = yes }
-				set_temp_variable = { h_sv = mod1440_h_9^h_j }
-			}
-		}
-		add_to_array = { mod1440_h_spin = h_sv }
-	}
-	mod1440_h_spark = yes
-	clear_array = mod1440_h_sp_9
-	for_each_loop = {
-		array = mod1440_h_spout
-		value = h_sv
-		add_to_array = { mod1440_h_sp_9 = h_sv }
-	}
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12305,31 +12748,6 @@ mod1440_h_draw = {
 	add_to_array = { mod1440_h_tab_hm = h_hm }
 	add_to_array = { mod1440_h_tab_dy = h_dy }
 	add_to_array = { mod1440_h_tab_hy = h_hy }
-	clear_array = mod1440_h_spin
-	for_loop_effect = {
-		start = 0
-		end = 12
-		value = h_k
-		set_temp_variable = { h_j = h_n }
-		subtract_from_temp_variable = { h_j = 12 }
-		add_to_temp_variable = { h_j = h_k }
-		set_temp_variable = { h_sv = -2100000 }
-		if = {
-			limit = { check_variable = { h_j > -1 } }
-			if = {
-				limit = { always = yes }
-				set_temp_variable = { h_sv = mod1440_h_10^h_j }
-			}
-		}
-		add_to_array = { mod1440_h_spin = h_sv }
-	}
-	mod1440_h_spark = yes
-	clear_array = mod1440_h_sp_10
-	for_each_loop = {
-		array = mod1440_h_spout
-		value = h_sv
-		add_to_array = { mod1440_h_sp_10 = h_sv }
-	}
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12387,6 +12805,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_11 = h_sv }
 	}
+	clear_array = mod1440_h_spn_11
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_11 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_11 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12444,6 +12869,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_12 = h_sv }
 	}
+	clear_array = mod1440_h_spn_12
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_12 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_12 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12501,6 +12933,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_13 = h_sv }
 	}
+	clear_array = mod1440_h_spn_13
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_13 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_13 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12558,6 +12997,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_14 = h_sv }
 	}
+	clear_array = mod1440_h_spn_14
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_14 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_14 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12615,6 +13061,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_15 = h_sv }
 	}
+	clear_array = mod1440_h_spn_15
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_15 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_15 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12672,6 +13125,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_16 = h_sv }
 	}
+	clear_array = mod1440_h_spn_16
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_16 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_16 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12729,6 +13189,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_17 = h_sv }
 	}
+	clear_array = mod1440_h_spn_17
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_17 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_17 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12786,6 +13253,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_18 = h_sv }
 	}
+	clear_array = mod1440_h_spn_18
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_18 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_18 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -12843,6 +13317,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_19 = h_sv }
 	}
+	clear_array = mod1440_h_spn_19
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_19 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_19 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -13124,6 +13605,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_27 = h_sv }
 	}
+	clear_array = mod1440_h_spn_27
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_27 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_27 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -13181,6 +13669,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_28 = h_sv }
 	}
+	clear_array = mod1440_h_spn_28
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_28 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_28 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -13238,6 +13733,13 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_29 = h_sv }
 	}
+	clear_array = mod1440_h_spn_29
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_29 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_29 = mod1440_h_spz }
 	set_temp_variable = { h_now = 0 }
 	set_temp_variable = { h_dm = 0 }
 	set_temp_variable = { h_hm = 0 }
@@ -13295,6 +13797,397 @@ mod1440_h_draw = {
 		value = h_sv
 		add_to_array = { mod1440_h_sp_30 = h_sv }
 	}
+	clear_array = mod1440_h_spn_30
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_30 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_30 = mod1440_h_spz }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_31^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_31^h_i1 > -1 } check_variable = { mod1440_h_31^h_i2 > -1 } }
+			set_temp_variable = { h_dm = mod1440_h_31^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_31^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_31^h_i1 > -1 } check_variable = { mod1440_h_31^h_i13 > -1 } }
+			set_temp_variable = { h_dy = mod1440_h_31^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_31^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	clear_array = mod1440_h_spin
+	for_loop_effect = {
+		start = 0
+		end = 12
+		value = h_k
+		set_temp_variable = { h_j = h_n }
+		subtract_from_temp_variable = { h_j = 12 }
+		add_to_temp_variable = { h_j = h_k }
+		set_temp_variable = { h_sv = -2100000 }
+		if = {
+			limit = { check_variable = { h_j > -1 } }
+			if = {
+				limit = { check_variable = { mod1440_h_31^h_j > -1 } }
+				set_temp_variable = { h_sv = mod1440_h_31^h_j }
+			}
+		}
+		add_to_array = { mod1440_h_spin = h_sv }
+	}
+	mod1440_h_spark = yes
+	clear_array = mod1440_h_sp_31
+	for_each_loop = {
+		array = mod1440_h_spout
+		value = h_sv
+		add_to_array = { mod1440_h_sp_31 = h_sv }
+	}
+	clear_array = mod1440_h_spn_31
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_31 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_31 = mod1440_h_spz }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_32^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_32^h_i1 > -1 } check_variable = { mod1440_h_32^h_i2 > -1 } }
+			set_temp_variable = { h_dm = mod1440_h_32^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_32^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_32^h_i1 > -1 } check_variable = { mod1440_h_32^h_i13 > -1 } }
+			set_temp_variable = { h_dy = mod1440_h_32^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_32^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	clear_array = mod1440_h_spin
+	for_loop_effect = {
+		start = 0
+		end = 12
+		value = h_k
+		set_temp_variable = { h_j = h_n }
+		subtract_from_temp_variable = { h_j = 12 }
+		add_to_temp_variable = { h_j = h_k }
+		set_temp_variable = { h_sv = -2100000 }
+		if = {
+			limit = { check_variable = { h_j > -1 } }
+			if = {
+				limit = { check_variable = { mod1440_h_32^h_j > -1 } }
+				set_temp_variable = { h_sv = mod1440_h_32^h_j }
+			}
+		}
+		add_to_array = { mod1440_h_spin = h_sv }
+	}
+	mod1440_h_spark = yes
+	clear_array = mod1440_h_sp_32
+	for_each_loop = {
+		array = mod1440_h_spout
+		value = h_sv
+		add_to_array = { mod1440_h_sp_32 = h_sv }
+	}
+	clear_array = mod1440_h_spn_32
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_32 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_32 = mod1440_h_spz }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_33^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_33^h_i1 > -2000000 } check_variable = { mod1440_h_33^h_i2 > -2000000 } }
+			set_temp_variable = { h_dm = mod1440_h_33^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_33^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_33^h_i1 > -2000000 } check_variable = { mod1440_h_33^h_i13 > -2000000 } }
+			set_temp_variable = { h_dy = mod1440_h_33^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_33^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_34^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_34^h_i1 > -2000000 } check_variable = { mod1440_h_34^h_i2 > -2000000 } }
+			set_temp_variable = { h_dm = mod1440_h_34^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_34^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_34^h_i1 > -2000000 } check_variable = { mod1440_h_34^h_i13 > -2000000 } }
+			set_temp_variable = { h_dy = mod1440_h_34^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_34^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_35^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_35^h_i1 > -2000000 } check_variable = { mod1440_h_35^h_i2 > -2000000 } }
+			set_temp_variable = { h_dm = mod1440_h_35^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_35^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_35^h_i1 > -2000000 } check_variable = { mod1440_h_35^h_i13 > -2000000 } }
+			set_temp_variable = { h_dy = mod1440_h_35^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_35^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_36^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_36^h_i1 > -2000000 } check_variable = { mod1440_h_36^h_i2 > -2000000 } }
+			set_temp_variable = { h_dm = mod1440_h_36^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_36^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_36^h_i1 > -2000000 } check_variable = { mod1440_h_36^h_i13 > -2000000 } }
+			set_temp_variable = { h_dy = mod1440_h_36^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_36^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_37^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_37^h_i1 > -2000000 } check_variable = { mod1440_h_37^h_i2 > -2000000 } }
+			set_temp_variable = { h_dm = mod1440_h_37^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_37^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_37^h_i1 > -2000000 } check_variable = { mod1440_h_37^h_i13 > -2000000 } }
+			set_temp_variable = { h_dy = mod1440_h_37^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_37^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_38^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_38^h_i1 > -2000000 } check_variable = { mod1440_h_38^h_i2 > -2000000 } }
+			set_temp_variable = { h_dm = mod1440_h_38^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_38^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_38^h_i1 > -2000000 } check_variable = { mod1440_h_38^h_i13 > -2000000 } }
+			set_temp_variable = { h_dy = mod1440_h_38^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_38^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	set_temp_variable = { h_now = 0 }
+	set_temp_variable = { h_dm = 0 }
+	set_temp_variable = { h_hm = 0 }
+	set_temp_variable = { h_dy = 0 }
+	set_temp_variable = { h_hy = 0 }
+	if = {
+		limit = { check_variable = { h_n > 0 } }
+		set_temp_variable = { h_now = mod1440_h_39^h_i1 }
+	}
+	if = {
+		limit = { check_variable = { h_n > 1 } }
+		if = {
+			limit = { check_variable = { mod1440_h_39^h_i1 > -1 } check_variable = { mod1440_h_39^h_i2 > -1 } }
+			set_temp_variable = { h_dm = mod1440_h_39^h_i1 }
+			subtract_from_temp_variable = { h_dm = mod1440_h_39^h_i2 }
+			set_temp_variable = { h_hm = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { h_n > 12 } }
+		if = {
+			limit = { check_variable = { mod1440_h_39^h_i1 > -1 } check_variable = { mod1440_h_39^h_i13 > -1 } }
+			set_temp_variable = { h_dy = mod1440_h_39^h_i1 }
+			subtract_from_temp_variable = { h_dy = mod1440_h_39^h_i13 }
+			set_temp_variable = { h_hy = 1 }
+		}
+	}
+	add_to_array = { mod1440_h_tab_now = h_now }
+	add_to_array = { mod1440_h_tab_dm = h_dm }
+	add_to_array = { mod1440_h_tab_hm = h_hm }
+	add_to_array = { mod1440_h_tab_dy = h_dy }
+	add_to_array = { mod1440_h_tab_hy = h_hy }
+	clear_array = mod1440_h_spin
+	for_loop_effect = {
+		start = 0
+		end = 12
+		value = h_k
+		set_temp_variable = { h_j = h_n }
+		subtract_from_temp_variable = { h_j = 12 }
+		add_to_temp_variable = { h_j = h_k }
+		set_temp_variable = { h_sv = -2100000 }
+		if = {
+			limit = { check_variable = { h_j > -1 } }
+			if = {
+				limit = { check_variable = { mod1440_h_39^h_j > -1 } }
+				set_temp_variable = { h_sv = mod1440_h_39^h_j }
+			}
+		}
+		add_to_array = { mod1440_h_spin = h_sv }
+	}
+	mod1440_h_spark = yes
+	clear_array = mod1440_h_sp_39
+	for_each_loop = {
+		array = mod1440_h_spout
+		value = h_sv
+		add_to_array = { mod1440_h_sp_39 = h_sv }
+	}
+	clear_array = mod1440_h_spn_39
+	for_each_loop = {
+		array = mod1440_h_spsign
+		value = h_sv
+		add_to_array = { mod1440_h_spn_39 = h_sv }
+	}
+	set_variable = { mod1440_h_spz_39 = mod1440_h_spz }
 	for_loop_effect = {
 		start = 0
 		end = 120
@@ -13390,6 +14283,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^0 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^0 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^0 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 1 } }
@@ -13417,6 +14312,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^1 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^1 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^1 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 2 } }
@@ -13444,6 +14341,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^2 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^2 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^2 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 3 } }
@@ -13471,6 +14370,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^3 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^3 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^3 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 4 } }
@@ -13498,6 +14399,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^4 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^4 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^4 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 5 } }
@@ -13525,6 +14428,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^5 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^5 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^5 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 6 } }
@@ -13552,6 +14457,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^6 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^6 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^6 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 7 } }
@@ -13579,6 +14486,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^7 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^7 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^7 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 8 } }
@@ -13606,6 +14515,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^8 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^8 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^8 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 9 } }
@@ -13633,6 +14544,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^9 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^9 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^9 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 10 } }
@@ -13660,6 +14573,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^10 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^10 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^10 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 11 } }
@@ -13687,6 +14602,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^11 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^11 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^11 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 12 } }
@@ -13714,6 +14631,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^12 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^12 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^12 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 13 } }
@@ -13741,6 +14660,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^13 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^13 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^13 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 14 } }
@@ -13768,6 +14689,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^14 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^14 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^14 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 15 } }
@@ -13795,6 +14718,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^15 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^15 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^15 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 16 } }
@@ -13822,6 +14747,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^16 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^16 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^16 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 17 } }
@@ -13849,6 +14776,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^17 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^17 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^17 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 18 } }
@@ -13876,6 +14805,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^18 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^18 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^18 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 19 } }
@@ -13903,6 +14834,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^19 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^19 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^19 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 20 } }
@@ -13930,6 +14863,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^20 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^20 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^20 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 21 } }
@@ -13957,6 +14892,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^21 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^21 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^21 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 22 } }
@@ -13984,6 +14921,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^22 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^22 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^22 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 23 } }
@@ -14011,6 +14950,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^23 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^23 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^23 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 24 } }
@@ -14038,6 +14979,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^24 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^24 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^24 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 25 } }
@@ -14065,6 +15008,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^25 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^25 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^25 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 26 } }
@@ -14092,6 +15037,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^26 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^26 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^26 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 27 } }
@@ -14119,6 +15066,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^27 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^27 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^27 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 28 } }
@@ -14146,6 +15095,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^28 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^28 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^28 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 29 } }
@@ -14173,6 +15124,8 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^29 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^29 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^29 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_h_series = 30 } }
@@ -14200,6 +15153,269 @@ mod1440_h_draw = {
 		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^30 }
 		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^30 }
 		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^30 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 31 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_31^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 0 }
+		set_temp_variable = { h_floor = -1 }
+		for_each_loop = {
+			array = mod1440_h_31
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^31 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^31 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^31 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^31 }
+		set_variable = { mod1440_h_loss = 1 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 32 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_32^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 0 }
+		set_temp_variable = { h_floor = -1 }
+		for_each_loop = {
+			array = mod1440_h_32
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^32 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^32 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^32 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^32 }
+		set_variable = { mod1440_h_loss = 1 }
+		set_variable = { mod1440_h_gold = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 33 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_33^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 1 }
+		set_temp_variable = { h_floor = -2000000 }
+		for_each_loop = {
+			array = mod1440_h_33
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^33 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^33 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^33 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^33 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 34 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_34^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 1 }
+		set_temp_variable = { h_floor = -2000000 }
+		for_each_loop = {
+			array = mod1440_h_34
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^34 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^34 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^34 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^34 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 35 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_35^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 1 }
+		set_temp_variable = { h_floor = -2000000 }
+		for_each_loop = {
+			array = mod1440_h_35
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^35 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^35 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^35 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^35 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 36 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_36^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 1 }
+		set_temp_variable = { h_floor = -2000000 }
+		for_each_loop = {
+			array = mod1440_h_36
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^36 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^36 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^36 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^36 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 37 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_37^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 1 }
+		set_temp_variable = { h_floor = -2000000 }
+		for_each_loop = {
+			array = mod1440_h_37
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^37 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^37 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^37 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^37 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 38 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_38^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 1 }
+		set_temp_variable = { h_floor = -2000000 }
+		for_each_loop = {
+			array = mod1440_h_38
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^38 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^38 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^38 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^38 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_h_series = 39 } }
+		for_loop_effect = {
+			start = 0
+			end = h_cnt
+			value = h_k
+			set_temp_variable = { h_j = h_k }
+			add_to_temp_variable = { h_j = h_from }
+			set_temp_variable = { h_v = mod1440_h_39^h_j }
+			add_to_array = { mod1440_h_now = h_v }
+		}
+		set_variable = { mod1440_h_dec = 1 }
+		set_variable = { mod1440_h_rise = 0 }
+		set_temp_variable = { h_floor = -1 }
+		for_each_loop = {
+			array = mod1440_h_39
+			value = h_v
+			if = {
+				limit = { check_variable = { h_v > h_floor } }
+				add_to_temp_variable = { h_total = 1 }
+			}
+		}
+		set_variable = { mod1440_h_dm = mod1440_h_tab_dm^39 }
+		set_variable = { mod1440_h_dy = mod1440_h_tab_dy^39 }
+		set_variable = { mod1440_h_has_m = mod1440_h_tab_hm^39 }
+		set_variable = { mod1440_h_has_y = mod1440_h_tab_hy^39 }
+		set_variable = { mod1440_h_loss = 0 }
+		set_variable = { mod1440_h_gold = 0 }
 	}
 	set_temp_variable = { h_max = 0 }
 	find_highest_in_array = {
@@ -14211,6 +15427,7 @@ mod1440_h_draw = {
 	set_temp_variable = { h_min_at = 0 }
 	set_temp_variable = { h_valid = 0 }
 	set_temp_variable = { h_first = 0 }
+	set_temp_variable = { h_sum = 0 }
 	for_each_loop = {
 		array = mod1440_h_now
 		value = h_v
@@ -14221,6 +15438,7 @@ mod1440_h_draw = {
 				limit = { check_variable = { h_valid = 0 } }
 				set_temp_variable = { h_first = h_v }
 			}
+			add_to_temp_variable = { h_sum = h_v }
 			add_to_temp_variable = { h_valid = 1 }
 			if = {
 				limit = { check_variable = { h_v < h_min } }
@@ -14239,6 +15457,18 @@ mod1440_h_draw = {
 	set_variable = { mod1440_h_min = h_min }
 	set_variable = { mod1440_h_valid = h_valid }
 	set_variable = { mod1440_h_total = h_total }
+	set_variable = { mod1440_h_max_i = h_at }
+	set_variable = { mod1440_h_sum = h_sum }
+	set_temp_variable = { h_w = 0 }
+	find_highest_in_array = {
+		array = mod1440_h_32
+		value = h_w
+	}
+	if = {
+		limit = { check_variable = { h_w < 0 } }
+		set_temp_variable = { h_w = 0 }
+	}
+	set_variable = { mod1440_h_cas_worst = h_w }
 	if = {
 		limit = { check_variable = { h_cnt > 0 } }
 		set_variable = { mod1440_h_max_date = mod1440_h_sdate^h_at }
@@ -14267,6 +15497,7 @@ mod1440_h_draw = {
 	add_to_variable = { mod1440_h_s3 = h_quarter }
 	set_variable = { mod1440_h_s4 = h_top }
 	set_variable = { mod1440_h_zero = 0 }
+	set_variable = { mod1440_h_zero_h = 0 }
 	if = {
 		limit = { check_variable = { h_base < 0 } check_variable = { h_top > -0.001 } check_variable = { h_range > 0 } }
 		set_variable = { mod1440_h_zero = 1 }
@@ -14274,19 +15505,34 @@ mod1440_h_draw = {
 		subtract_from_temp_variable = { h_z = h_base }
 		divide_temp_variable = { h_z = h_range }
 		multiply_temp_variable = { h_z = 200 }
-		set_variable = { mod1440_h_zero_y = 721 }
+		set_variable = { mod1440_h_zero_y = 763 }
 		subtract_from_variable = { mod1440_h_zero_y = h_z }
+		set_variable = { mod1440_h_zero_h = h_z }
+		set_variable = { mod1440_h_zero_sy = mod1440_h_zero_y }
+		subtract_from_variable = { mod1440_h_zero_sy = 10 }
+	}
+	else_if = {
+		limit = { check_variable = { h_top < 0 } }
+		set_variable = { mod1440_h_zero_h = 200 }
 	}
 	clear_array = mod1440_h_bars_24
+	clear_array = mod1440_h_neg_24
 	clear_array = mod1440_h_bars_60
+	clear_array = mod1440_h_neg_60
 	clear_array = mod1440_h_bars_120
+	clear_array = mod1440_h_neg_120
 	for_each_loop = {
 		array = mod1440_h_now
 		value = h_v
 		set_temp_variable = { h_bar = -1 }
+		set_temp_variable = { h_ng = 0 }
 		if = {
 			limit = { check_variable = { h_v > h_floor } }
 			set_temp_variable = { h_bar = 0 }
+			if = {
+				limit = { check_variable = { h_v < 0 } }
+				set_temp_variable = { h_ng = 1 }
+			}
 			if = {
 				limit = { check_variable = { h_range > 0 } }
 				set_temp_variable = { h_bar = h_v }
@@ -14317,14 +15563,17 @@ mod1440_h_draw = {
 		if = {
 			limit = { check_variable = { h_span = 24 } }
 			add_to_array = { mod1440_h_bars_24 = h_bar }
+			add_to_array = { mod1440_h_neg_24 = h_ng }
 		}
 		else_if = {
 			limit = { check_variable = { h_span = 60 } }
 			add_to_array = { mod1440_h_bars_60 = h_bar }
+			add_to_array = { mod1440_h_neg_60 = h_ng }
 		}
 		else_if = {
 			limit = { check_variable = { h_span = 120 } }
 			add_to_array = { mod1440_h_bars_120 = h_bar }
+			add_to_array = { mod1440_h_neg_120 = h_ng }
 		}
 	}
 	set_variable = { mod1440_h_yl_0 = 0 }

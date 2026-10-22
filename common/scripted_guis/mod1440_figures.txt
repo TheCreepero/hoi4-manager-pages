@@ -81,13 +81,17 @@ scripted_gui = {
 				array = mod1440_h_sp_2
 				entry_container = "mod1440_figures_spark_2"
 			}
-			nf_sp10_grid = {
-				array = mod1440_h_sp_10
-				entry_container = "mod1440_figures_spark_10"
+			nf_sp31_grid = {
+				array = mod1440_h_sp_31
+				entry_container = "mod1440_figures_spark_31"
 			}
-			nf_sp9_grid = {
-				array = mod1440_h_sp_9
-				entry_container = "mod1440_figures_spark_9"
+			nf_sp32_grid = {
+				array = mod1440_h_sp_32
+				entry_container = "mod1440_figures_spark_32"
+			}
+			nf_sp39_grid = {
+				array = mod1440_h_sp_39
+				entry_container = "mod1440_figures_spark_39"
 			}
 			nf_sp16_grid = {
 				array = mod1440_h_sp_16
@@ -148,73 +152,301 @@ scripted_gui = {
 			nf_sp11 = {
 				frame = v
 			}
+			nf_spr11 = {
+				frame = mod1440_h_spz_11
+			}
+			nf_spm11 = {
+				frame = mod1440_h_spz_11
+			}
+			nf_spn11 = {
+				frame = v
+			}
 			nf_sp14 = {
+				frame = v
+			}
+			nf_spr14 = {
+				frame = mod1440_h_spz_14
+			}
+			nf_spm14 = {
+				frame = mod1440_h_spz_14
+			}
+			nf_spn14 = {
 				frame = v
 			}
 			nf_sp6 = {
 				frame = v
 			}
+			nf_spr6 = {
+				frame = mod1440_h_spz_6
+			}
+			nf_spm6 = {
+				frame = mod1440_h_spz_6
+			}
+			nf_spn6 = {
+				frame = v
+			}
 			nf_sp7 = {
+				frame = v
+			}
+			nf_spr7 = {
+				frame = mod1440_h_spz_7
+			}
+			nf_spm7 = {
+				frame = mod1440_h_spz_7
+			}
+			nf_spn7 = {
 				frame = v
 			}
 			nf_sp30 = {
 				frame = v
 			}
+			nf_spr30 = {
+				frame = mod1440_h_spz_30
+			}
+			nf_spm30 = {
+				frame = mod1440_h_spz_30
+			}
+			nf_spn30 = {
+				frame = v
+			}
 			nf_sp15 = {
+				frame = v
+			}
+			nf_spr15 = {
+				frame = mod1440_h_spz_15
+			}
+			nf_spm15 = {
+				frame = mod1440_h_spz_15
+			}
+			nf_spn15 = {
 				frame = v
 			}
 			nf_sp3 = {
 				frame = v
 			}
+			nf_spr3 = {
+				frame = mod1440_h_spz_3
+			}
+			nf_spm3 = {
+				frame = mod1440_h_spz_3
+			}
+			nf_spn3 = {
+				frame = v
+			}
 			nf_sp4 = {
+				frame = v
+			}
+			nf_spr4 = {
+				frame = mod1440_h_spz_4
+			}
+			nf_spm4 = {
+				frame = mod1440_h_spz_4
+			}
+			nf_spn4 = {
 				frame = v
 			}
 			nf_sp5 = {
 				frame = v
 			}
+			nf_spr5 = {
+				frame = mod1440_h_spz_5
+			}
+			nf_spm5 = {
+				frame = mod1440_h_spz_5
+			}
+			nf_spn5 = {
+				frame = v
+			}
 			nf_sp8 = {
+				frame = v
+			}
+			nf_spr8 = {
+				frame = mod1440_h_spz_8
+			}
+			nf_spm8 = {
+				frame = mod1440_h_spz_8
+			}
+			nf_spn8 = {
 				frame = v
 			}
 			nf_sp12 = {
 				frame = v
 			}
+			nf_spr12 = {
+				frame = mod1440_h_spz_12
+			}
+			nf_spm12 = {
+				frame = mod1440_h_spz_12
+			}
+			nf_spn12 = {
+				frame = v
+			}
 			nf_sp13 = {
+				frame = v
+			}
+			nf_spr13 = {
+				frame = mod1440_h_spz_13
+			}
+			nf_spm13 = {
+				frame = mod1440_h_spz_13
+			}
+			nf_spn13 = {
 				frame = v
 			}
 			nf_sp0 = {
 				frame = v
 			}
+			nf_spr0 = {
+				frame = mod1440_h_spz_0
+			}
+			nf_spm0 = {
+				frame = mod1440_h_spz_0
+			}
+			nf_spn0 = {
+				frame = v
+			}
 			nf_sp1 = {
+				frame = v
+			}
+			nf_spr1 = {
+				frame = mod1440_h_spz_1
+			}
+			nf_spm1 = {
+				frame = mod1440_h_spz_1
+			}
+			nf_spn1 = {
 				frame = v
 			}
 			nf_sp2 = {
 				frame = v
 			}
-			nf_sp10 = {
+			nf_spr2 = {
+				frame = mod1440_h_spz_2
+			}
+			nf_spm2 = {
+				frame = mod1440_h_spz_2
+			}
+			nf_spn2 = {
 				frame = v
 			}
-			nf_sp9 = {
+			nf_sp31 = {
+				frame = v
+			}
+			nf_spr31 = {
+				frame = mod1440_h_spz_31
+			}
+			nf_spm31 = {
+				frame = mod1440_h_spz_31
+			}
+			nf_spn31 = {
+				frame = v
+			}
+			nf_sp32 = {
+				frame = v
+			}
+			nf_spr32 = {
+				frame = mod1440_h_spz_32
+			}
+			nf_spm32 = {
+				frame = mod1440_h_spz_32
+			}
+			nf_spn32 = {
+				frame = v
+			}
+			nf_sp39 = {
+				frame = v
+			}
+			nf_spr39 = {
+				frame = mod1440_h_spz_39
+			}
+			nf_spm39 = {
+				frame = mod1440_h_spz_39
+			}
+			nf_spn39 = {
 				frame = v
 			}
 			nf_sp16 = {
 				frame = v
 			}
+			nf_spr16 = {
+				frame = mod1440_h_spz_16
+			}
+			nf_spm16 = {
+				frame = mod1440_h_spz_16
+			}
+			nf_spn16 = {
+				frame = v
+			}
 			nf_sp17 = {
+				frame = v
+			}
+			nf_spr17 = {
+				frame = mod1440_h_spz_17
+			}
+			nf_spm17 = {
+				frame = mod1440_h_spz_17
+			}
+			nf_spn17 = {
 				frame = v
 			}
 			nf_sp18 = {
 				frame = v
 			}
+			nf_spr18 = {
+				frame = mod1440_h_spz_18
+			}
+			nf_spm18 = {
+				frame = mod1440_h_spz_18
+			}
+			nf_spn18 = {
+				frame = v
+			}
 			nf_sp19 = {
+				frame = v
+			}
+			nf_spr19 = {
+				frame = mod1440_h_spz_19
+			}
+			nf_spm19 = {
+				frame = mod1440_h_spz_19
+			}
+			nf_spn19 = {
 				frame = v
 			}
 			nf_sp27 = {
 				frame = v
 			}
+			nf_spr27 = {
+				frame = mod1440_h_spz_27
+			}
+			nf_spm27 = {
+				frame = mod1440_h_spz_27
+			}
+			nf_spn27 = {
+				frame = v
+			}
 			nf_sp28 = {
 				frame = v
 			}
+			nf_spr28 = {
+				frame = mod1440_h_spz_28
+			}
+			nf_spm28 = {
+				frame = mod1440_h_spz_28
+			}
+			nf_spn28 = {
+				frame = v
+			}
 			nf_sp29 = {
+				frame = v
+			}
+			nf_spr29 = {
+				frame = mod1440_h_spz_29
+			}
+			nf_spm29 = {
+				frame = mod1440_h_spz_29
+			}
+			nf_spn29 = {
 				frame = v
 			}
 			h_range_24 = {
@@ -232,10 +464,55 @@ scripted_gui = {
 			h_bar24 = {
 				frame = v
 			}
+			h_loss24 = {
+				frame = v
+			}
+			h_gold24 = {
+				frame = v
+			}
+			h_red24 = {
+				frame = mod1440_h_zero_h
+			}
+			h_mask24 = {
+				frame = mod1440_h_zero_h
+			}
+			h_maskn24 = {
+				frame = v
+			}
 			h_bar60 = {
 				frame = v
 			}
+			h_loss60 = {
+				frame = v
+			}
+			h_gold60 = {
+				frame = v
+			}
+			h_red60 = {
+				frame = mod1440_h_zero_h
+			}
+			h_mask60 = {
+				frame = mod1440_h_zero_h
+			}
+			h_maskn60 = {
+				frame = v
+			}
 			h_bar120 = {
+				frame = v
+			}
+			h_loss120 = {
+				frame = v
+			}
+			h_gold120 = {
+				frame = v
+			}
+			h_red120 = {
+				frame = mod1440_h_zero_h
+			}
+			h_mask120 = {
+				frame = mod1440_h_zero_h
+			}
+			h_maskn120 = {
 				frame = v
 			}
 			h_year_0 = {
@@ -270,6 +547,9 @@ scripted_gui = {
 			}
 			h_zero = {
 				y = mod1440_h_zero_y
+			}
+			h_scale_zero = {
+				y = mod1440_h_zero_sy
 			}
 		}
 
@@ -352,12 +632,16 @@ scripted_gui = {
 				set_variable = { mod1440_h_series = 2 }
 				mod1440_h_draw = yes
 			}
-			nf_t10_click = {
-				set_variable = { mod1440_h_series = 10 }
+			nf_t31_click = {
+				set_variable = { mod1440_h_series = 31 }
 				mod1440_h_draw = yes
 			}
-			nf_t9_click = {
-				set_variable = { mod1440_h_series = 9 }
+			nf_t32_click = {
+				set_variable = { mod1440_h_series = 32 }
+				mod1440_h_draw = yes
+			}
+			nf_t39_click = {
+				set_variable = { mod1440_h_series = 39 }
 				mod1440_h_draw = yes
 			}
 			nf_t16_click = {
@@ -416,6 +700,30 @@ scripted_gui = {
 				set_variable = { mod1440_h_series = 26 }
 				mod1440_h_draw = yes
 			}
+			nf_t33_click = {
+				set_variable = { mod1440_h_series = 33 }
+				mod1440_h_draw = yes
+			}
+			nf_t34_click = {
+				set_variable = { mod1440_h_series = 34 }
+				mod1440_h_draw = yes
+			}
+			nf_t35_click = {
+				set_variable = { mod1440_h_series = 35 }
+				mod1440_h_draw = yes
+			}
+			nf_t36_click = {
+				set_variable = { mod1440_h_series = 36 }
+				mod1440_h_draw = yes
+			}
+			nf_t37_click = {
+				set_variable = { mod1440_h_series = 37 }
+				mod1440_h_draw = yes
+			}
+			nf_t38_click = {
+				set_variable = { mod1440_h_series = 38 }
+				mod1440_h_draw = yes
+			}
 			h_range_24_click = {
 				set_variable = { mod1440_h_range = 24 }
 				mod1440_h_draw = yes
@@ -456,6 +764,12 @@ scripted_gui = {
 			nf_t11_ly_visible = {
 				check_variable = { mod1440_h_series = 11 }
 			}
+			nf_t11_v_visible = {
+				NOT = { check_variable = { political_power < 0 } }
+			}
+			nf_t11_vn_visible = {
+				check_variable = { political_power < 0 }
+			}
 			nf_t11_m_up_visible = {
 				check_variable = { mod1440_h_tab_hm^11 = 1 }
 				check_variable = { mod1440_h_tab_dm^11 > 0 }
@@ -482,6 +796,20 @@ scripted_gui = {
 			}
 			nf_sp11_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_11^i = 1 } }
+			}
+			nf_spr11_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_11^i = 1 }
+			}
+			nf_spm11_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_11^i = 1 } }
+				check_variable = { mod1440_h_spz_11 > 0 }
+			}
+			nf_spn11_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_11^i = 1 }
 			}
 			nf_t14_pick_visible = {
 				check_variable = { mod1440_h_series = 14 }
@@ -518,6 +846,20 @@ scripted_gui = {
 			}
 			nf_sp14_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_14^i = 1 } }
+			}
+			nf_spr14_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_14^i = 1 }
+			}
+			nf_spm14_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_14^i = 1 } }
+				check_variable = { mod1440_h_spz_14 > 0 }
+			}
+			nf_spn14_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_14^i = 1 }
 			}
 			nf_t6_pick_visible = {
 				check_variable = { mod1440_h_series = 6 }
@@ -554,6 +896,20 @@ scripted_gui = {
 			}
 			nf_sp6_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_6^i = 1 } }
+			}
+			nf_spr6_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_6^i = 1 }
+			}
+			nf_spm6_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_6^i = 1 } }
+				check_variable = { mod1440_h_spz_6 > 0 }
+			}
+			nf_spn6_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_6^i = 1 }
 			}
 			nf_t7_pick_visible = {
 				check_variable = { mod1440_h_series = 7 }
@@ -590,6 +946,20 @@ scripted_gui = {
 			}
 			nf_sp7_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_7^i = 1 } }
+			}
+			nf_spr7_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_7^i = 1 }
+			}
+			nf_spm7_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_7^i = 1 } }
+				check_variable = { mod1440_h_spz_7 > 0 }
+			}
+			nf_spn7_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_7^i = 1 }
 			}
 			nf_t30_pick_visible = {
 				check_variable = { mod1440_h_series = 30 }
@@ -626,6 +996,20 @@ scripted_gui = {
 			}
 			nf_sp30_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_30^i = 1 } }
+			}
+			nf_spr30_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_30^i = 1 }
+			}
+			nf_spm30_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_30^i = 1 } }
+				check_variable = { mod1440_h_spz_30 > 0 }
+			}
+			nf_spn30_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_30^i = 1 }
 			}
 			nf_t15_pick_visible = {
 				check_variable = { mod1440_h_series = 15 }
@@ -662,6 +1046,20 @@ scripted_gui = {
 			}
 			nf_sp15_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_15^i = 1 } }
+			}
+			nf_spr15_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_15^i = 1 }
+			}
+			nf_spm15_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_15^i = 1 } }
+				check_variable = { mod1440_h_spz_15 > 0 }
+			}
+			nf_spn15_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_15^i = 1 }
 			}
 			nf_t3_pick_visible = {
 				check_variable = { mod1440_h_series = 3 }
@@ -698,6 +1096,20 @@ scripted_gui = {
 			}
 			nf_sp3_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_3^i = 1 } }
+			}
+			nf_spr3_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_3^i = 1 }
+			}
+			nf_spm3_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_3^i = 1 } }
+				check_variable = { mod1440_h_spz_3 > 0 }
+			}
+			nf_spn3_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_3^i = 1 }
 			}
 			nf_t4_pick_visible = {
 				check_variable = { mod1440_h_series = 4 }
@@ -734,6 +1146,20 @@ scripted_gui = {
 			}
 			nf_sp4_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_4^i = 1 } }
+			}
+			nf_spr4_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_4^i = 1 }
+			}
+			nf_spm4_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_4^i = 1 } }
+				check_variable = { mod1440_h_spz_4 > 0 }
+			}
+			nf_spn4_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_4^i = 1 }
 			}
 			nf_t5_pick_visible = {
 				check_variable = { mod1440_h_series = 5 }
@@ -770,6 +1196,20 @@ scripted_gui = {
 			}
 			nf_sp5_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_5^i = 1 } }
+			}
+			nf_spr5_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_5^i = 1 }
+			}
+			nf_spm5_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_5^i = 1 } }
+				check_variable = { mod1440_h_spz_5 > 0 }
+			}
+			nf_spn5_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_5^i = 1 }
 			}
 			nf_t8_pick_visible = {
 				check_variable = { mod1440_h_series = 8 }
@@ -806,6 +1246,20 @@ scripted_gui = {
 			}
 			nf_sp8_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_8^i = 1 } }
+			}
+			nf_spr8_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_8^i = 1 }
+			}
+			nf_spm8_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_8^i = 1 } }
+				check_variable = { mod1440_h_spz_8 > 0 }
+			}
+			nf_spn8_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_8^i = 1 }
 			}
 			nf_t12_pick_visible = {
 				check_variable = { mod1440_h_series = 12 }
@@ -842,6 +1296,20 @@ scripted_gui = {
 			}
 			nf_sp12_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_12^i = 1 } }
+			}
+			nf_spr12_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_12^i = 1 }
+			}
+			nf_spm12_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_12^i = 1 } }
+				check_variable = { mod1440_h_spz_12 > 0 }
+			}
+			nf_spn12_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_12^i = 1 }
 			}
 			nf_t13_pick_visible = {
 				check_variable = { mod1440_h_series = 13 }
@@ -878,6 +1346,20 @@ scripted_gui = {
 			}
 			nf_sp13_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_13^i = 1 } }
+			}
+			nf_spr13_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_13^i = 1 }
+			}
+			nf_spm13_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_13^i = 1 } }
+				check_variable = { mod1440_h_spz_13 > 0 }
+			}
+			nf_spn13_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_13^i = 1 }
 			}
 			nf_t0_pick_visible = {
 				check_variable = { mod1440_h_series = 0 }
@@ -914,6 +1396,20 @@ scripted_gui = {
 			}
 			nf_sp0_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_0^i = 1 } }
+			}
+			nf_spr0_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_0^i = 1 }
+			}
+			nf_spm0_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_0^i = 1 } }
+				check_variable = { mod1440_h_spz_0 > 0 }
+			}
+			nf_spn0_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_0^i = 1 }
 			}
 			nf_t1_pick_visible = {
 				check_variable = { mod1440_h_series = 1 }
@@ -950,6 +1446,20 @@ scripted_gui = {
 			}
 			nf_sp1_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_1^i = 1 } }
+			}
+			nf_spr1_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_1^i = 1 }
+			}
+			nf_spm1_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_1^i = 1 } }
+				check_variable = { mod1440_h_spz_1 > 0 }
+			}
+			nf_spn1_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_1^i = 1 }
 			}
 			nf_t2_pick_visible = {
 				check_variable = { mod1440_h_series = 2 }
@@ -986,78 +1496,170 @@ scripted_gui = {
 			}
 			nf_sp2_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_2^i = 1 } }
 			}
-			nf_t10_pick_visible = {
-				check_variable = { mod1440_h_series = 10 }
-			}
-			nf_t10_l_visible = {
-				NOT = { check_variable = { mod1440_h_series = 10 } }
-			}
-			nf_t10_ly_visible = {
-				check_variable = { mod1440_h_series = 10 }
-			}
-			nf_t10_m_up_visible = {
-				check_variable = { mod1440_h_tab_hm^10 = 1 }
-				check_variable = { mod1440_h_tab_dm^10 > 0 }
-			}
-			nf_t10_m_down_visible = {
-				check_variable = { mod1440_h_tab_hm^10 = 1 }
-				check_variable = { mod1440_h_tab_dm^10 < 0 }
-			}
-			nf_t10_m_same_visible = {
-				check_variable = { mod1440_h_tab_hm^10 = 1 }
-				check_variable = { mod1440_h_tab_dm^10 = 0 }
-			}
-			nf_t10_y_up_visible = {
-				check_variable = { mod1440_h_tab_hy^10 = 1 }
-				check_variable = { mod1440_h_tab_dy^10 > 0 }
-			}
-			nf_t10_y_down_visible = {
-				check_variable = { mod1440_h_tab_hy^10 = 1 }
-				check_variable = { mod1440_h_tab_dy^10 < 0 }
-			}
-			nf_t10_y_same_visible = {
-				check_variable = { mod1440_h_tab_hy^10 = 1 }
-				check_variable = { mod1440_h_tab_dy^10 = 0 }
-			}
-			nf_sp10_visible = {
+			nf_spr2_visible = {
 				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_2^i = 1 }
 			}
-			nf_t9_pick_visible = {
-				check_variable = { mod1440_h_series = 9 }
-			}
-			nf_t9_l_visible = {
-				NOT = { check_variable = { mod1440_h_series = 9 } }
-			}
-			nf_t9_ly_visible = {
-				check_variable = { mod1440_h_series = 9 }
-			}
-			nf_t9_m_up_visible = {
-				check_variable = { mod1440_h_tab_hm^9 = 1 }
-				check_variable = { mod1440_h_tab_dm^9 > 0 }
-			}
-			nf_t9_m_down_visible = {
-				check_variable = { mod1440_h_tab_hm^9 = 1 }
-				check_variable = { mod1440_h_tab_dm^9 < 0 }
-			}
-			nf_t9_m_same_visible = {
-				check_variable = { mod1440_h_tab_hm^9 = 1 }
-				check_variable = { mod1440_h_tab_dm^9 = 0 }
-			}
-			nf_t9_y_up_visible = {
-				check_variable = { mod1440_h_tab_hy^9 = 1 }
-				check_variable = { mod1440_h_tab_dy^9 > 0 }
-			}
-			nf_t9_y_down_visible = {
-				check_variable = { mod1440_h_tab_hy^9 = 1 }
-				check_variable = { mod1440_h_tab_dy^9 < 0 }
-			}
-			nf_t9_y_same_visible = {
-				check_variable = { mod1440_h_tab_hy^9 = 1 }
-				check_variable = { mod1440_h_tab_dy^9 = 0 }
-			}
-			nf_sp9_visible = {
+			nf_spm2_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_2^i = 1 } }
+				check_variable = { mod1440_h_spz_2 > 0 }
+			}
+			nf_spn2_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_2^i = 1 }
+			}
+			nf_t31_pick_visible = {
+				check_variable = { mod1440_h_series = 31 }
+			}
+			nf_t31_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 31 } }
+			}
+			nf_t31_ly_visible = {
+				check_variable = { mod1440_h_series = 31 }
+			}
+			nf_t31_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^31 = 1 }
+				check_variable = { mod1440_h_tab_dm^31 > 0 }
+			}
+			nf_t31_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^31 = 1 }
+				check_variable = { mod1440_h_tab_dm^31 < 0 }
+			}
+			nf_t31_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^31 = 1 }
+				check_variable = { mod1440_h_tab_dm^31 = 0 }
+			}
+			nf_t31_y_up_visible = {
+				check_variable = { mod1440_h_tab_hy^31 = 1 }
+				check_variable = { mod1440_h_tab_dy^31 > 0 }
+			}
+			nf_t31_y_down_visible = {
+				check_variable = { mod1440_h_tab_hy^31 = 1 }
+				check_variable = { mod1440_h_tab_dy^31 < 0 }
+			}
+			nf_t31_y_same_visible = {
+				check_variable = { mod1440_h_tab_hy^31 = 1 }
+				check_variable = { mod1440_h_tab_dy^31 = 0 }
+			}
+			nf_sp31_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_31^i = 1 } }
+			}
+			nf_spr31_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_31^i = 1 }
+			}
+			nf_spm31_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_31^i = 1 } }
+				check_variable = { mod1440_h_spz_31 > 0 }
+			}
+			nf_spn31_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_31^i = 1 }
+			}
+			nf_t32_pick_visible = {
+				check_variable = { mod1440_h_series = 32 }
+			}
+			nf_t32_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 32 } }
+			}
+			nf_t32_ly_visible = {
+				check_variable = { mod1440_h_series = 32 }
+			}
+			nf_t32_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^32 = 1 }
+				check_variable = { mod1440_h_tab_dm^32 > 0 }
+			}
+			nf_t32_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^32 = 1 }
+				check_variable = { mod1440_h_tab_dm^32 < 0 }
+			}
+			nf_t32_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^32 = 1 }
+				check_variable = { mod1440_h_tab_dm^32 = 0 }
+			}
+			nf_t32_y_up_visible = {
+				check_variable = { mod1440_h_tab_hy^32 = 1 }
+				check_variable = { mod1440_h_tab_dy^32 > 0 }
+			}
+			nf_t32_y_down_visible = {
+				check_variable = { mod1440_h_tab_hy^32 = 1 }
+				check_variable = { mod1440_h_tab_dy^32 < 0 }
+			}
+			nf_t32_y_same_visible = {
+				check_variable = { mod1440_h_tab_hy^32 = 1 }
+				check_variable = { mod1440_h_tab_dy^32 = 0 }
+			}
+			nf_sp32_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_32^i = 1 } }
+			}
+			nf_spr32_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_32^i = 1 }
+			}
+			nf_spm32_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_32^i = 1 } }
+				check_variable = { mod1440_h_spz_32 > 0 }
+			}
+			nf_spn32_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_32^i = 1 }
+			}
+			nf_t39_pick_visible = {
+				check_variable = { mod1440_h_series = 39 }
+			}
+			nf_t39_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 39 } }
+			}
+			nf_t39_ly_visible = {
+				check_variable = { mod1440_h_series = 39 }
+			}
+			nf_t39_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^39 = 1 }
+				check_variable = { mod1440_h_tab_dm^39 > 0 }
+			}
+			nf_t39_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^39 = 1 }
+				check_variable = { mod1440_h_tab_dm^39 < 0 }
+			}
+			nf_t39_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^39 = 1 }
+				check_variable = { mod1440_h_tab_dm^39 = 0 }
+			}
+			nf_t39_y_up_visible = {
+				check_variable = { mod1440_h_tab_hy^39 = 1 }
+				check_variable = { mod1440_h_tab_dy^39 > 0 }
+			}
+			nf_t39_y_down_visible = {
+				check_variable = { mod1440_h_tab_hy^39 = 1 }
+				check_variable = { mod1440_h_tab_dy^39 < 0 }
+			}
+			nf_t39_y_same_visible = {
+				check_variable = { mod1440_h_tab_hy^39 = 1 }
+				check_variable = { mod1440_h_tab_dy^39 = 0 }
+			}
+			nf_sp39_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_39^i = 1 } }
+			}
+			nf_spr39_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_39^i = 1 }
+			}
+			nf_spm39_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_39^i = 1 } }
+				check_variable = { mod1440_h_spz_39 > 0 }
+			}
+			nf_spn39_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_39^i = 1 }
 			}
 			nf_t16_pick_visible = {
 				check_variable = { mod1440_h_series = 16 }
@@ -1094,6 +1696,20 @@ scripted_gui = {
 			}
 			nf_sp16_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_16^i = 1 } }
+			}
+			nf_spr16_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_16^i = 1 }
+			}
+			nf_spm16_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_16^i = 1 } }
+				check_variable = { mod1440_h_spz_16 > 0 }
+			}
+			nf_spn16_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_16^i = 1 }
 			}
 			nf_t17_pick_visible = {
 				check_variable = { mod1440_h_series = 17 }
@@ -1130,6 +1746,20 @@ scripted_gui = {
 			}
 			nf_sp17_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_17^i = 1 } }
+			}
+			nf_spr17_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_17^i = 1 }
+			}
+			nf_spm17_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_17^i = 1 } }
+				check_variable = { mod1440_h_spz_17 > 0 }
+			}
+			nf_spn17_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_17^i = 1 }
 			}
 			nf_t18_pick_visible = {
 				check_variable = { mod1440_h_series = 18 }
@@ -1166,6 +1796,20 @@ scripted_gui = {
 			}
 			nf_sp18_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_18^i = 1 } }
+			}
+			nf_spr18_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_18^i = 1 }
+			}
+			nf_spm18_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_18^i = 1 } }
+				check_variable = { mod1440_h_spz_18 > 0 }
+			}
+			nf_spn18_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_18^i = 1 }
 			}
 			nf_t19_pick_visible = {
 				check_variable = { mod1440_h_series = 19 }
@@ -1202,6 +1846,20 @@ scripted_gui = {
 			}
 			nf_sp19_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_19^i = 1 } }
+			}
+			nf_spr19_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_19^i = 1 }
+			}
+			nf_spm19_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_19^i = 1 } }
+				check_variable = { mod1440_h_spz_19 > 0 }
+			}
+			nf_spn19_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_19^i = 1 }
 			}
 			nf_t27_pick_visible = {
 				check_variable = { mod1440_h_series = 27 }
@@ -1238,6 +1896,20 @@ scripted_gui = {
 			}
 			nf_sp27_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_27^i = 1 } }
+			}
+			nf_spr27_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_27^i = 1 }
+			}
+			nf_spm27_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_27^i = 1 } }
+				check_variable = { mod1440_h_spz_27 > 0 }
+			}
+			nf_spn27_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_27^i = 1 }
 			}
 			nf_t28_pick_visible = {
 				check_variable = { mod1440_h_series = 28 }
@@ -1274,6 +1946,20 @@ scripted_gui = {
 			}
 			nf_sp28_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_28^i = 1 } }
+			}
+			nf_spr28_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_28^i = 1 }
+			}
+			nf_spm28_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_28^i = 1 } }
+				check_variable = { mod1440_h_spz_28 > 0 }
+			}
+			nf_spn28_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_28^i = 1 }
 			}
 			nf_t29_pick_visible = {
 				check_variable = { mod1440_h_series = 29 }
@@ -1310,6 +1996,20 @@ scripted_gui = {
 			}
 			nf_sp29_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_29^i = 1 } }
+			}
+			nf_spr29_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_29^i = 1 }
+			}
+			nf_spm29_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_spn_29^i = 1 } }
+				check_variable = { mod1440_h_spz_29 > 0 }
+			}
+			nf_spn29_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_spn_29^i = 1 }
 			}
 			nf_t20_pick_visible = {
 				check_variable = { mod1440_h_series = 20 }
@@ -1457,6 +2157,258 @@ scripted_gui = {
 			nf_t26_m_same_visible = {
 				check_variable = { mod1440_h_tab_hm^26 = 1 }
 				check_variable = { mod1440_h_tab_dm^26 = 0 }
+			}
+			nf_t33_pick_visible = {
+				check_variable = { mod1440_h_series = 33 }
+			}
+			nf_t33_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 33 } }
+			}
+			nf_t33_ly_visible = {
+				check_variable = { mod1440_h_series = 33 }
+			}
+			nf_eq_s_0_visible = {
+				check_variable = { mod1440_nf_eq_s_0 > 0 }
+			}
+			nf_eq_s0_0_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_s_0 > 0 } }
+			}
+			nf_eq_d_0_visible = {
+				check_variable = { mod1440_nf_eq_d_0 > 0 }
+			}
+			nf_eq_d0_0_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_d_0 > 0 } }
+			}
+			nf_eq_b_0_visible = {
+				check_variable = { mod1440_nf_eq_b_0 > 0 }
+			}
+			nf_eq_bn_0_visible = {
+				check_variable = { mod1440_nf_eq_b_0 < 0 }
+			}
+			nf_eq_b0_0_visible = {
+				check_variable = { mod1440_nf_eq_b_0 = 0 }
+			}
+			nf_t33_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^33 = 1 }
+				check_variable = { mod1440_h_tab_dm^33 > 0 }
+			}
+			nf_t33_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^33 = 1 }
+				check_variable = { mod1440_h_tab_dm^33 < 0 }
+			}
+			nf_t33_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^33 = 1 }
+				check_variable = { mod1440_h_tab_dm^33 = 0 }
+			}
+			nf_t34_pick_visible = {
+				check_variable = { mod1440_h_series = 34 }
+			}
+			nf_t34_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 34 } }
+			}
+			nf_t34_ly_visible = {
+				check_variable = { mod1440_h_series = 34 }
+			}
+			nf_eq_s_1_visible = {
+				check_variable = { mod1440_nf_eq_s_1 > 0 }
+			}
+			nf_eq_s0_1_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_s_1 > 0 } }
+			}
+			nf_eq_d_1_visible = {
+				check_variable = { mod1440_nf_eq_d_1 > 0 }
+			}
+			nf_eq_d0_1_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_d_1 > 0 } }
+			}
+			nf_eq_b_1_visible = {
+				check_variable = { mod1440_nf_eq_b_1 > 0 }
+			}
+			nf_eq_bn_1_visible = {
+				check_variable = { mod1440_nf_eq_b_1 < 0 }
+			}
+			nf_eq_b0_1_visible = {
+				check_variable = { mod1440_nf_eq_b_1 = 0 }
+			}
+			nf_t34_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^34 = 1 }
+				check_variable = { mod1440_h_tab_dm^34 > 0 }
+			}
+			nf_t34_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^34 = 1 }
+				check_variable = { mod1440_h_tab_dm^34 < 0 }
+			}
+			nf_t34_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^34 = 1 }
+				check_variable = { mod1440_h_tab_dm^34 = 0 }
+			}
+			nf_t35_pick_visible = {
+				check_variable = { mod1440_h_series = 35 }
+			}
+			nf_t35_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 35 } }
+			}
+			nf_t35_ly_visible = {
+				check_variable = { mod1440_h_series = 35 }
+			}
+			nf_eq_s_2_visible = {
+				check_variable = { mod1440_nf_eq_s_2 > 0 }
+			}
+			nf_eq_s0_2_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_s_2 > 0 } }
+			}
+			nf_eq_d_2_visible = {
+				check_variable = { mod1440_nf_eq_d_2 > 0 }
+			}
+			nf_eq_d0_2_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_d_2 > 0 } }
+			}
+			nf_eq_b_2_visible = {
+				check_variable = { mod1440_nf_eq_b_2 > 0 }
+			}
+			nf_eq_bn_2_visible = {
+				check_variable = { mod1440_nf_eq_b_2 < 0 }
+			}
+			nf_eq_b0_2_visible = {
+				check_variable = { mod1440_nf_eq_b_2 = 0 }
+			}
+			nf_t35_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^35 = 1 }
+				check_variable = { mod1440_h_tab_dm^35 > 0 }
+			}
+			nf_t35_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^35 = 1 }
+				check_variable = { mod1440_h_tab_dm^35 < 0 }
+			}
+			nf_t35_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^35 = 1 }
+				check_variable = { mod1440_h_tab_dm^35 = 0 }
+			}
+			nf_t36_pick_visible = {
+				check_variable = { mod1440_h_series = 36 }
+			}
+			nf_t36_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 36 } }
+			}
+			nf_t36_ly_visible = {
+				check_variable = { mod1440_h_series = 36 }
+			}
+			nf_eq_s_3_visible = {
+				check_variable = { mod1440_nf_eq_s_3 > 0 }
+			}
+			nf_eq_s0_3_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_s_3 > 0 } }
+			}
+			nf_eq_d_3_visible = {
+				check_variable = { mod1440_nf_eq_d_3 > 0 }
+			}
+			nf_eq_d0_3_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_d_3 > 0 } }
+			}
+			nf_eq_b_3_visible = {
+				check_variable = { mod1440_nf_eq_b_3 > 0 }
+			}
+			nf_eq_bn_3_visible = {
+				check_variable = { mod1440_nf_eq_b_3 < 0 }
+			}
+			nf_eq_b0_3_visible = {
+				check_variable = { mod1440_nf_eq_b_3 = 0 }
+			}
+			nf_t36_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^36 = 1 }
+				check_variable = { mod1440_h_tab_dm^36 > 0 }
+			}
+			nf_t36_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^36 = 1 }
+				check_variable = { mod1440_h_tab_dm^36 < 0 }
+			}
+			nf_t36_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^36 = 1 }
+				check_variable = { mod1440_h_tab_dm^36 = 0 }
+			}
+			nf_t37_pick_visible = {
+				check_variable = { mod1440_h_series = 37 }
+			}
+			nf_t37_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 37 } }
+			}
+			nf_t37_ly_visible = {
+				check_variable = { mod1440_h_series = 37 }
+			}
+			nf_eq_s_4_visible = {
+				check_variable = { mod1440_nf_eq_s_4 > 0 }
+			}
+			nf_eq_s0_4_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_s_4 > 0 } }
+			}
+			nf_eq_d_4_visible = {
+				check_variable = { mod1440_nf_eq_d_4 > 0 }
+			}
+			nf_eq_d0_4_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_d_4 > 0 } }
+			}
+			nf_eq_b_4_visible = {
+				check_variable = { mod1440_nf_eq_b_4 > 0 }
+			}
+			nf_eq_bn_4_visible = {
+				check_variable = { mod1440_nf_eq_b_4 < 0 }
+			}
+			nf_eq_b0_4_visible = {
+				check_variable = { mod1440_nf_eq_b_4 = 0 }
+			}
+			nf_t37_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^37 = 1 }
+				check_variable = { mod1440_h_tab_dm^37 > 0 }
+			}
+			nf_t37_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^37 = 1 }
+				check_variable = { mod1440_h_tab_dm^37 < 0 }
+			}
+			nf_t37_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^37 = 1 }
+				check_variable = { mod1440_h_tab_dm^37 = 0 }
+			}
+			nf_t38_pick_visible = {
+				check_variable = { mod1440_h_series = 38 }
+			}
+			nf_t38_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 38 } }
+			}
+			nf_t38_ly_visible = {
+				check_variable = { mod1440_h_series = 38 }
+			}
+			nf_eq_s_5_visible = {
+				check_variable = { mod1440_nf_eq_s_5 > 0 }
+			}
+			nf_eq_s0_5_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_s_5 > 0 } }
+			}
+			nf_eq_d_5_visible = {
+				check_variable = { mod1440_nf_eq_d_5 > 0 }
+			}
+			nf_eq_d0_5_visible = {
+				NOT = { check_variable = { mod1440_nf_eq_d_5 > 0 } }
+			}
+			nf_eq_b_5_visible = {
+				check_variable = { mod1440_nf_eq_b_5 > 0 }
+			}
+			nf_eq_bn_5_visible = {
+				check_variable = { mod1440_nf_eq_b_5 < 0 }
+			}
+			nf_eq_b0_5_visible = {
+				check_variable = { mod1440_nf_eq_b_5 = 0 }
+			}
+			nf_t38_m_up_visible = {
+				check_variable = { mod1440_h_tab_hm^38 = 1 }
+				check_variable = { mod1440_h_tab_dm^38 > 0 }
+			}
+			nf_t38_m_down_visible = {
+				check_variable = { mod1440_h_tab_hm^38 = 1 }
+				check_variable = { mod1440_h_tab_dm^38 < 0 }
+			}
+			nf_t38_m_same_visible = {
+				check_variable = { mod1440_h_tab_hm^38 = 1 }
+				check_variable = { mod1440_h_tab_dm^38 = 0 }
 			}
 			nf_res_made_0_visible = {
 				check_variable = { resource_produced@oil > 0 }
@@ -1759,6 +2711,101 @@ scripted_gui = {
 				check_variable = { mod1440_h_series = 30 }
 				check_variable = { mod1440_h_valid > 0 }
 			}
+			h_name_31_visible = {
+				check_variable = { mod1440_h_series = 31 }
+			}
+			h_unit_31_visible = {
+				check_variable = { mod1440_h_series = 31 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_31_visible = {
+				check_variable = { mod1440_h_series = 31 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_32_visible = {
+				check_variable = { mod1440_h_series = 32 }
+			}
+			h_unit_32_visible = {
+				check_variable = { mod1440_h_series = 32 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_32_visible = {
+				check_variable = { mod1440_h_series = 32 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_33_visible = {
+				check_variable = { mod1440_h_series = 33 }
+			}
+			h_unit_33_visible = {
+				check_variable = { mod1440_h_series = 33 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_33_visible = {
+				check_variable = { mod1440_h_series = 33 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_34_visible = {
+				check_variable = { mod1440_h_series = 34 }
+			}
+			h_unit_34_visible = {
+				check_variable = { mod1440_h_series = 34 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_34_visible = {
+				check_variable = { mod1440_h_series = 34 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_35_visible = {
+				check_variable = { mod1440_h_series = 35 }
+			}
+			h_unit_35_visible = {
+				check_variable = { mod1440_h_series = 35 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_35_visible = {
+				check_variable = { mod1440_h_series = 35 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_36_visible = {
+				check_variable = { mod1440_h_series = 36 }
+			}
+			h_unit_36_visible = {
+				check_variable = { mod1440_h_series = 36 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_36_visible = {
+				check_variable = { mod1440_h_series = 36 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_37_visible = {
+				check_variable = { mod1440_h_series = 37 }
+			}
+			h_unit_37_visible = {
+				check_variable = { mod1440_h_series = 37 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_37_visible = {
+				check_variable = { mod1440_h_series = 37 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_38_visible = {
+				check_variable = { mod1440_h_series = 38 }
+			}
+			h_unit_38_visible = {
+				check_variable = { mod1440_h_series = 38 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_note_38_visible = {
+				check_variable = { mod1440_h_series = 38 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
+			h_name_39_visible = {
+				check_variable = { mod1440_h_series = 39 }
+			}
+			h_unit_39_visible = {
+				check_variable = { mod1440_h_series = 39 }
+				check_variable = { mod1440_h_valid > 0 }
+			}
 			h_latest_0_visible = {
 				check_variable = { mod1440_h_valid > 0 }
 				check_variable = { mod1440_h_dec = 0 }
@@ -1841,6 +2888,20 @@ scripted_gui = {
 				check_variable = { mod1440_h_valid > 0 }
 				check_variable = { mod1440_h_dec = 1 }
 			}
+			h_max_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 32 } }
+			}
+			h_max32_l_visible = {
+				check_variable = { mod1440_h_series = 32 }
+			}
+			h_max_d_visible = {
+				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
+			}
+			h_max_d32_visible = {
+				check_variable = { mod1440_h_valid > 0 }
+				check_variable = { mod1440_h_series = 32 }
+			}
 			h_min_0_visible = {
 				check_variable = { mod1440_h_valid > 0 }
 				check_variable = { mod1440_h_dec = 0 }
@@ -1849,33 +2910,62 @@ scripted_gui = {
 				check_variable = { mod1440_h_valid > 0 }
 				check_variable = { mod1440_h_dec = 1 }
 			}
+			h_min_d_visible = {
+				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
+			}
+			h_min_d32_visible = {
+				check_variable = { mod1440_h_valid > 0 }
+				check_variable = { mod1440_h_series = 32 }
+			}
 			h_change_0_visible = {
 				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
 				check_variable = { mod1440_h_dec = 0 }
 				check_variable = { mod1440_h_rise = 1 }
 				NOT = { check_variable = { mod1440_h_change = 0 } }
 			}
 			h_change_0r_visible = {
 				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
 				check_variable = { mod1440_h_dec = 0 }
 				check_variable = { mod1440_h_rise = 0 }
 				NOT = { check_variable = { mod1440_h_change = 0 } }
 			}
 			h_change_1_visible = {
 				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
 				check_variable = { mod1440_h_dec = 1 }
 				check_variable = { mod1440_h_rise = 1 }
 				NOT = { check_variable = { mod1440_h_change = 0 } }
 			}
 			h_change_1r_visible = {
 				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
 				check_variable = { mod1440_h_dec = 1 }
 				check_variable = { mod1440_h_rise = 0 }
 				NOT = { check_variable = { mod1440_h_change = 0 } }
 			}
 			h_change_same_visible = {
 				check_variable = { mod1440_h_valid > 0 }
+				NOT = { check_variable = { mod1440_h_series = 32 } }
 				check_variable = { mod1440_h_change = 0 }
+			}
+			h_change_l_visible = {
+				NOT = { check_variable = { mod1440_h_series = 32 } }
+			}
+			h_sum_l_visible = {
+				check_variable = { mod1440_h_series = 32 }
+			}
+			h_sum_0_visible = {
+				check_variable = { mod1440_h_valid > 0 }
+				check_variable = { mod1440_h_series = 32 }
+				check_variable = { mod1440_h_dec = 0 }
+			}
+			h_sum_1_visible = {
+				check_variable = { mod1440_h_valid > 0 }
+				check_variable = { mod1440_h_series = 32 }
+				check_variable = { mod1440_h_dec = 1 }
 			}
 			h_scale_0_0_visible = {
 				check_variable = { mod1440_h_valid > 0 }
@@ -1919,12 +3009,84 @@ scripted_gui = {
 			}
 			h_bar24_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_neg_24^i = 1 } }
+				NOT = { check_variable = { mod1440_h_loss = 1 } }
+			}
+			h_loss24_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_loss = 1 }
+				NOT = { AND = { check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i } } }
+			}
+			h_gold24_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i }
+			}
+			h_red24_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_neg_24^i = 1 }
+			}
+			h_mask24_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_neg_24^i = 1 } }
+				check_variable = { mod1440_h_zero_h > 0 }
+			}
+			h_maskn24_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_neg_24^i = 1 }
 			}
 			h_bar60_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_neg_60^i = 1 } }
+				NOT = { check_variable = { mod1440_h_loss = 1 } }
+			}
+			h_loss60_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_loss = 1 }
+				NOT = { AND = { check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i } } }
+			}
+			h_gold60_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i }
+			}
+			h_red60_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_neg_60^i = 1 }
+			}
+			h_mask60_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_neg_60^i = 1 } }
+				check_variable = { mod1440_h_zero_h > 0 }
+			}
+			h_maskn60_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_neg_60^i = 1 }
 			}
 			h_bar120_visible = {
 				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_neg_120^i = 1 } }
+				NOT = { check_variable = { mod1440_h_loss = 1 } }
+			}
+			h_loss120_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_loss = 1 }
+				NOT = { AND = { check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i } } }
+			}
+			h_gold120_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_gold = 1 } check_variable = { i = mod1440_h_max_i }
+			}
+			h_red120_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_neg_120^i = 1 }
+			}
+			h_mask120_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_h_neg_120^i = 1 } }
+				check_variable = { mod1440_h_zero_h > 0 }
+			}
+			h_maskn120_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_h_neg_120^i = 1 }
 			}
 			h_none_visible = {
 				NOT = { check_variable = { mod1440_h_valid > 0 } }
@@ -1972,6 +3134,9 @@ scripted_gui = {
 				check_variable = { mod1440_h_yl_9 > 0 }
 			}
 			h_zero_visible = {
+				check_variable = { mod1440_h_zero = 1 }
+			}
+			h_scale_zero_visible = {
 				check_variable = { mod1440_h_zero = 1 }
 			}
 			nf_c0_count_visible = {

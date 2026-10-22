@@ -571,20 +571,39 @@ mod1440_chk_ar_row = {
 """
 
 
-H_SERIES = 31          # D4 round 2: the figures National Figures writes down (tools/build_managers.py, SERIES)
-H_RES = range(20, 27)  # their resource balances, which go below zero
+H_SERIES = 40          # D9: the figures National Figures writes down (tools/build_managers.py, SERIES)
+H_DEEP = list(range(20, 27)) + list(range(33, 39))  # the resource balances and (D9) the equipment balances: below zero too
+H_D9 = 31              # D9: the series a save of the build before D9 has (0 to 30)
+
+
+def series_value(n):
+    """The made-up value of series n in a month: a rising figure, a falling one and a wave, by turns; the balances
+    and political power (D9) a wave around zero; the game's casualties (10), the total of every war (31), the dead of
+    the month (32) and surrender progress (39) from two made-up wars (D9)."""
+    if n == 10:
+        return "cas_g"
+    if n == 31:
+        return "cas_t"
+    if n == 32:
+        return "cas_m"
+    if n == 39:
+        return "sur"
+    if n in H_DEEP or n == 11:
+        return "below"
+    return ("up", "down", "wave")[n % 3]
 
 
 def history_months(name, months, years, filled=H_SERIES):
-    """An effect that fills the arrays of the History page with made-up months, without running time: a rising
-    figure, a falling one and a wave, by turns; the resource balances (D4 round 2) a wave around zero. years: with
+    """An effect that fills the arrays of the History page with made-up months, without running time. years: with
     the year of each month, or without as a game saved before 2026-10-12 has them. filled: how many of the figures
-    get months; 12 leaves the eight of 2026-10-16 and the eleven of 2026-10-17 empty, as a game saved by the build
-    before 2026-10-16 has them, 20 the eleven, as a save of 2026-10-16 (the drawing pads them)."""
-    series = "".join(("\t\tadd_to_array = { mod1440_h_%d = below }\n" if n in H_RES else
-                      "\t\tadd_to_array = { mod1440_h_%d = up }\n" if n % 3 == 0 else
-                      "\t\tadd_to_array = { mod1440_h_%d = down }\n" if n % 3 == 1 else
-                      "\t\tadd_to_array = { mod1440_h_%d = wave }\n") % n for n in range(filled))
+    get months; 12 leaves the eight of 2026-10-16, the eleven of 2026-10-17 and the nine of D9 empty, as a game saved
+    by the build before 2026-10-16 has them, 20 the eleven and the nine, as a save of 2026-10-16, 31 the nine of D9,
+    as a save of the build before D9 (the drawing pads them, and back-fills 31 and 32 from series 10).
+    D9: two made-up wars, months 40 to 69 and 100 on (of 130): the dead of each month in cas_m; the game's number
+    (series 10) adds them during a war and drops to 0 when the first war ends, as casualties_k does; the total (31)
+    never falls; surrender progress rises during the wars. A save with all 40 figures gets mod1440_h_cas_ver and the
+    counters of the daily step; an older one loses them, so that the drawing back-fills."""
+    series = "".join("\t\tadd_to_array = { mod1440_h_%d = %s }\n" % (n, series_value(n)) for n in range(filled))
     forget = "".join("\t\t\tremove_from_array = { array = mod1440_h_%d index = 0 }\n" % n for n in range(filled))
     clear = "".join("\tclear_array = mod1440_h_%d\n" % n for n in range(H_SERIES))
     year = """		set_temp_variable = { mo = t }
@@ -596,10 +615,26 @@ def history_months(name, months, years, filled=H_SERIES):
 		add_to_array = { mod1440_h_year = yr }
 """ if years else ""
     forget_year = "\t\t\tremove_from_array = { array = mod1440_h_year index = 0 }\n" if years else ""
+    if filled == H_SERIES:
+        counters = """	set_variable = { mod1440_h_cas_sum = cas_t }
+	set_variable = { mod1440_h_cas_mon = 0 }
+	set_variable = { mod1440_h_cas_last = casualties_k }
+	set_variable = { mod1440_h_cas_from = global.date }
+	set_variable = { mod1440_h_cas_ver = 1 }
+"""
+    else:
+        counters = """	clear_variable = mod1440_h_cas_ver
+	clear_variable = mod1440_h_cas_sum
+	clear_variable = mod1440_h_cas_mon
+	clear_variable = mod1440_h_cas_last
+	clear_variable = mod1440_h_cas_from
+"""
     return """
 %s = {
 %s	clear_array = mod1440_h_date
 	clear_array = mod1440_h_year
+	set_temp_variable = { cas_g = 0 }
+	set_temp_variable = { cas_t = 0 }
 	for_loop_effect = {
 		start = 0
 		end = %d
@@ -614,24 +649,107 @@ def history_months(name, months, years, filled=H_SERIES):
 		add_to_temp_variable = { wave = 10 }
 		set_temp_variable = { below = wave }
 		subtract_from_temp_variable = { below = 22 }
+		set_temp_variable = { cas_m = 0 }
+		set_temp_variable = { sur = 0 }
+		if = {
+			limit = { check_variable = { t > 39 } check_variable = { t < 70 } }
+			set_temp_variable = { cas_m = wave }
+			set_temp_variable = { sur = t }
+			subtract_from_temp_variable = { sur = 40 }
+		}
+		if = {
+			limit = { check_variable = { t > 99 } }
+			set_temp_variable = { cas_m = wave }
+			multiply_temp_variable = { cas_m = 2 }
+			set_temp_variable = { sur = t }
+			subtract_from_temp_variable = { sur = 100 }
+			multiply_temp_variable = { sur = 2 }
+		}
+		add_to_temp_variable = { cas_g = cas_m }
+		add_to_temp_variable = { cas_t = cas_m }
+		if = {
+			limit = { check_variable = { t = 70 } }
+			set_temp_variable = { cas_g = 0 }
+		}
+		if = {
+			limit = { check_variable = { t = 0 } }
+			set_temp_variable = { cas_m = -1 }
+		}
 %s		add_to_array = { mod1440_h_date = global.date }
 %s		if = {
 			limit = { check_variable = { mod1440_h_date^num > 120 } }
 %s			remove_from_array = { array = mod1440_h_date index = 0 }
 %s		}
 	}
-	mod1440_h_draw = yes
+%s	mod1440_h_draw = yes
 	log = "MOD1440 check: history filled, [?mod1440_h_date^num] months, [?mod1440_h_0^num] values, [?mod1440_h_year^num] years"
+	log = "MOD1440 check: casualties, series 10 now [?cas_g] (the first war's dead dropped at month 70), total [?mod1440_h_cas_sum] in [?mod1440_h_31^num] months, month [?mod1440_h_32^num] months, worst [?mod1440_h_cas_worst], cas_ver [?mod1440_h_cas_ver]"
 }
-""" % (name, clear, months, series, year, forget, forget_year)
+""" % (name, clear, months, series, year, forget, forget_year, counters)
 
 
 # 130 months with years (the oldest ten are forgotten), the same as an older save has them, seven months, and
-# 130 months of the twelve figures a save of the build before 2026-10-16 has
+# 130 months of the twelve figures a save of the build before 2026-10-16 has, of the twenty of 2026-10-16 and (D9) of
+# the 31 of the build before D9: then the drawing back-fills series 31 and 32 from series 10
 HISTORY = ("\n# ---- the History page: made-up months\n"
            + history_months("mod1440_chk_months", 130, True) + history_months("mod1440_chk_months_old", 130, False)
            + history_months("mod1440_chk_months_few", 7, True) + history_months("mod1440_chk_months_twelve", 130, True, 12)
-           + history_months("mod1440_chk_months_twenty", 130, True, 20))
+           + history_months("mod1440_chk_months_twenty", 130, True, 20) + history_months("mod1440_chk_months_d4", 130, True, H_D9))
+
+# --- D9 ---
+# The daily casualty step and the Equipment table, as Germany on 1 January 1936 (no war: casualties_k is 0).
+HISTORY += """
+# ---- National Figures, D9
+
+# As if the game's casualties had risen by 12 thousand since yesterday: the step adds 12.0K to the total and to the
+# month so far.
+mod1440_chk_cas_rise = {
+	set_variable = { mod1440_h_cas_last = casualties_k }
+	subtract_from_variable = { mod1440_h_cas_last = 12 }
+	mod1440_h_cas_step = yes
+	mod1440_h_draw = yes
+	log = "MOD1440 check: cas rise, total [?mod1440_h_cas_sum] month [?mod1440_h_cas_mon] game [?casualties_k] last [?mod1440_h_cas_last]"
+}
+
+# As if a war had ended since yesterday: the game's number 50 thousand lower. The step adds nothing.
+mod1440_chk_cas_fall = {
+	set_variable = { mod1440_h_cas_last = casualties_k }
+	add_to_variable = { mod1440_h_cas_last = 50 }
+	mod1440_h_cas_step = yes
+	mod1440_h_draw = yes
+	log = "MOD1440 check: cas fall, total [?mod1440_h_cas_sum] month [?mod1440_h_cas_mon] game [?casualties_k] last [?mod1440_h_cas_last]"
+}
+
+# The back-fill after mod1440_chk_months_d4, written to game.log.
+mod1440_chk_backfill = {
+	mod1440_h_draw = yes
+	log = "MOD1440 check: backfill, cas_ver [?mod1440_h_cas_ver] months [?mod1440_h_date^num] series 10 [?mod1440_h_10^num] 31 [?mod1440_h_31^num] 32 [?mod1440_h_32^num] 33 [?mod1440_h_33^num] total [?mod1440_h_cas_sum] worst [?mod1440_h_cas_worst] from [?mod1440_h_cas_from.GetDateStringNoHourLong]"
+}
+
+# A made-up shortage in the Equipment table until the next day's count: infantry equipment 12.4K short with none in
+# stock, towed anti-aircraft 1.1K short.
+mod1440_chk_equip_short = {
+	set_variable = { mod1440_nf_eq_s_0 = 0 }
+	set_variable = { mod1440_nf_eq_d_0 = 12.4 }
+	set_variable = { mod1440_nf_eq_b_0 = -12.4 }
+	set_variable = { mod1440_nf_eq_s_4 = 0 }
+	set_variable = { mod1440_nf_eq_d_4 = 1.1 }
+	set_variable = { mod1440_nf_eq_b_4 = -1.1 }
+	log = "MOD1440 check: equip short, infantry [?mod1440_nf_eq_b_0] anti-air [?mod1440_nf_eq_b_4]"
+}
+
+# The real count of the Equipment table, written to game.log beside the game's own numbers.
+mod1440_chk_equip = {
+	mod1440_nf_equip = yes
+	log = "MOD1440 check: equip, infantry stock [?num_equipment@infantry_equipment] field [?num_equipment_in_armies@infantry_equipment] need [?num_target_equipment_in_armies@infantry_equipment]: [?mod1440_nf_eq_s_0] [?mod1440_nf_eq_d_0] [?mod1440_nf_eq_b_0]; trucks [?mod1440_nf_eq_s_5] [?mod1440_nf_eq_d_5] [?mod1440_nf_eq_b_5]"
+}
+
+# Political power below zero: the Now of its row in red with its sign.
+mod1440_chk_pp_negative = {
+	add_political_power = -200
+}
+"""
+# --- end D9 ---
 
 
 def changed_month():

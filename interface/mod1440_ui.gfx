@@ -1577,4 +1577,146 @@ spriteTypes = {
 		steps = 100
 	}
 	# --- end E1 ---
+
+	# --- D9 ---
+	# National Figures refinement (2026-10-22, scratch/phases/D9/design.json): the graph's columns of the casualty
+	# series in the strength bar's colour, the deadliest month in the experience bar's gold, a month below zero in the
+	# red of a bad progress bar, and a mask (the column's own dark background over a transparent one) that covers a
+	# column from its foot up to the zero level; the same three for the sparklines. Vanilla textures only.
+	progressbartype = {
+		name = "GFX_1440p_SG_column_loss_57x200"
+		textureFile1 = "gfx/interface/navieslist_bar_str.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 57 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_loss_22x200"
+		textureFile1 = "gfx/interface/navieslist_bar_str.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 22 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_loss_11x200"
+		textureFile1 = "gfx/interface/navieslist_bar_str.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 11 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_gold_57x200"
+		textureFile1 = "gfx/interface/unit_xp_bar.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 57 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_gold_22x200"
+		textureFile1 = "gfx/interface/unit_xp_bar.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 22 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_gold_11x200"
+		textureFile1 = "gfx/interface/unit_xp_bar.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 11 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_red_57x200"
+		textureFile1 = "gfx/interface/naval_mine_progress_bad.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 57 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_red_22x200"
+		textureFile1 = "gfx/interface/naval_mine_progress_bad.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 22 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_red_11x200"
+		textureFile1 = "gfx/interface/naval_mine_progress_bad.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 11 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_mask_57x200"
+		textureFile1 = "gfx/interface/navieslist_bar_bg.dds"
+		textureFile2 = "gfx/interface/skill_transparent.dds"
+		size = { x = 57 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_mask_22x200"
+		textureFile1 = "gfx/interface/navieslist_bar_bg.dds"
+		textureFile2 = "gfx/interface/skill_transparent.dds"
+		size = { x = 22 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_mask_11x200"
+		textureFile1 = "gfx/interface/navieslist_bar_bg.dds"
+		textureFile2 = "gfx/interface/skill_transparent.dds"
+		size = { x = 11 y = 200 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 200
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_spark_loss_4x18"
+		textureFile1 = "gfx/interface/navieslist_bar_str.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 4 y = 18 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 18
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_spark_red_4x18"
+		textureFile1 = "gfx/interface/naval_mine_progress_bad.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 4 y = 18 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 18
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_spark_mask_4x18"
+		textureFile1 = "gfx/interface/navieslist_bar_bg.dds"
+		textureFile2 = "gfx/interface/skill_transparent.dds"
+		size = { x = 4 y = 18 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 18
+	}
+	# --- end D9 ---
 }
