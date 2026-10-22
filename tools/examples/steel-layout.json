@@ -1,0 +1,48 @@
+{
+  "_comment": "The pieces of the steel look, the default of every screen since 2026-10-21 (wiki/Design-Language.md), as one layout: the catalogue a designer copies from. tools/mockup.py draws it into wiki/images/design-language.png; tools/lint_layout.py passes it with no finding; tests/Layout.Tests.ps1 checks both. Not a screen of the game: the texts are samples and nothing is applied.",
+  "id": "STEEL",
+  "prefix": "steel",
+  "style": "steel",
+  "frame": null,
+  "size": [848, 556],
+  "windows": [{
+    "path": "catalogue", "at": [14, 14], "size": [820, 528],
+    "background": "GFX_1440p_steel_ground",
+    "items": [
+      {"kind": "steel_title", "name": "title", "x": 2, "y": 2, "w": 816, "h": 46},
+      {"kind": "text", "role": "title", "font": "hoi_36header", "x": 18, "y": 6, "text": "Window Title"},
+      {"kind": "text", "role": "figure", "font": "hoi_24header", "x": 520, "y": 13, "text": "§Y42§! factories", "w": 200, "align": "right"},
+      {"kind": "move", "path": "close_button", "x": 782, "y": 8, "sprite": "GFX_closebutton"},
+
+      {"kind": "steel", "name": "table", "x": 6, "y": 54, "w": 808, "h": 180, "head": 27},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 18, "y": 58, "text": "A banded table: the head band is its head bar"},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 560, "y": 59, "text": "Produced", "w": 120, "align": "right"},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 680, "y": 59, "text": "Needed", "w": 120, "align": "right"},
+      {"kind": "bands", "name": "table_band", "x": 14, "y": 86, "w": 792, "row": 32, "rows": 4},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 22, "repeat": {"var": "n", "range": [1, 4], "dy": 32}, "y": 91, "texts": ["Infantry Equipment", "Support Equipment", "Artillery", "Fighters"]},
+      {"kind": "text", "role": "value", "font": "hoi_20b", "x": 560, "repeat": {"var": "n", "range": [1, 4], "dy": 32}, "y": 91, "w": 120, "align": "right", "texts": ["12 480", "1 320", "§R96§!", "§G410§!"]},
+      {"kind": "text", "role": "value", "font": "hoi_20b", "x": 680, "repeat": {"var": "n", "range": [1, 4], "dy": 32}, "y": 91, "w": 120, "align": "right", "texts": ["9 000", "1 100", "240", "300"]},
+
+      {"kind": "steel", "name": "line", "x": 6, "y": 240, "w": 808, "h": 120, "head": 38},
+      {"kind": "text", "role": "name", "font": "hoi_24header", "x": 18, "y": 248, "text": "A card with buttons in its head band"},
+      {"kind": "sprite", "name": "GFX_button_148x34", "x": 658, "y": 242, "w": 148, "h": 34},
+      {"kind": "text", "role": "button", "font": "hoi_16mbs", "x": 658, "y": 250, "w": 148, "align": "center", "text": "Head button"},
+      {"kind": "inset", "name": "line_inset", "x": 14, "y": 286, "w": 392, "h": 66},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 26, "y": 294, "text": "An inset holds a column"},
+      {"kind": "text", "role": "figure", "font": "hoi_24header", "x": 26, "y": 320, "text": "1 Mar 1937"},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 422, "y": 294, "text": "Content stands 8 inside its card,"},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 422, "y": 320, "text": "columns 16 apart, cards 6 apart."},
+
+      {"kind": "steel", "name": "small_a", "x": 6, "y": 366, "w": 401, "h": 72},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 18, "y": 378, "text": "A card without a head"},
+      {"kind": "text", "role": "value", "font": "hoi_20b", "x": 18, "y": 404, "text": "Values in hoi_20b"},
+      {"kind": "steel", "name": "small_b", "x": 413, "y": 366, "w": 401, "h": 72},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 425, "y": 378, "text": "§R-12%§! damage, shortage"},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 425, "y": 404, "text": "§G+8%§! gains, §Yhighlight§!"},
+
+      {"kind": "steel", "name": "foot", "x": 6, "y": 444, "w": 808, "h": 78, "head": 27},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 18, "y": 448, "text": "Hotkeys: the same action has the same key on every screen"},
+      {"kind": "text", "role": "caption", "font": "hoi_18mbs", "x": 18, "y": 486, "text": "ESCAPE closes, RETURN confirms, shift+N creates, shift+U unassigns"}
+    ]
+  }]
+}

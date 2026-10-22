@@ -1,0 +1,8 @@
+{
+  "_comment": "The shared hotkey table (wiki/Design-Language.md, Hotkeys; user decision 2026-10-21): one key per action on every screen, and one action per key. Every hotkey the mod adds is listed here (shift+m and shift+j are reserved for the pages; split from the 1440p UI mod on 2026-10-21, whose screens keep their own table) under its action as file:button; the keys vanilla gives its own buttons stay as they are and are not listed. A new hotkey reuses the key of its action, or adds an action with a free shift+letter. tests/ScreenInvariants.Tests.ps1 checks the files against this table.",
+  "always": {"ESCAPE": "Close the window", "RETURN": "Confirm"},
+  "actions": [
+    {"action": "Fold or open a manager page", "key": "shift+m", "buttons": ["mod1440_army_readiness.gui:ar_fold", "mod1440_army_readiness.gui:ar_unfold", "mod1440_states.gui:st_fold", "mod1440_states.gui:st_unfold", "mod1440_figures.gui:nf_toggle", "mod1440_figures.gui:nf_fold"]},
+    {"action": "Open or close the Records", "key": "shift+j", "buttons": ["mod1440_records.gui:rec_toggle"]}
+  ]
+}

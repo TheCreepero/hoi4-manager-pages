@@ -1,0 +1,40 @@
+"""Made by tools/make_game_tables.py from the game 1.19.3.0: change the game, not this file.
+
+A row is (idea of a law, the sprite of its picture or "" when no .gfx declares it).
+33 laws."""
+
+LAW_PICTURES = [
+    ('ETH_chitet_law', 'GFX_idea_ETH_chitet_law'),
+    ('ETH_chitet_law_peace_time', 'GFX_idea_ETH_chitet_law'),
+    ('JAP_war_communism_idea', 'GFX_idea_new_economic_policy'),
+    ('SPR_collectivized_society', 'GFX_idea_SPR_collectivized_society'),
+    ('SWI_citizen_militia_1', 'GFX_idea_citizen_militia_1'),
+    ('SWI_citizen_militia_2', 'GFX_idea_citizen_militia_2'),
+    ('all_adults_serve', 'GFX_idea_all_adults_serve'),
+    ('autarkic_economy', 'GFX_idea_autarkic_economy'),
+    ('autarkic_economy_improved', 'GFX_idea_autarkic_economy'),
+    ('capital_investment_model', 'GFX_idea_RAJ_trickle_down_economy'),
+    ('civilian_economy', 'GFX_idea_civilian_economy'),
+    ('closed_economy', 'GFX_idea_closed_economy'),
+    ('disarmed_nation', 'GFX_idea_disarmed_nation'),
+    ('export_focus', 'GFX_idea_export_focus'),
+    ('extensive_conscription', 'GFX_idea_extensive_conscription'),
+    ('free_trade', 'GFX_idea_free_trade'),
+    ('isolation', 'GFX_idea_isolation'),
+    ('limited_conscription', 'GFX_idea_limited_conscription'),
+    ('limited_exports', 'GFX_idea_limited_exports'),
+    ('low_economic_mobilisation', 'GFX_idea_low_economic_mobilisation'),
+    ('national_defense_state', 'GFX_idea_JAP_national_defense_state'),
+    ('new_economic_policy', 'GFX_idea_new_economic_policy'),
+    ('new_economic_policy_2', 'GFX_idea_new_economic_policy'),
+    ('partial_economic_mobilisation', 'GFX_idea_partial_economic_mobilisation'),
+    ('scraping_the_barrel', 'GFX_idea_scraping_the_barrel'),
+    ('service_by_requirement', 'GFX_idea_service_by_requirement'),
+    ('special_economic_zones', 'GFX_idea_RAJ_special_economic_zones'),
+    ('tot_economic_mobilisation', 'GFX_idea_tot_economic_mobilisation'),
+    ('totaler_krieg_economy', 'GFX_idea_totaler_krieg_economy'),
+    ('uncontrolled_exports', 'GFX_idea_isolation'),
+    ('undisturbed_isolation', 'GFX_idea_undisturbed_isolation'),
+    ('volunteer_only', 'GFX_idea_volunteer_only'),
+    ('war_economy', 'GFX_idea_war_economy'),
+]

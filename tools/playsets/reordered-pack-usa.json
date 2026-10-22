@@ -1,0 +1,14 @@
+[
+  {"click": [1220, 1102], "wait": 2.0, "_note": "the welcome of the tech tree mod (FLTE): Continue"},
+  {"click": [1456, 782], "wait": 1.2, "_note": "Special Project Completed: Ok. Road to 56 and Vanilla Navy Rework hand out eight at the start"},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.5},
+  {"click": [1624, 914], "wait": 2.0, "_note": "the splash of the tech tree mod: its lower right corner closes it"},
+  {"click": [1386, 652], "wait": 2.0, "_note": "the event of +2 Research Slots: Awesome!"},
+  {"click": [1386, 836], "wait": 2.0, "_note": "Welcome to the Road: Continue"}
+]

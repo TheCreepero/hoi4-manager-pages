@@ -1,0 +1,23 @@
+# Archives and build artifacts
+*.zip
+*.7z
+*.tar.gz
+artifacts/
+scratch/
+*.mod
+!descriptor.mod
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.bak
+.steam_username
+.claude/settings.local.json
+# Python and the renderer's local settings
+__pycache__/
+*.pyc
+tools/render.local.json

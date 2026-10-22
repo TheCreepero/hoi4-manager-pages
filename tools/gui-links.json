@@ -1,0 +1,8 @@
+{
+  "_comment": "Links the engine makes in code between lists and the windows that fill them. Read by tests/GuiInvariants.Tests.ps1, tools/render_gui.py and tools/Invoke-GameCheck.ps1. Empty in this mod: its windows are scripted GUIs whose lists script fills (the 1440p UI mod keeps the rows of its reworked vanilla lists). Add a row only for a vanilla list this mod overrides.",
+  "entryPairs": [],
+  "listRows": [],
+  "variables": {
+    "_comment": "File-level @variables of vanilla files whose windows the mod overrides. None here."
+  }
+}
