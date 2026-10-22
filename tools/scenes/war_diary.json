@@ -14,7 +14,7 @@
       "freeWindow": true,
       "name": "mod1440_records_wd",
       "rows": {
-        "wd_grid": 29
+        "wd_grid": 28
       },
       "listRows": {
         "wd_grid": "mod1440_records_diary_row"
@@ -22,73 +22,510 @@
       "hide": [
         "wd_none",
         "wd_count_state",
-        "wd_hn_none"
+        "wd_count_country",
+        "wd_hn_none",
+        "wd_ch_none_0",
+        "wd_ch_none_1",
+        "wd_ch_0_f1",
+        "wd_ch_0_f3",
+        "wd_ch_0_f4",
+        "wd_ch_0_f5",
+        "wd_ch_0_p",
+        "wd_ch_0_b",
+        "wd_ch_1_f1",
+        "wd_ch_1_f2",
+        "wd_ch_1_f3",
+        "wd_ch_1_f5",
+        "wd_ch_1_p",
+        "wd_ch_1_b",
+        "wd_ch_2_f1",
+        "wd_ch_2_f3",
+        "wd_ch_2_f4",
+        "wd_ch_2_f5",
+        "wd_ch_2_p",
+        "wd_ch_2_b",
+        "wd_ch_3_f2",
+        "wd_ch_3_f3",
+        "wd_ch_3_f4",
+        "wd_ch_3_f5",
+        "wd_ch_3_s",
+        "wd_ch_3_p"
       ],
-      "_note": "A window of its own over the map, opened from the Records button of the top bar."
+      "frames": {
+        "wd_show_all": 2,
+        "wd_hn_cap": 2,
+        "wd_hn_sea": 2,
+        "wd_hn_air": 2
+      },
+      "_note": "A window of its own over the map, opened from the Records button of the top bar. The list shows a campaign like the design's; flags and faces are the renderer's samples."
     },
     {
       "name": "mod1440_records_diary_row",
       "skip": true,
-      "hide": [
-        "wd_row_day_bg",
-        "wd_row_day",
-        "wd_row_day_n",
-        "wd_row_day_n1",
-        "wd_row_point",
-        "wd_row_face",
-        "wd_row_who",
-        "wd_row_name",
-        "wd_row_flag_near",
-        "wd_row_b_near",
-        "wd_row_marked",
-        "wd_row_icon_1",
-        "wd_row_icon_3",
-        "wd_row_icon_4",
-        "wd_row_icon_5"
-      ],
-      "_note": "Drawn as a line of the territory log: a state, the country it was taken from, the officer. The states 'days', 'officers' and 'countries' draw the other kinds of row."
+      "only": {
+        "wd_row_date": [
+          0,
+          3,
+          6,
+          9,
+          12,
+          14,
+          16,
+          19,
+          22,
+          24
+        ],
+        "wd_row_new": [
+          0,
+          1,
+          2
+        ],
+        "wd_row_icon_1": [
+          0,
+          1,
+          8,
+          9,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          27
+        ],
+        "wd_row_event": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27
+        ],
+        "wd_row_flag_near": [
+          0,
+          1,
+          8,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          27
+        ],
+        "wd_row_lines_near": [
+          0,
+          1,
+          8,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          27
+        ],
+        "wd_row_b_near": [
+          0,
+          1,
+          8,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          27
+        ],
+        "wd_row_mark": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          27
+        ],
+        "wd_row_icon_2": [
+          2,
+          3,
+          4,
+          5,
+          10,
+          11,
+          12,
+          13,
+          20,
+          24,
+          25,
+          26
+        ],
+        "wd_row_go_fold": [
+          2,
+          13
+        ],
+        "wd_row_a": [
+          2,
+          4,
+          5,
+          10,
+          12,
+          13,
+          20,
+          25,
+          26
+        ],
+        "wd_row_fold": [
+          2,
+          13
+        ],
+        "wd_row_flag": [
+          2,
+          3,
+          4,
+          10,
+          11,
+          12,
+          13,
+          20,
+          24,
+          25
+        ],
+        "wd_row_lines": [
+          2,
+          3,
+          4,
+          10,
+          11,
+          12,
+          13,
+          20,
+          24,
+          25
+        ],
+        "wd_row_b": [
+          2,
+          3,
+          4,
+          10,
+          11,
+          12,
+          13,
+          20,
+          24,
+          25
+        ],
+        "wd_row_go": [
+          3,
+          4,
+          5,
+          10,
+          11,
+          12,
+          20,
+          24,
+          25,
+          26
+        ],
+        "wd_row_point": [
+          3,
+          11,
+          24
+        ],
+        "wd_row_cface": [
+          3,
+          4,
+          10,
+          11,
+          12,
+          24,
+          25
+        ],
+        "wd_row_cfile": [
+          3,
+          4,
+          10,
+          11,
+          12,
+          24,
+          25
+        ],
+        "wd_row_c": [
+          3,
+          4,
+          10,
+          11,
+          12,
+          24,
+          25
+        ],
+        "wd_row_stripe": [
+          6,
+          7,
+          8,
+          12,
+          13,
+          16,
+          17,
+          18,
+          22,
+          23
+        ],
+        "wd_row_icon_4": [
+          6,
+          7,
+          14,
+          22
+        ],
+        "wd_row_n": [
+          6
+        ],
+        "wd_row_face": [
+          6,
+          7,
+          14,
+          22
+        ],
+        "wd_row_file": [
+          6,
+          7,
+          14,
+          22
+        ],
+        "wd_row_who": [
+          6,
+          7,
+          14,
+          22
+        ],
+        "wd_row_n_k": [
+          9
+        ],
+        "wd_row_marked": [
+          12,
+          22,
+          26
+        ],
+        "wd_row_icon_3": [
+          23
+        ],
+        "wd_row_name": [
+          23
+        ],
+        "wd_row_n_m": [],
+        "wd_row_icon_5": []
+      },
+      "_note": "Each widget is drawn in the rows script shows it in: the day on its first row, the band of the day, the new lines of the first day on the lighter band, runs of states folded, the numbers of a line."
     }
   ],
   "samples": {
     "mod1440_records_wd": {
-      "wd_country": "Czechoslovakia",
-      "wd_since": "Kept since 30 September, 1944  -  1374 days on record",
-      "wd_tab_0_n": "1000 lines",
-      "wd_tab_3_n": "2 at war",
-      "wd_tab_1_n": "128",
-      "wd_count": "lines 1 - 200 of 1000",
+      "wd_country": "United States of America",
+      "wd_since": "Kept since 3 March, 1941  -  1084 days on record",
+      "wd_tab_0_n": "155 lines",
+      "wd_tab_3_n": "11 at war",
+      "wd_tab_1_n": "103",
+      "wd_count": "lines 1 - 311 of 318",
       "wd_count_state": "\u00a7YKonstantin von Neurath\u00a7!: lines 1 - 200 of 1000",
-      "wd_f_wars": "128",
-      "wd_f_peace": "128",
-      "wd_f_cap": "128",
-      "wd_f_annex": "128",
-      "wd_g_st_t": "128",
-      "wd_g_st_x": "12",
-      "wd_g_vp_t": "128",
-      "wd_g_vp_x": "12",
-      "wd_g_cap_t": "128",
-      "wd_g_cap_x": "12",
-      "wd_f_comm": "128",
-      "wd_f_prom": "128",
-      "wd_f_dec": "128",
-      "wd_f_govs": "128",
-      "wd_c_marked_0": "300 lines, kept for good whatever the age of the log.",
-      "wd_hn_auto": "128",
-      "wd_hn_cite": "128",
-      "wd_hn_last": "Last citation: \u00a7YNiederschlesien\u00a7!, 30 September, 1944",
-      "wd_kept_0": "Main log: 1000 of 1000 lines. Territory: 1000 of 1000."
+      "wd_count_country": "\u00a7YKonstantin von Neurath\u00a7!: lines 1 - 200 of 1000",
+      "wd_f_wars": "\u00a7Y33\u00a7!",
+      "wd_f_peace": "\u00a7Y22\u00a7!",
+      "wd_f_cap": "\u00a7Y2\u00a7!",
+      "wd_f_annex": "\u00a7Y2\u00a7!",
+      "wd_f_subj": "\u00a7Y17\u00a7!",
+      "wd_f_atwar": "\u00a7Y11\u00a7!",
+      "wd_g_st_t": "\u00a7Y59\u00a7!",
+      "wd_g_st_x": "\u00a7Y7\u00a7!",
+      "wd_g_vp_t": "\u00a7Y25\u00a7!",
+      "wd_g_vp_x": "\u00a7Y0\u00a7!",
+      "wd_g_cap_t": "\u00a7Y2\u00a7!",
+      "wd_g_cap_x": "\u00a7Y1\u00a7!",
+      "wd_f_trr": "\u00a7Y39\u00a7!",
+      "wd_f_trh": "\u00a7Y47\u00a7!",
+      "wd_f_comm": "\u00a7Y1\u00a7!",
+      "wd_f_prom": "\u00a7Y1\u00a7!",
+      "wd_f_lvl": "\u00a7Y4\u00a7!",
+      "wd_f_dec": "\u00a7Y3\u00a7!",
+      "wd_f_gone": "\u00a7Y2\u00a7!",
+      "wd_f_govs": "\u00a7Y0\u00a7!",
+      "wd_ch_n": "The lines you marked, kept for good: 4 of 300.",
+      "wd_ch_0_d": "\u00a7g27 May, 1943\u00a7!",
+      "wd_ch_0": "Capital taken",
+      "wd_ch_0_s": "\u00a7YKanto\u00a7!",
+      "wd_ch_0_p": "\u00a7Y128\u00a7!",
+      "wd_ch_0_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "wd_ch_1_d": "\u00a7g9 May, 1943\u00a7!",
+      "wd_ch_1": "Promoted to field marshal",
+      "wd_ch_1_s": "\u00a7YWalter Krueger\u00a7!",
+      "wd_ch_1_p": "\u00a7Y128\u00a7!",
+      "wd_ch_1_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "wd_ch_2_d": "\u00a7g2 May, 1943\u00a7!",
+      "wd_ch_2": "Landing in",
+      "wd_ch_2_s": "\u00a7YKyushu\u00a7!",
+      "wd_ch_2_p": "\u00a7Y128\u00a7!",
+      "wd_ch_2_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "wd_ch_3_d": "\u00a7g8 December, 1941\u00a7!",
+      "wd_ch_3": "War declared by",
+      "wd_ch_3_s": "\u00a7YKonstantin von Neurath\u00a7!",
+      "wd_ch_3_p": "\u00a7Y128\u00a7!",
+      "wd_ch_3_b": "\u00a7YEmpire of Japan\u00a7!",
+      "wd_hn_auto": "\u00a7Y3\u00a7!",
+      "wd_hn_cite": "\u00a7Y1\u00a7!",
+      "wd_hn_last": "Last citation: \u00a7YKyushu\u00a7!, 7 June, 1943",
+      "wd_kept_0": "Main log 155 of 1000 lines, territory 178 of 1000."
     },
     "mod1440_records_diary_row": {
-      "wd_row_day": "30 September, 1944",
-      "wd_row_day_n": "2 lines",
-      "wd_row_event": "Our pride of the fleet was sunk by",
-      "wd_row_a": "\u00a7YNiederschlesien\u00a7!",
-      "wd_row_point": "\u00a7YNiederschlesien\u00a7!",
-      "wd_row_who": "\u00a7YNiederschlesien\u00a7!",
-      "wd_row_name": "\u00a7YNiederschlesien\u00a7!",
-      "wd_row_b": "The Czechoslovak Republic",
-      "wd_row_b_near": "The Czechoslovak Republic",
-      "wd_row_c": "\u00a7YKonstantin von Neurath\u00a7!"
+      "wd_row_date": [
+        "12 June, 1943",
+        "7 June, 1943",
+        "2 June, 1943",
+        "30 May, 1943",
+        "27 May, 1943",
+        "23 May, 1943",
+        "22 May, 1943",
+        "17 May, 1943",
+        "9 May, 1943",
+        "2 May, 1943"
+      ],
+      "wd_row_event": [
+        "Peace with",
+        "Made a subject:",
+        "Handed over to",
+        "Victory point taken",
+        "State taken",
+        "Landing in",
+        "Gained a skill level",
+        "Decorated",
+        "Broke the cipher of",
+        "Our casualties passed",
+        "State taken",
+        "Victory point taken",
+        "Capital taken",
+        "State taken",
+        "Left the service",
+        "Volunteers sent to",
+        "War declared by",
+        "War declared by",
+        "War declared by",
+        "Annexed",
+        "Received from",
+        "Joined our faction:",
+        "Promoted to field marshal",
+        "Appointed",
+        "Victory point taken",
+        "State taken",
+        "Landing in",
+        "War declared on"
+      ],
+      "wd_row_n": [
+        "\u00a7Y5\u00a7!"
+      ],
+      "wd_row_n_k": [
+        "\u00a7Y250 000\u00a7!"
+      ],
+      "wd_row_n_m": "\u00a7Y128 000 000\u00a7!",
+      "wd_row_a": [
+        "\u00a7YLuzon\u00a7!",
+        "\u00a7YMinami Kyushu\u00a7!",
+        "\u00a7YKyushu\u00a7!",
+        "\u00a7YChugoku\u00a7!",
+        "\u00a7YKanto\u00a7!",
+        "\u00a7YShikoku\u00a7!",
+        "\u00a7YCuba\u00a7!",
+        "\u00a7YKyushu\u00a7!",
+        "\u00a7YKyushu\u00a7!"
+      ],
+      "wd_row_point": [
+        "\u00a7YKagoshima\u00a7!",
+        "\u00a7YHiroshima\u00a7!",
+        "\u00a7YNagasaki\u00a7!"
+      ],
+      "wd_row_fold": [
+        "+6 states",
+        "+11 states"
+      ],
+      "wd_row_who": [
+        "\u00a7YWilliam Halsey, Jr.\u00a7!",
+        "\u00a7YDouglas MacArthur\u00a7!",
+        "\u00a7YLeslie McNair\u00a7!",
+        "\u00a7YWalter Krueger\u00a7!"
+      ],
+      "wd_row_name": [
+        "\u00a7YGeorge C. Marshall\u00a7!"
+      ],
+      "wd_row_b": [
+        "Philippines",
+        "State of Japan",
+        "State of Japan",
+        "State of Japan",
+        "State of Japan",
+        "State of Japan",
+        "State of Japan",
+        "Cuba",
+        "State of Japan",
+        "State of Japan"
+      ],
+      "wd_row_b_near": [
+        "Siam",
+        "Philippines",
+        "State of Japan",
+        "China",
+        "Hungary",
+        "Romania",
+        "Bulgaria",
+        "Cuba",
+        "Brazil",
+        "Siam"
+      ],
+      "wd_row_c": [
+        "\u00a7YWalter Krueger\u00a7!",
+        "\u00a7YWalter Krueger\u00a7!",
+        "\u00a7YDwight D. Eisenhower\u00a7!",
+        "\u00a7YDwight D. Eisenhower\u00a7!",
+        "\u00a7YDouglas MacArthur\u00a7!",
+        "\u00a7YWalter Krueger\u00a7!",
+        "\u00a7YWalter Krueger\u00a7!"
+      ]
     }
   },
   "setup": [
@@ -104,7 +541,8 @@
   "captures": [],
   "expect": [
     "mod1440_records_wd/wd_close",
-    "mod1440_records_wd/wd_older"
+    "mod1440_records_wd/wd_older",
+    "mod1440_records_wd/wd_ch_read"
   ],
   "crop": [
     430,
@@ -113,20 +551,29 @@
     1240
   ],
   "manual": [
-    "Lines that need a war: a state and a victory point taken with the general on the spot, capitulation, landings, aces",
-    "A landing and an airborne drop with the honour switches on: the lines in the divisions' history"
+    "Lines that need a war: a state and a victory point taken with the general on the spot, capitulation, landings",
+    "A landing and an airborne drop with the honour switches on: the lines in the divisions' history",
+    "A peace conference that hands states over (whether has_war_with still holds then), a civil war won, a government in exile"
   ],
   "checklist": [
-    "The title strip: Germany's flag, Records, German Reich, 'Kept since 1 January, 1936 - 0 days on record'; the tabs in the order War Diary, Wars, Officers, Government, the War Diary's with the gold chevrons, the counts '1 lines' and '0 at war'",
-    "Each tab opens its page; the chevrons move to it; its tooltip says what the page is for",
-    "The diary's lines stand under a row for their day, with the date and the number of lines",
-    "A line about a country: its flag (41x26) and name. A line about an officer (promote one by effect): his face and name",
-    "A line about a state taken (mod1440_chk_state2): the plate moves the camera; the general's face and name at the right",
-    "The box at the end of a line: click it, it is ticked; the Marked filter lists the line; click again and it leaves",
-    "The page arrows < and > past 200 rows (mod1440_chk_fill fills the logs); 'lines 1 - N of M' in the head bar",
-    "The campaign card: the tiles, the three bars of ground; the four honour switches toggle; landings and airborne ticked, the great city not",
-    "The top bar button: '\u00a3army_experience Records', a badge with the lines written while the window was closed; closing clears it",
-    "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type'"
+    "The title strip and the tabs as before: Germany's flag, Records, German Reich, 'Kept since 1 January, 1936 - 0 days on record'; the War Diary's tab with the gold chevrons; each tab opens its page",
+    "The list: no row of its own for a day; the date (hoi_16mbs) stands on a day's first line only, every line of a day on one band, the bands of two days apart; 'The record begins' on the lighter band of a new line until the window is closed once, then on the day's band",
+    "Close and open the Records after a day with a line: the new lines on the lighter band (GFX_1440p_SG_pick); does it read as 'new' against the day bands?",
+    "A line about a country (mod1440_chk_war: War declared on Poland): its flag (41x26) and name; click the name: the diary shows Poland's lines only, 'Poland: lines 1 - N of N' in the head bar where Officer stood, the Country and Officer heads gone, no filter lit; All brings every line back",
+    "A state taken in battle (mod1440_chk_war, then mod1440_chk_state2: Danzig): 'State taken', the plate moves the camera, Poland in the Country column, the general's face and name at the right; click his name: the Officers page opens on his file",
+    "A state received by treaty (mod1440_chk_treaty): 'Received from' Austria in the diary (Territory filter too), no general named; the state card of Niederschlesien: 'Received from Austria by treaty on 1 January, 1936, held 0 days' and the grey line that no troops are named; 'Handed over to' Austria for the state given first",
+    "A run of states (mod1440_chk_treaty_run: four states received from Austria on one day): All shows one row 'Received from <state>' with '+3 states' at the plate's right end and its tooltip; Territory lists the four lines; 'lines 1 - N of M' counts the four",
+    "An officer line (mod1440_chk_level: a general gains a skill level): 'Gained a skill level' with the level reached in yellow at the right end of the words (compare with the level in the general's own window); his face and name open his file",
+    "mod1440_chk_retire (the fifth general retires), then mod1440_chk_daily: 'Left the service' with his face and name; The service: Left the service 1. A second mod1440_chk_daily writes no second line",
+    "mod1440_chk_cipher and mod1440_chk_exile: 'Broke the cipher of' Poland and 'Hosting the exiled government of' Poland, each with its flag (volunteers, a civil war won and fighting on need a war the check cannot cause: under manual)",
+    "The pane: The campaign as banded tables under three head bars (War and peace, Ground in battle with taken and lost and a bar, the By treaty row, The service); 'At war today' equals the number of enemies on the Wars page; Wars begun and Wars ended against the Wars page's rows",
+    "The chronicle: mark three lines with their boxes: the pane lists the newest marked lines (date in grey, icon, words, name); 'Read the chronicle' opens the Marked filter; unmark them all: the two lines that say how to mark",
+    "Battle honours: the four switches in two rows toggle; By themselves and Cited by you as a table row; the last citation under them",
+    "Kept: two lines; the count in the head bar has the Kept text as its tooltip",
+    "The page arrows past 200 rows (mod1440_chk_fill fills the logs): 200 lines a page with no day rows; 'lines 1 - 200 of M'; scroll the list to its end; mod1440_chk_list_time in game.log (the folds' cost against the last check)",
+    "The top bar button: a War and peace line written while the window is closed turns the count red; its tooltip says 'N new lines since you last closed the Records, K of war and peace' and 'Newest: <words> <name>, <date>' (GetTokenLocalizedKey in a tooltip); Close clears both",
+    "mod1440_chk_old3 (a save of before the review), then the Records opened: mod1440_chk_sizes3 reads every log's n as long as its dates; no line is on the lighter band; no 'Left the service' line for an officer gone before",
+    "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type', no unknown trigger has_war_with"
   ],
   "teardown": [
     {
@@ -136,158 +583,436 @@
   ],
   "states": [
     {
-      "name": "days",
+      "name": "follow",
+      "rows": {
+        "wd_grid": 10
+      },
+      "frames": {
+        "mod1440_records_wd": {
+          "wd_show_all": 1,
+          "wd_hn_cap": 2,
+          "wd_hn_sea": 2,
+          "wd_hn_air": 2
+        }
+      },
       "hide": {
         "mod1440_records_wd": [
           "wd_none",
+          "wd_count",
           "wd_count_state",
-          "wd_hn_none"
-        ],
-        "mod1440_records_diary_row": [
-          "wd_row_day_n1",
-          "wd_row_stripe",
-          "wd_row_event",
-          "wd_row_go",
-          "wd_row_a",
-          "wd_row_point",
-          "wd_row_face",
-          "wd_row_who",
-          "wd_row_name",
-          "wd_row_flag",
-          "wd_row_b",
-          "wd_row_flag_near",
-          "wd_row_b_near",
-          "wd_row_cface",
-          "wd_row_c",
-          "wd_row_mark",
-          "wd_row_marked",
-          "wd_row_icon_1",
-          "wd_row_icon_2",
-          "wd_row_icon_3",
-          "wd_row_icon_4",
-          "wd_row_icon_5"
+          "wd_heads_3",
+          "wd_heads_4",
+          "wd_hn_none",
+          "wd_ch_none_0",
+          "wd_ch_none_1",
+          "wd_ch_0_f1",
+          "wd_ch_0_f3",
+          "wd_ch_0_f4",
+          "wd_ch_0_f5",
+          "wd_ch_0_p",
+          "wd_ch_0_b",
+          "wd_ch_1_f1",
+          "wd_ch_1_f2",
+          "wd_ch_1_f3",
+          "wd_ch_1_f5",
+          "wd_ch_1_p",
+          "wd_ch_1_b",
+          "wd_ch_2_f1",
+          "wd_ch_2_f3",
+          "wd_ch_2_f4",
+          "wd_ch_2_f5",
+          "wd_ch_2_p",
+          "wd_ch_2_b",
+          "wd_ch_3_f2",
+          "wd_ch_3_f3",
+          "wd_ch_3_f4",
+          "wd_ch_3_f5",
+          "wd_ch_3_s",
+          "wd_ch_3_p"
         ]
+      },
+      "only": {
+        "mod1440_records_diary_row": {
+          "wd_row_date": [
+            0,
+            2,
+            3,
+            5,
+            7,
+            9
+          ],
+          "wd_row_stripe": [
+            0,
+            1,
+            3,
+            4,
+            7,
+            8
+          ],
+          "wd_row_icon_2": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "wd_row_event": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "wd_row_go": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "wd_row_point": [
+            0,
+            4,
+            7
+          ],
+          "wd_row_flag": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "wd_row_lines": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "wd_row_b": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "wd_row_cface": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "wd_row_cfile": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "wd_row_c": [
+            0,
+            1,
+            3,
+            4,
+            5,
+            7,
+            8
+          ],
+          "wd_row_mark": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            6,
+            7,
+            8,
+            9
+          ],
+          "wd_row_a": [
+            1,
+            3,
+            5,
+            6,
+            8
+          ],
+          "wd_row_icon_1": [
+            2,
+            9
+          ],
+          "wd_row_flag_near": [
+            2,
+            9
+          ],
+          "wd_row_lines_near": [
+            2,
+            9
+          ],
+          "wd_row_b_near": [
+            2,
+            9
+          ],
+          "wd_row_marked": [
+            5
+          ],
+          "wd_row_go_fold": [
+            6
+          ],
+          "wd_row_fold": [
+            6
+          ],
+          "wd_row_new": [],
+          "wd_row_n": [],
+          "wd_row_n_k": [],
+          "wd_row_n_m": [],
+          "wd_row_face": [],
+          "wd_row_file": [],
+          "wd_row_who": [],
+          "wd_row_name": [],
+          "wd_row_icon_3": [],
+          "wd_row_icon_4": [],
+          "wd_row_icon_5": []
+        }
       },
       "samples": {
         "mod1440_records_diary_row": {
-          "wd_row_day": "27 September, 1939",
-          "wd_row_day_n": "2 lines"
+          "wd_row_date": [
+            "7 June, 1943",
+            "2 June, 1943",
+            "30 May, 1943",
+            "27 May, 1943",
+            "2 May, 1943",
+            "8 December, 1941"
+          ],
+          "wd_row_event": [
+            "Victory point taken",
+            "State taken",
+            "Broke the cipher of",
+            "State taken",
+            "Victory point taken",
+            "Capital taken",
+            "State taken",
+            "Victory point taken",
+            "State taken",
+            "War declared by"
+          ],
+          "wd_row_point": [
+            "\u00a7YKagoshima\u00a7!",
+            "\u00a7YHiroshima\u00a7!",
+            "\u00a7YNagasaki\u00a7!"
+          ],
+          "wd_row_b": [
+            "State of Japan",
+            "State of Japan",
+            "State of Japan",
+            "State of Japan",
+            "State of Japan",
+            "State of Japan",
+            "State of Japan",
+            "State of Japan"
+          ],
+          "wd_row_c": [
+            "\u00a7YWalter Krueger\u00a7!",
+            "\u00a7YWalter Krueger\u00a7!",
+            "\u00a7YDwight D. Eisenhower\u00a7!",
+            "\u00a7YDwight D. Eisenhower\u00a7!",
+            "\u00a7YDouglas MacArthur\u00a7!",
+            "\u00a7YWalter Krueger\u00a7!",
+            "\u00a7YWalter Krueger\u00a7!"
+          ],
+          "wd_row_a": [
+            "\u00a7YMinami Kyushu\u00a7!",
+            "\u00a7YChugoku\u00a7!",
+            "\u00a7YKanto\u00a7!",
+            "\u00a7YShikoku\u00a7!",
+            "\u00a7YKyushu\u00a7!"
+          ],
+          "wd_row_b_near": [
+            "State of Japan",
+            "State of Japan"
+          ],
+          "wd_row_fold": [
+            "+11 states"
+          ]
+        },
+        "mod1440_records_wd": {
+          "wd_f_wars": "\u00a7Y33\u00a7!",
+          "wd_f_peace": "\u00a7Y22\u00a7!",
+          "wd_f_cap": "\u00a7Y2\u00a7!",
+          "wd_f_annex": "\u00a7Y2\u00a7!",
+          "wd_f_subj": "\u00a7Y17\u00a7!",
+          "wd_f_atwar": "\u00a7Y11\u00a7!",
+          "wd_f_comm": "\u00a7Y1\u00a7!",
+          "wd_f_prom": "\u00a7Y1\u00a7!",
+          "wd_f_lvl": "\u00a7Y4\u00a7!",
+          "wd_f_dec": "\u00a7Y3\u00a7!",
+          "wd_f_gone": "\u00a7Y2\u00a7!",
+          "wd_f_govs": "\u00a7Y0\u00a7!",
+          "wd_f_trr": "\u00a7Y39\u00a7!",
+          "wd_f_trh": "\u00a7Y47\u00a7!",
+          "wd_g_st_t": "\u00a7Y59\u00a7!",
+          "wd_g_st_x": "\u00a7Y7\u00a7!",
+          "wd_g_vp_t": "\u00a7Y25\u00a7!",
+          "wd_g_vp_x": "\u00a7Y0\u00a7!",
+          "wd_g_cap_t": "\u00a7Y2\u00a7!",
+          "wd_g_cap_x": "\u00a7Y1\u00a7!",
+          "wd_hn_auto": "\u00a7Y3\u00a7!",
+          "wd_hn_cite": "\u00a7Y1\u00a7!",
+          "wd_hn_last": "Last citation: \u00a7YKyushu\u00a7!, 7 June, 1943",
+          "wd_count": "lines 1 - 311 of 318",
+          "wd_country": "United States of America",
+          "wd_since": "Kept since 3 March, 1941  -  1084 days on record",
+          "wd_tab_0_n": "155 lines",
+          "wd_tab_3_n": "11 at war",
+          "wd_tab_1_n": "103",
+          "wd_ch_n": "The lines you marked, kept for good: 4 of 300.",
+          "wd_kept_0": "Main log 155 of 1000 lines, territory 178 of 1000.",
+          "wd_ch_0_d": "\u00a7g27 May, 1943\u00a7!",
+          "wd_ch_0": "Capital taken",
+          "wd_ch_0_s": "\u00a7YKanto\u00a7!",
+          "wd_ch_1_d": "\u00a7g9 May, 1943\u00a7!",
+          "wd_ch_1": "Promoted to field marshal",
+          "wd_ch_1_s": "\u00a7YWalter Krueger\u00a7!",
+          "wd_ch_2_d": "\u00a7g2 May, 1943\u00a7!",
+          "wd_ch_2": "Landing in",
+          "wd_ch_2_s": "\u00a7YKyushu\u00a7!",
+          "wd_ch_3_d": "\u00a7g8 December, 1941\u00a7!",
+          "wd_ch_3": "War declared by",
+          "wd_ch_3_b": "\u00a7YEmpire of Japan\u00a7!",
+          "wd_count_country": "\u00a7YState of Japan\u00a7!: lines 1 - 57 of 57"
         }
       },
-      "_note": "The row of a day."
+      "_note": "A click on a country's name: its lines only (filter 8), its name where the Officer head was; no filter lit."
     },
     {
-      "name": "officers",
+      "name": "empty",
+      "rows": {
+        "wd_grid": 0
+      },
       "hide": {
         "mod1440_records_wd": [
-          "wd_none",
+          "wd_count",
           "wd_count_state",
-          "wd_hn_none"
-        ],
-        "mod1440_records_diary_row": [
-          "wd_row_day_bg",
-          "wd_row_day",
-          "wd_row_day_n",
-          "wd_row_day_n1",
-          "wd_row_stripe",
-          "wd_row_go",
-          "wd_row_a",
-          "wd_row_point",
-          "wd_row_name",
-          "wd_row_flag",
-          "wd_row_b",
-          "wd_row_flag_near",
-          "wd_row_b_near",
-          "wd_row_cface",
-          "wd_row_c",
-          "wd_row_marked",
-          "wd_row_icon_1",
-          "wd_row_icon_2",
-          "wd_row_icon_3",
-          "wd_row_icon_5"
+          "wd_count_country",
+          "wd_hn_last",
+          "wd_ch_0",
+          "wd_ch_0_d",
+          "wd_ch_0_bg",
+          "wd_ch_0_s",
+          "wd_ch_0_p",
+          "wd_ch_0_b",
+          "wd_ch_1",
+          "wd_ch_1_d",
+          "wd_ch_1_bg",
+          "wd_ch_1_s",
+          "wd_ch_1_p",
+          "wd_ch_1_b",
+          "wd_ch_2",
+          "wd_ch_2_d",
+          "wd_ch_2_bg",
+          "wd_ch_2_s",
+          "wd_ch_2_p",
+          "wd_ch_2_b",
+          "wd_ch_3",
+          "wd_ch_3_d",
+          "wd_ch_3_bg",
+          "wd_ch_3_s",
+          "wd_ch_3_p",
+          "wd_ch_3_b",
+          "wd_ch_0_f1",
+          "wd_ch_0_f2",
+          "wd_ch_0_f3",
+          "wd_ch_0_f4",
+          "wd_ch_0_f5",
+          "wd_ch_1_f1",
+          "wd_ch_1_f2",
+          "wd_ch_1_f3",
+          "wd_ch_1_f4",
+          "wd_ch_1_f5",
+          "wd_ch_2_f1",
+          "wd_ch_2_f2",
+          "wd_ch_2_f3",
+          "wd_ch_2_f4",
+          "wd_ch_2_f5",
+          "wd_ch_3_f1",
+          "wd_ch_3_f2",
+          "wd_ch_3_f3",
+          "wd_ch_3_f4",
+          "wd_ch_3_f5"
         ]
       },
       "samples": {
-        "mod1440_records_diary_row": {
-          "wd_row_event": "Promoted to field marshal",
-          "wd_row_who": "\u00a7YGerd von Rundstedt\u00a7!"
+        "mod1440_records_wd": {
+          "wd_f_wars": "\u00a7Y33\u00a7!",
+          "wd_f_peace": "\u00a7Y22\u00a7!",
+          "wd_f_cap": "\u00a7Y2\u00a7!",
+          "wd_f_annex": "\u00a7Y2\u00a7!",
+          "wd_f_subj": "\u00a7Y17\u00a7!",
+          "wd_f_atwar": "\u00a7Y11\u00a7!",
+          "wd_f_comm": "\u00a7Y1\u00a7!",
+          "wd_f_prom": "\u00a7Y1\u00a7!",
+          "wd_f_lvl": "\u00a7Y4\u00a7!",
+          "wd_f_dec": "\u00a7Y3\u00a7!",
+          "wd_f_gone": "\u00a7Y2\u00a7!",
+          "wd_f_govs": "\u00a7Y0\u00a7!",
+          "wd_f_trr": "\u00a7Y39\u00a7!",
+          "wd_f_trh": "\u00a7Y47\u00a7!",
+          "wd_g_st_t": "\u00a7Y59\u00a7!",
+          "wd_g_st_x": "\u00a7Y7\u00a7!",
+          "wd_g_vp_t": "\u00a7Y25\u00a7!",
+          "wd_g_vp_x": "\u00a7Y0\u00a7!",
+          "wd_g_cap_t": "\u00a7Y2\u00a7!",
+          "wd_g_cap_x": "\u00a7Y1\u00a7!",
+          "wd_hn_auto": "\u00a7Y3\u00a7!",
+          "wd_hn_cite": "\u00a7Y1\u00a7!",
+          "wd_hn_last": "Last citation: \u00a7YKyushu\u00a7!, 7 June, 1943",
+          "wd_count": "lines 1 - 311 of 318",
+          "wd_country": "United States of America",
+          "wd_since": "Kept since 3 March, 1941  -  1084 days on record",
+          "wd_tab_0_n": "155 lines",
+          "wd_tab_3_n": "11 at war",
+          "wd_tab_1_n": "103",
+          "wd_ch_n": "The lines you marked, kept for good: 0 of 300.",
+          "wd_kept_0": "Main log 155 of 1000 lines, territory 178 of 1000.",
+          "wd_ch_0_d": "\u00a7g27 May, 1943\u00a7!",
+          "wd_ch_0": "Capital taken",
+          "wd_ch_0_s": "\u00a7YKanto\u00a7!",
+          "wd_ch_1_d": "\u00a7g9 May, 1943\u00a7!",
+          "wd_ch_1": "Promoted to field marshal",
+          "wd_ch_1_s": "\u00a7YWalter Krueger\u00a7!",
+          "wd_ch_2_d": "\u00a7g2 May, 1943\u00a7!",
+          "wd_ch_2": "Landing in",
+          "wd_ch_2_s": "\u00a7YKyushu\u00a7!",
+          "wd_ch_3_d": "\u00a7g8 December, 1941\u00a7!",
+          "wd_ch_3": "War declared by",
+          "wd_ch_3_b": "\u00a7YEmpire of Japan\u00a7!"
         }
       },
-      "_note": "A line about an officer: his face and name."
-    },
-    {
-      "name": "countries",
-      "hide": {
-        "mod1440_records_wd": [
-          "wd_none",
-          "wd_count_state",
-          "wd_hn_none"
-        ],
-        "mod1440_records_diary_row": [
-          "wd_row_day_bg",
-          "wd_row_day",
-          "wd_row_day_n",
-          "wd_row_day_n1",
-          "wd_row_go",
-          "wd_row_a",
-          "wd_row_point",
-          "wd_row_face",
-          "wd_row_who",
-          "wd_row_name",
-          "wd_row_flag",
-          "wd_row_b",
-          "wd_row_cface",
-          "wd_row_c",
-          "wd_row_mark",
-          "wd_row_icon_2",
-          "wd_row_icon_3",
-          "wd_row_icon_4",
-          "wd_row_icon_5"
-        ]
-      },
-      "samples": {
-        "mod1440_records_diary_row": {
-          "wd_row_event": "War declared by",
-          "wd_row_b_near": "United Kingdom"
-        }
-      },
-      "_note": "A line about a country alone, marked: its flag where the eye looks next."
-    },
-    {
-      "name": "territory",
-      "hide": {
-        "mod1440_records_wd": [
-          "wd_none",
-          "wd_count_state",
-          "wd_hn_none"
-        ],
-        "mod1440_records_diary_row": [
-          "wd_row_day_bg",
-          "wd_row_day",
-          "wd_row_day_n",
-          "wd_row_day_n1",
-          "wd_row_point",
-          "wd_row_face",
-          "wd_row_who",
-          "wd_row_name",
-          "wd_row_flag_near",
-          "wd_row_b_near",
-          "wd_row_marked",
-          "wd_row_icon_1",
-          "wd_row_icon_3",
-          "wd_row_icon_4",
-          "wd_row_icon_5"
-        ]
-      },
-      "samples": {
-        "mod1440_records_diary_row": {
-          "wd_row_event": "Victory point taken",
-          "wd_row_a": "\u00a7YModlin\u00a7!",
-          "wd_row_b": "Poland",
-          "wd_row_c": "\u00a7YFedor von Bock\u00a7!"
-        }
-      },
-      "_note": "A line about a state, with everyday names."
+      "_note": "A filter with nothing written yet; no line marked; no citation."
     }
   ]
 }

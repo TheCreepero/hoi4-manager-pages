@@ -30,7 +30,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "wd_card"
 			position = { x = 14 y = 116 }
-			size = { width = 1172 height = 1090 }
+			size = { width = 1240 height = 1090 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 			buttonType = { name = "wd_show_all" position = { x = 10 y = 10 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_SHOW_ALL" pdx_tooltip = "MOD1440_WD_SHOW_ALL_TT" }
 			buttonType = { name = "wd_show_war" position = { x = 154 y = 10 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_SHOW_WAR" pdx_tooltip = "MOD1440_WD_SHOW_WAR_TT" }
@@ -39,24 +39,26 @@ guiTypes = {
 			buttonType = { name = "wd_show_off" position = { x = 586 y = 10 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_SHOW_OFF" pdx_tooltip = "MOD1440_WD_SHOW_OFF_TT" }
 			buttonType = { name = "wd_show_air" position = { x = 730 y = 10 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_SHOW_AIR" pdx_tooltip = "MOD1440_WD_SHOW_AIR_TT" }
 			buttonType = { name = "wd_show_marked" position = { x = 874 y = 10 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_SHOW_MARKED" pdx_tooltip = "MOD1440_WD_SHOW_MARKED_TT" }
-			buttonType = { name = "wd_newer" position = { x = 1072 y = 10 } quadTextureSprite = "GFX_1440p_SG_sort_40x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_NEWER" pdx_tooltip = "MOD1440_WD_NEWER_TT" }
-			buttonType = { name = "wd_older" position = { x = 1118 y = 10 } quadTextureSprite = "GFX_1440p_SG_sort_40x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_OLDER" pdx_tooltip = "MOD1440_WD_OLDER_TT" }
+			buttonType = { name = "wd_newer" position = { x = 1140 y = 10 } quadTextureSprite = "GFX_1440p_SG_sort_40x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_NEWER" pdx_tooltip = "MOD1440_WD_NEWER_TT" }
+			buttonType = { name = "wd_older" position = { x = 1186 y = 10 } quadTextureSprite = "GFX_1440p_SG_sort_40x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_OLDER" pdx_tooltip = "MOD1440_WD_OLDER_TT" }
 			containerWindowType = {
 				name = "wd_heads"
 				position = { x = 8 y = 48 }
-				size = { width = 1156 height = 30 }
+				size = { width = 1224 height = 30 }
 				background = { name = "Background" quadTextureSprite = "GFX_1440p_SG_head_240" }
-				instantTextboxType = { name = "wd_heads_0" position = { x = 10 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_0" maxWidth = 250 maxHeight = 20 format = left }
-				instantTextboxType = { name = "wd_heads_1" position = { x = 290 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_1" maxWidth = 280 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HEADS_1_TT" }
-				instantTextboxType = { name = "wd_heads_2" position = { x = 600 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_2" maxWidth = 260 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HEADS_2_TT" }
-				instantTextboxType = { name = "wd_heads_3" position = { x = 890 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_3" maxWidth = 160 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HEADS_3_TT" }
+				instantTextboxType = { name = "wd_heads_0" position = { x = 8 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_0" maxWidth = 118 maxHeight = 20 format = left }
+				instantTextboxType = { name = "wd_heads_1" position = { x = 132 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_1" maxWidth = 250 maxHeight = 20 format = left }
+				instantTextboxType = { name = "wd_heads_2" position = { x = 398 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_2" maxWidth = 260 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HEADS_2_TT" }
+				instantTextboxType = { name = "wd_heads_3" position = { x = 668 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_3" maxWidth = 260 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HEADS_3_TT" }
+				instantTextboxType = { name = "wd_heads_4" position = { x = 954 y = 5 } font = "hoi_16mbs" text = "MOD1440_WD_HEADS_4" maxWidth = 160 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HEADS_4_TT" }
 			}
-			instantTextboxType = { name = "wd_count" position = { x = 934 y = 53 } font = "hoi_16mbs" text = "MOD1440_WD_COUNT" maxWidth = 220 maxHeight = 20 format = right pdx_tooltip = "MOD1440_WD_COUNT_TT" }
-			instantTextboxType = { name = "wd_count_state" position = { x = 774 y = 53 } font = "hoi_16mbs" text = "MOD1440_WD_COUNT_STATE" maxWidth = 380 maxHeight = 20 format = right }
+			instantTextboxType = { name = "wd_count" position = { x = 1002 y = 53 } font = "hoi_16mbs" text = "MOD1440_WD_COUNT" maxWidth = 220 maxHeight = 20 format = right pdx_tooltip = "MOD1440_WD_COUNT_TT" }
+			instantTextboxType = { name = "wd_count_state" position = { x = 702 y = 53 } font = "hoi_16mbs" text = "MOD1440_WD_COUNT_STATE" maxWidth = 520 maxHeight = 20 format = right pdx_tooltip = "MOD1440_WD_COUNT_TT" }
+			instantTextboxType = { name = "wd_count_country" position = { x = 702 y = 53 } font = "hoi_16mbs" text = "MOD1440_WD_COUNT_COUNTRY" maxWidth = 520 maxHeight = 20 format = right pdx_tooltip = "MOD1440_WD_COUNT_TT" }
 			containerWindowType = {
 				name = "wd_list"
 				position = { x = 8 y = 84 }
-				size = { width = 1160 height = 998 }
+				size = { width = 1228 height = 998 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 102
 				smooth_scrolling = yes
@@ -64,7 +66,7 @@ guiTypes = {
 				gridboxtype = {
 					name = "wd_grid"
 					position = { x = 0 y = 0 }
-					size = { width = 1130 height = 100%% }
+					size = { width = 1198 height = 100%% }
 					slotsize = { width = 1 height = 1 }
 					add_horizontal = no
 					format = "UPPER_LEFT"
@@ -74,120 +76,182 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "wd_campaign"
-			position = { x = 1198 y = 116 }
-			size = { width = 468 height = 590 }
+			position = { x = 1266 y = 116 }
+			size = { width = 400 height = 414 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "wd_campaign_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_CAMPAIGN_TITLE" maxWidth = 440 maxHeight = 30 format = left }
-			instantTextboxType = { name = "wd_c_war" position = { x = 16 y = 46 } font = "hoi_18mbs" text = "MOD1440_WD_C_WAR" maxWidth = 436 maxHeight = 22 format = left }
-			iconType = { name = "wd_f_wars_bg" position = { x = 16 y = 72 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_wars_l" position = { x = 22 y = 79 } font = "hoi_16mbs" text = "MOD1440_WD_F_WARS_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_WARS_TT" }
-			instantTextboxType = { name = "wd_f_wars" position = { x = 22 y = 102 } font = "hoi_20b" text = "MOD1440_WD_F_WARS" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_WARS_TT" }
-			iconType = { name = "wd_f_peace_bg" position = { x = 127 y = 72 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_peace_l" position = { x = 133 y = 79 } font = "hoi_16mbs" text = "MOD1440_WD_F_PEACE_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_PEACE_TT" }
-			instantTextboxType = { name = "wd_f_peace" position = { x = 133 y = 102 } font = "hoi_20b" text = "MOD1440_WD_F_PEACE" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_PEACE_TT" }
-			iconType = { name = "wd_f_cap_bg" position = { x = 238 y = 72 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_cap_l" position = { x = 244 y = 79 } font = "hoi_16mbs" text = "MOD1440_WD_F_CAP_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_CAP_TT" }
-			instantTextboxType = { name = "wd_f_cap" position = { x = 244 y = 102 } font = "hoi_20b" text = "MOD1440_WD_F_CAP" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_CAP_TT" }
-			iconType = { name = "wd_f_annex_bg" position = { x = 349 y = 72 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_annex_l" position = { x = 355 y = 79 } font = "hoi_16mbs" text = "MOD1440_WD_F_ANNEX_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_ANNEX_TT" }
-			instantTextboxType = { name = "wd_f_annex" position = { x = 355 y = 102 } font = "hoi_20b" text = "MOD1440_WD_F_ANNEX" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_ANNEX_TT" }
-			instantTextboxType = { name = "wd_c_ground" position = { x = 16 y = 154 } font = "hoi_18mbs" text = "MOD1440_WD_C_GROUND" maxWidth = 436 maxHeight = 22 format = left }
-			instantTextboxType = { name = "wd_c_taken" position = { x = 16 y = 156 } font = "hoi_16mbs" text = "MOD1440_WD_C_TAKEN" maxWidth = 150 maxHeight = 20 format = right }
-			instantTextboxType = { name = "wd_c_lost" position = { x = 392 y = 156 } font = "hoi_16mbs" text = "MOD1440_WD_C_LOST" maxWidth = 60 maxHeight = 20 format = right }
-			instantTextboxType = { name = "wd_g_st_l" position = { x = 16 y = 185 } font = "hoi_18mbs" text = "MOD1440_WD_G_ST_L" maxWidth = 130 maxHeight = 22 format = left }
-			instantTextboxType = { name = "wd_g_st_t" position = { x = 16 y = 183 } font = "hoi_20b" text = "MOD1440_WD_G_ST_T" maxWidth = 150 maxHeight = 24 format = right }
-			iconType = { name = "wd_g_st_bar" position = { x = 178 y = 190 } spriteType = "GFX_1440p_SG_bar_226" }
-			instantTextboxType = { name = "wd_g_st_x" position = { x = 392 y = 183 } font = "hoi_20b" text = "MOD1440_WD_G_ST_X" maxWidth = 60 maxHeight = 24 format = right }
-			instantTextboxType = { name = "wd_g_vp_l" position = { x = 16 y = 217 } font = "hoi_18mbs" text = "MOD1440_WD_G_VP_L" maxWidth = 130 maxHeight = 22 format = left }
-			instantTextboxType = { name = "wd_g_vp_t" position = { x = 16 y = 215 } font = "hoi_20b" text = "MOD1440_WD_G_VP_T" maxWidth = 150 maxHeight = 24 format = right }
-			iconType = { name = "wd_g_vp_bar" position = { x = 178 y = 222 } spriteType = "GFX_1440p_SG_bar_226" }
-			instantTextboxType = { name = "wd_g_vp_x" position = { x = 392 y = 215 } font = "hoi_20b" text = "MOD1440_WD_G_VP_X" maxWidth = 60 maxHeight = 24 format = right }
-			instantTextboxType = { name = "wd_g_cap_l" position = { x = 16 y = 249 } font = "hoi_18mbs" text = "MOD1440_WD_G_CAP_L" maxWidth = 130 maxHeight = 22 format = left }
-			instantTextboxType = { name = "wd_g_cap_t" position = { x = 16 y = 247 } font = "hoi_20b" text = "MOD1440_WD_G_CAP_T" maxWidth = 150 maxHeight = 24 format = right }
-			iconType = { name = "wd_g_cap_bar" position = { x = 178 y = 254 } spriteType = "GFX_1440p_SG_bar_226" }
-			instantTextboxType = { name = "wd_g_cap_x" position = { x = 392 y = 247 } font = "hoi_20b" text = "MOD1440_WD_G_CAP_X" maxWidth = 60 maxHeight = 24 format = right }
-			instantTextboxType = { name = "wd_c_service" position = { x = 16 y = 288 } font = "hoi_18mbs" text = "MOD1440_WD_C_SERVICE" maxWidth = 436 maxHeight = 22 format = left }
-			iconType = { name = "wd_f_comm_bg" position = { x = 16 y = 314 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_comm_l" position = { x = 22 y = 321 } font = "hoi_16mbs" text = "MOD1440_WD_F_COMM_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_COMM_TT" }
-			instantTextboxType = { name = "wd_f_comm" position = { x = 22 y = 344 } font = "hoi_20b" text = "MOD1440_WD_F_COMM" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_COMM_TT" }
-			iconType = { name = "wd_f_prom_bg" position = { x = 127 y = 314 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_prom_l" position = { x = 133 y = 321 } font = "hoi_16mbs" text = "MOD1440_WD_F_PROM_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_PROM_TT" }
-			instantTextboxType = { name = "wd_f_prom" position = { x = 133 y = 344 } font = "hoi_20b" text = "MOD1440_WD_F_PROM" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_PROM_TT" }
-			iconType = { name = "wd_f_dec_bg" position = { x = 238 y = 314 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_dec_l" position = { x = 244 y = 321 } font = "hoi_16mbs" text = "MOD1440_WD_F_DEC_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_DEC_TT" }
-			instantTextboxType = { name = "wd_f_dec" position = { x = 244 y = 344 } font = "hoi_20b" text = "MOD1440_WD_F_DEC" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_DEC_TT" }
-			iconType = { name = "wd_f_govs_bg" position = { x = 349 y = 314 } spriteType = "GFX_1440p_SG_tile_103x64" }
-			instantTextboxType = { name = "wd_f_govs_l" position = { x = 355 y = 321 } font = "hoi_16mbs" text = "MOD1440_WD_F_GOVS_L" maxWidth = 91 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_F_GOVS_TT" }
-			instantTextboxType = { name = "wd_f_govs" position = { x = 355 y = 344 } font = "hoi_20b" text = "MOD1440_WD_F_GOVS" maxWidth = 91 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_F_GOVS_TT" }
-			instantTextboxType = { name = "wd_c_marked" position = { x = 16 y = 396 } font = "hoi_18mbs" text = "MOD1440_WD_C_MARKED" maxWidth = 436 maxHeight = 22 format = left }
-			instantTextboxType = { name = "wd_c_marked_0" position = { x = 16 y = 422 } font = "hoi_16mbs" text = "MOD1440_WD_C_MARKED_0" maxWidth = 436 maxHeight = 20 format = left }
-			instantTextboxType = { name = "wd_c_marked_1" position = { x = 16 y = 442 } font = "hoi_16mbs" text = "MOD1440_WD_C_MARKED_1" maxWidth = 436 maxHeight = 20 format = left }
-			instantTextboxType = { name = "wd_c_marked_2" position = { x = 16 y = 462 } font = "hoi_16mbs" text = "MOD1440_WD_C_MARKED_2" maxWidth = 436 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_campaign_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_CAMPAIGN_TITLE" maxWidth = 372 maxHeight = 30 format = left }
+			iconType = { name = "wd_c_war_bg" position = { x = 8 y = 44 } spriteType = "GFX_1440p_SG_head_384x26" }
+			instantTextboxType = { name = "wd_c_war" position = { x = 16 y = 48 } font = "hoi_16mbs" text = "MOD1440_WD_C_WAR" maxWidth = 200 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_f_wars_l" position = { x = 16 y = 74 } font = "hoi_16mbs" text = "MOD1440_WD_F_WARS_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_WARS_TT" }
+			instantTextboxType = { name = "wd_f_wars" position = { x = 16 y = 73 } font = "hoi_18mbs" text = "MOD1440_WD_F_WARS" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_WARS_TT" }
+			instantTextboxType = { name = "wd_f_peace_l" position = { x = 204 y = 74 } font = "hoi_16mbs" text = "MOD1440_WD_F_PEACE_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_PEACE_TT" }
+			instantTextboxType = { name = "wd_f_peace" position = { x = 204 y = 73 } font = "hoi_18mbs" text = "MOD1440_WD_F_PEACE" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_PEACE_TT" }
+			iconType = { name = "wd_c_war_band_1" position = { x = 8 y = 96 } spriteType = "GFX_1440p_SG_stripe_384x26" }
+			instantTextboxType = { name = "wd_f_cap_l" position = { x = 16 y = 100 } font = "hoi_16mbs" text = "MOD1440_WD_F_CAP_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_CAP_TT" }
+			instantTextboxType = { name = "wd_f_cap" position = { x = 16 y = 99 } font = "hoi_18mbs" text = "MOD1440_WD_F_CAP" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_CAP_TT" }
+			instantTextboxType = { name = "wd_f_annex_l" position = { x = 204 y = 100 } font = "hoi_16mbs" text = "MOD1440_WD_F_ANNEX_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_ANNEX_TT" }
+			instantTextboxType = { name = "wd_f_annex" position = { x = 204 y = 99 } font = "hoi_18mbs" text = "MOD1440_WD_F_ANNEX" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_ANNEX_TT" }
+			instantTextboxType = { name = "wd_f_subj_l" position = { x = 16 y = 126 } font = "hoi_16mbs" text = "MOD1440_WD_F_SUBJ_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_SUBJ_TT" }
+			instantTextboxType = { name = "wd_f_subj" position = { x = 16 y = 125 } font = "hoi_18mbs" text = "MOD1440_WD_F_SUBJ" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_SUBJ_TT" }
+			instantTextboxType = { name = "wd_f_atwar_l" position = { x = 204 y = 126 } font = "hoi_16mbs" text = "MOD1440_WD_F_ATWAR_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_ATWAR_TT" }
+			instantTextboxType = { name = "wd_f_atwar" position = { x = 204 y = 125 } font = "hoi_18mbs" text = "MOD1440_WD_F_ATWAR" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_ATWAR_TT" }
+			iconType = { name = "wd_c_ground_bg" position = { x = 8 y = 156 } spriteType = "GFX_1440p_SG_head_384x26" }
+			instantTextboxType = { name = "wd_c_ground" position = { x = 16 y = 160 } font = "hoi_16mbs" text = "MOD1440_WD_C_GROUND" maxWidth = 200 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_c_ground_0" position = { x = 160 y = 160 } font = "hoi_16mbs" text = "MOD1440_WD_C_GROUND_0" maxWidth = 40 maxHeight = 20 format = right }
+			instantTextboxType = { name = "wd_c_ground_1" position = { x = 330 y = 160 } font = "hoi_16mbs" text = "MOD1440_WD_C_GROUND_1" maxWidth = 54 maxHeight = 20 format = right }
+			instantTextboxType = { name = "wd_g_st_l" position = { x = 16 y = 186 } font = "hoi_16mbs" text = "MOD1440_WD_G_ST_L" maxWidth = 140 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_g_st_t" position = { x = 160 y = 185 } font = "hoi_18mbs" text = "MOD1440_WD_G_ST_T" maxWidth = 40 maxHeight = 22 format = right }
+			iconType = { name = "wd_g_st_bar" position = { x = 212 y = 190 } spriteType = "GFX_1440p_SG_bar_116" }
+			instantTextboxType = { name = "wd_g_st_x" position = { x = 330 y = 185 } font = "hoi_18mbs" text = "MOD1440_WD_G_ST_X" maxWidth = 54 maxHeight = 22 format = right }
+			iconType = { name = "wd_g_vp_band" position = { x = 8 y = 208 } spriteType = "GFX_1440p_SG_stripe_384x26" }
+			instantTextboxType = { name = "wd_g_vp_l" position = { x = 16 y = 212 } font = "hoi_16mbs" text = "MOD1440_WD_G_VP_L" maxWidth = 140 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_g_vp_t" position = { x = 160 y = 211 } font = "hoi_18mbs" text = "MOD1440_WD_G_VP_T" maxWidth = 40 maxHeight = 22 format = right }
+			iconType = { name = "wd_g_vp_bar" position = { x = 212 y = 216 } spriteType = "GFX_1440p_SG_bar_116" }
+			instantTextboxType = { name = "wd_g_vp_x" position = { x = 330 y = 211 } font = "hoi_18mbs" text = "MOD1440_WD_G_VP_X" maxWidth = 54 maxHeight = 22 format = right }
+			instantTextboxType = { name = "wd_g_cap_l" position = { x = 16 y = 238 } font = "hoi_16mbs" text = "MOD1440_WD_G_CAP_L" maxWidth = 140 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_g_cap_t" position = { x = 160 y = 237 } font = "hoi_18mbs" text = "MOD1440_WD_G_CAP_T" maxWidth = 40 maxHeight = 22 format = right }
+			iconType = { name = "wd_g_cap_bar" position = { x = 212 y = 242 } spriteType = "GFX_1440p_SG_bar_116" }
+			instantTextboxType = { name = "wd_g_cap_x" position = { x = 330 y = 237 } font = "hoi_18mbs" text = "MOD1440_WD_G_CAP_X" maxWidth = 54 maxHeight = 22 format = right }
+			instantTextboxType = { name = "wd_f_trr_l" position = { x = 16 y = 264 } font = "hoi_16mbs" text = "MOD1440_WD_F_TRR_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_TRR_TT" }
+			instantTextboxType = { name = "wd_f_trr" position = { x = 16 y = 263 } font = "hoi_18mbs" text = "MOD1440_WD_F_TRR" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_TRR_TT" }
+			instantTextboxType = { name = "wd_f_trh_l" position = { x = 204 y = 264 } font = "hoi_16mbs" text = "MOD1440_WD_F_TRH_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_TRH_TT" }
+			instantTextboxType = { name = "wd_f_trh" position = { x = 204 y = 263 } font = "hoi_18mbs" text = "MOD1440_WD_F_TRH" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_TRH_TT" }
+			iconType = { name = "wd_c_service_bg" position = { x = 8 y = 294 } spriteType = "GFX_1440p_SG_head_384x26" }
+			instantTextboxType = { name = "wd_c_service" position = { x = 16 y = 298 } font = "hoi_16mbs" text = "MOD1440_WD_C_SERVICE" maxWidth = 200 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_f_comm_l" position = { x = 16 y = 324 } font = "hoi_16mbs" text = "MOD1440_WD_F_COMM_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_COMM_TT" }
+			instantTextboxType = { name = "wd_f_comm" position = { x = 16 y = 323 } font = "hoi_18mbs" text = "MOD1440_WD_F_COMM" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_COMM_TT" }
+			instantTextboxType = { name = "wd_f_prom_l" position = { x = 204 y = 324 } font = "hoi_16mbs" text = "MOD1440_WD_F_PROM_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_PROM_TT" }
+			instantTextboxType = { name = "wd_f_prom" position = { x = 204 y = 323 } font = "hoi_18mbs" text = "MOD1440_WD_F_PROM" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_PROM_TT" }
+			iconType = { name = "wd_c_service_band_1" position = { x = 8 y = 346 } spriteType = "GFX_1440p_SG_stripe_384x26" }
+			instantTextboxType = { name = "wd_f_lvl_l" position = { x = 16 y = 350 } font = "hoi_16mbs" text = "MOD1440_WD_F_LVL_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_LVL_TT" }
+			instantTextboxType = { name = "wd_f_lvl" position = { x = 16 y = 349 } font = "hoi_18mbs" text = "MOD1440_WD_F_LVL" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_LVL_TT" }
+			instantTextboxType = { name = "wd_f_dec_l" position = { x = 204 y = 350 } font = "hoi_16mbs" text = "MOD1440_WD_F_DEC_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_DEC_TT" }
+			instantTextboxType = { name = "wd_f_dec" position = { x = 204 y = 349 } font = "hoi_18mbs" text = "MOD1440_WD_F_DEC" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_DEC_TT" }
+			instantTextboxType = { name = "wd_f_gone_l" position = { x = 16 y = 376 } font = "hoi_16mbs" text = "MOD1440_WD_F_GONE_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_GONE_TT" }
+			instantTextboxType = { name = "wd_f_gone" position = { x = 16 y = 375 } font = "hoi_18mbs" text = "MOD1440_WD_F_GONE" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_GONE_TT" }
+			instantTextboxType = { name = "wd_f_govs_l" position = { x = 204 y = 376 } font = "hoi_16mbs" text = "MOD1440_WD_F_GOVS_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_F_GOVS_TT" }
+			instantTextboxType = { name = "wd_f_govs" position = { x = 204 y = 375 } font = "hoi_18mbs" text = "MOD1440_WD_F_GOVS" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_F_GOVS_TT" }
+		}
+		containerWindowType = {
+			name = "wd_chronicle"
+			position = { x = 1266 y = 542 }
+			size = { width = 400 height = 348 }
+			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
+			instantTextboxType = { name = "wd_chronicle_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_CHRONICLE_TITLE" maxWidth = 372 maxHeight = 30 format = left }
+			instantTextboxType = { name = "wd_ch_n" position = { x = 16 y = 44 } font = "hoi_16mbs" text = "MOD1440_WD_CH_N" maxWidth = 368 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_none_0" position = { x = 16 y = 70 } font = "hoi_16mbs" text = "MOD1440_WD_CH_NONE_0" maxWidth = 368 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_none_1" position = { x = 16 y = 92 } font = "hoi_16mbs" text = "MOD1440_WD_CH_NONE_1" maxWidth = 368 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_0_d" position = { x = 16 y = 73 } font = "hoi_16mbs" text = "MOD1440_WD_CH_0_D" maxWidth = 300 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_0_f1" position = { x = 16 y = 91 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_1" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_0_f2" position = { x = 16 y = 91 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_2" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_0_f3" position = { x = 16 y = 91 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_3" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_0_f4" position = { x = 16 y = 91 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_4" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_0_f5" position = { x = 16 y = 91 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_5" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_0" position = { x = 40 y = 93 } font = "hoi_16mbs" text = "MOD1440_WD_CH_0" maxWidth = 208 maxHeight = 20 format = left fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_0_s" position = { x = 216 y = 93 } font = "hoi_16mbs" text = "MOD1440_WD_CH_0_S" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_0_p" position = { x = 216 y = 93 } font = "hoi_16mbs" text = "MOD1440_WD_CH_0_P" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_0_b" position = { x = 216 y = 93 } font = "hoi_16mbs" text = "MOD1440_WD_CH_0_B" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			iconType = { name = "wd_ch_1_bg" position = { x = 8 y = 116 } spriteType = "GFX_1440p_SG_stripe_384x46" }
+			instantTextboxType = { name = "wd_ch_1_d" position = { x = 16 y = 119 } font = "hoi_16mbs" text = "MOD1440_WD_CH_1_D" maxWidth = 300 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_1_f1" position = { x = 16 y = 137 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_1" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_1_f2" position = { x = 16 y = 137 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_2" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_1_f3" position = { x = 16 y = 137 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_3" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_1_f4" position = { x = 16 y = 137 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_4" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_1_f5" position = { x = 16 y = 137 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_5" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_1" position = { x = 40 y = 139 } font = "hoi_16mbs" text = "MOD1440_WD_CH_1" maxWidth = 208 maxHeight = 20 format = left fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_1_s" position = { x = 216 y = 139 } font = "hoi_16mbs" text = "MOD1440_WD_CH_1_S" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_1_p" position = { x = 216 y = 139 } font = "hoi_16mbs" text = "MOD1440_WD_CH_1_P" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_1_b" position = { x = 216 y = 139 } font = "hoi_16mbs" text = "MOD1440_WD_CH_1_B" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_2_d" position = { x = 16 y = 165 } font = "hoi_16mbs" text = "MOD1440_WD_CH_2_D" maxWidth = 300 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_2_f1" position = { x = 16 y = 183 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_1" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_2_f2" position = { x = 16 y = 183 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_2" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_2_f3" position = { x = 16 y = 183 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_3" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_2_f4" position = { x = 16 y = 183 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_4" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_2_f5" position = { x = 16 y = 183 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_5" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_2" position = { x = 40 y = 185 } font = "hoi_16mbs" text = "MOD1440_WD_CH_2" maxWidth = 208 maxHeight = 20 format = left fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_2_s" position = { x = 216 y = 185 } font = "hoi_16mbs" text = "MOD1440_WD_CH_2_S" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_2_p" position = { x = 216 y = 185 } font = "hoi_16mbs" text = "MOD1440_WD_CH_2_P" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_2_b" position = { x = 216 y = 185 } font = "hoi_16mbs" text = "MOD1440_WD_CH_2_B" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			iconType = { name = "wd_ch_3_bg" position = { x = 8 y = 208 } spriteType = "GFX_1440p_SG_stripe_384x46" }
+			instantTextboxType = { name = "wd_ch_3_d" position = { x = 16 y = 211 } font = "hoi_16mbs" text = "MOD1440_WD_CH_3_D" maxWidth = 300 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_ch_3_f1" position = { x = 16 y = 229 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_1" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_3_f2" position = { x = 16 y = 229 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_2" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_3_f3" position = { x = 16 y = 229 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_3" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_3_f4" position = { x = 16 y = 229 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_4" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_3_f5" position = { x = 16 y = 229 } font = "hoi_16mbs" text = "MOD1440_WD_ICON_5" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "wd_ch_3" position = { x = 40 y = 231 } font = "hoi_16mbs" text = "MOD1440_WD_CH_3" maxWidth = 208 maxHeight = 20 format = left fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_3_s" position = { x = 216 y = 231 } font = "hoi_16mbs" text = "MOD1440_WD_CH_3_S" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_3_p" position = { x = 216 y = 231 } font = "hoi_16mbs" text = "MOD1440_WD_CH_3_P" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			instantTextboxType = { name = "wd_ch_3_b" position = { x = 216 y = 231 } font = "hoi_16mbs" text = "MOD1440_WD_CH_3_B" maxWidth = 168 maxHeight = 20 format = right fixedsize = yes }
+			buttonType = { name = "wd_ch_read" position = { x = 16 y = 307 } quadTextureSprite = "GFX_sort_button_202x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_WD_CH_READ" pdx_tooltip = "MOD1440_WD_CH_READ_TT" }
 		}
 		containerWindowType = {
 			name = "wd_honour"
-			position = { x = 1198 y = 718 }
-			size = { width = 468 height = 350 }
+			position = { x = 1266 y = 902 }
+			size = { width = 400 height = 196 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "wd_honour_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_HONOUR_TITLE" maxWidth = 440 maxHeight = 30 format = left }
-			instantTextboxType = { name = "wd_hn_1" position = { x = 16 y = 46 } font = "hoi_16mbs" text = "MOD1440_WD_HN_1" maxWidth = 436 maxHeight = 20 format = left }
-			instantTextboxType = { name = "wd_hn_2" position = { x = 16 y = 66 } font = "hoi_16mbs" text = "MOD1440_WD_HN_2" maxWidth = 436 maxHeight = 20 format = left }
-			buttonType = { name = "wd_hn_cap" position = { x = 18 y = 94 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_CAP_TT" }
-			instantTextboxType = { name = "wd_hn_cap_l" position = { x = 50 y = 96 } font = "hoi_18mbs" text = "MOD1440_WD_HN_CAP_L" maxWidth = 402 maxHeight = 22 format = left }
-			buttonType = { name = "wd_hn_sea" position = { x = 18 y = 124 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_SEA_TT" }
-			instantTextboxType = { name = "wd_hn_sea_l" position = { x = 50 y = 126 } font = "hoi_18mbs" text = "MOD1440_WD_HN_SEA_L" maxWidth = 402 maxHeight = 22 format = left }
-			buttonType = { name = "wd_hn_air" position = { x = 18 y = 154 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_AIR_TT" }
-			instantTextboxType = { name = "wd_hn_air_l" position = { x = 50 y = 156 } font = "hoi_18mbs" text = "MOD1440_WD_HN_AIR_L" maxWidth = 402 maxHeight = 22 format = left }
-			buttonType = { name = "wd_hn_vp" position = { x = 18 y = 184 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_VP_TT" }
-			instantTextboxType = { name = "wd_hn_vp_l" position = { x = 50 y = 186 } font = "hoi_18mbs" text = "MOD1440_WD_HN_VP_L" maxWidth = 402 maxHeight = 22 format = left }
-			iconType = { name = "wd_hn_auto_bg" position = { x = 16 y = 220 } spriteType = "GFX_1440p_SG_tile_214x64" }
-			instantTextboxType = { name = "wd_hn_auto_l" position = { x = 22 y = 227 } font = "hoi_16mbs" text = "MOD1440_WD_HN_AUTO_L" maxWidth = 202 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_HN_AUTO_TT" }
-			instantTextboxType = { name = "wd_hn_auto" position = { x = 22 y = 250 } font = "hoi_20b" text = "MOD1440_WD_HN_AUTO" maxWidth = 202 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_HN_AUTO_TT" }
-			iconType = { name = "wd_hn_cite_bg" position = { x = 238 y = 220 } spriteType = "GFX_1440p_SG_tile_214x64" }
-			instantTextboxType = { name = "wd_hn_cite_l" position = { x = 244 y = 227 } font = "hoi_16mbs" text = "MOD1440_WD_HN_CITE_L" maxWidth = 202 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_WD_HN_CITE_TT" }
-			instantTextboxType = { name = "wd_hn_cite" position = { x = 244 y = 250 } font = "hoi_20b" text = "MOD1440_WD_HN_CITE" maxWidth = 202 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_WD_HN_CITE_TT" }
-			instantTextboxType = { name = "wd_hn_last" position = { x = 16 y = 296 } font = "hoi_16mbs" text = "MOD1440_WD_HN_LAST" maxWidth = 436 maxHeight = 20 format = left }
-			instantTextboxType = { name = "wd_hn_none" position = { x = 16 y = 296 } font = "hoi_16mbs" text = "MOD1440_WD_HN_NONE" maxWidth = 436 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_honour_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_HONOUR_TITLE" maxWidth = 372 maxHeight = 30 format = left }
+			instantTextboxType = { name = "wd_hn_1" position = { x = 16 y = 42 } font = "hoi_16mbs" text = "MOD1440_WD_HN_1" maxWidth = 368 maxHeight = 20 format = left }
+			buttonType = { name = "wd_hn_cap" position = { x = 16 y = 66 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_CAP_TT" }
+			instantTextboxType = { name = "wd_hn_cap_l" position = { x = 44 y = 68 } font = "hoi_16mbs" text = "MOD1440_WD_HN_CAP_L" maxWidth = 156 maxHeight = 20 format = left }
+			buttonType = { name = "wd_hn_sea" position = { x = 204 y = 66 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_SEA_TT" }
+			instantTextboxType = { name = "wd_hn_sea_l" position = { x = 232 y = 68 } font = "hoi_16mbs" text = "MOD1440_WD_HN_SEA_L" maxWidth = 156 maxHeight = 20 format = left }
+			buttonType = { name = "wd_hn_air" position = { x = 16 y = 94 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_AIR_TT" }
+			instantTextboxType = { name = "wd_hn_air_l" position = { x = 44 y = 96 } font = "hoi_16mbs" text = "MOD1440_WD_HN_AIR_L" maxWidth = 156 maxHeight = 20 format = left }
+			buttonType = { name = "wd_hn_vp" position = { x = 204 y = 94 } scale = 0.7 quadTextureSprite = "GFX_checkbox_gold_32" clicksound = click_default pdx_tooltip = "MOD1440_WD_HN_VP_TT" }
+			instantTextboxType = { name = "wd_hn_vp_l" position = { x = 232 y = 96 } font = "hoi_16mbs" text = "MOD1440_WD_HN_VP_L" maxWidth = 156 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_hn_auto_l" position = { x = 16 y = 130 } font = "hoi_16mbs" text = "MOD1440_WD_HN_AUTO_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HN_AUTO_TT" }
+			instantTextboxType = { name = "wd_hn_auto" position = { x = 16 y = 129 } font = "hoi_18mbs" text = "MOD1440_WD_HN_AUTO" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_HN_AUTO_TT" }
+			instantTextboxType = { name = "wd_hn_cite_l" position = { x = 204 y = 130 } font = "hoi_16mbs" text = "MOD1440_WD_HN_CITE_L" maxWidth = 172 maxHeight = 20 format = left pdx_tooltip = "MOD1440_WD_HN_CITE_TT" }
+			instantTextboxType = { name = "wd_hn_cite" position = { x = 204 y = 129 } font = "hoi_18mbs" text = "MOD1440_WD_HN_CITE" maxWidth = 172 maxHeight = 22 format = right pdx_tooltip = "MOD1440_WD_HN_CITE_TT" }
+			instantTextboxType = { name = "wd_hn_last" position = { x = 16 y = 158 } font = "hoi_16mbs" text = "MOD1440_WD_HN_LAST" maxWidth = 368 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_hn_none" position = { x = 16 y = 158 } font = "hoi_16mbs" text = "MOD1440_WD_HN_NONE" maxWidth = 368 maxHeight = 20 format = left }
 		}
 		containerWindowType = {
 			name = "wd_kept"
-			position = { x = 1198 y = 1080 }
-			size = { width = 468 height = 126 }
+			position = { x = 1266 y = 1110 }
+			size = { width = 400 height = 96 }
 			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "wd_kept_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_KEPT_TITLE" maxWidth = 440 maxHeight = 30 format = left }
-			instantTextboxType = { name = "wd_kept_0" position = { x = 16 y = 44 } font = "hoi_16mbs" text = "MOD1440_WD_KEPT_0" maxWidth = 436 maxHeight = 20 format = left }
-			instantTextboxType = { name = "wd_kept_1" position = { x = 16 y = 66 } font = "hoi_16mbs" text = "MOD1440_WD_KEPT_1" maxWidth = 436 maxHeight = 20 format = left }
-			instantTextboxType = { name = "wd_kept_2" position = { x = 16 y = 88 } font = "hoi_16mbs" text = "MOD1440_WD_KEPT_2" maxWidth = 436 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_kept_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_WD_KEPT_TITLE" maxWidth = 372 maxHeight = 30 format = left }
+			instantTextboxType = { name = "wd_kept_0" position = { x = 16 y = 42 } font = "hoi_16mbs" text = "MOD1440_WD_KEPT_0" maxWidth = 368 maxHeight = 20 format = left }
+			instantTextboxType = { name = "wd_kept_1" position = { x = 16 y = 64 } font = "hoi_16mbs" text = "MOD1440_WD_KEPT_1" maxWidth = 368 maxHeight = 20 format = left }
 		}
 	}
 	containerWindowType = {
 		name = "mod1440_records_diary_row"
-		size = { width = 1130 height = 34 }
-		iconType = { name = "wd_row_stripe" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_stripe_1130x34" }
-		iconType = { name = "wd_row_day_bg" position = { x = 0 y = 2 } spriteType = "GFX_1440p_SG_head_1130x30" }
-		instantTextboxType = { name = "wd_row_day" position = { x = 10 y = 6 } font = "hoi_20b" text = "MOD1440_WD_ROW_DAY" maxWidth = 400 maxHeight = 24 format = left }
-		instantTextboxType = { name = "wd_row_day_n" position = { x = 968 y = 9 } font = "hoi_16mbs" text = "MOD1440_WD_ROW_DAY_N" maxWidth = 150 maxHeight = 20 format = right }
-		instantTextboxType = { name = "wd_row_day_n1" position = { x = 968 y = 9 } font = "hoi_16mbs" text = "MOD1440_WD_ROW_DAY_N1" maxWidth = 150 maxHeight = 20 format = right }
-		instantTextboxType = { name = "wd_row_icon_1" position = { x = 10 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_1" maxWidth = 30 maxHeight = 24 format = left }
-		instantTextboxType = { name = "wd_row_icon_2" position = { x = 10 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_2" maxWidth = 30 maxHeight = 24 format = left }
-		instantTextboxType = { name = "wd_row_icon_3" position = { x = 10 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_3" maxWidth = 30 maxHeight = 24 format = left }
-		instantTextboxType = { name = "wd_row_icon_4" position = { x = 10 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_4" maxWidth = 30 maxHeight = 24 format = left }
-		instantTextboxType = { name = "wd_row_icon_5" position = { x = 10 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_5" maxWidth = 30 maxHeight = 24 format = left }
-		instantTextboxType = { name = "wd_row_event" position = { x = 40 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_EVENT" maxWidth = 240 maxHeight = 22 format = left }
-		buttonType = { name = "wd_row_go" position = { x = 290 y = 3 } quadTextureSprite = "GFX_1440p_SG_head_290x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_GO_TT" }
-		instantTextboxType = { name = "wd_row_a" position = { x = 300 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_A" maxWidth = 270 maxHeight = 22 format = left alwaystransparent = yes }
-		instantTextboxType = { name = "wd_row_point" position = { x = 300 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_POINT" maxWidth = 270 maxHeight = 22 format = left alwaystransparent = yes }
-		iconType = { name = "wd_row_face" position = { x = 292 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
-		instantTextboxType = { name = "wd_row_who" position = { x = 324 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_WHO" maxWidth = 256 maxHeight = 22 format = left }
-		instantTextboxType = { name = "wd_row_name" position = { x = 300 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_NAME" maxWidth = 270 maxHeight = 22 format = left }
-		iconType = { name = "wd_row_flag" position = { x = 600 y = 4 } spriteType = "GFX_flag_small2" }
-		instantTextboxType = { name = "wd_row_b" position = { x = 648 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_B" maxWidth = 228 maxHeight = 22 format = left }
-		iconType = { name = "wd_row_flag_near" position = { x = 290 y = 4 } spriteType = "GFX_flag_small2" }
-		instantTextboxType = { name = "wd_row_b_near" position = { x = 338 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_B" maxWidth = 228 maxHeight = 22 format = left }
-		iconType = { name = "wd_row_cface" position = { x = 890 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
-		instantTextboxType = { name = "wd_row_c" position = { x = 922 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_C" maxWidth = 176 maxHeight = 22 format = left }
-		buttonType = { name = "wd_row_mark" position = { x = 1100 y = 6 } quadTextureSprite = "GFX_checkbox_gold_32" frame = 1 scale = 0.7 clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_MARK_TT" }
-		buttonType = { name = "wd_row_marked" position = { x = 1100 y = 6 } quadTextureSprite = "GFX_checkbox_gold_32" frame = 2 scale = 0.7 clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_MARK_TT" }
+		size = { width = 1198 height = 34 }
+		iconType = { name = "wd_row_stripe" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_stripe_1198x34" }
+		iconType = { name = "wd_row_new" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_pick_1198x34" }
+		instantTextboxType = { name = "wd_row_date" position = { x = 8 y = 9 } font = "hoi_16mbs" text = "MOD1440_WD_ROW_DATE" maxWidth = 118 maxHeight = 20 format = left }
+		instantTextboxType = { name = "wd_row_icon_1" position = { x = 132 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_1" maxWidth = 30 maxHeight = 24 format = left }
+		instantTextboxType = { name = "wd_row_icon_2" position = { x = 132 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_2" maxWidth = 30 maxHeight = 24 format = left }
+		instantTextboxType = { name = "wd_row_icon_3" position = { x = 132 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_3" maxWidth = 30 maxHeight = 24 format = left }
+		instantTextboxType = { name = "wd_row_icon_4" position = { x = 132 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_4" maxWidth = 30 maxHeight = 24 format = left }
+		instantTextboxType = { name = "wd_row_icon_5" position = { x = 132 y = 6 } font = "hoi_18mbs" text = "MOD1440_WD_ICON_5" maxWidth = 30 maxHeight = 24 format = left }
+		instantTextboxType = { name = "wd_row_event" position = { x = 160 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_EVENT" maxWidth = 232 maxHeight = 22 format = left }
+		instantTextboxType = { name = "wd_row_n" position = { x = 160 y = 6 } font = "hoi_20b" text = "MOD1440_WD_ROW_N" maxWidth = 228 maxHeight = 24 format = right alwaystransparent = yes }
+		instantTextboxType = { name = "wd_row_n_k" position = { x = 160 y = 6 } font = "hoi_20b" text = "MOD1440_WD_ROW_N_K" maxWidth = 228 maxHeight = 24 format = right alwaystransparent = yes }
+		instantTextboxType = { name = "wd_row_n_m" position = { x = 160 y = 6 } font = "hoi_20b" text = "MOD1440_WD_ROW_N_M" maxWidth = 228 maxHeight = 24 format = right alwaystransparent = yes }
+		buttonType = { name = "wd_row_go" position = { x = 398 y = 3 } quadTextureSprite = "GFX_1440p_SG_head_260x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_GO_TT" }
+		buttonType = { name = "wd_row_go_fold" position = { x = 398 y = 3 } quadTextureSprite = "GFX_1440p_SG_head_260x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_GO_FOLD_TT" }
+		instantTextboxType = { name = "wd_row_a" position = { x = 408 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_A" maxWidth = 240 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
+		instantTextboxType = { name = "wd_row_point" position = { x = 408 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_POINT" maxWidth = 240 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
+		instantTextboxType = { name = "wd_row_fold" position = { x = 398 y = 9 } font = "hoi_16mbs" text = "MOD1440_WD_ROW_FOLD" maxWidth = 250 maxHeight = 20 format = right alwaystransparent = yes }
+		iconType = { name = "wd_row_face" position = { x = 400 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
+		buttonType = { name = "wd_row_file" position = { x = 398 y = 3 } quadTextureSprite = "GFX_1440p_SG_hit_260x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_FILE_TT" }
+		instantTextboxType = { name = "wd_row_who" position = { x = 432 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_WHO" maxWidth = 224 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
+		instantTextboxType = { name = "wd_row_name" position = { x = 408 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_NAME" maxWidth = 250 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "wd_row_flag" position = { x = 668 y = 4 } spriteType = "GFX_flag_small2" }
+		buttonType = { name = "wd_row_lines" position = { x = 668 y = 3 } quadTextureSprite = "GFX_1440p_SG_hit_276x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_LINES_TT" }
+		instantTextboxType = { name = "wd_row_b" position = { x = 716 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_B" maxWidth = 228 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
+		iconType = { name = "wd_row_flag_near" position = { x = 398 y = 4 } spriteType = "GFX_flag_small2" }
+		buttonType = { name = "wd_row_lines_near" position = { x = 398 y = 3 } quadTextureSprite = "GFX_1440p_SG_hit_276x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_LINES_TT" }
+		instantTextboxType = { name = "wd_row_b_near" position = { x = 446 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_B" maxWidth = 228 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
+		iconType = { name = "wd_row_cface" position = { x = 954 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
+		buttonType = { name = "wd_row_cfile" position = { x = 954 y = 3 } quadTextureSprite = "GFX_1440p_SG_hit_208x28" clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_FILE_TT" }
+		instantTextboxType = { name = "wd_row_c" position = { x = 986 y = 8 } font = "hoi_18mbs" text = "MOD1440_WD_ROW_C" maxWidth = 176 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
+		buttonType = { name = "wd_row_mark" position = { x = 1170 y = 6 } quadTextureSprite = "GFX_checkbox_gold_32" frame = 1 scale = 0.7 clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_MARK_TT" }
+		buttonType = { name = "wd_row_marked" position = { x = 1170 y = 6 } quadTextureSprite = "GFX_checkbox_gold_32" frame = 2 scale = 0.7 clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_MARK_TT" }
 	}
 	containerWindowType = {
 		name = "mod1440_records_of"
@@ -1445,6 +1509,7 @@ guiTypes = {
 		instantTextboxType = { name = "rec_toggle_l" position = { x = 12 y = 5 } font = "hoi_18mbs" text = "MOD1440_REC_TOGGLE" maxWidth = 98 maxHeight = 22 format = left alwaystransparent = yes }
 		iconType = { name = "rec_badge_bg" position = { x = 114 y = 2 } spriteType = "GFX_1440p_SG_tile_30x24" }
 		instantTextboxType = { name = "rec_badge" position = { x = 114 y = 5 } font = "hoi_16mbs" text = "MOD1440_REC_BADGE" maxWidth = 30 maxHeight = 20 format = centre alwaystransparent = yes }
+		instantTextboxType = { name = "rec_badge_war" position = { x = 114 y = 5 } font = "hoi_16mbs" text = "MOD1440_REC_BADGE_WAR" maxWidth = 30 maxHeight = 20 format = centre alwaystransparent = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_state_card"
@@ -1457,6 +1522,8 @@ guiTypes = {
 		instantTextboxType = { name = "sc_lines_1" position = { x = 324 y = 12 } font = "hoi_16mbs" text = "MOD1440_SC_LINES_1" maxWidth = 200 maxHeight = 20 format = right }
 		iconType = { name = "sc_flag" position = { x = 14 y = 44 } spriteType = "GFX_flag_small2" }
 		instantTextboxType = { name = "sc_taken" position = { x = 62 y = 48 } font = "hoi_18mbs" text = "MOD1440_SC_TAKEN" maxWidth = 464 maxHeight = 22 format = left fixedsize = yes }
+		instantTextboxType = { name = "sc_received" position = { x = 62 y = 48 } font = "hoi_18mbs" text = "MOD1440_SC_RECEIVED" maxWidth = 464 maxHeight = 22 format = left fixedsize = yes }
+		instantTextboxType = { name = "sc_treaty" position = { x = 62 y = 78 } font = "hoi_16mbs" text = "MOD1440_SC_TREATY" maxWidth = 464 maxHeight = 20 format = left }
 		instantTextboxType = { name = "sc_untaken" position = { x = 14 y = 48 } font = "hoi_18mbs" text = "MOD1440_SC_UNTAKEN" maxWidth = 512 maxHeight = 22 format = left }
 		buttonType = { name = "sc_cite" position = { x = 12 y = 108 } quadTextureSprite = "GFX_sort_button_202x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_SC_CITE" pdx_tooltip = "MOD1440_SC_CITE_TT" }
 		instantTextboxType = { name = "sc_cited" position = { x = 224 y = 114 } font = "hoi_16mbs" text = "MOD1440_SC_CITED" maxWidth = 200 maxHeight = 20 format = left }

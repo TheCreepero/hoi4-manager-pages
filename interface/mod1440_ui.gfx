@@ -1487,4 +1487,94 @@ spriteTypes = {
 		tilingCenter = yes
 	}
 	# --- end D7 ---
+
+	# --- E1 ---
+	# The War Diary after the UX review (tools/build_records.py, 2026-10-22): the rows of 1198 with the day's band and
+	# the lighter band of a new line, the plate of 260 under a state's name, and the buttons with nothing drawn over a
+	# country's flag and name and over an officer's face and name (the transparent picture of the officer rows); the
+	# pane of 400 with head bars, banded rows of 26 and of 46 (the chronicle) and the bar of ground at 116.
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_1198x34"
+		size = { x = 1198 y = 34 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_1198x34"
+		size = { x = 1198 y = 34 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_260x28"
+		size = { x = 260 y = 28 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_276x28"
+		size = { x = 276 y = 28 }
+		textureFile = "gfx/interface/skill_transparent.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_260x28"
+		size = { x = 260 y = 28 }
+		textureFile = "gfx/interface/skill_transparent.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_208x28"
+		size = { x = 208 y = 28 }
+		textureFile = "gfx/interface/skill_transparent.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_384x26"
+		size = { x = 384 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_384x26"
+		size = { x = 384 y = 26 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_384x46"
+		size = { x = 384 y = 46 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+
+	progressbartype = {
+		name = "GFX_1440p_SG_bar_116"
+		textureFile1 = "gfx/interface/navieslist_bar_org.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 116 y = 12 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+		steps = 100
+	}
+	# --- end E1 ---
 }

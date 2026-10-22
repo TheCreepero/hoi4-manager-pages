@@ -3370,7 +3370,9 @@ def tb_scene():
         {"name": "mod1440_top_bar_fixed", "at": [TB_X, TB_Y], "drawIn": ["old_save"], "hide": ["tbf_mil", "tbf_dock_idle"],
          "_note": "The fixed twin: the eight defaults at fixed places, shown instead of the moving strip in a save of an earlier build until the first click on the edit button or the next day."},
         {"name": "mod1440_top_bar_edit", "at": [TB_EDIT[0], TB_EDIT[1]]},
-        {"name": "mod1440_records_handle", "at": [2002, 3], "_note": "From mod1440_records.gui (tools/build_records.py): moved to the right end and lowered to 28 px in D7."},
+        {"name": "mod1440_records_handle", "at": [2002, 3], "_note": "From mod1440_records.gui (tools/build_records.py): moved to the right end and lowered to 28 px in D7.",
+         # --- E1 --- the red twin of the count (a new line of War and peace) is drawn in the War Diary's badge figure only
+         "hide": ["rec_badge_war"]},
         {"name": "mod1440_top_bar_setup", "at": [TB_PANEL_X, TB_PANEL_Y], "drawIn": ["panel", "chosen"], "hide": tb_panel_hide(TB_DEFAULT),
          "_note": "The panel of the edit button, shown while mod1440_tb_setup is 1. With the defaults 3 px are left, so every value that is off is refused."},
     ]

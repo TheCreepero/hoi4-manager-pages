@@ -656,6 +656,63 @@ def changed_month():
 
 HISTORY += changed_month()
 
+# --- E1 ---
+# The War Diary after the UX review (2026-10-22): the new kinds of line, as Germany on 1 January 1936.
+HISTORY += """
+# ---- War Diary, E1 review
+
+# Niederschlesien handed over to Austria and received back, with no war: "Handed over to", "Received from", and the
+# state card's treaty wording.
+mod1440_chk_treaty = {
+	AUS = { set_state_controller = 66 }
+	set_state_controller = 66
+}
+
+# The four states of Austria received on one day: one row "+3 states" in All, four lines under Territory.
+mod1440_chk_treaty_run = {
+	set_state_controller = 4
+	set_state_controller = 152
+	set_state_controller = 153
+	set_state_controller = 976
+}
+
+# A skill level for the third general of the game's list: the line carries the level reached.
+mod1440_chk_level = {
+	set_temp_variable = { c_g = army_leaders^2 }
+	var:c_g = { add_skill_level = 1 }
+	log = "MOD1440 check: level, [?c_g.GetName] now at [?c_g.skill_level]"
+}
+
+# Poland's cipher broken at once (on_fully_decrypted_cipher, if the full ratio fires it).
+mod1440_chk_cipher = {
+	add_decryption = { target = POL ratio = 1 }
+}
+
+# Poland's government goes into exile in Germany: "Hosting the exiled government of" Poland.
+mod1440_chk_exile = {
+	POL = { become_exiled_in = { target = GER } }
+}
+
+# As a save of a build before the review: no number on the lines, no seen line, no marks of officers gone, no
+# casualty step. Then the Records opened: every line gets n = 0, none stands on the lighter band, no officer gone
+# before gets a line.
+mod1440_chk_old3 = {
+	clear_array = mod1440_ev_n
+	clear_array = mod1440_tr_n
+	clear_array = mod1440_kp_n
+	clear_variable = mod1440_rec_v
+	clear_variable = mod1440_of_gone_v
+	clear_variable = mod1440_ev_cas_v
+	mod1440_chk_sizes3 = yes
+}
+
+# How long the number part is beside the dates, and the review's other values.
+mod1440_chk_sizes3 = {
+	log = "MOD1440 check: sizes3 ev [?mod1440_ev_date^num]/[?mod1440_ev_n^num] tr [?mod1440_tr_date^num]/[?mod1440_tr_n^num] kp [?mod1440_kp_date^num]/[?mod1440_kp_n^num] seen [?mod1440_rec_seen] next [?mod1440_ln_next] new [?mod1440_rec_new]/[?mod1440_rec_new_war] cas [?mod1440_ev_cas_i] ([?casualties_k]k) gone [?mod1440_of_gone_v]"
+}
+"""
+# --- end E1 ---
+
 if __name__ == "__main__":
     if "--restore" in sys.argv:
         if os.path.isfile(PATH):

@@ -282,7 +282,21 @@ KINDS = [
     ("pride_lost", 5, "Our pride of the fleet was sunk by"), ("pride_sunk", 5, "Sank the pride of the fleet of"),
     ("vp_taken", 2, "Victory point taken"), ("vp_lost", 2, "Victory point lost"),
     ("commissioned_more", 4, "More officers commissioned"),
+    # E1 review (2026-10-22): a change of hands with a country we are not at war with; an officer gone or held; the
+    # hooks of R5 the design chose; a casualty step of the daily round
+    ("state_received", 2, "Received from"), ("state_handed", 2, "Handed over to"),
+    ("officer_gone", 4, "Left the service"), ("officer_captured", 4, "Captured:"),
+    ("volunteers_sent", 1, "Volunteers sent to"), ("volunteers_back", 1, "Volunteers recalled from"),
+    ("exiled", 3, "Our government went into exile in"), ("exile_hosted", 3, "Hosting the exiled government of"),
+    ("reinstated", 3, "Our government is back from exile"), ("cipher", 1, "Broke the cipher of"),
+    ("civil_war_won", 1, "Won the civil war against"), ("fought_on", 1, "We fight on: no longer capitulated"),
+    ("casualties", 1, "Our casualties passed"),
 ]
+# A run of state lines of one day, kind and country that the diary folds into one row (All and a country's lines)
+FOLDED_KINDS = ("state_taken", "state_lost", "state_received", "state_handed")
+FOLD_MIN = 3                    # lines a run has before it is folded
+# the casualty steps of the daily round, in thousands (casualties_k)
+CASUALTY_STEPS = [10, 25, 50, 100, 250, 500, 1000, 2000, 5000]
 FAMILY = dict((name, family) for name, family, words in KINDS)
 NUMBER = dict((name, n) for n, (name, family, words) in enumerate(KINDS))
 # What a line holds. a: whom or what it is about (sa says which: 1 a person, 2 a state, 3 the name of a victory
@@ -290,18 +304,22 @@ NUMBER = dict((name, n) for n, (name, family, words) in enumerate(KINDS))
 # the line stands in the other log too.
 # k: 1 when the player has marked the line; id: a number of its own (the same in both logs for a line in both),
 # by which a mark finds the line again in the other log and in the chronicle.
-LOG_ARRAYS = ["date", "day", "kind", "fam", "a", "b", "sa", "sb", "c", "sc", "p", "x", "k", "id"]
+# n: a number the line carries (E1 review, 2026-10-22): the skill level reached, how many more officers, the divisions
+# cited, the casualty step in thousands; 0 for none.
+LOG_ARRAYS = ["date", "day", "kind", "fam", "a", "b", "sa", "sb", "c", "sc", "p", "x", "k", "id", "n"]
 NEW_ARRAYS = ["c", "sc", "p", "x"]          # a game saved before 2026-10-13 has logs without these
 MARK_ARRAYS = ["k", "id"]                   # ... and one saved before 2026-10-16 without these
+NUMBER_ARRAYS = ["n"]                       # ... and one saved before 2026-10-22 without this (the chronicle too)
 MARK_ID_BASE = {"ev": 0, "tr": 5000}        # the old lines get negative numbers of their own, apart in each log
 # the game's own text icon for each family
 FAMILY_ICON = {1: "army_experience", 2: "victory_points", 3: "pol_power", 4: "command_power", 5: "air_experience"}
 
 
-def fill(name, a=None, b=None, state=False, point=False, c=None, sc=None, p=None):
+def fill(name, a=None, b=None, state=False, point=False, c=None, sc=None, p=None, n=None):
     """Script that sets what the next line says: its kind, and whom or what it is about. a is a character, a
     state (state=True) or the text key of a victory point's name (point=True); b a country; c an officer,
-    written when the temporary variable sc is above zero (or always, without sc); p the state of a point."""
+    written when the temporary variable sc is above zero (or always, without sc); p the state of a point; n a
+    number the line carries (part n)."""
     out = tmp("ev_kind", "token:mod1440_ev_" + name) + tmp("ev_fam", FAMILY[name]) + tmp("ev_kid", NUMBER[name])
     out += tmp("ev_sa", (3 if point else 2 if state else 1) if a else 0) + tmp("ev_a", a or 0)
     # the officer has temporary variables of his own: ev_c is the country in the loops of the daily comparison
@@ -309,7 +327,7 @@ def fill(name, a=None, b=None, state=False, point=False, c=None, sc=None, p=None
     if c:
         officer = tmp("ev_so", 1) + tmp("ev_o", c)
         out += iff("check_variable = { %s > 0 }" % sc, officer) if sc else officer
-    return out + tmp("ev_p", p or 0) + tmp("ev_x", 0)
+    return out + tmp("ev_p", p or 0) + tmp("ev_x", 0) + tmp("ev_n", n or 0)
 
 
 def line(name, a=None, b=None, state=False, log="ev", both=False, **more):
@@ -333,7 +351,7 @@ def recording():
     out += "# ev_kind, ev_fam, ev_kid and one for each part of a line (tools/build_records.py, fill()). The oldest line goes past %d.\n" % LOG_KEEP
     out += "# Each kind of line is counted (mod1440_ct), a line of the territory log in that log only.\n"
     values = {"date": "global.date", "day": "global.num_days", "kind": "ev_kind", "fam": "ev_fam", "a": "ev_a", "b": "ev_b",
-              "sa": "ev_sa", "sb": "ev_sb", "c": "ev_o", "sc": "ev_so", "p": "ev_p", "x": "ev_x", "k": 0, "id": "ev_id"}
+              "sa": "ev_sa", "sb": "ev_sb", "c": "ev_o", "sc": "ev_so", "p": "ev_p", "x": "ev_x", "k": 0, "id": "ev_id", "n": "ev_n"}
     counted = pad([("mod1440_ct", 0)], len(KINDS) + 8) + "add_to_variable = { mod1440_ct^ev_kid = 1 }\n"
     # the state a line names counts it (the state card says how many lines it has)
     named = (iff("check_variable = { ev_sa = 2 }", block("var:ev_a", "add_to_variable = { mod1440_sr_lines = 1 }\n"))
@@ -346,11 +364,19 @@ def recording():
         body += "".join("add_to_array = { mod1440_%s_%s = %s }\n" % (log, part, values[part]) for part in LOG_ARRAYS)
         body += iff("check_variable = { mod1440_%s_date^num > %d }" % (log, LOG_KEEP),
                     "".join("remove_from_array = { array = mod1440_%s_%s index = 0 }\n" % (log, part) for part in LOG_ARRAYS))
-        body += counted if log == "tr" else iff("NOT = { check_variable = { ev_fam = 2 } }", counted)
+        # a line of the territory family that stands in both logs is counted there; one of the main log alone (a
+        # landing, an airborne drop) here (E1 review: they were counted in neither)
+        body += counted if log == "tr" else iff("NOT = { AND = { check_variable = { ev_fam = 2 } check_variable = { ev_x = 1 } } }", counted)
         body += named if log == "ev" else iff("NOT = { check_variable = { ev_x = 1 } }", named)
         if log == "ev":
-            # the badge of the top bar button: lines written while the window was closed
-            body += iff("NOT = { %s }" % is_one("mod1440_rec_open"), "add_to_variable = { mod1440_rec_new = 1 }\n")
+            # the badge of the top bar button: lines written while the window was closed, how many of War and
+            # peace, and the newest line for its tooltip (its name: the person or state, a point's state, the country)
+            body += iff("NOT = { %s }" % is_one("mod1440_rec_open"), "add_to_variable = { mod1440_rec_new = 1 }\n"
+                        + iff("check_variable = { ev_fam = 1 }", "add_to_variable = { mod1440_rec_new_war = 1 }\n"))
+            body += (setv("mod1440_rec_last_k", "ev_kind") + setv("mod1440_rec_last_d", "global.date") + setv("mod1440_rec_last_n", "THIS")
+                     + iff("check_variable = { ev_sb = 1 }", setv("mod1440_rec_last_n", "ev_b"))
+                     + iff("OR = { check_variable = { ev_sa = 1 } check_variable = { ev_sa = 2 } }", setv("mod1440_rec_last_n", "ev_a"))
+                     + iff("check_variable = { ev_sa = 3 }", setv("mod1440_rec_last_n", "ev_p"), "else_if"))
         # a person the line names by his place says so himself from now on (places())
         body += iff("check_variable = { ev_sa = 1 }", tmp("ch_v", "ev_a") + "mod1440_ch_mark = yes\n")
         body += iff("check_variable = { ev_so = 1 }", tmp("ch_v", "ev_o") + "mod1440_ch_mark = yes\n")
@@ -377,6 +403,17 @@ def recording():
                 + "multiply_temp_variable = { gr_v = -1 }\n"
                 + "add_to_array = { array = mod1440_%s_id value = gr_v index = 0 }\n" % log))))
         grow += iff("check_variable = { mod1440_%s_id^num < mod1440_%s_date^num }" % (log, log), marks)
+    # 2026-10-22 (E1 review): the number of each line, 0 for the lines a save has; the chronicle too
+    for log in ("ev", "tr", "kp"):
+        for part in NUMBER_ARRAYS:
+            grow += iff("check_variable = { mod1440_%s_%s^num < mod1440_%s_date^num }" % (log, part, log), block(
+                "for_loop_effect", "start = 0\nend = %d\nvalue = gr_n\n" % max(LOG_KEEP, MARK_KEEP) + iff(
+                    "check_variable = { mod1440_%s_%s^num < mod1440_%s_date^num }" % (log, part, log),
+                    "add_to_array = { array = mod1440_%s_%s value = 0 index = 0 }\n" % (log, part))))
+    # ... and what the new-line band and the badge's tooltip read: every line written so far counts as seen
+    grow += iff("NOT = { check_variable = { mod1440_rec_v = 2 } }", (
+        setv("mod1440_rec_v", 2) + setv("mod1440_rec_seen", "mod1440_ln_next") + setv("mod1440_rec_new_war", 0)
+        + setv("mod1440_rec_last_n", "THIS") + setv("mod1440_rec_last_k", BLANK) + setv("mod1440_rec_last_d", "global.date")))
     # 2026-10-16: the honours have four occasions, each with its switch (landings and airborne on, a great city
     # off), and count what they wrote by themselves apart from the citations. A record of an earlier build
     # counted both together: that sum stands under "by themselves".
@@ -437,61 +474,95 @@ def merged(match, take):
 
 # ---------------------------------------------------------------- War Diary (E1)
 
-# The page (e-diary-wars, 2026-10-16): a card with the list on the left, the campaign, the battle honours and
-# what is kept on the right. The list reads like a diary: a row for each day, the lines of the day under it,
-# flags and faces on the lines, and a box at the end of each line that marks it for the chronicle.
-WD_W = 1172                     # the card of the list
+# The page (e-diary-wars, 2026-10-16; the UX review of E1, 2026-10-22): a card with the list on the left, the
+# campaign, the chronicle, the battle honours and what is kept on the right. The list reads like a diary: the day in
+# a column on its first line and every line of a day on one band, flags and faces on the lines, names that lead
+# somewhere (a country to its lines, an officer to his file), runs of states folded, the lines written while the
+# window was closed on the lighter band, and a box at the end of each line that marks it for the chronicle.
+WD_W = 1240                     # the card of the list (1172 until the review: the pane gave 68)
 WD_ROW = 34
-WD_ROW_W = 1130
+WD_ROW_W = 1198
 WD_LIST_X, WD_LIST_Y = 8, 84
-WD_ICON_X, WD_EVENT_X, WD_A_X, WD_B_X, WD_C_X, WD_MARK_X = 10, 40, 290, 600, 890, 1100
+# the columns of a row: the day, the family's icon, the words (and a line's number at their right end), what or whom
+# it is about on a plate of 260, the country (flag and name, 228), the officer on the spot (face and name, 176), the box
+WD_DATE_X, WD_DATE_W = 8, 118
+WD_ICON_X, WD_EVENT_X, WD_EVENT_W = 132, 160, 232
+WD_A_X, WD_PLATE_W = 398, 260
+WD_B_X, WD_B_W = 668, 228
+WD_C_X, WD_C_W = 954, 176
+WD_MARK_X = 1170
 WD_FACE = 0.15                  # a portrait on a line: 23x31 of 156x210
+WD_PLATE = "GFX_1440p_SG_head_%dx28" % WD_PLATE_W
+WD_HIT_B = "GFX_1440p_SG_hit_276x28"        # the country's flag and name: a button with nothing drawn
+WD_HIT_A = "GFX_1440p_SG_hit_%dx28" % WD_PLATE_W   # an officer whom the line is about: his face and name
+WD_HIT_C = "GFX_1440p_SG_hit_208x28"        # the officer on the spot: his face and name
 WD_PANE_X = REC_BODY_X + WD_W + 12
-WD_PANE_W = REC_W - WD_PANE_X - 14
-WD_CAMPAIGN_H = 590
-WD_KEPT_H = 126
+WD_PANE_W = REC_W - WD_PANE_X - 14          # 400
+WD_CAMPAIGN_H = 414
+WD_CHRON_H = 348
+WD_HONOUR_H = 196
+WD_KEPT_H = 96
+WD_GAP = 12
+WD_TROW = 26                    # a row of the pane's tables
+WD_PAIR = 188                   # from the first figure of a row to the second
+WD_PAIR_W = 172                 # a figure's label and its value, right-aligned
+WD_CHRON_LINES = 4              # the newest marked lines the pane shows
+WD_CHRON_ROW = 46
+WD_CHRON_WORDS = 208             # the words of a marked line: the longest kind measures 202 px in hoi_16mbs
 WD_FILTERS = [
-    (0, "all", "All", "Everything, newest first."),
-    (1, "war", "War and peace", "Wars declared and ended, capitulations, annexations, subjects, factions."),
-    (2, "land", "Territory", "Every state and every victory point taken or lost, landings, and the divisions you cited."),
-    (3, "gov", "Government", "Parties, elections, heads of government, advisors."),
-    (4, "off", "Officers", "Commissions, promotions, skill levels, decorations."),
-    (5, "air", "Air and sea", "Aces and the pride of a fleet."),
+    (0, "all", "All", "Everything, newest first. Three or more states of one day, kind and country stand on one row."),
+    (1, "war", "War and peace", "Wars declared and ended, capitulations, annexations, subjects, factions, volunteers, ciphers."),
+    (2, "land", "Territory", "Every state and every victory point taken, lost or handed over, landings, and the divisions you cited."),
+    (3, "gov", "Government", "Parties, elections, heads of government, advisors, a government in exile."),
+    (4, "off", "Officers", "Commissions, promotions, skill levels, decorations, officers who left the service or were captured."),
+    (5, "air", "Air and sea", "The pride of a fleet. Aces are counted on the Wars page until they can be named."),
     (6, "marked", "Marked", "The lines you marked with the box at their end: the chronicle of your campaign, kept for good."),
 ]
 WD_STATE_FILTER = 7             # the lines of one state, from the state card's Its lines
-# the figures of the campaign: (name, label, kinds counted, tooltip); the first four are War and peace, the last
-# four The service
+WD_COUNTRY_FILTER = 8           # the lines of one country, from its name on a line (E1 review)
+WD_FOLDING = (0, WD_COUNTRY_FILTER)         # the filters that fold a run of states
+# the figures of the campaign: (name, label, kinds counted, tooltip). War and peace and The service, two to a row.
 WD_FIGURES = [
     ("wars", "Wars begun", ("war_on", "war_by", "war_with"), "Countries you went to war with since the record began."),
     ("peace", "Wars ended", ("peace",), "Enemies you are no longer at war with."),
     ("cap", "Capitulations", ("capitulated",), "Enemies that capitulated."),
     ("annex", "Annexations", ("annexed",), "Countries you annexed."),
+    ("subj", "Subjects made", ("subject_new",), "Countries that became your subjects."),
+    ("atwar", "At war today", None, "The enemies you are at war with today (the Wars page)."),
     ("comm", "Commissioned", ("commissioned",), "Generals and admirals who joined your officers."),
     ("prom", "Promotions", ("promoted",), "Generals promoted to field marshal."),
+    ("lvl", "Skill levels", ("level",), "Skill levels your officers gained."),
     ("dec", "Decorations", ("decorated",), "Decorations you awarded to officers."),
+    ("gone", "Left the service", ("officer_gone",), "Officers who no longer serve: retired, dismissed or fallen."),
     ("govs", "Governments", ("party", "government", "leader"), "Changes of ruling party, of government and of its head."),
 ]
-# ground taken and lost: (name, label, kinds taken, kinds lost)
+WD_WAR_ROWS = [("wars", "peace"), ("cap", "annex"), ("subj", "atwar")]
+WD_SERVICE_ROWS = [("comm", "prom"), ("lvl", "dec"), ("gone", "govs")]
+# ground taken and lost in battle: (name, label, kinds taken, kinds lost); by treaty apart (E1 review)
 WD_GROUND = [
     ("st", "States", ("state_taken", "capital_taken"), ("state_lost", "capital_lost")),
     ("vp", "Victory points", ("vp_taken",), ("vp_lost",)),
     ("cap", "Capitals", ("capital_taken",), ("capital_lost",)),
 ]
-WD_BAR = 226
+WD_TREATY = [("trr", "By treaty: received", ("state_received",), "States that came to you without a battle: an annexation, a peace, a subject's state."),
+             ("trh", "handed over", ("state_handed",), "States you handed over without a battle: to a subject, at a peace.")]
+WD_BAR = 116
 # the honours: (name, variable, words); the first is the switch of before, the others are new
 HONOURS = [
-    ("cap", "mod1440_hn_auto", "an enemy capital falls with them in it"),
+    ("cap", "mod1440_hn_auto", "a capital falls"),
     ("sea", "mod1440_hn_sea", "they land from the sea"),
     ("air", "mod1440_hn_air", "they land from the air"),
-    ("vp", "mod1440_hn_vp", "they take a victory point of %d or more" % VP_MAJOR),
+    ("vp", "mod1440_hn_vp", "a city of %d or more falls" % VP_MAJOR),
 ]
-# what a row of the list needs of a line, and what the list adds: hd 1 for the row of a day, hn the lines under
-# it, k the mark, src the log the line is in (1 main, 2 territory, 3 the chronicle) and si its place there, ap and
-# cp the portraits, st the stripe
-WD_VIEW = ["date", "kind", "fam", "a", "b", "sa", "sb", "c", "sc", "p"]
-WD_MORE = ["hd", "hn", "k", "src", "si", "ap", "cp", "st"]
+# what a row of the list needs of a line, and what the list adds: dd 1 on a day's first row (the date shows), fo the
+# states folded into the row, nw 1 for a line written since the window was last closed, nu how its number reads (0
+# none, 1 as it is, 2 in thousands, 3 in millions), k the mark, src the log the line is in (1 main, 2 territory, 3 the
+# chronicle) and si its place there, ap and cp the portraits, st the band of the day
+WD_VIEW = ["date", "kind", "fam", "a", "b", "sa", "sb", "c", "sc", "p", "n"]
+WD_MORE = ["dd", "fo", "nw", "nu", "k", "src", "si", "ap", "cp", "st"]
 LOG_SOURCE = {"ev": 1, "tr": 2, "kp": 3}
+# the newest marked lines in the pane: what each needs
+WD_CHRON = ["date", "kind", "fam", "a", "b", "sa", "sb"]
 
 
 def checkbox(name, x, y, frame, tooltip=None):
@@ -501,9 +572,26 @@ def checkbox(name, x, y, frame, tooltip=None):
             'scale = 0.7 clicksound = click_default%s }\n' % (name, x, y, frame, tip))
 
 
+def fixed(widget):
+    """A text box that keeps its size: a name another mod can lengthen ends in dots on its one line (W28)."""
+    return widget.replace(" }\n", " fixedsize = yes }\n", 1)
+
+
+def open_file(officer):
+    """Script of a click on an officer's name: the Officers page with his file open, as a click on his row there.
+    <officer> holds him by his number or place; 0 (a person who is gone) does nothing."""
+    return tmp("wd_o", officer) + iff("NOT = { check_variable = { wd_o = 0 } }", (
+        iff(is_one("mod1440_of_has_sel"), block("var:mod1440_of_sel", setv("mod1440_of_picked", 0)))
+        + setv("mod1440_of_sel", "wd_o") + setv("mod1440_of_has_sel", 1) + setv("mod1440_of_awarding", 0)
+        + block("var:mod1440_of_sel", setv("mod1440_of_picked", 1))
+        + setv("mod1440_rec_page", 1) + "mod1440_rec_show = yes\n"))
+
+
 def war_diary(portrait_version):
     body, effects, properties = head("wd", 0)
     triggers = ""
+    kept = ("Main log [?mod1440_ev_date^num|0] of %d lines, territory [?mod1440_tr_date^num|0] of %d." % (LOG_KEEP, LOG_KEEP),
+            "The oldest line goes first; a marked line stays.")
 
     # ---- the card of the list: filters and page arrows, the bar of heads, the list
     inner = ""
@@ -525,157 +613,218 @@ def war_diary(portrait_version):
                      + iff("check_variable = { wd_next < mod1440_wd_total } check_variable = { mod1440_wd_shown > 0 }", (
                          "add_to_array = { mod1440_wd_back = mod1440_wd_from }\n" + setv("mod1440_wd_from", "wd_next") + "mod1440_wd_list = yes\n")))
     inner += heads("wd_heads", WD_LIST_X, 48, WD_W - 2 * WD_LIST_X, [
+        (WD_DATE_X, WD_DATE_W, "When", "left", None),
         (WD_ICON_X, 250, "What happened", "left", None),
-        (WD_A_X, 280, "Where, or who", "left", "The name of a state or of a victory point is a button: it shows the place on the map."),
-        (WD_B_X, 260, "Country", "left", "For a state or a victory point: whom it was taken from or lost to."),
-        (WD_C_X, 160, "Officer", "left", "The general who had the most divisions in the place when it changed hands.")])
+        (WD_A_X, WD_PLATE_W, "Where, or who", "left", "The name of a state or of a victory point is a button: it shows the place on the map. "
+                                                       "An officer's name opens his file on the Officers page."),
+        (WD_B_X, 260, "Country", "left", "For a state or a victory point: whom it was taken from, lost or handed over to. "
+                                         "A country's name is a button: the lines about that country only."),
+        (WD_C_X, 160, "Officer", "left", "The general who had the most divisions in the place when it changed hands in battle. "
+                                         "His name opens his file.")])
+    count_tip = B.key("wd_count_tt", "The lines on this page, of the lines this filter has; a folded row counts its states.\\n" + " ".join(kept))
     inner += M.text("wd_count", WD_W - WD_LIST_X - 10 - 220, 53, 220, B.key("wd_count", "lines [?mod1440_wd_first|0] - [?mod1440_wd_last|0] of [?mod1440_wd_total|0]"),
-                    M.FONT_SMALL, "right", 20, tooltip=B.key("wd_count_tt", "The lines on this page, of the lines this filter has."))
-    # the lines of one state, from its card: the state's name stands in the place of the Officer head
-    inner += M.text("wd_count_state", WD_W - WD_LIST_X - 10 - 380, 53, 380, B.key(
-        "wd_count_state", "§Y[?mod1440_wd_state.GetName]§!: lines [?mod1440_wd_first|0] - [?mod1440_wd_last|0] of [?mod1440_wd_total|0]"),
-        M.FONT_SMALL, "right", 20)
+                    M.FONT_SMALL, "right", 20, tooltip=count_tip)
+    # the lines of one state, from its card, and of one country, from its name: the name stands where the Officer head was
+    for name, variable in (("state", "mod1440_wd_state"), ("country", "mod1440_wd_country")):
+        inner += M.text("wd_count_" + name, WD_W - WD_LIST_X - 10 - 520, 53, 520, B.key(
+            "wd_count_" + name, "§Y[?%s.GetName]§!: lines [?mod1440_wd_first|0] - [?mod1440_wd_last|0] of [?mod1440_wd_total|0]" % variable),
+            M.FONT_SMALL, "right", 20, tooltip=count_tip)
     state_filter = "check_variable = { mod1440_wd_filter = %d }" % WD_STATE_FILTER
-    triggers += block("wd_count_visible", M.more_than_zero("mod1440_wd_shown") + "NOT = { %s }\n" % state_filter)
-    triggers += block("wd_count_state_visible", state_filter + "\n")
-    triggers += block("wd_heads_3_visible", "NOT = { %s }\n" % state_filter)
+    country_filter = "check_variable = { mod1440_wd_filter = %d }" % WD_COUNTRY_FILTER
+    triggers += block("wd_count_visible", M.more_than_zero("mod1440_wd_shown") + "NOT = { %s }\nNOT = { %s }\n" % (state_filter, country_filter))
+    triggers += block("wd_count_state_visible", state_filter + "\n") + block("wd_count_country_visible", country_filter + "\n")
+    triggers += block("wd_heads_4_visible", "NOT = { %s }\nNOT = { %s }\n" % (state_filter, country_filter))
+    triggers += block("wd_heads_3_visible", "NOT = { %s }\n" % country_filter)
     inner += listing("wd_list", "wd_grid", WD_LIST_X, WD_LIST_Y, WD_ROW_W + 30, REC_BODY_H - WD_LIST_Y - 8, WD_ROW)
     inner += M.text("wd_none", 40, WD_LIST_Y + 20, 900, B.key("wd_none", "Nothing of this kind is written down yet."), M.FONT_LABEL)
     triggers += block("wd_none_visible", "check_variable = { mod1440_wd_fam^num < 1 }\n")
     body += M.box("wd_card", REC_BODY_X, REC_BODY_Y, WD_W, REC_BODY_H, inner, M.CARD_BG)
 
-    # ---- a row: the row of a day (v = 0), or a line (v its family)
-    day = "check_variable = { v = 0 }\n"
-    line_row = "check_variable = { v > 0 }\n"
+    # ---- a row: one line. The band of its day (or the lighter band of a new line), the date on the day's first row.
     entry = M.icon("wd_row_stripe", 0, 0, STRIPE % (WD_ROW_W, WD_ROW))
-    triggers += block("wd_row_stripe_visible", line_row + "check_variable = { mod1440_wd_st^i = 1 }\n")
-    entry += M.icon("wd_row_day_bg", 0, 2, "GFX_1440p_SG_head_%dx30" % WD_ROW_W)
-    entry += M.text("wd_row_day", 10, 6, 400, B.key("wd_row_day", "[?mod1440_wd_date^i.%s]" % LONG), M.FONT_VALUE, height=24)
-    entry += M.text("wd_row_day_n", WD_ROW_W - 12 - 150, 9, 150, B.key("wd_row_day_n", "[?mod1440_wd_hn^i|0] lines"), M.FONT_SMALL, "right", 20)
-    entry += M.text("wd_row_day_n1", WD_ROW_W - 12 - 150, 9, 150, B.key("wd_row_day_n1", "1 line"), M.FONT_SMALL, "right", 20)
-    triggers += shown_if(["wd_row_day_bg", "wd_row_day"], day)
-    triggers += block("wd_row_day_n_visible", day + "check_variable = { mod1440_wd_hn^i > 1 }\n")
-    triggers += block("wd_row_day_n1_visible", day + "check_variable = { mod1440_wd_hn^i = 1 }\n")
+    entry += M.icon("wd_row_new", 0, 0, PICK % (WD_ROW_W, WD_ROW))
+    triggers += block("wd_row_stripe_visible", "check_variable = { mod1440_wd_st^i = 1 }\ncheck_variable = { mod1440_wd_nw^i = 0 }\n")
+    triggers += block("wd_row_new_visible", "check_variable = { mod1440_wd_nw^i = 1 }\n")
+    entry += M.text("wd_row_date", WD_DATE_X, 9, WD_DATE_W, B.key("wd_row_date", "[?mod1440_wd_date^i.%s]" % LONG), M.FONT_SMALL, height=20)
+    triggers += block("wd_row_date_visible", "check_variable = { mod1440_wd_dd^i = 1 }\n")
     for family, text_icon in sorted(FAMILY_ICON.items()):
         entry += M.text("wd_row_icon_%d" % family, WD_ICON_X, 6, 30, B.key("wd_icon_%d" % family, "£" + text_icon), M.FONT_LABEL, height=24)
         triggers += block("wd_row_icon_%d_visible" % family, "check_variable = { v = %d }\n" % family)
-    entry += M.text("wd_row_event", WD_EVENT_X, 8, 240, B.key("wd_row_event", "[?mod1440_wd_kind^i.GetTokenLocalizedKey]"), M.FONT_LABEL, height=22)
-    triggers += block("wd_row_event_visible", line_row)
-    # what or whom it is about: a state or a victory point on a plate that moves the camera, an officer with his
-    # face, another person by name
-    entry += M.button("wd_row_go", WD_A_X, 3, "GFX_1440p_SG_head_290x28", tooltip=B.key("wd_row_go_tt", "Show this place on the map"))
-    entry += plain("wd_row_a", WD_A_X + 10, 8, 270, B.key("wd_row_a", "§Y[?mod1440_wd_a^i.GetName]§!"), height=22)
-    entry += plain("wd_row_point", WD_A_X + 10, 8, 270, B.key("wd_row_point", "§Y[?mod1440_wd_a^i.GetTokenLocalizedKey]§!"), height=22)
+    entry += M.text("wd_row_event", WD_EVENT_X, 8, WD_EVENT_W, B.key("wd_row_event", "[?mod1440_wd_kind^i.GetTokenLocalizedKey]"), M.FONT_LABEL, height=22)
+    # the number a line carries, at the right end of its words (part n)
+    for suffix, words, unit in (("", "[?mod1440_wd_n^i|0]", 1), ("_k", "[?mod1440_wd_n^i|0] 000", 2), ("_m", "[?mod1440_wd_n^i|0] 000 000", 3)):
+        entry += plain("wd_row_n" + suffix, WD_EVENT_X, 6, WD_EVENT_W - 4, B.key("wd_row_n" + suffix, "§Y%s§!" % words), M.FONT_VALUE, "right", 24)
+        triggers += block("wd_row_n%s_visible" % suffix, "check_variable = { mod1440_wd_nu^i = %d }\n" % unit)
+    # what or whom it is about: a state or a victory point on a plate that moves the camera (a run of states folded:
+    # "+N states" at the plate's right end), an officer with his face (a button: his file), another person by name
+    fold_tip = B.key("wd_row_go_fold_tt", "Show this place on the map. The Territory filter lists each state of the row.")
+    entry += M.button("wd_row_go", WD_A_X, 3, WD_PLATE, tooltip=B.key("wd_row_go_tt", "Show this place on the map"))
+    entry += M.button("wd_row_go_fold", WD_A_X, 3, WD_PLATE, tooltip=fold_tip)
+    entry += fixed(plain("wd_row_a", WD_A_X + 10, 8, WD_PLATE_W - 20, B.key("wd_row_a", "§Y[?mod1440_wd_a^i.GetName]§!"), height=22))
+    entry += fixed(plain("wd_row_point", WD_A_X + 10, 8, WD_PLATE_W - 20, B.key("wd_row_point", "§Y[?mod1440_wd_a^i.GetTokenLocalizedKey]§!"), height=22))
+    entry += plain("wd_row_fold", WD_A_X, 9, WD_PLATE_W - 10, B.key("wd_row_fold", "+[?mod1440_wd_fo^i|0] states"), M.FONT_SMALL, "right", 20)
     entry += portrait("wd_row_face", WD_A_X + 2, 1, WD_FACE)
     properties += shown("wd_row_face", "mod1440_wd_ap^i")
-    entry += M.text("wd_row_who", WD_A_X + 34, 8, 256, B.key("wd_row_who", "§Y[?mod1440_wd_a^i.GetName]§!"), M.FONT_LABEL, height=22)
-    entry += M.text("wd_row_name", WD_A_X + 10, 8, 270, B.key("wd_row_name", "§Y[?mod1440_wd_a^i.GetName]§!"), M.FONT_LABEL, height=22)
+    entry += M.button("wd_row_file", WD_A_X, 3, WD_HIT_A, tooltip=B.key("wd_row_file_tt", "Open his file on the Officers page"))
+    entry += fixed(plain("wd_row_who", WD_A_X + 34, 8, WD_PLATE_W - 36, B.key("wd_row_who", "§Y[?mod1440_wd_a^i.GetName]§!"), height=22))
+    entry += M.text("wd_row_name", WD_A_X + 10, 8, WD_PLATE_W - 10, B.key("wd_row_name", "§Y[?mod1440_wd_a^i.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
     officer_line = "check_variable = { mod1440_wd_sa^i = 1 }\ncheck_variable = { v = 4 }\n"
-    triggers += block("wd_row_go_visible", line_row + "check_variable = { mod1440_wd_sa^i > 1 }\n")
-    triggers += block("wd_row_a_visible", line_row + "check_variable = { mod1440_wd_sa^i = 2 }\n")
-    triggers += block("wd_row_point_visible", line_row + "check_variable = { mod1440_wd_sa^i = 3 }\n")
-    triggers += shown_if(["wd_row_face", "wd_row_who"], officer_line)
-    triggers += block("wd_row_name_visible", "check_variable = { mod1440_wd_sa^i = 1 }\nNOT = { check_variable = { v = 4 } }\ncheck_variable = { v > 0 }\n")
-    # the country: in its column, or where the eye looks next for a line about a country alone
+    place = "check_variable = { mod1440_wd_sa^i > 1 }\n"
+    triggers += block("wd_row_go_visible", place + "check_variable = { mod1440_wd_fo^i = 0 }\n")
+    triggers += block("wd_row_go_fold_visible", place + "check_variable = { mod1440_wd_fo^i > 0 }\n")
+    triggers += block("wd_row_fold_visible", "check_variable = { mod1440_wd_fo^i > 0 }\n")
+    triggers += block("wd_row_a_visible", "check_variable = { mod1440_wd_sa^i = 2 }\n")
+    triggers += block("wd_row_point_visible", "check_variable = { mod1440_wd_sa^i = 3 }\n")
+    triggers += shown_if(["wd_row_face", "wd_row_who", "wd_row_file"], officer_line)
+    triggers += block("wd_row_name_visible", "check_variable = { mod1440_wd_sa^i = 1 }\nNOT = { check_variable = { v = 4 } }\n")
+    # the country: in its column, or where the eye looks next for a line about a country alone; its flag and name are
+    # a button that shows its lines only (filter 8)
     for suffix, x, test in (("", WD_B_X, "check_variable = { mod1440_wd_sa^i > 0 }\n"), ("_near", WD_A_X, "check_variable = { mod1440_wd_sa^i = 0 }\n")):
         entry += M.icon("wd_row_flag" + suffix, x, 4, FLAG_SMALL)
         properties += flown("wd_row_flag" + suffix, "?mod1440_wd_b^i")
-        entry += M.text("wd_row_b" + suffix, x + 48, 8, 228, B.key("wd_row_b", "[?mod1440_wd_b^i.GetName]"), M.FONT_LABEL, height=22)
-        triggers += shown_if(["wd_row_flag" + suffix, "wd_row_b" + suffix], line_row + "check_variable = { mod1440_wd_sb^i > 0 }\n" + test)
-    # the officer on the spot
+        entry += M.button("wd_row_lines" + suffix, x, 3, WD_HIT_B, tooltip=B.key("wd_row_lines_tt", "Show the lines about this country only"))
+        entry += fixed(plain("wd_row_b" + suffix, x + 48, 8, WD_B_W, B.key("wd_row_b", "[?mod1440_wd_b^i.GetName]"), height=22))
+        triggers += shown_if(["wd_row_flag" + suffix, "wd_row_lines" + suffix, "wd_row_b" + suffix], "check_variable = { mod1440_wd_sb^i > 0 }\n" + test)
+        effects += block("wd_row_lines%s_click" % suffix, setv("mod1440_wd_filter", WD_COUNTRY_FILTER) + setv("mod1440_wd_country", "mod1440_wd_b^i")
+                         + "mod1440_wd_first_page = yes\n")
+    # the officer on the spot: his face and name, a button that opens his file
     entry += portrait("wd_row_cface", WD_C_X, 1, WD_FACE)
     properties += shown("wd_row_cface", "mod1440_wd_cp^i")
-    entry += M.text("wd_row_c", WD_C_X + 32, 8, 176, B.key("wd_row_c", "§Y[?mod1440_wd_c^i.GetName]§!"), M.FONT_LABEL, height=22)
-    triggers += shown_if(["wd_row_cface", "wd_row_c"], line_row + "check_variable = { mod1440_wd_sc^i = 1 }\n")
+    entry += M.button("wd_row_cfile", WD_C_X, 3, WD_HIT_C, tooltip=B.key("wd_row_file_tt", "Open his file on the Officers page"))
+    entry += fixed(plain("wd_row_c", WD_C_X + 32, 8, WD_C_W, B.key("wd_row_c", "§Y[?mod1440_wd_c^i.GetName]§!"), height=22))
+    triggers += shown_if(["wd_row_cface", "wd_row_cfile", "wd_row_c"], "check_variable = { mod1440_wd_sc^i = 1 }\n")
+    effects += block("wd_row_file_click", open_file("mod1440_wd_a^i")) + block("wd_row_cfile_click", open_file("mod1440_wd_c^i"))
     # the mark: an empty box and a ticked one, the same click
     tip = B.key("wd_row_mark_tt", "Mark this line: it goes into the chronicle (the Marked filter) and stays there whatever the age of the log. "
                                   "%d lines at most. Click again to take the mark off." % MARK_KEEP)
     entry += checkbox("wd_row_mark", WD_MARK_X, 6, 1, tip) + checkbox("wd_row_marked", WD_MARK_X, 6, 2, tip)
-    triggers += block("wd_row_mark_visible", line_row + "check_variable = { mod1440_wd_k^i = 0 }\n")
-    triggers += block("wd_row_marked_visible", line_row + "check_variable = { mod1440_wd_k^i = 1 }\n")
+    triggers += block("wd_row_mark_visible", "check_variable = { mod1440_wd_k^i = 0 }\n")
+    triggers += block("wd_row_marked_visible", "check_variable = { mod1440_wd_k^i = 1 }\n")
     for name in ("wd_row_mark", "wd_row_marked"):
         effects += block(name + "_click", tmp("mk_src", "mod1440_wd_src^i") + tmp("mk_si", "mod1440_wd_si^i") + "mod1440_wd_mark = yes\n")
     # the camera goes to the state, or to the state of the victory point
-    effects += block("wd_row_go_click", tmp("wd_go", "mod1440_wd_a^i") + iff("check_variable = { mod1440_wd_sa^i = 3 }", tmp("wd_go", "mod1440_wd_p^i"))
-                     + block("var:wd_go", block("ROOT", "goto_state = PREV\n" + "mod1440_rec_close = yes\n")))
+    go = (tmp("wd_go", "mod1440_wd_a^i") + iff("check_variable = { mod1440_wd_sa^i = 3 }", tmp("wd_go", "mod1440_wd_p^i"))
+          + block("var:wd_go", block("ROOT", "goto_state = PREV\n" + "mod1440_rec_close = yes\n")))
+    effects += block("wd_row_go_click", go) + block("wd_row_go_fold_click", go)
 
-    # ---- the campaign: war and peace, the ground taken and lost, the service, the marked lines
+    # ---- the pane (E1 review): banded tables under head bars, two figures to a row
     pw = WD_PANE_W
-    tw = (pw - 32 - 3 * 8) // 4
     sums = ""
-    pane = ""
 
-    def tiles(names, y):
-        nonlocal pane, sums
-        for n, (name, label, kinds, tip) in enumerate([f for f in WD_FIGURES if f[0] in names]):
-            piece, extra = tile("wd_f_" + name, 16 + n * (tw + 8), y, label, "[?mod1440_wd_n_%s|0]" % name, tip, width=tw)
-            pane += piece
-            sums += count(*kinds) + setv("mod1440_wd_n_" + name, "ct_sum")
+    def head_bar(name, y, label, right=()):
+        out = M.icon(name + "_bg", 8, y, "GFX_1440p_SG_head_%dx%d" % (pw - 16, WD_TROW))
+        out += M.text(name, 16, y + 4, 200, B.key(name, label), M.FONT_SMALL, height=20)
+        for k, (x, w, words) in enumerate(right):
+            out += M.text("%s_%d" % (name, k), x, y + 4, w, B.key("%s_%d" % (name, k), words), M.FONT_SMALL, "right", 20)
+        return out
 
-    def sub(name, y, words):
-        return M.text(name, 16, y, pw - 32, B.key(name, "§Y%s§!" % words), M.FONT_LABEL, height=22)
+    def band(name, n, y, height=WD_TROW):
+        return M.icon(name, 8, y, STRIPE % (pw - 16, height)) if n % 2 else ""
 
-    pane += sub("wd_c_war", 46, "War and peace")
-    tiles(("wars", "peace", "cap", "annex"), 72)
-    y = 72 + 64 + 18
-    pane += sub("wd_c_ground", y, "Ground")
-    pane += M.text("wd_c_taken", 16, y + 2, 150, B.key("wd_c_taken", "taken"), M.FONT_SMALL, "right", 20)
-    pane += M.text("wd_c_lost", pw - 16 - 60, y + 2, 60, B.key("wd_c_lost", "lost"), M.FONT_SMALL, "right", 20)
-    y += 28
+    def figure(name, x, y, label, value, tip):
+        tooltip = B.key(name + "_tt", tip) if tip else None
+        return (M.text(name + "_l", x, y + 4, WD_PAIR_W, B.key(name + "_l", label), M.FONT_SMALL, height=20, tooltip=tooltip)
+                + M.text(name, x, y + 3, WD_PAIR_W, B.key(name, "§Y%s§!" % value), M.FONT_LABEL, "right", 22, tooltip=tooltip))
+
+    def table(prefix, rows, y, stripe_from=0):
+        nonlocal sums
+        out = ""
+        by_name = dict((f[0], f) for f in WD_FIGURES)
+        for n, pair in enumerate(rows):
+            ry = y + n * WD_TROW
+            out += band("%s_band_%d" % (prefix, n), n + stripe_from, ry)
+            for k, name in enumerate(pair):
+                _, label, kinds, tip = by_name[name]
+                out += figure("wd_f_" + name, 16 + k * WD_PAIR, ry, label, "[?mod1440_wd_n_%s|0]" % name, tip)
+                sums += (count(*kinds) + setv("mod1440_wd_n_" + name, "ct_sum")) if kinds else setv("mod1440_wd_n_" + name, "mod1440_wr_enemy^num")
+        return out, y + len(rows) * WD_TROW
+
+    pane = head_bar("wd_c_war", 44, "War and peace")
+    piece, y = table("wd_c_war", WD_WAR_ROWS, 44 + WD_TROW)
+    pane += piece
+    y += 8
+    pane += head_bar("wd_c_ground", y, "Ground, in battle", ((160, 40, "taken"), (330, 54, "lost")))
+    y += WD_TROW
     for n, (name, label, taken, lost) in enumerate(WD_GROUND):
-        ry = y + n * 32
-        pane += M.text("wd_g_%s_l" % name, 16, ry + 3, 130, B.key("wd_g_%s_l" % name, label), M.FONT_LABEL, height=22)
-        pane += M.text("wd_g_%s_t" % name, 16, ry + 1, 150, B.key("wd_g_%s_t" % name, "[?mod1440_wd_g_%s_t|0]" % name), M.FONT_VALUE, "right", 24)
-        pane += M.icon("wd_g_%s_bar" % name, 16 + 162, ry + 8, M.bar_sprite(WD_BAR))
-        pane += M.text("wd_g_%s_x" % name, pw - 16 - 60, ry + 1, 60, B.key("wd_g_%s_x" % name, "[?mod1440_wd_g_%s_x|0]" % name), M.FONT_VALUE, "right", 24)
+        ry = y + n * WD_TROW
+        pane += band("wd_g_%s_band" % name, n, ry)
+        pane += M.text("wd_g_%s_l" % name, 16, ry + 4, 140, B.key("wd_g_%s_l" % name, label), M.FONT_SMALL, height=20)
+        pane += M.text("wd_g_%s_t" % name, 160, ry + 3, 40, B.key("wd_g_%s_t" % name, "§Y[?mod1440_wd_g_%s_t|0]§!" % name), M.FONT_LABEL, "right", 22)
+        pane += M.icon("wd_g_%s_bar" % name, 212, ry + 8, M.bar_sprite(WD_BAR))
+        pane += M.text("wd_g_%s_x" % name, 330, ry + 3, 54, B.key("wd_g_%s_x" % name, "§Y[?mod1440_wd_g_%s_x|0]§!" % name), M.FONT_LABEL, "right", 22)
         properties += block("wd_g_%s_bar" % name, "frame = mod1440_wd_g_%s_bar\n" % name)
         sums += (count(*taken) + setv("mod1440_wd_g_%s_t" % name, "ct_sum") + count(*lost) + setv("mod1440_wd_g_%s_x" % name, "ct_sum")
                  + tmp("g_all", "mod1440_wd_g_%s_t" % name) + "add_to_temp_variable = { g_all = mod1440_wd_g_%s_x }\n" % name
                  + setv("mod1440_wd_g_%s_bar" % name, 0) + iff("check_variable = { g_all > 0 }", (
                      tmp("g_share", "mod1440_wd_g_%s_t" % name) + "multiply_temp_variable = { g_share = 100 }\n"
                      + "divide_temp_variable = { g_share = g_all }\n" + setv("mod1440_wd_g_%s_bar" % name, "g_share"))))
-    y += 3 * 32 + 10
-    pane += sub("wd_c_service", y, "The service")
-    tiles(("comm", "prom", "dec", "govs"), y + 26)
-    y += 26 + 64 + 18
-    pane += sub("wd_c_marked", y, "Marked by you")
-    for k, words in enumerate(("[?mod1440_kp_date^num|0] lines, kept for good whatever the age of the log.",
-                               "Mark a line with the box at its end; the Marked",
-                               "filter reads them as the chapters of your campaign.")):
-        pane += M.text("wd_c_marked_%d" % k, 16, y + 26 + k * 20, pw - 32, B.key("wd_c_marked_%d" % k, words), M.FONT_SMALL, height=20)
+    y += len(WD_GROUND) * WD_TROW
+    for k, (name, label, kinds, tip) in enumerate(WD_TREATY):
+        pane += figure("wd_f_" + name, 16 + k * WD_PAIR, y, label, "[?mod1440_wd_n_%s|0]" % name, tip)
+        sums += count(*kinds) + setv("mod1440_wd_n_" + name, "ct_sum")
+    y += WD_TROW + 8
+    pane += head_bar("wd_c_service", y, "The service")
+    piece, y = table("wd_c_service", WD_SERVICE_ROWS, y + WD_TROW)
+    pane += piece
     body += card("wd_campaign", WD_PANE_X, REC_BODY_Y, pw, WD_CAMPAIGN_H, "The campaign", pane)
 
-    # ---- battle honours: what they are, the four switches, what they wrote, the last citation
-    hy = REC_BODY_Y + WD_CAMPAIGN_H + 12
-    hh = REC_BODY_Y + REC_BODY_H - WD_KEPT_H - 12 - hy
-    pane = M.text("wd_hn_1", 16, 46, pw - 32, B.key("wd_hn_1", "Lines in the history of your divisions (By Blood Alone)."), M.FONT_SMALL, height=20)
-    pane += M.text("wd_hn_2", 16, 66, pw - 32, B.key("wd_hn_2", "Written by themselves on these occasions:"), M.FONT_SMALL, height=20)
+    # ---- the chronicle: the newest marked lines (mod1440_wd_ch_*, copied by mod1440_wd_list) and a way to read it all
+    cy = REC_BODY_Y + WD_CAMPAIGN_H + WD_GAP
+    pane = M.text("wd_ch_n", 16, 44, pw - 32, B.key("wd_ch_n", "The lines you marked, kept for good: [?mod1440_kp_date^num|0] of %d." % MARK_KEEP),
+                  M.FONT_SMALL, height=20)
+    for k, words in enumerate(("Mark a line with the box at its end; the Marked filter", "reads them as the chapters of your campaign.")):
+        pane += M.text("wd_ch_none_%d" % k, 16, 70 + k * 22, pw - 32, B.key("wd_ch_none_%d" % k, words), M.FONT_SMALL, height=20)
+        triggers += block("wd_ch_none_%d_visible" % k, "check_variable = { mod1440_wd_ch_n < 1 }\n")
+    for k in range(WD_CHRON_LINES):
+        ry = 70 + k * WD_CHRON_ROW
+        has = "check_variable = { mod1440_wd_ch_n > %d }\n" % k
+        if k % 2:
+            pane += M.icon("wd_ch_%d_bg" % k, 8, ry, STRIPE % (pw - 16, WD_CHRON_ROW))
+            triggers += block("wd_ch_%d_bg_visible" % k, has)
+        pane += M.text("wd_ch_%d_d" % k, 16, ry + 3, 300, B.key("wd_ch_%d_d" % k, "§g[?mod1440_wd_ch_date^%d.%s]§!" % (k, LONG)), M.FONT_SMALL, height=20)
+        for family, text_icon in sorted(FAMILY_ICON.items()):
+            widget = "wd_ch_%d_f%d" % (k, family)
+            pane += M.text(widget, 16, ry + 21, 26, B.key("wd_icon_%d" % family, "£" + text_icon), M.FONT_SMALL, height=22)
+            triggers += block(widget + "_visible", has + "check_variable = { mod1440_wd_ch_fam^%d = %d }\n" % (k, family))
+        pane += M.text("wd_ch_%d" % k, 40, ry + 23, WD_CHRON_WORDS, B.key("wd_ch_%d" % k, "[?mod1440_wd_ch_kind^%d.GetTokenLocalizedKey]" % k),
+                       M.FONT_SMALL, height=20, fixed=True)
+        # its name: the person or state, a victory point, or the country
+        for suffix, words, test in (("s", "[?mod1440_wd_ch_a^%d.GetName]" % k, "OR = { check_variable = { mod1440_wd_ch_sa^%d = 1 } check_variable = { mod1440_wd_ch_sa^%d = 2 } }" % (k, k)),
+                                    ("p", "[?mod1440_wd_ch_a^%d.GetTokenLocalizedKey]" % k, "check_variable = { mod1440_wd_ch_sa^%d = 3 }" % k),
+                                    ("b", "[?mod1440_wd_ch_b^%d.GetName]" % k, "check_variable = { mod1440_wd_ch_sa^%d = 0 } check_variable = { mod1440_wd_ch_sb^%d = 1 }" % (k, k))):
+            widget = "wd_ch_%d_%s" % (k, suffix)
+            pane += M.text(widget, 216, ry + 23, 168, B.key(widget, "§Y%s§!" % words), M.FONT_SMALL, "right", 20, fixed=True)
+            triggers += block(widget + "_visible", has + test + "\n")
+        triggers += block("wd_ch_%d_d_visible" % k, has) + block("wd_ch_%d_visible" % k, has)
+    pane += M.button("wd_ch_read", 16, WD_CHRON_H - 41, "GFX_sort_button_202x29", B.key("wd_ch_read", "Read the chronicle"),
+                     tooltip=B.key("wd_ch_read_tt", "The Marked filter: every line you marked, newest first."))
+    effects += block("wd_ch_read_click", setv("mod1440_wd_filter", 6) + "mod1440_wd_first_page = yes\n")
+    body += card("wd_chronicle", WD_PANE_X, cy, pw, WD_CHRON_H, "The chronicle", pane)
+
+    # ---- battle honours: what they are, the four switches in two rows, what they wrote, the last citation
+    hy = cy + WD_CHRON_H + WD_GAP
+    pane = M.text("wd_hn_1", 16, 42, pw - 32, B.key("wd_hn_1", "A line in your divisions' history (By Blood Alone) when:"), M.FONT_SMALL, height=20)
     for k, (name, variable, words) in enumerate(HONOURS):
-        ry = 94 + k * 30
+        x, ry = 16 + (k % 2) * WD_PAIR, 66 + (k // 2) * 28
         tip = B.key("wd_hn_%s_tt" % name, "Click to switch on or off. A division takes one line a day: the first occasion of the day wins.")
-        pane += M.button("wd_hn_%s" % name, 18, ry, "GFX_checkbox_gold_32", tooltip=tip).replace("quadTextureSprite", "scale = 0.7 quadTextureSprite")
-        pane += M.text("wd_hn_%s_l" % name, 50, ry + 2, pw - 66, B.key("wd_hn_%s_l" % name, words), M.FONT_LABEL, height=22)
+        pane += M.button("wd_hn_%s" % name, x, ry, "GFX_checkbox_gold_32", tooltip=tip).replace("quadTextureSprite", "scale = 0.7 quadTextureSprite")
+        pane += M.text("wd_hn_%s_l" % name, x + 28, ry + 2, WD_PAIR - 32, B.key("wd_hn_%s_l" % name, words), M.FONT_SMALL, height=20)
         effects += block("wd_hn_%s_click" % name, flip(variable) + "mod1440_rec_show = yes\n")
         properties += block("wd_hn_%s" % name, "frame = mod1440_hn_f_%s\n" % name)
-    ty = 94 + len(HONOURS) * 30 + 6
-    half = (pw - 40) // 2
-    for n, (name, label, variable, tip) in enumerate((
+    ty = 126
+    for k, (name, label, variable, tip) in enumerate((
             ("auto", "By themselves", "mod1440_hn_auto_n", "Lines your divisions got by themselves, on the occasions switched on."),
             ("cite", "Cited by you", "mod1440_hn_cite_n", "Lines your divisions got when you cited them from the card of a state."))):
-        piece, extra = tile("wd_hn_" + name, 16 + n * (half + 8), ty, label, "[?%s|0]" % variable, tip, width=half)
-        pane += piece
-    pane += M.text("wd_hn_last", 16, ty + 76, pw - 32, B.key("wd_hn_last", "Last citation: §Y[?mod1440_hn_last_s.GetName]§!, [?mod1440_hn_last_d.%s]" % LONG),
+        pane += figure("wd_hn_" + name, 16 + k * WD_PAIR, ty, label, "[?%s|0]" % variable, tip)
+    pane += M.text("wd_hn_last", 16, ty + WD_TROW + 6, pw - 32, B.key("wd_hn_last", "Last citation: §Y[?mod1440_hn_last_s.GetName]§!, [?mod1440_hn_last_d.%s]" % LONG),
                    M.FONT_SMALL, height=20)
-    pane += M.text("wd_hn_none", 16, ty + 76, pw - 32, B.key("wd_hn_none", "Select a state you hold to cite the divisions there."), M.FONT_SMALL, height=20)
+    pane += M.text("wd_hn_none", 16, ty + WD_TROW + 6, pw - 32, B.key("wd_hn_none", "Select a state you hold to cite the divisions there."), M.FONT_SMALL, height=20)
     triggers += block("wd_hn_last_visible", is_one("mod1440_hn_has_last") + "\n") + block("wd_hn_none_visible", "NOT = { %s }\n" % is_one("mod1440_hn_has_last"))
-    body += card("wd_honour", WD_PANE_X, hy, pw, hh, "Battle honours", pane)
+    body += card("wd_honour", WD_PANE_X, hy, pw, WD_HONOUR_H, "Battle honours", pane)
 
-    # ---- what is kept
-    pane = ""
-    for k, words in enumerate(("Main log: [?mod1440_ev_date^num|0] of %d lines. Territory: [?mod1440_tr_date^num|0] of %d." % (LOG_KEEP, LOG_KEEP),
-                               "The oldest line goes first; a marked line stays.",
-                               "Shift+J or Escape closes the window.")):
-        pane += M.text("wd_kept_%d" % k, 16, 44 + k * 22, pw - 32, B.key("wd_kept_%d" % k, words), M.FONT_SMALL, height=20)
+    # ---- what is kept (the hint of the hotkey went: the top bar button's tooltip and Close say it)
+    pane = "".join(M.text("wd_kept_%d" % k, 16, 42 + k * 22, pw - 32, B.key("wd_kept_%d" % k, words), M.FONT_SMALL, height=20)
+                   for k, words in enumerate(kept))
     body += card("wd_kept", WD_PANE_X, REC_BODY_Y + REC_BODY_H - WD_KEPT_H, pw, WD_KEPT_H, "Kept", pane)
 
     gui, script = page_gui("wd", 0, body, dirty="mod1440_rec_dirty",
@@ -691,29 +840,56 @@ def war_diary(portrait_version):
         return (tmp(target, unknown) + tmp("wd_ch", source) + block("var:wd_ch", (
             iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n") + tmp(target, "mod1440_p"))))
 
+    folded = "OR = { %s }" % " ".join("check_variable = { %%s = wd_f%d }" % k for k in range(len(FOLDED_KINDS)))
+
     def take(log, index):
-        """A line the filter wants: counted, and copied to the page when it is one of those on show, under the row of
-        its day."""
+        """A line the filter wants: counted, and copied to the page when it is one of those on show. A day's first row
+        shows the date and turns the band; a line of a run of states of one day, kind and country (in All and a
+        country's lines) adds to the run's row from the third line on."""
         part = lambda name: "mod1440_%s_%s^%s" % (log, name, index)
-        head_row = ("".join("add_to_array = { mod1440_wd_%s = %s }\n" % (name, value) for name, value in (
-            ("date", part("date")), ("kind", BLANK), ("fam", 0), ("a", 0), ("b", "THIS"), ("sa", 0), ("sb", 0), ("c", 0), ("sc", 0), ("p", 0),
-            ("hd", 1), ("hn", 0), ("k", 0), ("src", 0), ("si", 0), ("ap", unknown), ("cp", unknown), ("st", 0)))
-            + tmp("wd_day", "wd_d") + tmp("wd_hi", "mod1440_wd_fam^num") + "subtract_from_temp_variable = { wd_hi = 1 }\n" + tmp("wd_par", 0))
+        last = "mod1440_wd_fam^num"
+        remove_last = (tmp("wd_r", last) + "subtract_from_temp_variable = { wd_r = 1 }\n"
+                       + "".join("remove_from_array = { array = mod1440_wd_%s index = wd_r }\n" % name for name in WD_VIEW + WD_MORE))
         line_row = (
-            "".join("add_to_array = { mod1440_wd_%s = %s }\n" % (name, part(name)) for name in ("date", "kind", "fam", "a", "sa", "sb", "c", "sc", "p"))
+            "".join("add_to_array = { mod1440_wd_%s = %s }\n" % (name, part(name)) for name in ("date", "kind", "fam", "a", "sa", "sb", "c", "sc", "p", "n"))
             + iff("check_variable = { %s > 0 }" % part("sb"), "add_to_array = { mod1440_wd_b = %s }\n" % part("b")) + els("add_to_array = { mod1440_wd_b = THIS }\n")
-            + "add_to_array = { mod1440_wd_hd = 0 }\nadd_to_array = { mod1440_wd_hn = 0 }\n"
+            # the day: its first row shows the date, and every row of a day stands on the same band
+            + tmp("wd_d", part("day")) + tmp("wd_dd", 0)
+            + iff("NOT = { check_variable = { wd_d = wd_day } }", tmp("wd_dd", 1) + tmp("wd_day", "wd_d")
+                  + iff("check_variable = { wd_par = 0 }", tmp("wd_par", 1)) + els(tmp("wd_par", 0)))
+            + "add_to_array = { mod1440_wd_dd = wd_dd }\nadd_to_array = { mod1440_wd_st = wd_par }\nadd_to_array = { mod1440_wd_fo = 0 }\n"
+            # a line written since the window was last closed
+            + tmp("wd_nw", 0) + iff("check_variable = { %s > mod1440_rec_seen }" % part("id"), tmp("wd_nw", 1)) + "add_to_array = { mod1440_wd_nw = wd_nw }\n"
+            # how its number reads: a casualty step in thousands, or in millions from 1000 on
+            + tmp("wd_nu", 0) + iff("check_variable = { %s > 0 }" % part("n"), tmp("wd_nu", 1) + iff("check_variable = { %s = wd_cas }" % part("kind"), (
+                tmp("wd_nu", 2) + iff("check_variable = { %s > 999 }" % part("n"), tmp("wd_nu", 3) + tmp("wd_nv", part("n"))
+                                      + "divide_temp_variable = { wd_nv = 1000 }\n" + setv("mod1440_wd_n^%s" % "wd_nl", "wd_nv")))))
+            + "add_to_array = { mod1440_wd_nu = wd_nu }\n"
             + "add_to_array = { mod1440_wd_k = %s }\nadd_to_array = { mod1440_wd_src = %d }\nadd_to_array = { mod1440_wd_si = %s }\n" % (part("k"), LOG_SOURCE[log], index)
             + tmp("wd_ap", unknown) + iff("check_variable = { %s = 1 } check_variable = { %s = 4 }" % (part("sa"), part("fam")), face(part("a"), "wd_ap"))
             + tmp("wd_cp", unknown) + iff("check_variable = { %s = 1 }" % part("sc"), face(part("c"), "wd_cp"))
-            + "add_to_array = { mod1440_wd_ap = wd_ap }\nadd_to_array = { mod1440_wd_cp = wd_cp }\nadd_to_array = { mod1440_wd_st = wd_par }\n"
-            + iff("check_variable = { wd_par = 0 }", tmp("wd_par", 1)) + els(tmp("wd_par", 0))
-            + "add_to_variable = { mod1440_wd_hn^wd_hi = 1 }\nadd_to_temp_variable = { wd_shown = 1 }\n")
-        return ("add_to_temp_variable = { wd_seen = 1 }\n"
-                + iff("check_variable = { wd_seen > mod1440_wd_from } check_variable = { mod1440_wd_fam^num < %d }" % VIEW_ROWS, (
-                    tmp("wd_d", part("day"))
-                    + iff("NOT = { check_variable = { wd_d = wd_day } } check_variable = { mod1440_wd_fam^num < %d }" % (VIEW_ROWS - 1), head_row)
-                    + iff("check_variable = { wd_d = wd_day }", line_row))))
+            + "add_to_array = { mod1440_wd_ap = wd_ap }\nadd_to_array = { mod1440_wd_cp = wd_cp }\n"
+            + "add_to_temp_variable = { wd_shown = 1 }\n")
+        # the place of the row just added, for the casualty number in millions (above) and the start of a run (below)
+        line_row = tmp("wd_nl", last) + line_row
+        same_run = ("check_variable = { wd_fold = 1 } check_variable = { wd_rn > 0 } check_variable = { %s = 2 } check_variable = { %s = wd_rk } "
+                    "check_variable = { %s = wd_rb } check_variable = { %s = wd_rd } check_variable = { wd_rs = wd_prev }"
+                    % (part("sa"), part("kind"), part("b"), part("day")))
+        foldable = "check_variable = { wd_fold = 1 } check_variable = { %s = 2 } %s" % (part("sa"), folded % ((part("kind"),) * len(FOLDED_KINDS)))
+        start_run = (tmp("wd_rn", 1) + tmp("wd_rk", part("kind")) + tmp("wd_rb", part("b")) + tmp("wd_rd", part("day")) + tmp("wd_rs", "wd_seen")
+                     + tmp("wd_rr", "wd_nl"))
+        fold = ("add_to_temp_variable = { wd_rn = 1 }\n" + tmp("wd_rs", "wd_seen") + "add_to_temp_variable = { wd_shown = 1 }\n"
+                # the third line: the second line's row goes, and the first row says two more states; then one more each
+                + iff("check_variable = { wd_rn = %d }" % FOLD_MIN, remove_last + setv("mod1440_wd_fo^wd_rr", FOLD_MIN - 1) + setv("mod1440_wd_sc^wd_rr", 0))
+                + els("add_to_variable = { mod1440_wd_fo^wd_rr = 1 }\n"))
+        return ("add_to_temp_variable = { wd_seen = 1 }\n" + tmp("wd_prev", "wd_seen") + "subtract_from_temp_variable = { wd_prev = 1 }\n"
+                + iff("check_variable = { wd_seen > mod1440_wd_from }", (
+                    iff("%s check_variable = { wd_rn > %d }" % (same_run, FOLD_MIN - 2), fold)
+                    + iff("check_variable = { %s < %d }" % (last, VIEW_ROWS), (
+                        line_row
+                        + iff(same_run, "add_to_temp_variable = { wd_rn = 1 }\n" + tmp("wd_rs", "wd_seen"))
+                        + iff(foldable, start_run, "else_if") + els(tmp("wd_rn", 0))), "else_if")
+                    + els(tmp("wd_rn", 0)))))
 
     def one_log(log, by_family):
         keep = take(log, "wd_m")
@@ -728,25 +904,41 @@ def war_diary(portrait_version):
         return ("OR = { AND = { check_variable = { mod1440_%s_sa^mg_m = 2 } check_variable = { mod1440_%s_a^mg_m = mod1440_wd_state } } "
                 "AND = { check_variable = { mod1440_%s_sa^mg_m = 3 } check_variable = { mod1440_%s_p^mg_m = mod1440_wd_state } } }" % (log, log, log, log))
 
+    def of_country(log):
+        return "check_variable = { mod1440_%s_sb^mg_m = 1 } check_variable = { mod1440_%s_b^mg_m = mod1440_wd_country }" % (log, log)
+
+    # the newest marked lines for the pane: the chronicle is kept in the order of the days, so from its end
+    chronicle = ("".join("clear_array = mod1440_wd_ch_%s\n" % part for part in WD_CHRON) + tmp("wd_c", "mod1440_kp_date^num")
+                 + block("for_loop_effect", "start = 0\nend = %d\nvalue = wd_ck\n" % WD_CHRON_LINES + (
+                     "subtract_from_temp_variable = { wd_c = 1 }\n" + iff("check_variable = { wd_c > -1 }", "".join(
+                         "add_to_array = { mod1440_wd_ch_%s = mod1440_kp_%s^wd_c }\n" % (part, part) for part in WD_CHRON))))
+                 + setv("mod1440_wd_ch_n", "mod1440_wd_ch_date^num")
+                 + pad([("mod1440_wd_ch_date", 0), ("mod1440_wd_ch_kind", BLANK), ("mod1440_wd_ch_fam", 0), ("mod1440_wd_ch_a", 0),
+                        ("mod1440_wd_ch_b", "THIS"), ("mod1440_wd_ch_sa", 0), ("mod1440_wd_ch_sb", 0)], WD_CHRON_LINES))
+
     frames = "".join(setv("mod1440_wd_frame_%d" % v, 1) for v, _, _, _ in WD_FILTERS)
     frames += "".join(iff("check_variable = { mod1440_wd_filter = %d }" % v, setv("mod1440_wd_frame_%d" % v, 2)) for v, _, _, _ in WD_FILTERS)
+    kinds = "".join(tmp("wd_f%d" % k, "token:mod1440_ev_" + name) for k, name in enumerate(FOLDED_KINDS)) + tmp("wd_cas", "token:mod1440_ev_casualties")
+    folding = tmp("wd_fold", 0) + "".join(iff("check_variable = { mod1440_wd_filter = %d }" % v, tmp("wd_fold", 1)) for v in WD_FOLDING)
     script_effects = (
         "# War Diary: copies the lines the chosen filter wants, newest first, from the chosen place on, into the arrays\n"
-        "# the page draws: a row for each day and the day's lines under it, %d rows at most. All and the lines of one\n"
-        "# state go through both logs together; Territory has a log of its own; Marked reads the chronicle; every other\n"
-        "# filter reads the main log. Then the figures of the campaign: sums of the counters.\n" % VIEW_ROWS
+        "# the page draws, %d rows at most: the day on a day's first row, the band of the day, the new lines, a run of\n"
+        "# states folded in All and in a country's lines. All and the lines of one state or country go through both logs\n"
+        "# together; Territory has a log of its own; Marked reads the chronicle; every other filter reads the main log.\n"
+        "# Then the figures of the campaign (sums of the counters) and the newest marked lines.\n" % VIEW_ROWS
         + block("mod1440_wd_list", (
             "mod1440_ev_grow = yes\n" + "".join("clear_array = mod1440_wd_%s\n" % part for part in WD_VIEW + WD_MORE)
-            + tmp("wd_seen", 0) + tmp("wd_shown", 0) + tmp("wd_day", -1) + tmp("wd_hi", 0) + tmp("wd_par", 0)
+            + tmp("wd_seen", 0) + tmp("wd_shown", 0) + tmp("wd_day", -1) + tmp("wd_par", 0) + tmp("wd_rn", 0) + kinds + folding
             + iff("check_variable = { mod1440_wd_filter = 0 }", merged(None, lambda log: take(log, "mg_m")))
             + iff("check_variable = { mod1440_wd_filter = 2 }", one_log("tr", False), "else_if")
             + iff("check_variable = { mod1440_wd_filter = 6 }", one_log("kp", False), "else_if")
             + iff("check_variable = { mod1440_wd_filter = %d }" % WD_STATE_FILTER, merged(of_state, lambda log: take(log, "mg_m")), "else_if")
+            + iff("check_variable = { mod1440_wd_filter = %d }" % WD_COUNTRY_FILTER, merged(of_country, lambda log: take(log, "mg_m")), "else_if")
             + els(one_log("ev", True))
             + setv("mod1440_wd_total", "wd_seen") + setv("mod1440_wd_shown", "wd_shown")
             + setv("mod1440_wd_first", "mod1440_wd_from") + "add_to_variable = { mod1440_wd_first = 1 }\n"
             + setv("mod1440_wd_last", "mod1440_wd_from") + "add_to_variable = { mod1440_wd_last = wd_shown }\n"
-            + frames + pad([("mod1440_ct", 0)], len(KINDS) + 8) + sums
+            + frames + pad([("mod1440_ct", 0)], len(KINDS) + 8) + sums + chronicle
             + "add_to_variable = { mod1440_rec_dirty = 1 }\n"))
         + "\n# War Diary: the first page of the chosen filter.\n"
         + block("mod1440_wd_first_page", "clear_array = mod1440_wd_back\n" + setv("mod1440_wd_from", 0) + "mod1440_wd_list = yes\n")
@@ -1347,6 +1539,20 @@ def officers(portrait_version):
         + setv("PREV.mod1440_of_c_tr_other", "num_traits") + "subtract_from_variable = { PREV.mod1440_of_c_tr_other = mod1440_of_tr_k }\n"
         + setv("PREV.mod1440_of_c_tr_over", "mod1440_of_tr_k") + "subtract_from_variable = { PREV.mod1440_of_c_tr_over = %d }\n" % TRAIT_ICONS
         + block("for_each_loop", "array = mod1440_of_tr\nvalue = of_v\nadd_to_array = { PREV.mod1440_of_c_tr = of_v }\n"))
+    # E1 review: who left the service or was captured (mod1440_of_gone, once a day after mod1440_of_seen)
+    write = lambda kind: fill(kind, a="of_me") + block("PREV", "mod1440_ev_add = yes\n")
+    captured = "NOT = { is_navy_leader = yes } is_general_captured = yes"
+    first_run = setv("mod1440_of_gone_v", 1) + block("for_each_scope_loop", "array = mod1440_of_known\n" + iff(FORMER, setv("mod1440_of_out", 1))
+                                                     + iff(captured, setv("mod1440_of_held", 1)))
+    not_met = iff("NOT = { %s }" % is_one("mod1440_of_out"), (
+        setv("mod1440_of_out", 1) + "mod1440_of_me = yes\n"
+        + iff(has_me, iff("%s NOT = { %s }" % (captured, is_one("mod1440_of_held")), setv("mod1440_of_held", 1) + write("officer_captured"))
+              + els(write("officer_gone")))))
+    met = (setv("mod1440_of_out", 0)
+           + iff(captured, iff("NOT = { %s }" % is_one("mod1440_of_held"), setv("mod1440_of_held", 1) + "mod1440_of_me = yes\n" + iff(has_me, write("officer_captured"))))
+           + els(setv("mod1440_of_held", 0)))
+    gone_script = iff("NOT = { %s }" % is_one("mod1440_of_gone_v"), first_run) + els(
+        block("for_each_scope_loop", "array = mod1440_of_known\n" + iff(FORMER, not_met) + els(met)))
     script_effects = (
         places()
         + trait_script
@@ -1376,7 +1582,12 @@ def officers(portrait_version):
             + setv("mod1440_of_listed", 1) + setv("mod1440_of_serving", "of_serving")
             + iff("check_variable = { of_new > %d }" % COMM_LINES, (
                 tmp("of_more", "of_new") + "subtract_from_temp_variable = { of_more = %d }\n" % COMM_LINES
-                + line("commissioned_more") + "add_to_variable = { mod1440_ct^%d = of_more }\n" % NUMBER["commissioned"]))))
+                + line("commissioned_more", n="of_more") + "add_to_variable = { mod1440_ct^%d = of_more }\n" % NUMBER["commissioned"]))))
+        + "\n# Officers (E1 review, 2026-10-22): once a day after mod1440_of_seen, a line for an officer the record knows who\n"
+        "# was not met today (Left the service) or who is held by an enemy (Captured:). The marks mod1440_of_out and\n"
+        "# mod1440_of_held on him keep each to one line; met again, free again, the mark clears. The first run takes\n"
+        "# those already gone without a line.\n"
+        + block("mod1440_of_gone", gone_script)
         + "\n# Officers: makes the list of the page again: who the filter wants, in the order of the chosen column,\n"
         "# every second row marked for its stripe.\n"
         + block("mod1440_of_list", (
@@ -1458,17 +1669,17 @@ def officers(portrait_version):
     # ---- hooks: the officer is the scope, FROM his country (X43)
     human = "FROM = { is_ai = no }"
 
-    def dated(name, kind):
+    def dated(name, kind, n=None):
         # an officer without a number whose place is not known yet: it is looked for before the line is written
         return iff(human, setv("mod1440_of_%s" % name, "global.date") + setv("mod1440_of_%s_day" % name, "global.num_days")
                    + "mod1440_of_me = yes\n"
                    + iff("check_variable = { of_me = 0 }", block("FROM", "mod1440_of_refs = yes\n") + "mod1440_of_me = yes\n")
-                   + iff("NOT = { check_variable = { of_me = 0 } }", fill(kind, a="of_me") + block("FROM", "mod1440_ev_add = yes\n")))
+                   + iff("NOT = { check_variable = { of_me = 0 } }", fill(kind, a="of_me", n=n) + block("FROM", "mod1440_ev_add = yes\n")))
 
     hooks = {
         "on_unit_leader_created": dated("since", "commissioned"),
         "on_army_leader_promoted": dated("prom", "promoted"),
-        "on_unit_leader_level_up": dated("lvl", "level"),
+        "on_unit_leader_level_up": dated("lvl", "level", n="skill_level"),     # part n: the level reached
         "on_army_leader_won_combat": iff(human, "add_to_variable = { mod1440_of_won = 1 }\n"),
         "on_army_leader_lost_combat": iff(human, "add_to_variable = { mod1440_of_lost = 1 }\n"),
         "on_navy_leader_won_combat": iff(human, "add_to_variable = { mod1440_of_won = 1 }\n"),
@@ -2775,6 +2986,9 @@ def kept_tokens_script(portrait_version):
         + block("for_each_loop", "array = tk_%sc\nvalue = tk_o\nadd_to_array = { mod1440_tk_%sc = tk_o }\n" % (g, g)) for g, rows in groups)
     outcomes = block("for_loop_effect", "start = 0\nend = mod1440_wo_outcome^num\nvalue = tk_i\n" + tmp("tk_v", "mod1440_wo_outcome^tk_i")
                      + "mod1440_tk_map_k = yes\n" + iff("NOT = { check_variable = { tk_r = %d } }" % none, setv("mod1440_wo_outcome^tk_i", "tk_r")))
+    # the kind of the newest line, which the tooltip of the top bar button names (E1 review)
+    outcomes += (tmp("tk_v", "mod1440_rec_last_k") + "mod1440_tk_map_k = yes\n"
+                 + iff("NOT = { check_variable = { tk_r = %d } }" % none, setv("mod1440_rec_last_k", "tk_r")) + els(setv("mod1440_rec_last_k", BLANK)))
     out += (
         "\n# The Records: for the country in scope, whether the numbers of the kept keys are still today's (the version of\n"
         "# the list, then every key of the kinds and every %dth name of a point). If not, mod1440_tk_fix.\n" % TK_SAMPLE
@@ -2831,16 +3045,23 @@ def frame(portrait_version):
     # ---- the top bar button: the diary's icon, and a badge with the lines written since the window was last closed
     # d7-top-bar: at the right end of the top bar beside the clock, 150x28 inside the band's flat interior (y 3 to
     # 31), where it was 168x36 at 1300,4 and ran over the band's lower edge (user, 2026-10-16)
-    handle = M.button("rec_toggle", 0, 0, "GFX_1440p_SG_button_150x28", shortcut="shift+j",
-                      tooltip=B.key("rec_toggle_tt", "The War Diary, your wars, your officers and your government (Shift+J)"))
+    # E1 review: the count in red when a new line is of War and peace; the tooltip says how many and names the
+    # newest line (mod1440_rec_last_*, written by mod1440_ev_add)
+    handle = M.button("rec_toggle", 0, 0, "GFX_1440p_SG_button_150x28", shortcut="shift+j", tooltip=B.key("rec_toggle_tt", (
+        "The War Diary, your wars, your officers and your government (Shift+J)\\n\\n"
+        "§Y[?mod1440_rec_new|0]§! new lines since you last closed the Records, §R[?mod1440_rec_new_war|0] of war and peace§!.\\n"
+        "Newest: [?mod1440_rec_last_k.GetTokenLocalizedKey] §Y[?mod1440_rec_last_n.GetName]§!, [?mod1440_rec_last_d.%s]" % LONG)))
     handle += plain("rec_toggle_l", 12, 5, 98, B.key("rec_toggle", "£army_experience  Records"), height=22)
     handle += M.icon("rec_badge_bg", 114, 2, M.tile_sprite(30, 24))
     handle += plain("rec_badge", 114, 5, 30, B.key("rec_badge", "§Y[?mod1440_rec_new|0]§!"), M.FONT_SMALL, "centre", 20)
+    handle += plain("rec_badge_war", 114, 5, 30, B.key("rec_badge_war", "§R[?mod1440_rec_new|0]§!"), M.FONT_SMALL, "centre", 20)
     gui = M.box("mod1440_records_handle", 2002, 3, 150, 28, handle)
+    new = M.more_than_zero("mod1440_rec_new")
     script = M.scripted_gui("mod1440_records_handle", "mod1440_records_handle", "top_bar", effects=block(
         "rec_toggle_click", "mod1440_ev_init = yes\n" + iff(is_one("mod1440_rec_open"), "mod1440_rec_close = yes\n")
         + els(setv("mod1440_rec_open", 1) + "mod1440_rec_show = yes\n")),
-        triggers=shown_if(["rec_badge_bg", "rec_badge"], M.more_than_zero("mod1440_rec_new")))
+        triggers=shown_if(["rec_badge_bg"], new) + block("rec_badge_visible", new + "NOT = { %s }\n" % M.more_than_zero("mod1440_rec_new_war").strip())
+        + block("rec_badge_war_visible", new + M.more_than_zero("mod1440_rec_new_war")))
 
     # ---- the state card (E1 part C, E6): who took the state and when, by whose troops, the citation, its lines
     card_w, card_h = 540, 142
@@ -2851,6 +3072,12 @@ def frame(portrait_version):
     inner += M.icon("sc_flag", 14, 44, FLAG_SMALL)
     inner += M.text("sc_taken", 62, 48, card_w - 76, B.key(
         "sc_taken", "Taken from §Y[?mod1440_sr_from.GetName]§! on [?mod1440_sr_date.%s], held [?mod1440_sr_held|0] days" % LONG), M.FONT_LABEL, height=22, fixed=True)
+    # E1 review: a state that came by treaty (mod1440_sr_how 2) says so, and that no troops are named
+    inner += M.text("sc_received", 62, 48, card_w - 76, B.key(
+        "sc_received", "Received from §Y[?mod1440_sr_from.GetName]§! by treaty on [?mod1440_sr_date.%s], held [?mod1440_sr_held|0] days" % LONG),
+        M.FONT_LABEL, height=22, fixed=True)
+    inner += M.text("sc_treaty", 62, 78, card_w - 76, B.key("sc_treaty", "§gIt came by treaty or annexation, not in battle: no troops are named.§!"),
+                    M.FONT_SMALL, height=20)
     inner += M.text("sc_untaken", 14, 48, card_w - 28, B.key("sc_untaken", "Yours since before the record began."), M.FONT_LABEL, height=22)
     inner += M.button("sc_cite", 12, 108, "GFX_sort_button_202x29", B.key("sc_cite", "Cite the divisions here"), tooltip=B.key(
         "sc_cite_tt", "Every division of yours that stands in this state gets a line in its own history: Cited by the high command. "
@@ -2869,7 +3096,7 @@ def frame(portrait_version):
             + block("every_state_division", "limit = { OWNER = { tag = ROOT } }\n" + block(
                 "add_history_entry", 'key = mod1440_hn_cited\nsubject = "Citation"\nallow = yes\n') + "add_to_temp_variable = { hn_n = 1 }\n")
             + setv("mod1440_sr_cited", "hn_n") + setv("mod1440_sr_cited_day", "global.num_days")
-            + iff("check_variable = { hn_n > 0 }", "add_to_variable = { mod1440_sr_cites = 1 }\n" + fill("cited", a="THIS", state=True)
+            + iff("check_variable = { hn_n > 0 }", "add_to_variable = { mod1440_sr_cites = 1 }\n" + fill("cited", a="THIS", state=True, n="hn_n")
                   + block("ROOT", "mod1440_tr_add = yes\nadd_to_variable = { mod1440_hn_count = hn_n }\nadd_to_variable = { mod1440_hn_cite_n = hn_n }\n"
                           + setv("mod1440_hn_last_s", "PREV") + setv("mod1440_hn_last_d", "global.date") + setv("mod1440_hn_has_last", 1))))
     its_lines = block("ROOT", (setv("mod1440_wd_filter", WD_STATE_FILTER) + setv("mod1440_wd_state", "PREV") + setv("mod1440_rec_page", 0)
@@ -2884,7 +3111,9 @@ def frame(portrait_version):
         + block("triggers", (
             block("sc_lines_visible", "check_variable = { mod1440_sr_lines > 1 }\n")
             + block("sc_lines_1_visible", "check_variable = { mod1440_sr_lines = 1 }\n")
-            + shown_if(["sc_taken", "sc_flag"], taken)
+            + shown_if(["sc_flag"], taken)
+            + block("sc_taken_visible", taken + "NOT = { check_variable = { mod1440_sr_how = 2 } }\n")
+            + shown_if(["sc_received", "sc_treaty"], taken + "check_variable = { mod1440_sr_how = 2 }\n")
             + block("sc_untaken_visible", "check_variable = { mod1440_sr_day < 1 }\n")
             + block("sc_cite_visible", HONOUR_DLC + "\n")
             + block("sc_its_lines_visible", M.more_than_zero("mod1440_sr_lines"))
@@ -2916,6 +3145,8 @@ def frame(portrait_version):
     # that names a state through a variable gets the capital until it names another
     faces = "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "token:" + UNKNOWN)) for v in ("mod1440_of_c_p", "mod1440_wr_c_p", "mod1440_gv_p"))
     faces += "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "capital")) for v in ("mod1440_wd_state", "mod1440_hn_last_s"))
+    # ... and one that names a country, the country itself (the head of a country's lines, E1 review)
+    faces += iff("check_variable = { mod1440_wd_country = 0 }", setv("mod1440_wd_country", "THIS"))
     copy_members = "clear_array = mod1440_gv_fac\n" + block(
         "for_each_loop", "array = faction_members\nvalue = ev_c\nadd_to_array = { mod1440_gv_fac = ev_c }\n")
     in_faction = tmp("ev_in", 0) + iff("is_in_faction = yes", tmp("ev_in", 1))
@@ -2928,6 +3159,13 @@ def frame(portrait_version):
         return (tmp("hn_n", 0) + block("every_state_division", "limit = { OWNER = { tag = %s } }\n" % owner + block(
             "add_history_entry", 'key = mod1440_hn_%s\nsubject = "%s"\nallow = no\n' % (key, subject)) + "add_to_temp_variable = { hn_n = 1 }\n"))
 
+    # the casualty steps (E1 review): casualties_k against the next step, once a day; the first run of a record
+    # takes the steps already passed without a line (mod1440_ev_cas_i: the index of the next step)
+    casualty_step = tmp("ev_ck", "casualties_k") + iff("NOT = { check_variable = { mod1440_ev_cas_v = 1 } }", (
+        setv("mod1440_ev_cas_v", 1) + setv("mod1440_ev_cas_i", 0)
+        + "".join(iff("check_variable = { ev_ck > %d }" % (step - 1), setv("mod1440_ev_cas_i", k + 1)) for k, step in enumerate(CASUALTY_STEPS))))
+    casualty_step += "".join(iff("check_variable = { mod1440_ev_cas_i = %d } check_variable = { ev_ck > %d }" % (k, step - 1), (
+        setv("mod1440_ev_cas_i", k + 1) + line("casualties", n=step)), "if" if k == 0 else "else_if") for k, step in enumerate(CASUALTY_STEPS))
     counted = "add_to_variable = { mod1440_hn_count = hn_n }\nadd_to_variable = { mod1440_hn_auto_n = hn_n }\n"
     capital = iff("check_variable = { tr_cap = 1 } %s %s" % (is_one("mod1440_hn_auto"), HONOUR_DLC), block("var:tr_s", honour("capture", "Capital")) + counted)
 
@@ -2947,7 +3185,9 @@ def frame(portrait_version):
         "# The Records: what the window shows. Sets the buttons' frames and makes the list of the open page.\n"
         + block("mod1440_rec_show", "mod1440_ev_grow = yes\n" + faces + show + "add_to_variable = { mod1440_rec_dirty = 1 }\n")
         + "\n# The Records: the window closes; the lines written so far count as seen (the badge of the top bar button).\n"
-        + block("mod1440_rec_close", setv("mod1440_rec_open", 0) + setv("mod1440_rec_new", 0))
+        + block("mod1440_rec_close", setv("mod1440_rec_open", 0) + setv("mod1440_rec_new", 0) + setv("mod1440_rec_new_war", 0)
+                # the lines up to here are seen: a line with a higher number stands on the lighter band (E1 review)
+                + setv("mod1440_rec_seen", "mod1440_ln_next"))
         + "\n# The Records: the first run for the country in scope. Takes the copies the daily comparison needs, opens a\n"
         "# row for each war that already runs and writes the first line.\n"
         # The card of a state names the country it was taken from. A state nobody took holds none, and the game
@@ -2979,8 +3219,11 @@ def frame(portrait_version):
             + iff("NOT = { check_variable = { mod1440_ev_fac = ev_in } }", (
                 iff("check_variable = { ev_in = 1 }", line("faction_in", b="faction_leader")) + els(line("faction_out"))
                 + setv("mod1440_ev_fac", "ev_in") + copy_members))
-            + els(compare("faction_members", "mod1440_gv_fac", "ev_c", line("member_in", b="ev_c"), line("member_out", b="ev_c")))
-            + "mod1440_wr_daily = yes\nmod1440_gv_daily = yes\nmod1440_of_seen = yes\n"
+            # a new subject joins its overlord's faction the same day: "Made a subject" says it already (E1 review)
+            + els(compare("faction_members", "mod1440_gv_fac", "ev_c",
+                          iff("NOT = { is_in_array = { array = subjects value = ev_c } }", line("member_in", b="ev_c")), line("member_out", b="ev_c")))
+            + "mod1440_wr_daily = yes\nmod1440_gv_daily = yes\nmod1440_of_seen = yes\nmod1440_of_gone = yes\n"
+            + casualty_step
             + block("every_controlled_state", "limit = { check_variable = { mod1440_sr_day > 0 } }\n" + setv("mod1440_sr_held", "global.num_days")
                     + "subtract_from_variable = { mod1440_sr_held = mod1440_sr_day }\n")
             + iff(is_one("mod1440_rec_open"), "mod1440_rec_show = yes\n")))
@@ -2995,17 +3238,23 @@ def frame(portrait_version):
             tmp("of_n", "num_units_in_state@var:tr_s")
             + iff("check_variable = { of_n > of_best }", "mod1440_of_me = yes\n" + iff(
                 "NOT = { check_variable = { of_me = 0 } }", tmp("of_best", "of_n") + tmp("of_who", "of_me"))))))
-        + "\n# The Records: the country in scope has taken the state tr_s from tr_c (tr_cap = 1: a capital). A line with\n"
-        "# the general on the spot, the count of the war and his own, what the state card shows, and the honour.\n"
+        + "\n# The Records: the country in scope has taken the state tr_s from tr_c (tr_cap = 1: a capital). At war with\n"
+        "# tr_c: a line with the general on the spot, the count of the war and his own, what the state card shows, and the\n"
+        "# honour. Not at war (an annexation, a subject's state, a peace): a line of the territory log only, \"Received\n"
+        "# from\", nothing counted for a war or an officer, and the card says it came by treaty (E1 review, 2026-10-22).\n"
         + block("mod1440_tr_taken", (
-            "mod1440_of_best = yes\n" + changed("state_taken", "capital_taken")
-            + tmp("wr_c", "tr_c") + tmp("wr_f", 1) + "mod1440_wr_count = yes\n" + credit("mod1440_of_states")
-            + block("var:tr_s", setv("mod1440_sr_date", "global.date") + setv("mod1440_sr_day", "global.num_days")
-                    + setv("mod1440_sr_from", "tr_c") + setv("mod1440_sr_held", 0))
-            + by_whom + capital))
-        + block("mod1440_tr_lost", (
+            block("var:tr_s", setv("mod1440_sr_date", "global.date") + setv("mod1440_sr_day", "global.num_days")
+                  + setv("mod1440_sr_from", "tr_c") + setv("mod1440_sr_held", 0) + setv("mod1440_sr_how", 1))
+            + iff("has_war_with = var:tr_c", (
+                "mod1440_of_best = yes\n" + changed("state_taken", "capital_taken")
+                + tmp("wr_c", "tr_c") + tmp("wr_f", 1) + "mod1440_wr_count = yes\n" + credit("mod1440_of_states")
+                + by_whom + capital))
+            + els(line("state_received", a="tr_s", b="tr_c", state=True, log="tr")
+                  + block("var:tr_s", setv("mod1440_sr_how", 2) + setv("mod1440_sr_has_by", 0)))))
+        + block("mod1440_tr_lost", iff("has_war_with = var:tr_c", (
             "mod1440_of_best = yes\n" + changed("state_lost", "capital_lost")
             + tmp("wr_c", "tr_c") + tmp("wr_f", 2) + "mod1440_wr_count = yes\n"))
+            + els(line("state_handed", a="tr_s", b="tr_c", state=True, log="tr")))
         + "\n# The Records: a victory point worth %d or more taken (mod1440_vp_changed): the honour of the divisions of the\n"
         "# country in scope that stand in its state vp_s, when that switch is on.\n" % VP_MAJOR
         + block("mod1440_hn_city", iff("%s %s" % (is_one("mod1440_hn_vp"), HONOUR_DLC), block("var:vp_s", honour("city", "City")) + counted))
@@ -3024,15 +3273,41 @@ def frame(portrait_version):
         return iff(human, line(kind))
 
     def ace(counter, kind, word):
-        return iff(human, "add_to_variable = { mod1440_ac_%s = 1 }\n" % counter + line(kind)
+        # E1 review (decision 2): a counter only, until phase E5 can keep the ace and name him on a line
+        return iff(human, "add_to_variable = { mod1440_ac_%s = 1 }\n" % counter
                    + 'log = "MOD1440 listening: %s, ace [FROM.GetFullName] ([FROM.GetCallsign])"\n' % word)
+
+    def listening(hook, scopes):
+        return 'log = "MOD1440 listening: %s, %s"\n' % (hook, scopes)
 
     hooks = {
         # ROOT the attacker, FROM the defender
         "on_war_relation_added": (iff(human, tmp("wr_c", "FROM") + "mod1440_ev_war_on = yes\n")
                                   + iff("FROM = { is_ai = no }", block("FROM", tmp("wr_c", "PREV") + "mod1440_ev_war_by = yes\n"))),
-        # ROOT the annexer, FROM the annexed
-        "on_annex": iff(human, line("annexed", b="FROM") + tmp("wr_c", "FROM") + "mod1440_wr_annexed = yes\n"),
+        # ROOT the annexer, FROM the annexed. A civil war won writes its own line (on_civil_war_end, which says that
+        # it fires on_annex too): the Annexed line is left out when that line came first on the same day
+        "on_annex": iff(human, tmp("ev_an", "FROM") + iff(
+            "NOT = { check_variable = { mod1440_ev_cw_day = global.num_days } check_variable = { mod1440_ev_cw_c = ev_an } }",
+            line("annexed", b="FROM")) + tmp("wr_c", "FROM") + "mod1440_wr_annexed = yes\n"),
+        # --- E1 review (2026-10-22): the hooks of the new kinds, with the scopes of the comments of the vanilla files
+        # ROOT the winner, FROM the annexed: "fires just before FROM gets annexed ... It will also fire on_annex and
+        # on_civil_war_end" (04_mtg_on_actions.txt:194), so the skip in on_annex above holds
+        "on_civil_war_end_before_annexation": iff(human, setv("mod1440_ev_cw_day", "global.num_days") + setv("mod1440_ev_cw_c", "FROM")
+                                + line("civil_war_won", b="FROM") + listening("on_civil_war_end_before_annexation", "[ROOT.GetName] over [FROM.GetName]")),
+        # ROOT the sender, FROM the receiver (07_nsb_on_actions.txt)
+        "on_send_volunteers": iff(human, line("volunteers_sent", b="FROM") + listening("on_send_volunteers", "[ROOT.GetName] to [FROM.GetName]")),
+        # scopes not commented in the game's files: taken to be those of on_send_volunteers; the log line tells
+        "on_recall_volunteers": iff(human, line("volunteers_back", b="FROM") + listening("on_recall_volunteers", "ROOT [ROOT.GetName], FROM [FROM.GetName]")),
+        # ROOT the government in exile, FROM its host (09_aat_on_actions.txt)
+        "on_government_exiled": (listening("on_government_exiled", "ROOT [ROOT.GetName], FROM [FROM.GetName]")
+                                 + iff(human, line("exiled", b="FROM"))
+                                 + iff("FROM = { is_ai = no }", block("FROM", line("exile_hosted", b="PREV")))),
+        # ROOT the exile, FROM the old host (04_mtg_on_actions.txt)
+        "on_exile_government_reinstated": iff(human, line("reinstated", b="FROM")),
+        # the scope is the country whose cipher is broken, FROM the decrypter (05_lar_on_actions.txt): our own success only
+        "on_fully_decrypted_cipher": iff("FROM = { is_ai = no }", block("FROM", line("cipher", b="PREV"))),
+        # ROOT the country that was capitulated (00_on_actions.txt)
+        "on_uncapitulation": iff(human, line("fought_on")),
         # ROOT the new controller, FROM the old one, FROM.FROM the state
         "on_state_control_changed": (iff(human, state + tmp("tr_c", "FROM") + "mod1440_tr_taken = yes\n")
                                      + iff("FROM = { is_ai = no }", state + block("FROM", tmp("tr_c", "PREV") + "mod1440_tr_lost = yes\n"))),
@@ -3047,8 +3322,9 @@ def frame(portrait_version):
             fill("airborne", a="THIS", state=True) + block("FROM", "mod1440_ev_add = yes\n")
             + iff("FROM = { %s } %s" % (is_one("mod1440_hn_air"), HONOUR_DLC), "mod1440_hn_drop = yes\n")
             + 'log = "MOD1440 listening: on_units_paradropped_in_state, state [THIS.GetName], by [FROM.GetName], [?hn_n] divisions honoured"\n')),
-        "on_ruling_party_change": simple("party"),
-        "on_government_change": simple("government"),
+        # a change of party also changes the government: one line for the day (E1 review)
+        "on_ruling_party_change": iff(human, setv("mod1440_ev_party_day", "global.num_days") + line("party")),
+        "on_government_change": iff(human + " NOT = { check_variable = { mod1440_ev_party_day = global.num_days } }", line("government")),
         "on_new_term_election": simple("election"),
         # the country is the scope, FROM the ace. Whether an ace can be kept is not known (wiki/phases/E5-aces-roll.md):
         # the first hook tries and writes what it reads back to game.log.
@@ -3177,6 +3453,213 @@ def government_scene_hide():
     return hide
 
 
+# The War Diary's scene (E1 review): a campaign like the design's (the United States in 1943) drawn row by row. Each
+# row is (date or None, family, words, what: None / ("state", name, folded or 0) / ("vp", name) / ("officer", name) /
+# ("person", name), country or None, officer on the spot or None, number widget and text or None, marked).
+DIARY_CAMPAIGN = [
+    ("12 June, 1943", 1, "Peace with", None, "Siam", None, None, False),
+    (None, 1, "Made a subject:", None, "Philippines", None, None, False),
+    (None, 2, "Handed over to", ("state", "Luzon", 6), "Philippines", None, None, False),
+    ("7 June, 1943", 2, "Victory point taken", ("vp", "Kagoshima"), "State of Japan", "Walter Krueger", None, False),
+    (None, 2, "State taken", ("state", "Minami Kyushu", 0), "State of Japan", "Walter Krueger", None, False),
+    (None, 2, "Landing in", ("state", "Kyushu", 0), None, None, None, False),
+    ("2 June, 1943", 4, "Gained a skill level", ("officer", "William Halsey, Jr."), None, None, ("", "5"), False),
+    (None, 4, "Decorated", ("officer", "Douglas MacArthur"), None, None, None, False),
+    (None, 1, "Broke the cipher of", None, "State of Japan", None, None, False),
+    ("30 May, 1943", 1, "Our casualties passed", None, None, None, ("_k", "250 000"), False),
+    (None, 2, "State taken", ("state", "Chugoku", 0), "State of Japan", "Dwight D. Eisenhower", None, False),
+    (None, 2, "Victory point taken", ("vp", "Hiroshima"), "State of Japan", "Dwight D. Eisenhower", None, False),
+    ("27 May, 1943", 2, "Capital taken", ("state", "Kanto", 0), "State of Japan", "Douglas MacArthur", None, True),
+    (None, 2, "State taken", ("state", "Shikoku", 11), "State of Japan", None, None, False),
+    ("23 May, 1943", 4, "Left the service", ("officer", "Leslie McNair"), None, None, None, False),
+    (None, 1, "Volunteers sent to", None, "China", None, None, False),
+    ("22 May, 1943", 1, "War declared by", None, "Hungary", None, None, False),
+    (None, 1, "War declared by", None, "Romania", None, None, False),
+    (None, 1, "War declared by", None, "Bulgaria", None, None, False),
+    ("17 May, 1943", 1, "Annexed", None, "Cuba", None, None, False),
+    (None, 2, "Received from", ("state", "Cuba", 0), "Cuba", None, None, False),
+    (None, 1, "Joined our faction:", None, "Brazil", None, None, False),
+    ("9 May, 1943", 4, "Promoted to field marshal", ("officer", "Walter Krueger"), None, None, None, True),
+    (None, 3, "Appointed", ("person", "George C. Marshall"), None, None, None, False),
+    ("2 May, 1943", 2, "Victory point taken", ("vp", "Nagasaki"), "State of Japan", "Walter Krueger", None, False),
+    (None, 2, "State taken", ("state", "Kyushu", 0), "State of Japan", "Walter Krueger", None, False),
+    (None, 2, "Landing in", ("state", "Kyushu", 0), None, None, None, True),
+    (None, 1, "War declared on", None, "Siam", None, None, False),
+]
+DIARY_NEW_DAYS = 1                  # the first day of the campaign was written while the window was closed
+
+
+def diary_rows(rows, new_days=DIARY_NEW_DAYS):
+    """The scene's "only" and "samples" of the row window for <rows> (DIARY_CAMPAIGN's shape)."""
+    only, samples = {}, {}
+
+    def put(widget, n, text=None):
+        only.setdefault(widget, []).append(n)
+        if text is not None:
+            samples.setdefault(widget, []).append(text)
+
+    day, band = -1, 0
+    for n, (date, family, words, what, country, officer, number, marked) in enumerate(rows):
+        if date:
+            day += 1
+            band = 1 - band
+            put("wd_row_date", n, date)
+        put("wd_row_new" if day < new_days else ("wd_row_stripe" if band else None), n)
+        put("wd_row_icon_%d" % family, n)
+        put("wd_row_event", n, words)
+        if number:
+            put("wd_row_n" + number[0], n, "§Y%s§!" % number[1])
+        kind = what[0] if what else None
+        if kind in ("state", "vp"):
+            folded = kind == "state" and what[2]
+            put("wd_row_go_fold" if folded else "wd_row_go", n)
+            put("wd_row_a" if kind == "state" else "wd_row_point", n, "§Y%s§!" % what[1])
+            if folded:
+                put("wd_row_fold", n, "+%d states" % what[2])
+        elif kind == "officer":
+            for widget in ("wd_row_face", "wd_row_file"):
+                put(widget, n)
+            put("wd_row_who", n, "§Y%s§!" % what[1])
+        elif kind == "person":
+            put("wd_row_name", n, "§Y%s§!" % what[1])
+        if country:
+            suffix = "" if what else "_near"
+            put("wd_row_flag" + suffix, n)
+            put("wd_row_lines" + suffix, n)
+            put("wd_row_b" + suffix, n, country)
+        if officer:
+            put("wd_row_cface", n)
+            put("wd_row_cfile", n)
+            put("wd_row_c", n, "§Y%s§!" % officer)
+        put("wd_row_marked" if marked else "wd_row_mark", n)
+    only.pop(None, None)
+    every = ["wd_row_stripe", "wd_row_new", "wd_row_date", "wd_row_event", "wd_row_n", "wd_row_n_k", "wd_row_n_m", "wd_row_go", "wd_row_go_fold",
+             "wd_row_a", "wd_row_point", "wd_row_fold", "wd_row_face", "wd_row_file", "wd_row_who", "wd_row_name", "wd_row_flag", "wd_row_lines",
+             "wd_row_b", "wd_row_flag_near", "wd_row_lines_near", "wd_row_b_near", "wd_row_cface", "wd_row_cfile", "wd_row_c", "wd_row_mark",
+             "wd_row_marked"] + ["wd_row_icon_%d" % f for f in FAMILY_ICON]
+    for widget in every:
+        only.setdefault(widget, [])
+    return only, samples
+
+
+def diary_scene(place, crop, shot, back):
+    """The scene of the War Diary (tools/scenes/war_diary.json)."""
+    only, row_samples = diary_rows(DIARY_CAMPAIGN)
+    # the pane with the figures of the design (the user's save of 2026-10-16, Ground split by the review's rule)
+    figures = {"wars": 33, "peace": 22, "cap": 2, "annex": 2, "subj": 17, "atwar": 11, "comm": 1, "prom": 1, "lvl": 4, "dec": 3, "gone": 2,
+               "govs": 0, "trr": 39, "trh": 47}
+    page = dict(("wd_f_" + name, "§Y%d§!" % value) for name, value in figures.items())
+    page.update({"wd_g_st_t": "§Y59§!", "wd_g_st_x": "§Y7§!", "wd_g_vp_t": "§Y25§!", "wd_g_vp_x": "§Y0§!", "wd_g_cap_t": "§Y2§!", "wd_g_cap_x": "§Y1§!",
+                 "wd_hn_auto": "§Y3§!", "wd_hn_cite": "§Y1§!", "wd_hn_last": "Last citation: §YKyushu§!, 7 June, 1943",
+                 "wd_count": "lines 1 - 311 of 318", "wd_country": "United States of America",
+                 "wd_since": "Kept since 3 March, 1941  -  1084 days on record", "wd_tab_0_n": "155 lines", "wd_tab_3_n": "11 at war",
+                 "wd_tab_1_n": "103", "wd_ch_n": "The lines you marked, kept for good: 4 of 300.",
+                 "wd_kept_0": "Main log 155 of 1000 lines, territory 178 of 1000."})
+    chronicle = [("27 May, 1943", 2, "Capital taken", "s", "Kanto"), ("9 May, 1943", 4, "Promoted to field marshal", "s", "Walter Krueger"),
+                 ("2 May, 1943", 2, "Landing in", "s", "Kyushu"), ("8 December, 1941", 1, "War declared by", "b", "Empire of Japan")]
+    pane_hide = ["wd_ch_none_0", "wd_ch_none_1"]
+    for k, (date, family, words, which, name) in enumerate(chronicle):
+        page["wd_ch_%d_d" % k] = "§g%s§!" % date
+        page["wd_ch_%d" % k] = words
+        page["wd_ch_%d_%s" % (k, which)] = "§Y%s§!" % name
+        pane_hide += ["wd_ch_%d_f%d" % (k, f) for f in FAMILY_ICON if f != family]
+        pane_hide += ["wd_ch_%d_%s" % (k, s) for s in ("s", "p", "b") if s != which]
+    diary_page = ["wd_none", "wd_count_state", "wd_count_country", "wd_hn_none"] + pane_hide
+
+    # a country's lines (filter 8): the State of Japan, back to the war's first day
+    follow_rows = [r for r in DIARY_CAMPAIGN if r[4] == "State of Japan"]
+    dated, seen = [], set()
+    for date, family, words, what, country, officer, number, marked in follow_rows:
+        day = next(d for d, rows in _days(DIARY_CAMPAIGN) if (date, family, words, what, country, officer, number, marked) in rows)
+        dated.append((None if day in seen else day, family, words, what, country, officer, number, marked))
+        seen.add(day)
+    dated.append(("8 December, 1941", 1, "War declared by", None, "State of Japan", None, None, False))
+    follow_only, follow_samples = diary_rows(dated, new_days=0)
+    follow_page = ["wd_none", "wd_count", "wd_count_state", "wd_heads_3", "wd_heads_4", "wd_hn_none"] + pane_hide
+
+    # nothing written yet of a filter: the list empty, the chronicle's two lines, no citation
+    empty_page = (["wd_count", "wd_count_state", "wd_count_country", "wd_hn_last"]
+                  + ["wd_ch_%d%s" % (k, part) for k in range(WD_CHRON_LINES) for part in ("", "_d", "_bg", "_s", "_p", "_b")]
+                  + ["wd_ch_%d_f%d" % (k, f) for k in range(WD_CHRON_LINES) for f in FAMILY_ICON])
+    states = [
+        {"name": "follow", "rows": {"wd_grid": len(dated)},
+         "frames": {"mod1440_records_wd": {"wd_show_all": 1, "wd_hn_cap": 2, "wd_hn_sea": 2, "wd_hn_air": 2}},
+         "hide": {"mod1440_records_wd": follow_page}, "only": {"mod1440_records_diary_row": follow_only},
+         "samples": {"mod1440_records_diary_row": follow_samples,
+                     "mod1440_records_wd": dict(page, wd_count_country="§YState of Japan§!: lines 1 - 57 of 57")},
+         "_note": "A click on a country's name: its lines only (filter 8), its name where the Officer head was; no filter lit."},
+        {"name": "empty", "rows": {"wd_grid": 0}, "hide": {"mod1440_records_wd": empty_page},
+         "samples": {"mod1440_records_wd": dict(page, wd_ch_n="The lines you marked, kept for good: 0 of 300.")},
+         "_note": "A filter with nothing written yet; no line marked; no citation."},
+    ]
+    return {
+        "phase": "E1", "file": "mod1440_records.gui", "screenshot": shot,
+        "windows": [dict(place, name="mod1440_records_wd", rows={"wd_grid": len(DIARY_CAMPAIGN)}, listRows={"wd_grid": "mod1440_records_diary_row"},
+                         hide=diary_page, frames={"wd_show_all": 2, "wd_hn_cap": 2, "wd_hn_sea": 2, "wd_hn_air": 2},
+                         _note="A window of its own over the map, opened from the Records button of the top bar. "
+                                                "The list shows a campaign like the design's; flags and faces are the renderer's samples."),
+                    {"name": "mod1440_records_diary_row", "skip": True, "only": only,
+                     "_note": "Each widget is drawn in the rows script shows it in: the day on its first row, the band of the day, the new "
+                              "lines of the first day on the lighter band, runs of states folded, the numbers of a line."}],
+        "samples": {"mod1440_records_diary_row": row_samples, "mod1440_records_wd": page},
+        "states": states,
+        "setup": [{"key": "shift+j", "wait": 1.5}, {"clickWidget": "mod1440_records_wd/wd_tab_0", "wait": 1.0}],
+        "teardown": back,
+        "expect": ["mod1440_records_wd/wd_close", "mod1440_records_wd/wd_older", "mod1440_records_wd/wd_ch_read"],
+        "crop": crop,
+        "manual": ["Lines that need a war: a state and a victory point taken with the general on the spot, capitulation, landings",
+                   "A landing and an airborne drop with the honour switches on: the lines in the divisions' history",
+                   "A peace conference that hands states over (whether has_war_with still holds then), a civil war won, a government in exile"],
+        "checklist": DIARY_CHECKLIST,
+    }
+
+
+def _days(rows):
+    out = []
+    for row in rows:
+        if row[0]:
+            out.append((row[0], []))
+        out[-1][1].append(row)
+    return out
+
+
+DIARY_CHECKLIST = [
+    "The title strip and the tabs as before: Germany's flag, Records, German Reich, 'Kept since 1 January, 1936 - 0 days on record'; the War Diary's tab "
+    "with the gold chevrons; each tab opens its page",
+    "The list: no row of its own for a day; the date (hoi_16mbs) stands on a day's first line only, every line of a day on one band, the bands of "
+    "two days apart; 'The record begins' on the lighter band of a new line until the window is closed once, then on the day's band",
+    "Close and open the Records after a day with a line: the new lines on the lighter band (GFX_1440p_SG_pick); does it read as 'new' against the day bands?",
+    "A line about a country (mod1440_chk_war: War declared on Poland): its flag (41x26) and name; click the name: the diary shows Poland's lines only, "
+    "'Poland: lines 1 - N of N' in the head bar where Officer stood, the Country and Officer heads gone, no filter lit; All brings every line back",
+    "A state taken in battle (mod1440_chk_war, then mod1440_chk_state2: Danzig): 'State taken', the plate moves the camera, Poland in the Country "
+    "column, the general's face and name at the right; click his name: the Officers page opens on his file",
+    "A state received by treaty (mod1440_chk_treaty): 'Received from' Austria in the diary (Territory filter too), no general named; the state card of "
+    "Niederschlesien: 'Received from Austria by treaty on 1 January, 1936, held 0 days' and the grey line that no troops are named; "
+    "'Handed over to' Austria for the state given first",
+    "A run of states (mod1440_chk_treaty_run: four states received from Austria on one day): All shows one row 'Received from <state>' with "
+    "'+3 states' at the plate's right end and its tooltip; Territory lists the four lines; 'lines 1 - N of M' counts the four",
+    "An officer line (mod1440_chk_level: a general gains a skill level): 'Gained a skill level' with the level reached in yellow at the right end of the "
+    "words (compare with the level in the general's own window); his face and name open his file",
+    "mod1440_chk_retire (the fifth general retires), then mod1440_chk_daily: 'Left the service' with his face and name; The service: Left the "
+    "service 1. A second mod1440_chk_daily writes no second line",
+    "mod1440_chk_cipher and mod1440_chk_exile: 'Broke the cipher of' Poland and 'Hosting the exiled government of' Poland, each with its flag "
+    "(volunteers, a civil war won and fighting on need a war the check cannot cause: under manual)",
+    "The pane: The campaign as banded tables under three head bars (War and peace, Ground in battle with taken and lost and a bar, the By treaty row, "
+    "The service); 'At war today' equals the number of enemies on the Wars page; Wars begun and Wars ended against the Wars page's rows",
+    "The chronicle: mark three lines with their boxes: the pane lists the newest marked lines (date in grey, icon, words, name); 'Read the chronicle' "
+    "opens the Marked filter; unmark them all: the two lines that say how to mark",
+    "Battle honours: the four switches in two rows toggle; By themselves and Cited by you as a table row; the last citation under them",
+    "Kept: two lines; the count in the head bar has the Kept text as its tooltip",
+    "The page arrows past 200 rows (mod1440_chk_fill fills the logs): 200 lines a page with no day rows; 'lines 1 - 200 of M'; scroll the list to "
+    "its end; mod1440_chk_list_time in game.log (the folds' cost against the last check)",
+    "The top bar button: a War and peace line written while the window is closed turns the count red; its tooltip says 'N new lines since you "
+    "last closed the Records, K of war and peace' and 'Newest: <words> <name>, <date>' (GetTokenLocalizedKey in a tooltip); Close clears both",
+    "mod1440_chk_old3 (a save of before the review), then the Records opened: mod1440_chk_sizes3 reads every log's n as long as its dates; "
+    "no line is on the lighter band; no 'Left the service' line for an officer gone before",
+    "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type', no unknown trigger has_war_with",
+]
+
+
 def scenes():
     from unit_medals_table import MEDALS
     others = sorted(set(m[1] for m in MEDALS) - {"ger"})
@@ -3193,36 +3676,6 @@ def scenes():
 
     officer_hide = officer_scene_hide()
 
-    # ---- the War Diary: a row is a day or a line, and a line is about a state, an officer or a country alone.
-    # The default draws lines about a state; the states draw the other kinds (render_gui.py --state <name>).
-    day_parts = ["wd_row_day_bg", "wd_row_day", "wd_row_day_n", "wd_row_day_n1"]
-    line_parts = (["wd_row_stripe", "wd_row_event", "wd_row_go", "wd_row_a", "wd_row_point", "wd_row_face", "wd_row_who", "wd_row_name",
-                   "wd_row_flag", "wd_row_b", "wd_row_flag_near", "wd_row_b_near", "wd_row_cface", "wd_row_c", "wd_row_mark", "wd_row_marked"]
-                  + ["wd_row_icon_%d" % f for f in FAMILY_ICON])
-
-    def diary_row(*shown):
-        return [w for w in day_parts + line_parts if w not in shown]
-
-    state_line = diary_row("wd_row_stripe", "wd_row_icon_2", "wd_row_event", "wd_row_go", "wd_row_a", "wd_row_flag", "wd_row_b", "wd_row_cface", "wd_row_c", "wd_row_mark")
-    diary_page = ["wd_none", "wd_count_state", "wd_hn_none"]
-    # the states also carry everyday samples: the widest are the scene's own
-    row_samples = lambda **texts: {"mod1440_records_diary_row": texts}
-    diary_states = [
-        {"name": "days", "hide": {"mod1440_records_wd": diary_page, "mod1440_records_diary_row": diary_row("wd_row_day_bg", "wd_row_day", "wd_row_day_n")},
-         "samples": row_samples(wd_row_day="27 September, 1939", wd_row_day_n="2 lines"), "_note": "The row of a day."},
-        {"name": "officers", "hide": {"mod1440_records_wd": diary_page, "mod1440_records_diary_row": diary_row(
-            "wd_row_icon_4", "wd_row_event", "wd_row_face", "wd_row_who", "wd_row_mark")},
-         "samples": row_samples(wd_row_event="Promoted to field marshal", wd_row_who="§YGerd von Rundstedt§!"),
-         "_note": "A line about an officer: his face and name."},
-        {"name": "countries", "hide": {"mod1440_records_wd": diary_page, "mod1440_records_diary_row": diary_row(
-            "wd_row_stripe", "wd_row_icon_1", "wd_row_event", "wd_row_flag_near", "wd_row_b_near", "wd_row_marked")},
-         "samples": row_samples(wd_row_event="War declared by", wd_row_b_near="United Kingdom"),
-         "_note": "A line about a country alone, marked: its flag where the eye looks next."},
-        {"name": "territory", "hide": {"mod1440_records_wd": diary_page, "mod1440_records_diary_row": state_line},
-         "samples": row_samples(wd_row_event="Victory point taken", wd_row_a="§YModlin§!", wd_row_b="Poland", wd_row_c="§YFedor von Bock§!"),
-         "_note": "A line about a state, with everyday names."},
-    ]
-
     # ---- Wars: the file of a war of today with an enemy outside any faction; marks spread over the track
     marks = dict(("wr_c_mark_%d_%s" % (k, "w" if k in (0, 19) else "t"), [WF_TRACK_X + 2 + int((WF_TRACK_W - 4 - WF_MARK) * (19 - k) / 19.0), WF_TRACK_Y + 3])
                  for k in range(WR_LINES))
@@ -3233,33 +3686,7 @@ def scenes():
                 + ["wr_ln_%d_p" % k for k in range(WR_LINES)] + ["wr_ln_%d_go" % k for k in (0, 19)] + ["wr_ln_%d_s" % k for k in (0, 19)]
                 + ["wr_k_%d_rank_%d" % (k, r) for k in range(WR_COMMANDERS) for r in (1, 2, 3) if r != (1 if k == 0 else 2)])
     return {
-        "war_diary": {
-            "phase": "E1", "file": "mod1440_records.gui", "screenshot": shot,
-            "windows": [dict(place, name="mod1440_records_wd", rows={"wd_grid": 29}, listRows={"wd_grid": "mod1440_records_diary_row"},
-                             hide=diary_page, _note="A window of its own over the map, opened from the Records button of the top bar."),
-                        {"name": "mod1440_records_diary_row", "skip": True, "hide": state_line,
-                         "_note": "Drawn as a line of the territory log: a state, the country it was taken from, the officer. "
-                                  "The states 'days', 'officers' and 'countries' draw the other kinds of row."}],
-            "states": diary_states,
-            "setup": [{"key": "shift+j", "wait": 1.5}, {"clickWidget": "mod1440_records_wd/wd_tab_0", "wait": 1.0}],
-            "teardown": back,
-            "expect": ["mod1440_records_wd/wd_close", "mod1440_records_wd/wd_older"],
-            "crop": crop,
-            "manual": ["Lines that need a war: a state and a victory point taken with the general on the spot, capitulation, landings, aces",
-                       "A landing and an airborne drop with the honour switches on: the lines in the divisions' history"],
-            "checklist": ["The title strip: Germany's flag, Records, German Reich, 'Kept since 1 January, 1936 - 0 days on record'; the tabs in the order "
-                          "War Diary, Wars, Officers, Government, the War Diary's with the gold chevrons, the counts '1 lines' and '0 at war'",
-                          "Each tab opens its page; the chevrons move to it; its tooltip says what the page is for",
-                          "The diary's lines stand under a row for their day, with the date and the number of lines",
-                          "A line about a country: its flag (41x26) and name. A line about an officer (promote one by effect): his face and name",
-                          "A line about a state taken (mod1440_chk_state2): the plate moves the camera; the general's face and name at the right",
-                          "The box at the end of a line: click it, it is ticked; the Marked filter lists the line; click again and it leaves",
-                          "The page arrows < and > past 200 rows (mod1440_chk_fill fills the logs); 'lines 1 - N of M' in the head bar",
-                          "The campaign card: the tiles, the three bars of ground; the four honour switches toggle; landings and airborne ticked, "
-                          "the great city not",
-                          "The top bar button: '£army_experience Records', a badge with the lines written while the window was closed; closing clears it",
-                          "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type'"],
-        },
+        "war_diary": diary_scene(place, crop, shot, back),
         "officers": {
             "phase": "E2", "file": "mod1440_records.gui", "screenshot": shot,
             "windows": [dict(place, name="mod1440_records_of", rows={"of_grid": 21}, listRows={"of_grid": "mod1440_records_officer_row"},

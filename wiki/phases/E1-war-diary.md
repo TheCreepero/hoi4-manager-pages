@@ -136,6 +136,242 @@ The user had installed the build of 2026-10-12, played a war with it and wrote o
 | 6 | 2026-10-13 | the finished build with the mod "Add USA Generals AI REWORK", cold start, 1 to 4 January | the lines for officers no hook tells of (their command came by an effect) | eight "Commissioned" with names on the day the daily round met them, then "More officers commissioned"; a person kept by his place stayed right through a change of places made up by effect ([E2 notes](E2-officer-records.md), checks 5 to 7) | `scratch/checks/d_wd-*` | X66, X67 |
 
 
+## Proposal
+
+<!-- generated: proposal (tools/phase_notes.py; edit the handoff file, not this) -->
+The page is right in its bones: the kinds of line are the right ones for a role-player, and the user's own save (read for this review: 155 main-log lines, 178 territory lines, 1084 days) shows few lines that are noise. What is wrong is narrower and has numbers: 70 of 152 state lines are hand-overs in peace counted as battles ("States lost 54" where the battle losses were about 7), 31 of 155 main-log lines repeat or name nobody, and the list spends a fifth of its rows on day headers while one peace day writes 88 lines.
+
+The proposal: split taken and lost by whether we are at war; the day in a column and runs of states folded, so the whole campaign fits one page of 200 rows instead of two; names that lead somewhere (a country to its lines, an officer to his file); new lines marked; thirteen new kinds the hooks can tell, and a number on a line; the pane as banded tables with the chronicle in view. Verdict: refine; effort: L: the generator only (build_records.py): 13 kinds and 6 hooks, the split and two daily checks in the recording, part n with its grow line, the list's row and copy (day column, folds, new mark, filter 8, two link buttons), the pane rebuilt as tables with a small chronicle list, the badge and state card texts, about 15 new sprite sizes in the E1 review block, the scene's states and samples, and check effects for the new kinds.
+
+What vanilla does badly: Read from the user's save (scratch/phases/E1/read_save*.py, save_facts.json):
+
+**The territory log mixes battles with treaties.** state_taken 93: 57 from an enemy, 36 from countries never at war with us (34 on the day of an annexation). state_lost 53: 30 to our own subjects (28 on one peace day), 22 to a former enemy, 16 of them on that same peace day. vp_lost is 0. The campaign card shows "States 98 taken, 54 lost" and a bar two-thirds green: a war that went far better than that.
+
+**The main log repeats.** member_in is the largest kind (27 of 155), and 17 of those are a country that became our subject that day, which "Made a subject:" already says. ace_new writes 14 lines that name nobody.
+
+**The list is slow to read back.** The All view has 318 lines on 83 days and needs 401 rows (2 pages): every day costs a header row, and 52 of 83 days have one line. One day holds 100 lines (a peace: 41 states taken, 28 handed to subjects, 16 to the former enemy). A page of 200 rows holds 163 lines.
+
+**Following one enemy or one general** takes another page: the Wars file shows 20 lines, the Officers file 11.
+
+**The pane** uses tiles for what is a list of figures (the rule of 2026-10-16: tables, not tiles), gives the chronicle three lines of explanation and leaves 90 px empty under them, and keeps the honours' switches and a Kept card of three lines (one of them a hotkey hint) in sight at all times.
+
+**Counting fault:** landings (6 lines) and airborne landings are never counted (ct 0), because a family-2 line that stands only in the main log is counted in neither log.
+
+**1. Relevance: what the 39 kinds earn.** Judged on the user's save (the table gives every kind with its count). **Keep 30** as they are: wars, peace, capitulations, annexations, subjects, factions, capitals, landings, victory points, government, officers, the pride of a fleet. **Split 4** (state and capital taken and lost) by whether we are at war. **Refine 2** (no faction line for a new subject; no "government changed" on the day of a party change). **Quiet 3** (the nameless ace lines: decision 2). **Fix 2** (landings and airborne are never counted). Two kinds get a number (skill level reached, how many more officers).
+
+Noise in numbers: of 155 main-log lines 31 repeat or name nobody (20%); of 152 state lines 70 are treaties read as battles (46%). Nothing else in the save is noise: skill levels, feared to flood, were 4.
+
+**2. Recording: battles apart from treaties.** In mod1440_tr_taken and mod1440_tr_lost, before the line: `has_war_with = var:tr_c` (the country in scope against the other). At war: as today (state_taken, capital_taken, the general on the spot, the war's and the officer's counts, the honour). Not at war: kind 39 "Received from" or 40 "Handed over to" into the territory log only (a capital too: the main log has the Annexed, Peace or Made a subject line), no general searched (mod1440_of_best skipped: 88 searches on the user's peace day), no war or officer counted, the state card told it came by treaty (mod1440_sr_how = 2).
+
+Ground counts battles: in the user's save States 59 : 7, Victory points 25 : 0, Capitals 2 : 1, and a row "By treaty: received 39, handed over 47" (7 and 47 if the 16 states that went back to the former enemy on the peace day count as a treaty: open in game). Lines already written keep their kinds; the figures of an existing save stay as they were until new lines come (the counters cannot be split after the fact).
+
+**3. Recording: fewer repeats, a number on a line.** member_in is not written for a country in our `subjects` (the daily round compares subjects first, so it is there). government is not written on a day party was (a day variable). The nameless ace lines: decision 2. Landings and airborne are counted (count a main-log line of family 2 when its x is 0).
+
+**Part n:** LOG_ARRAYS gets "n" at its end and mod1440_ev_grow a line for it (zeros for the lines a save has; the chronicle the same). Written for: level (the skill reached), commissioned_more (how many), cited (divisions), casualties (the step). Shown in the list right-aligned at the end of the words column in hoi_20b yellow; hidden on the Wars and Officers files on purpose (their lines are 26 high and narrow).
+
+**4. More to store: thirteen kinds and two values.** New kinds at the end of KINDS (39 to 51; codes stay below 90): the two of the split; **Left the service** and **Captured:** (the daily round already marks each serving officer with the day: one loop over the known officers finds who was not met, and is_general_captured who is held; the line names him by of_me, so his file shows it); **Volunteers sent to / recalled from**; **our government in exile, hosting one, back from exile**; **Broke the cipher of**; **Won the civil war against**; **We fight on**; **Our casualties passed** (a step of casualties_k, once a day).
+
+Cost: the hooks cost nothing on a day they do not fire and leave at their first line for a country that is no player's; the daily round adds one loop of ~100 officers and one comparison. Save: a new kind adds no bytes at full logs (a line takes an old line's place) and 29 bytes of counter; part n +73 KB, the officer marks +6 KB, everything of this design +88 KB, 0.08% of the user's 104 MB save (save_cost.py).
+
+Not proposed, with the reasons in the table: a nuclear strike (no target in scope), a coup, a border war, an autonomy level, the end of a peace conference, operatives (later, with a page of their own), battles as lines.
+
+**5. The list: the day in a column, a run folded, new lines marked.** The card widens from 1172 to 1240 (the pane gives 68), rows 1198x34 [WD_ROW_W], 29 in sight. Columns: date 8 (118, hoi_16mbs, "30 September, 1944" measures 115), icon 132, words 160 (232, hoi_18mbs; the longest words, "Hosting the exiled government of", 224), plate 398 (260x28; text 240), flag 668 and country 716 (228, as today), officer's face 954 and name 986 (176, as today), mark 1170.
+
+**No day rows:** the date stands on a day's first line; every line of a day shares one band (the stripe follows the day's parity, not the line's). The day rows go (WD_MORE loses hd and hn); a page of 200 rows holds 200 lines instead of 163.
+
+**Folds:** in All and in the country filter, three or more state lines of one day, one kind and one country become one row: the first state's plate and "+40 states" (hoi_16mbs, right in the plate), no officer, the tooltip "The Territory filter lists each state." Territory and the lines of a state show every line. In the user's save: 318 lines in 207 rows instead of 401, the whole campaign on one page.
+
+**New lines:** a line written while the window was closed stands on the lighter band (GFX_1440p_SG_pick, the chosen-row band of the other pages): its number above mod1440_rec_seen, set at Close.
+
+**6. Names that lead somewhere.** The country's flag and name become a button (a transparent hit area of 276x28 over them): the diary shows that country's lines only, filter 8 (`mod1440_wd_country`, the next filter number), from both logs as the lines of a state do; the head bar shows "§Y<country>§!: lines 1 - N of N" where the Officer head was. Following an enemy back to the first day is one click; the Wars file keeps its 20 lines.
+
+The officer's face and name (the general on the spot, or the person of an officer line) become a button: the Officers page with his file open (mod1440_of_sel, as a row click sets it). The state's plate keeps moving the camera.
+
+**7. Filters and pages.** The seven filters stay (numbers kept); filter 8 is reached from a name and left by any filter button. The arrows stay. "lines 1 - N of M" counts lines, a fold as its states. Its tooltip takes the text of the Kept card: "Main log 155 of 1000 lines, territory 178 of 1000. The oldest line goes first; a marked line stays."
+
+**8. The right pane, 400 wide.** **The campaign** (414 high): banded tables under head bars (rows 26, hoi_16mbs labels, hoi_18mbs yellow values), two figures to a row. War and peace: wars begun, wars ended, capitulations, annexations, subjects made, at war today. Ground, in battle: states, victory points, capitals with taken, a bar of 116 and lost; then by treaty: received, handed over. The service: commissioned, promotions, skill levels, decorations, left the service, governments.
+
+**The chronicle** (348): the four to six newest marked lines (date in grey, icon, words, name), copied by mod1440_wd_list from the end of mod1440_kp_*; "Read the chronicle" opens the Marked filter. Empty: the two lines that say how to mark.
+
+**Battle honours** (196): one line of what they are, the four switches in two rows, "By themselves | Cited by you" as a table row, the last citation.
+
+**Kept** (96): two lines. The hint "Shift+J or Escape closes the window" goes: the top bar button's tooltip and Close say it.
+
+**9. The state card.** Unchanged but for a state that came by treaty: "Received from §YCuba§! by treaty on 17 May, 1943, held 26 days" and, in grey, that no troops are named (mod1440_sr_how 2 hides the "by the troops of" window). "Its lines" stays.
+
+**10. The top bar badge.** The count turns red (§R) when one of the new lines is of War and peace (mod1440_rec_new_war, set by mod1440_ev_add while the window is closed, cleared at Close). The button's tooltip adds "N new lines since you last closed the Records, K of war and peace" and the newest line: its words, its name and date (mod1440_rec_last_k, _a or _b, _d, written by mod1440_ev_add). The button stays 150x28 at 2002,3 (D7).
+
+**11. What stays (the contracts).** KINDS only grows at its end; LOG_ARRAYS gets "n" at its end with its grow line; page numbers and filters 0 to 7 keep their values, the country filter is 8; the Records frame is untouched (no tab, title or body change); MARK_KEEP, LOG_KEEP and VIEW_ROWS stay. The Wars and Officers files read the new kinds by take() and show their words; part n is hidden there on purpose. The split changes what the Wars page counts per enemy: a hand-over is no longer "lost" to a former enemy (written down as a deviation with the build). New commands for the test's list: has_war_with.
+
+| Kind (number, name) | Words | Family | In the user's save (main / territory) | Verdict | Why, and the hook or value with its cost |
+|---|---|---|---|---|---|
+| 0 begins | The record begins | 1 | 1 | Keep | The anchor of the record. |
+| 1 war_on | War declared on | 1 | 9 | Keep | Core of the story. |
+| 2 war_by | War declared by | 1 | 24 | Keep | Core. They come in bursts (9 on one day when the Axis minors declared war); one line each still names each enemy. |
+| 3 war_with | At war with | 1 | 0 | Keep | The daily comparison's backstop: 0 here because the hooks caught every war. |
+| 4 peace | Peace with | 1 | 22 | Keep | Core. |
+| 5 capitulated | Capitulated: | 1 | 2 | Keep | Core. |
+| 6 we_capitulated | We capitulated | 1 | 0 | Keep | Core. |
+| 7 annexed | Annexed | 1 | 2 | Keep | Core. |
+| 8 subject_new | Made a subject: | 1 | 17 | Keep | Core: 9 and 5 on two days of a peace. |
+| 9 subject_gone | No longer a subject: | 1 | 2 | Keep |  |
+| 10 faction_in | Joined the faction led by | 1 | 0 | Keep | Rare and important. |
+| 11 faction_out | Left the faction | 1 | 0 | Keep |  |
+| 12 member_in | Joined our faction: | 1 | 27 | Refine | The largest kind of the main log (17%). 17 of the 27 are a country that became our subject the same day: a subject joins its overlord's faction, so the line repeats "Made a subject:". Not written for a country that is our subject (is_in_array subjects); the other 10 stay. |
+| 13 member_out | Left our faction: | 1 | 1 | Keep |  |
+| 14 state_taken | State taken | 2 | - / 93 | Split | 36 of the 93 came from a country never at war with us (an annexation brought 34 on one day). A state that changes hands with a country we are not at war with (has_war_with) becomes kind 39 "Received from"; the Ground figures count battles only. |
+| 15 state_lost | State lost | 2 | - / 53 | Split | 30 of the 53 went to our own subjects at a peace (28 on one day), and vp_lost is 0: the campaign card's "States lost 54" was nearly all hand-overs. Without a war: kind 40 "Handed over to". |
+| 16 capital_taken | Capital taken | 2 | 5 (both logs) | Split | 3 of the 5 from a country never an enemy (annexations): those become "Received from" in the territory log; the main log has the Annexed line already. |
+| 17 capital_lost | Capital lost | 2 | 1 (both logs) | Split | Same rule. |
+| 18 landing | Landing in | 2 | 6 | Keep, fix | Core. Its counter reads 0 for 6 lines: a family-2 line of the main log that is not in the territory log is never counted (recording(): counted only in tr, or in ev when fam is not 2). Count it. |
+| 19 airborne | Airborne landing in | 2 | 0 | Keep, fix | Same counter fault. |
+| 20 cited | Divisions cited in | 2 | - / 1 | Keep | The player's own act. Gets the number of divisions (part n). |
+| 21 party | The ruling party changed | 3 | 0 | Keep |  |
+| 22 government | The government changed | 3 | 0 | Refine | Probably fires with a party change (both hooks for one event): not written on a day a party line was written. To be seen in game. |
+| 23 election | An election was held | 3 | 0 | Keep |  |
+| 24 leader | New head of government | 3 | 0 | Keep | Core for role-play (a person with a portrait). |
+| 25 appointed | Appointed | 3 | 2 | Keep |  |
+| 26 dismissed | Left office | 3 | 2 | Keep |  |
+| 27 commissioned | Commissioned | 4 | 1 | Keep |  |
+| 28 promoted | Promoted to field marshal | 4 | 1 | Keep |  |
+| 29 level | Gained a skill level | 4 | 4 | Keep, add n | Not the noise it was feared to be (4 lines in 1084 days). Gets the level reached (part n). |
+| 30 decorated | Decorated | 4 | 3 | Keep |  |
+| 31 ace_new | An ace was promoted | 5 | 14 | Quiet (decision 2) | 14 lines (9% of the main log) that name nobody: the ace cannot be kept yet (E5). The counter stays (Wars page); the line waits for E5. |
+| 32 ace_lost | An ace was lost | 5 | 0 | Quiet (decision 2) | Same. |
+| 33 ace_down | An enemy ace was shot down | 5 | 0 | Quiet (decision 2) | Same; an air war makes many. |
+| 34 pride_lost | Our pride of the fleet was sunk by | 5 | 0 | Keep |  |
+| 35 pride_sunk | Sank the pride of the fleet of | 5 | 0 | Keep |  |
+| 36 vp_taken | Victory point taken | 2 | 9 / 25 | Keep | Core; only 5 of 25 fell on the day their state did, so no merging. |
+| 37 vp_lost | Victory point lost | 2 | 0 | Keep | Its 0 is the evidence that the 53 states lost were not battles. |
+| 38 commissioned_more | More officers commissioned | 4 | 0 | Keep, add n | Says how many (part n). |
+| 39 state_received (new) | Received from | 2 | would be 39 (36 states, 3 capitals) | Add | on_state_control_changed (R5), when NOT has_war_with FROM (triggers_documentation.md:5051). No daily cost; a trigger per hook that reaches a human. |
+| 40 state_handed (new) | Handed over to | 2 | would be 31 to 47 | Add | The same hook, the other side. |
+| 41 officer_gone (new) | Left the service | 4 | - | Add | Daily: an officer of mod1440_of_known whose mod1440_of_seen_day is yesterday's (the round marks every serving officer, build_records.py 1270). 103 scope entries a day in this save, under 1 ms by X69. Save: one mark per officer (3 KB). |
+| 42 officer_captured (new) | Captured: | 4 | - | Add | is_general_captured (CHARACTER, triggers_documentation.md:5603) asked in the same daily loop; one mark per officer (3 KB). |
+| 43 volunteers_sent (new) | Volunteers sent to | 1 | - | Add | on_send_volunteers: ROOT sender, FROM receiver (vanilla 07_nsb_on_actions.txt:2003). No daily cost. |
+| 44 volunteers_back (new) | Volunteers recalled from | 1 | - | Add if seen | on_recall_volunteers: documented, scopes not commented in vanilla: open in game. |
+| 45 exiled (new) | Our government went into exile in | 3 | - | Add | on_government_exiled: ROOT the exile, FROM the host (09_aat_on_actions.txt:219). |
+| 46 exile_hosted (new) | We host the government in exile of | 3 | - | Add | The same hook, FROM human. |
+| 47 reinstated (new) | Our government is back from exile | 3 | - | Add | on_exile_government_reinstated: ROOT the exile, FROM the old host (04_mtg_on_actions.txt:23). |
+| 48 cipher (new) | Broke the cipher of | 1 | - | Add | on_fully_decrypted_cipher: scope the target, FROM the decrypter (05_lar_on_actions.txt:341). Only our own success: that an enemy broke ours is the intelligence the game hides. |
+| 49 civil_war_won (new) | Won the civil war against | 1 | - | Add | on_civil_war_end: ROOT the winner, FROM annexed, fires on_annex too (00_on_actions.txt:1397): the Annexed line is then not written. |
+| 50 fought_on (new) | We fight on: no longer capitulated | 1 | - | Add | on_uncapitulation: ROOT the country (00_on_actions.txt:1165). |
+| 51 casualties (new) | Our casualties passed | 1 | - | Add | Daily: casualties_k (R14; trigger at triggers_documentation.md:2085) against the next of 10, 25, 50, 100, 250, 500, 1000, 2000, 5000 thousand; one comparison a day, one variable. The number is part n. |
+| not proposed | on_nuke_drop | - | - | No | ROOT the country that drops; the target is in no scope (00_on_actions.txt:384). |
+| not proposed | on_coup_succeeded, on_border_war_lost | - | - | No | Scopes not commented in vanilla; the border war is China's. |
+| not proposed | on_subject_autonomy_level_change | - | - | No | ROOT subject, FROM overlord (01_tfv_on_actions.txt:171), but no text names the new level. |
+| not proposed | on_peaceconference_ended | - | - | No | Repeats the Peace line. |
+| not proposed | on_operative_captured, on_operative_death | - | - | Later | A person kept by place (mod1440_ch_remap); belongs with an operatives page. |
+| not proposed | battle hooks as lines | - | - | No | A front makes hundreds: they stay counts on the officer (E2). |
+| part n (new) | a number on a line | - | - | Add | LOG_ARRAYS + ["n"] with a line in mod1440_ev_grow (zeros for old lines). For: the skill level reached, how many more officers, divisions cited, the casualty step. +73 KB with both logs and the chronicle full, 0.07% of the user's save. |
+
+Additions, each with the row of "What a redesign can add" or the register id that allows it:
+
+- The day in a column on a day's first line; the day's lines on one band; no day rows (Scripted GUI row widgets shown per row by _visible triggers on the row's index (X39, X50); 'A table of states or generals' row of What a redesign can add (scripted GUI, X10))
+- Folded runs of states in All and the country filter (+N states) (The page's copy made by script (mod1440_wd_list, X48, X69); a count array of the copy read by index (X30))
+- Lines written while the window was closed on the lighter band (A per-row _visible trigger (X39) on a number the copy carries; the band sprite GFX_1440p_SG_pick_* of the other pages)
+- A country's name as a button: its lines only (filter 8) ('New buttons that do something: yes in a scripted GUI' (X3); the row's index in a click effect (X50); as filter 7 of a state)
+- An officer's name as a button: his file on the Officers page (X3, X50; the officer entered by the number or place the line keeps (X66, X67))
+- Kinds 39 and 40: received by treaty, handed over (on_state_control_changed (R5, X43) with has_war_with (documented, triggers_documentation.md:5051))
+- Kinds 41 and 42: left the service, captured (The daily round's mark of serving officers (build_records.py, mod1440_of_seen); is_general_captured (R4, documented))
+- Kinds 43 to 50: volunteers, exile, cipher, civil war, fought on (R5 hooks with the scopes of the vanilla comments (SCR-062); X52 for carrying the scope into the effect)
+- Kind 51 and part n: casualty steps and a number on a line (casualties_k (R14, documented); a new part of the logs grown like NEW_ARRAYS (contracts))
+- The campaign as banded tables; Ground in battle and by treaty (Design Rules, 'A list of numbers is a table, not tiles' (second A3 redesign); counters mod1440_ct (save contract kept))
+- The chronicle's newest marked lines in the pane (A scripted list from an array (X10) copied by mod1440_wd_list)
+- Red badge and the newest line in the button's tooltip (Colour codes in a scripted text (X56); a variable in a pdx_tooltip (X30), GetTokenLocalizedKey there untested (openInGame))
+- State card wording for a state received by treaty (The card's selected_state_context (X47) reading one more state variable)
+
+Open until the game shows it:
+
+- Whether has_war_with is still true when a peace conference moves states: the user's peace day wrote 16 "lost" to the former enemy. If it is, those stay battles; fallback: also count as by treaty a change on a day the other country has capitulated (has_capitulated).
+- The scopes of on_recall_volunteers (not commented in vanilla) and whether on_send_volunteers fires once per sending.
+- Whether on_government_change and on_ruling_party_change fire together for one change (the reason to skip the second line).
+- The order of on_annex and on_state_control_changed for an annexation (the received states and the Annexed line on one day either way).
+- [?mod1440_rec_last_k.GetTokenLocalizedKey] inside the pdx_tooltip of the top bar button.
+- The lighter band of new lines against the day bands: whether it reads as "new" (the user's judgement).
+- The daily round's cost with the loop over known officers, and the page's with folds, by mod1440_chk_list_time after mod1440_chk_fill.
+- Left the service: a retired general and one killed in the field both read as not met; captured generals (is_general_captured) are told apart. A general who comes back is not written twice (the mark clears when he is met again).
+- The new hooks in play: none of 43 to 50 can be caused paused in January 1936 except by effect (send_volunteers, decryption); the check writes "MOD1440 listening" to game.log as the landing hooks do.
+
+Figure groups of the design page: page, list, follow, pane, badge, state.
+<!-- end generated: proposal -->
+
+## Build (generated)
+
+<!-- generated: build (tools/phase_notes.py; edit the handoff file, not this) -->
+Status: built and checked by render and tests; not seen in game (by builder-script).
+
+**What was built.** The UX review is built in tools/build_records.py with all eight decisions taken. Recording: 13 new kinds at the end of KINDS (39 to 51). State changes split by has_war_with = var:tr_c: not at war, a 'Received from' or 'Handed over to' line goes into the territory log only, with no general, no war or officer count and the state card set to sr_how 2. member_in is not written for a subject; government is skipped on a day of party; ace lines are quiet (counters kept); landings and airborne are now counted. Part n is added at the end of LOG_ARRAYS with a grow line for ev, tr and kp. Officers who left the service or were captured get lines from the daily round (mod1440_of_gone), as do casualty steps; six new hooks (exile, cipher, volunteers, civil war, uncapitulation) write lines. The page: a list card of 1240 with the day in a column on each day's first row, one band per day, new lines on the pick band (id above mod1440_rec_seen, set at Close) and runs of 3 or more states folded in All and in a country's lines. A country's name opens filter 8; an officer's name opens his file. The pane is 400 wide: banded tables, the chronicle with its 4 newest marked lines, compact honours, and Kept in two lines. The badge turns red with the newest line in its tooltip, and the state card shows the treaty wording.
+
+**Deviations.**
+
+- Kind 46 reads 'Hosting the exiled government of', not the table's 'We host the government in exile of'.: The table's words measure 233 px in hoi_18mbs, over the 232 px words column. The design's own section 5 measured 'Hosting the exiled government of' at 224 px.
+- The number of a casualty line is stored in thousands (n = 250 for 250 000). The row has three twins of the number: as it is, ' 000', and ' 000 000' for a step of 1000 thousand or more, written as n/1000 into the page's copy.: A variable stops at about 2.1 million, so the steps of 2 and 5 million cannot be stored whole. The game's formatting has no thousands separator.
+- The badge tooltip names the newest line through one variable, mod1440_rec_last_n. It holds the person or state, or the state of a victory point instead of the point's name, or the country; a line without a subject names the player's own country.: A tooltip cannot show one of several twins, and a point's name is a text key that GetName cannot read.
+- The chronicle in the pane shows 4 lines.: The design said four to six and its mock-up shows four; a fifth would leave 7 px above the button.
+- The Country head is also hidden in filter 8, as well as the Officer head.: The follow mock-up shows only When, What happened and Where, or who; every row names the same country.
+- A folded row's box marks the first state's line only. Its plate has its own twin button whose tooltip says the Territory filter lists each state.: One row stands for several lines. Marking each line of the run would need a loop on a click, and the design says nothing about it.
+- on_recall_volunteers is written with the scopes of on_send_volunteers (ROOT sender, FROM receiver) and logs both scopes to game.log.: Vanilla gives no comment for its scopes; the design said 'add if seen'.
+- kept_tokens() now also maps mod1440_rec_last_k (the badge's newest kind) when the token numbers move. The new kinds change the dictionary's version, so an existing save runs mod1440_tk_fix once and game.log gets its line once.: Contract: a kept text key goes through the dictionary.
+- The split changes what the Wars page counts per enemy: a hand-over is no longer 'lost' to a former enemy, and a received state is no longer 'taken'. An officer's states also count battles only.: This was the deviation the design announced (section 11). Lines already written keep their kinds.
+- tools/build_managers.py (D7's top bar scene, not D8's code): the handle window hides rec_badge_war, in a block marked '# --- E1 ---'.: The badge now has a red twin, so the top bar scene would otherwise draw both counts on top of each other.
+- Honour switch labels are shortened as in the mock-up: 'a capital falls' and 'a city of 15 or more falls'.: There are two switches to a row at 188 px.
+- The government line is left out only when on_ruling_party_change came first on the same day.: The order of the two hooks is open in game (fallback below).
+- Kind 49 'Won the civil war against' is written from on_civil_war_end_before_annexation, not on_civil_war_end (gate B).: Vanilla documents that it fires just before FROM is annexed and also fires on_annex (04_mtg_on_actions.txt:194). The skip in on_annex (mod1440_ev_cw_day and _cw_c) therefore holds: one line, not two.
+- Gate B, W28: the row's name boxes are fixedsize with a one-line maxHeight: wd_row_a, _point, _who, _name, _b, _b_near, _c. A longer name ends in dots. The state card's names (sc_title, sc_taken, sc_received, sc_by) already were.: A name another mod can lengthen gets a box of fixed size (contracts).
+- Gate B: the chronicle's words box (wd_ch_0..3) is 208 px instead of 200, and fixedsize.: The longest kind measures 202 px in hoi_16mbs ('Our government went into exile in', 'Our government is back from exile'). At 40 + 208 the box ends under the name box, which is right-aligned in 216..384.
+- Gate B, words column: all 52 kinds (0 to 51) measure 228 px or less in hoi_18mbs against 232. The widest are 'Our government is back from exile' and 'We fight on: no longer capitulated' at 228. The number of a line never meets its words in the 228 px it is right-aligned in: the closest are 'More officers commissioned' (190) + '120' (27) = 217, 11 px apart, and 'Our casualties passed' (145) + '5 000 000' (71) = 216, 12 px apart.: Measured with the game's fonts (scratch/phases/E1/build/measure_kinds.py).
+
+**Fallbacks.**
+
+- If Peace-conference hand-overs to the former enemy still come out as 'State lost' (has_war_with still true while the conference moves the states).: In mod1440_tr_taken and mod1440_tr_lost, also count as a treaty a change on a day the other country has capitulated: add 'NOT = { var:tr_c = { has_capitulated = yes } }' to the at-war test (the design's fallback).
+- If on_government_change fires before on_ruling_party_change, so both lines are written.: Write the government line one day late: keep the day in mod1440_ev_gov_day and write it from the daily round when mod1440_ev_party_day is not that day.
+- If game.log shows on_recall_volunteers with other scopes (FROM is not a country, or the scopes are swapped).: Swap ROOT and FROM in the hook, or remove kind 44's hook (the kind stays in KINDS).
+- If The tooltip of the top bar button shows '[?mod1440_rec_last_k.GetTokenLocalizedKey]' raw or empty.: Drop the words from the tooltip, so it reads 'Newest: <name>, <date>'.
+- If The lighter band of new lines does not read as 'new' against the day bands (the user's judgement).: Keep the day band and put a small yellow mark at the row's left edge (GFX_1440p_SG_tile_30x24 or a text icon) on the new rows instead.
+- If mod1440_chk_list_time shows the folds costing noticeably more than the last check (about 80 ms a view).: Fold in All only (WD_FOLDING = (0,)), or fold runs of the territory log only.
+- If error.log shows 'invalid scope' lines from mod1440_of_gone for a fallen general (for_each_scope_loop over a character who no longer exists).: Wrap the loop body in 'limit = { exists = yes }' and write 'Left the service' from the mark only.
+- If A click on an officer's name does nothing for a general given his command by effect (a place, not a number).: Run mod1440_of_refs before open_file, as the hooks do, and enter him through mod1440_ch_at.
+- If game.log's 'MOD1440 listening: on_government_exiled' line shows ROOT as the host and FROM as the exile (04_mtg_on_actions.txt:444 gives no scopes; 09_aat_on_actions.txt:219 says ROOT the exile, FROM the host).: Swap the two lines: 'Hosting the exiled government of' for ROOT, and 'Our government went into exile in' in FROM's scope.
+- If Both 'Annexed' and 'Won the civil war against' appear for one civil war (on_civil_war_end_before_annexation fired after on_annex, against its comment).: Move the line to on_civil_war_end and drop the Annexed line there by removing the last main-log line when it is annexed with b = FROM on the same day.
+
+**Not seen in game.**
+
+- Everything of this round: the split by has_war_with, the 13 new kinds and their 6 hooks, the officers' daily marks, the casualty steps, part n and its grow line for an older save
+- The list: the day column, the bands, the new-line band, the folds and their counts, filter 8, the country and officer buttons over the flag, face and name (the transparent skill_transparent hit sprites at 276, 260 and 208)
+- The pane: banded tables, the chronicle's newest marked lines and 'Read the chronicle', the compact honours
+- The red badge and the tooltip with GetTokenLocalizedKey; the state card's treaty wording
+- Volunteers, a civil war won, fighting on after capitulation and a government back from exile: no effect causes them on a paused January 1936 (no send_volunteers effect exists), so they are left to a played game
+
+Shared files touched: `interface/mod1440_ui.gfx (block '# --- E1 ---' at the end: stripe and pick 1198x34, head 260x28, hit 276x28, 260x28 and 208x28, head 384x26, stripe 384x26 and 384x46, bar 116)`, `tools/check_effects.py (block '# --- E1 ---': mod1440_chk_treaty, _treaty_run, _level, _cipher, _exile, _old3, _sizes3)`, `tools/build_managers.py (one line in D7's top bar scene, marked '# --- E1 ---': the handle hides rec_badge_war)`, `tools/scenes/war_diary.json and tools/scenes/top_bar.json (generated)`.
+
+**Game check.** `tools/Invoke-GameCheck.ps1 war_diary wars`
+
+Checklist for the game checker:
+
+1. 1. Title strip and tabs as before (Germany's flag, Records, German Reich, 'Kept since 1 January, 1936 - 0 days on record'). The War Diary tab has the gold chevrons, and each tab opens its page.
+2. 2. The list has no rows of its own for days. The date (hoi_16mbs) stands on a day's first line only, all lines of a day share one band, and two days have different bands. 'The record begins' sits on the lighter band of a new line until the window has been closed once; after that it is on the day's band.
+3. 3. Close and reopen the Records after a day with a line: the new lines are on the lighter band (pick). Does it read as 'new' against the day bands?
+4. 4. mod1440_chk_war: 'War declared on' Poland with its flag (41x26) and name. Click the name: only Poland's lines show, 'Poland: lines 1 - N of N' stands in the head bar, the Country and Officer heads are gone and no filter is lit. All brings every line back.
+5. 5. mod1440_chk_state2 (Danzig, at war): 'State taken' with the plate that moves the camera, Poland in the Country column, and the general's face and name. Click his name: the Officers page opens with his file. Wars page: Danzig counts as taken in the war with Poland.
+6. 6. mod1440_chk_treaty: 'Handed over to' Austria and 'Received from' Austria, also under Territory, with no general. Niederschlesien's state card reads 'Received from Austria by treaty on 1 January, 1936, held 0 days' with the grey no-troops line. The Wars page counts nothing for it, and the pane's By treaty row reads received 1, handed over 1.
+7. 7. mod1440_chk_treaty_run (four Austrian states): All shows one 'Received from <state>' row with '+3 states' at the plate's right end and the fold tooltip on the plate. Territory lists four lines. The head bar counts four lines for that row.
+8. 8. mod1440_chk_level: 'Gained a skill level' with the level reached in yellow at the right end of the words. Compare it with the level in the general's own window and with game.log's 'MOD1440 check: level' line.
+9. 9. mod1440_chk_retire, then mod1440_chk_daily: 'Left the service' with his face and name, and The service shows 'Left the service 1'. A second mod1440_chk_daily writes no second line.
+10. 10. mod1440_chk_cipher and mod1440_chk_exile: 'Broke the cipher of' Poland (if the full ratio fires the hook) and 'Hosting the exiled government of' Poland, each with its flag. Note which lines came. For exile, also note the 'MOD1440 listening: on_government_exiled' line in game.log: which country is ROOT and which FROM.
+11. 10b. Hover a long name on a row (a state, a person, a country of the playset): it stays on one line and ends in dots; nothing wraps into the next row.
+12. 11. The pane: The campaign as banded tables under three head bars. 'At war today' equals the number of enemies on the Wars page (rule 3: the game's own war list in the diplomacy view). Wars begun and Wars ended match the Wars page rows. 'Skill levels' counts the levels gained.
+13. 12. The chronicle: mark three lines with their boxes. The pane lists them newest first (date in grey, icon, words, name), and 'Read the chronicle' opens the Marked filter. Unmark them all: the two lines that say how to mark come back.
+14. 13. Battle honours: the four switches toggle in two rows; By themselves and Cited by you form one table row; the last citation stands under them.
+15. 14. Kept has two lines. Hover the head bar's 'lines 1 - N of M': its tooltip carries the Kept text.
+16. 15. mod1440_chk_fill, then the arrows: 200 lines a page with no day rows, 'lines 1 - 200 of M'. Scroll the list to its end. Run mod1440_chk_list_time and mod1440_chk_card_time and compare their game.log times with the last check's.
+17. 16. Top bar: a War and peace line written while the window is closed (mod1440_chk_war with the Records closed) turns the count red. The tooltip says 'N new lines since you last closed the Records, K of war and peace' and 'Newest: War declared on Poland, 1 January, 1936'. Open and close the window: the badge clears and the count is yellow again for a non-war line.
+18. 17. mod1440_chk_old3, then open the Records: mod1440_chk_sizes3 in game.log reads ev, tr and kp n as long as their dates. No line is on the lighter band, no 'Left the service' line appears for an officer gone before, and no casualty line appears for steps already passed.
+19. 18. error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type', no unknown trigger or effect (has_war_with, casualties_k, is_general_captured) and nothing from on_recall_volunteers.
+
+**Tests.** build.ps1 -Check war_diary: 254 passed, 0 failed (59 skipped) after gate B; build_managers.py --check clean; war_diary rendered again (default, follow)
+<!-- end generated: build -->
+
 ## Close
 
 - [x] Engine Facts rows for what the checks taught (X50 to X55)
@@ -212,7 +448,7 @@ Opened with `/phase E1 War Diary`. The user: "I want this looked at from a UX vi
 ### Roles and handoffs
 
 - Handoff folder: `scratch/phases/E1/` (not in the repository)
-- Builder: `builder-script` (a generated page; the log's shape is a save contract). Starts only after the uncommitted D7 build in `tools/build_managers.py` and `tools/build_records.py` is committed.
+- Builder: `builder-script` (a generated page; the log's shape is a save contract). Started 2026-10-22 in the main tree of this repository (D7 is in the initial commit of the split).
 - Design page: https://claude.ai/artifact/QhAoDf1vp7YntBu8PBfcgy (round 1, 2026-10-17; the designer's handoff `scratch/phases/E1/design.json`, thirteen figures, `mock_page.py`, `mocklib.py`, and the save-reading scripts `read_save*.py` that gave the counts)
 - Contracts written (hotkeys, shared rows, shared files): yes, `scratch/phases/E1/contracts.md` (2026-10-17): the order of `KINDS`, `LOG_ARRAYS` and the page and filter numbers are save contracts; the Records frame is shared by four pages; the logs are read by the Wars and Officers pages too.
 - Worktrees: main tree
@@ -222,3 +458,20 @@ Opened with `/phase E1 War Diary`. The user: "I want this looked at from a UX vi
 Designer, 2026-10-17: verdict refine. Judged on the user's own save (`USA.hoi4` of 2026-10-16, read without changing it; the totals agree with `screenshots/records_wardiary.png`): 30 of the 39 kinds kept; state and capital taken and lost split by `has_war_with` (70 of 152 state lines were hand-overs in peace, and the card read "States lost 54" where battle losses were about 7); the faction line not written for a new subject (17 of 27); the nameless ace lines quieted until E5; landings and airborne lines never counted (a fault in `recording()`: a family-2 line of the main log alone is counted in neither log). Thirteen new kinds from hooks and the daily round (received and handed over by treaty, left the service, captured, volunteers, exile, cipher, civil war, fought on, casualty steps) and a number on a line (part `n`, +73 KB in a full save). The list: the day in a column on its first line and no day rows (200 lines a page instead of 163), runs of three or more states folded in All (the campaign's 318 lines in 207 rows instead of 401), new lines on the lighter band, a country's name opens its lines (filter 8), an officer's name his file. The pane as banded tables with Ground in battle and by treaty, the chronicle's newest marked lines in view, the honours compact; the badge red for a war-and-peace line with the newest line in the tooltip; the state card tells a treaty from a battle.
 
 - 2026-10-17, gate A passed: every addition names its row or id; every figure group has the current build and the proposal at the same crop (the page has no vanilla counterpart); the contracts are kept, the one deviation named (the Wars page's taken and lost per enemy no longer count hand-overs); the game-only items are under `openInGame`; the playset report was read. Sent to the user with eight decisions.
+
+### Gate B (2026-10-22)
+
+- 2026-10-22, gate B passed after one round with the builder: `build_managers.py --check` clean, `build.ps1 -Check war_diary` 254 passed, 0 failed; the whole diff of the generated files read; the six figure groups match their mock-ups (flags and portraits are blank in the renders, the renderer's blind spot). Sent back and fixed: kind 49 from `on_civil_war_end_before_annexation` (fires before `on_annex`, vanilla `04_mtg_on_actions.txt:194`), so the Annexed line is skipped by a documented order; the name boxes of a row `fixedsize` (W28); the chronicle's words 208 px and fixed (longest kind 202 px); every kind measured at most 228 of 232 px; `on_government_exiled` logs its scopes. Design page republished with the build renders (version 2).
+
+### Decisions (2026-10-22)
+
+The user, with `/pages-phase E1 from 4`: "Go with the recommended options to the questions asked in the artefact". All eight recommendations are taken (`scratch/phases/E1/decisions-final.json`):
+
+1. Changes of hands with a country we are not at war with get their own words, "Received from" and "Handed over to"; Ground counts battles only.
+2. Ace lines: a counter only until E5 can keep an ace.
+3. The day stands in a column on its first line; no day rows (200 lines a page).
+4. Runs of three or more states of one day, kind and country are folded into one row (+N states) in the All view; every state stays under Territory.
+5. All thirteen new kinds of line (39 to 51).
+6. A click on an officer's name opens his file on the Officers page.
+7. The right pane: banded tables, the chronicle in view, the honours compact, 400 wide.
+8. A number on a line (part `n`), +73 KB in a full save.

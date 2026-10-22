@@ -43711,6 +43711,7 @@ mod1440_vp_changed = {
 			}
 			set_temp_variable = { ev_p = vp_s }
 			set_temp_variable = { ev_x = 0 }
+			set_temp_variable = { ev_n = 0 }
 			set_temp_variable = { ev_x = 1 }
 			mod1440_ev_add = yes
 			mod1440_tr_add = yes
@@ -43732,6 +43733,7 @@ mod1440_vp_changed = {
 			}
 			set_temp_variable = { ev_p = vp_s }
 			set_temp_variable = { ev_x = 0 }
+			set_temp_variable = { ev_n = 0 }
 			mod1440_tr_add = yes
 		}
 		set_temp_variable = { wr_c = vp_old }
@@ -43770,6 +43772,7 @@ mod1440_vp_changed = {
 			}
 			set_temp_variable = { ev_p = vp_s }
 			set_temp_variable = { ev_x = 0 }
+			set_temp_variable = { ev_n = 0 }
 			set_temp_variable = { ev_x = 1 }
 			mod1440_ev_add = yes
 			mod1440_tr_add = yes
@@ -43791,6 +43794,7 @@ mod1440_vp_changed = {
 			}
 			set_temp_variable = { ev_p = vp_s }
 			set_temp_variable = { ev_x = 0 }
+			set_temp_variable = { ev_n = 0 }
 			mod1440_tr_add = yes
 		}
 		set_temp_variable = { wr_c = vp_now }

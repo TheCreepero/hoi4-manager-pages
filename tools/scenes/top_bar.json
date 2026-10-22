@@ -96,7 +96,10 @@
         2002,
         3
       ],
-      "_note": "From mod1440_records.gui (tools/build_records.py): moved to the right end and lowered to 28 px in D7."
+      "_note": "From mod1440_records.gui (tools/build_records.py): moved to the right end and lowered to 28 px in D7.",
+      "hide": [
+        "rec_badge_war"
+      ]
     },
     {
       "name": "mod1440_top_bar_setup",
@@ -227,7 +230,8 @@
       "tbf_res_coal_neg": "\u00a7R195\u00a7!"
     },
     "mod1440_records_handle": {
-      "rec_badge": "\u00a7Y3\u00a7!"
+      "rec_badge": "\u00a7Y3\u00a7!",
+      "rec_badge_war": "\u00a7R3\u00a7!"
     },
     "mod1440_top_bar_setup": {
       "tb_used": "909 of 912 px used, 3 left. A value that needs more stays off."
