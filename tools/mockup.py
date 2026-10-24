@@ -2,8 +2,8 @@
 reference capture onto a canvas. A mock-up script imports this module and composes a proposal before any .gui
 file exists (wiki/Design-Rules.md, "Recipe for a screen phase", step 2).
 
-The short way is a layout file (wiki/Workflow.md, "Handoff files"): the same file the builder applies with
-tools/apply_layout.py, so the mock-up and the build share every number.
+The short way is a layout file (wiki/Workflow.md, "Handoff files"): the same file whose numbers the builder writes
+into the generator, so the mock-up and the build share every number.
 
     python -I tools/mockup.py scratch/phases/A10/layout.json --out scratch/phases/A10/proposed-main.png [--crop 690,280,2240,1040]
 

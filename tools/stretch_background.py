@@ -923,7 +923,7 @@ def naval_strip_301(source):
 def steel_piece(bar, kind, width, height, head=0, head_gain=1.9, bottom_rows=15):
     """A piece of the steel look (the default since 2026-10-21) at its size, as a layout file names it
     (tools/layout.py, steel_params): a "steel" card, with `head` rows of head band or none, or the
-    "steel_title" strip. tools/apply_layout.py writes it as a DDS, tools/mockup.py draws it."""
+    "steel_title" strip. tools/mockup.py draws it; a page in steel gets it as a DDS under gfx/interface/mod1440/."""
     return steel_plate(bar, width, height, head=head, head_gain=head_gain, bottom_rows=bottom_rows)
 
 

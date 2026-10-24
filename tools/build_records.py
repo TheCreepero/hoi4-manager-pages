@@ -17,13 +17,18 @@ add_history_entry, for the unit honours of phase E6.
 How the pages look (wiki/Scripted-GUIs.md, "The Records"): dark cards as on the manager pages; figures as
 tiles, a small label over a large value; every list striped, with a bar of column heads; names in the game's
 highlight yellow; the game's own text icons, flags, portraits, medal strips and progress bars. The sprites are
-declared in interface/1440p_ui.gfx (GFX_1440p_SG_*), all of them tiles of vanilla textures.
+declared in interface/mod1440_ui.gfx (GFX_1440p_SG_*), all of them tiles of vanilla textures.
 
 Two tables of game content stand beside this file, made by tools/make_game_tables.py: the portrait sprite of
 every named character (portraits_table.py) and every victory point (victory_points_table.py).
 """
+import os
 import re
+import sys
 import zlib
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import layout  # noqa: E402
 
 M = None        # tools/build_managers.py, set by build(): its helpers write the .gui and script pieces
 B = None
@@ -54,8 +59,7 @@ VIEW_ROWS = 200         # rows of the diary on one page of the list, day headers
 BLANK = "token:mod1440_blank"
 TILE_W, TILE_H = 156, 64                    # the plate of a figure (build_managers.tile)
 SMALL_TILE = 148                            # a narrower plate, where three stand beside a portrait
-STRIPE = "GFX_1440p_SG_stripe_%dx%d"        # the darker band of every second row of a list
-PICK = "GFX_1440p_SG_pick_%dx%d"            # the lighter band of the chosen row
+STRIPE, PICK = layout.STRIPE, layout.PICK   # the bands of every second row and of the chosen row
 ODD_ROWS = 512                              # rows a list can stripe
 LONG = "GetDateStringNoHourLong"            # "1 January, 1936"
 UNKNOWN = "GFX_portrait_unknown"            # the game's picture of a leader it has no portrait of (156x210)
@@ -98,7 +102,7 @@ def head(prefix, page, hint=None):
     Records, the country's name and the record's age, and Close; under it a tab bar, one tab per page with its
     family's icon, its name and a live count. What a page is for is the tooltip of its tab (PAGE_HINTS; <hint>
     is not shown). The page itself goes into the body REC_BODY_*. Returns the widgets, effects and properties."""
-    body = M.box(prefix + "_head", 3, 3, REC_W - 6, 56, "", "GFX_tiled_header")
+    body = M.title_strip(prefix + "_head", REC_W, 56)
     # the flag at its own size: an icon whose image is a flag draws it at the size of the sprite's mask, whatever
     # its scale (fix round 1: at 0.8 it came out 82x52 over the title)
     body += flag(prefix + "_flag", 12, 5)
@@ -117,7 +121,7 @@ def head(prefix, page, hint=None):
         if TAB_COUNT[n]:
             body += plain(tab + "_n", x + TAB_W - 30 - 90, TAB_Y + 13, 90, B.key("rec_tab_%d_n" % n, TAB_COUNT[n]), M.FONT_SMALL, "right", 22)
         effects += block(tab + "_click", setv("mod1440_rec_page", n) + "mod1440_rec_show = yes\n")
-    body += M.button(prefix + "_close", REC_W - 66, 12, "GFX_closebutton", shortcut="ESCAPE", tooltip=B.key("rec_close_tt", "Close"))
+    body += M.close_button(prefix + "_close", REC_W - 66, 12, tooltip=B.key("rec_close_tt", "Close"))
     effects += block(prefix + "_close_click", "mod1440_rec_close = yes\n")
     return body, effects, properties
 
@@ -492,7 +496,7 @@ WD_B_X, WD_B_W = 668, 228
 WD_C_X, WD_C_W = 954, 176
 WD_MARK_X = 1170
 WD_FACE = 0.15                  # a portrait on a line: 23x31 of 156x210
-WD_PLATE = "GFX_1440p_SG_head_%dx28" % WD_PLATE_W
+WD_PLATE = layout.head_sprite(WD_PLATE_W, 28)
 WD_HIT_B = "GFX_1440p_SG_hit_276x28"        # the country's flag and name: a button with nothing drawn
 WD_HIT_A = "GFX_1440p_SG_hit_%dx28" % WD_PLATE_W   # an officer whom the line is about: his face and name
 WD_HIT_C = "GFX_1440p_SG_hit_208x28"        # the officer on the spot: his face and name
@@ -712,7 +716,7 @@ def war_diary(portrait_version):
     sums = ""
 
     def head_bar(name, y, label, right=()):
-        out = M.icon(name + "_bg", 8, y, "GFX_1440p_SG_head_%dx%d" % (pw - 16, WD_TROW))
+        out = M.icon(name + "_bg", 8, y, layout.head_sprite(pw - 16, WD_TROW))
         out += M.text(name, 16, y + 4, 200, B.key(name, label), M.FONT_SMALL, height=20)
         for k, (x, w, words) in enumerate(right):
             out += M.text("%s_%d" % (name, k), x, y + 4, w, B.key("%s_%d" % (name, k), words), M.FONT_SMALL, "right", 20)
@@ -1008,7 +1012,6 @@ OF_FACE_W, OF_FACE = 40, 0.22               # the column of the portrait in a ro
 OF_NAME = 260                               # the name and under it the rank and status
 OF_ROW_W = OF_FACE_W + OF_NAME + sum(c[2] for c in OF_COLUMNS)
 OF_ROW = 48
-OF_HEAD = "GFX_1440p_SG_head_%d"            # a head plate of a width of its own
 OF_HIT = "GFX_1440p_SG_hit_300x48"          # the row's button: the portrait and the name, with nothing drawn
 OF_FILTER_Y = REC_BODY_Y                    # the filters stand inside the page's body (the frame's contract)
 OF_HEAD_Y = REC_BODY_Y + 38
@@ -1170,7 +1173,7 @@ def officers(portrait_version):
 
     # ---- column heads: a click sorts, a second click turns the order. A level has the game's icon on its plate.
     x = REC_BODY_X + OF_FACE_W
-    body += M.button("of_sort_name", x, OF_HEAD_Y, OF_HEAD % OF_NAME, B.key("of_sort_name", "Officer"),
+    body += M.button("of_sort_name", x, OF_HEAD_Y, layout.head_sprite(OF_NAME), B.key("of_sort_name", "Officer"),
                      tooltip=B.key("of_sort_name_tt", "Back to the order of the game."))
     effects += block("of_sort_name_click", setv("mod1440_of_sort_by", 0) + "mod1440_of_list = yes\n")
     x += OF_NAME
@@ -1194,9 +1197,9 @@ def officers(portrait_version):
     for number, (name, value, width, label, picture, tip) in enumerate(OF_COLUMNS, start=1):
         tooltip = B.key("of_sort_%s_tt" % name, tip + "\\nClick to sort, click again to turn the order.")
         if label:
-            body += M.button("of_sort_%s" % name, x, OF_HEAD_Y, OF_HEAD % width, B.key("of_sort_%s" % name, label), tooltip=tooltip)
+            body += M.button("of_sort_%s" % name, x, OF_HEAD_Y, layout.head_sprite(width), B.key("of_sort_%s" % name, label), tooltip=tooltip)
         else:
-            body += M.button("of_sort_%s" % name, x, OF_HEAD_Y, OF_HEAD % width, tooltip=tooltip)
+            body += M.button("of_sort_%s" % name, x, OF_HEAD_Y, layout.head_sprite(width), tooltip=tooltip)
             body += through("of_sort_%s_icon" % name, x + (width - 27) // 2, OF_HEAD_Y + 2, picture)
         effects += block("of_sort_%s_click" % name, (
             iff("check_variable = { mod1440_of_sort_by = %d }" % number, flip("mod1440_of_up"))
@@ -2555,7 +2558,7 @@ def wars(portrait_version):
         triggers += block("wr_ln_%d_t_visible" % k, more + "NOT = { check_variable = { mod1440_wr_ln_fam^%d = 1 } }\n" % k)
         inner += M.text("wr_ln_%d" % k, WF_RP + 126, ly + 2, 200, B.key("wr_ln_%d" % k, "[?mod1440_wr_ln_kind^%d.GetTokenLocalizedKey]" % k), M.FONT_SMALL, height=20, fixed=True)
         # the place is a button that moves the camera
-        inner += M.button("wr_ln_%d_go" % k, WF_RP + 330, ly - 1, "GFX_1440p_SG_head_180x24", tooltip=B.key("wd_row_go_tt", "Show this place on the map"))
+        inner += M.button("wr_ln_%d_go" % k, WF_RP + 330, ly - 1, layout.head_sprite(180, 24), tooltip=B.key("wd_row_go_tt", "Show this place on the map"))
         inner += plain("wr_ln_%d_s" % k, WF_RP + 338, ly + 1, 170, B.key("wr_ln_%d_s" % k, "§Y[?mod1440_wr_ln_a^%d.GetName]§!" % k), height=22)
         inner += plain("wr_ln_%d_p" % k, WF_RP + 338, ly + 1, 170, B.key("wr_ln_%d_p" % k, "§Y[?mod1440_wr_ln_a^%d.GetTokenLocalizedKey]§!" % k), height=22)
         triggers += block("wr_ln_%d_go_visible" % k, more + "check_variable = { mod1440_wr_ln_sa^%d > 1 }\n" % k)
@@ -3065,7 +3068,7 @@ def frame(portrait_version):
 
     # ---- the state card (E1 part C, E6): who took the state and when, by whose troops, the citation, its lines
     card_w, card_h = 540, 142
-    inner = M.icon("sc_head", 6, 6, "GFX_1440p_SG_head_%dx30" % (card_w - 12))
+    inner = M.icon("sc_head", 6, 6, layout.head_sprite(card_w - 12, 30))
     inner += M.text("sc_title", 14, 10, 330, B.key("sc_title", "£victory_points  The record of §Y[THIS.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
     inner += M.text("sc_lines", card_w - 16 - 200, 12, 200, B.key("sc_lines", "[?mod1440_sr_lines|0] lines in the War Diary"), M.FONT_SMALL, "right", 20)
     inner += M.text("sc_lines_1", card_w - 16 - 200, 12, 200, B.key("sc_lines_1", "1 line in the War Diary"), M.FONT_SMALL, "right", 20)

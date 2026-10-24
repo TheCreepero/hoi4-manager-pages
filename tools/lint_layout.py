@@ -22,7 +22,6 @@ REPO_ROOT = layoutmod.REPO_ROOT
 CARD_KINDS = ("card", "steel")
 TITLE_KINDS = ("title", "steel_title")
 CLOSE = re.compile(r"(^|_)close(_button)?$", re.I)
-CLOSE_SIZE = (32, 33)          # GFX_closebutton
 NEAR = 24                      # two cards closer than this are neighbours, and their gap is the card gap
 
 
@@ -123,7 +122,7 @@ def lint(lay):
             if not closes:
                 out.append(finding("warn", "close", wpath, title, "the layout does not place the close button; it belongs at the strip's right edge"))
             for item in closes:
-                w, h = item.get("w", CLOSE_SIZE[0]), item.get("h", CLOSE_SIZE[1])
+                w, h = item.get("w", layoutmod.CLOSE_SIZE[0]), item.get("h", layoutmod.CLOSE_SIZE[1])
                 x = item.get("x", 0)
                 if x < 0 and window.get("size"):
                     x += window["size"][0]

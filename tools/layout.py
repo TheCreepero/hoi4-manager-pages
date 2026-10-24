@@ -1,5 +1,5 @@
-"""The layout file of a phase: one JSON file that both the mock-up (tools/mockup.py) and the override file
-(tools/apply_layout.py) are made from, so the design is written once and the build cannot drift from it.
+"""The layout file of a phase: one JSON file that the mock-up (tools/mockup.py) is drawn from and whose numbers the
+builder writes into the generator (tools/build_managers.py, tools/build_records.py), so the design is written once.
 The shape is given in wiki/Workflow.md, "Handoff files"; the design language it draws is in wiki/Design-Language.md.
 
     import layout
@@ -80,6 +80,23 @@ FONTS = {                                # role -> the fonts the role may use, b
 }
 CLOSE_INSIDE = (2, 8)                    # the close button's right edge this far inside the title strip's
 CLOSE_SLACK = 4                          # and its middle this close to the strip's middle
+CLOSE_SIZE = (32, 33)                    # GFX_closebutton
+
+# ---------------------------------------------------------------- the pieces of the pages
+# tools/build_managers.py and tools/build_records.py write every page from these; tools/lint_gui.py holds the files
+# they write to the ruleset above. The sprites of the mod are declared in interface/mod1440_ui.gfx.
+CARD_GROUND = "GFX_tiled_window_1b_thin_border"     # the window ground of the card look
+CARD_PLATE = "GFX_tiled_plain_bg_small"             # a card, and the ground of a list that scrolls
+TITLE_STRIP = "GFX_tiled_header"                    # the title strip of a page
+CLOSE_BUTTON = "GFX_closebutton"
+HEAD = "GFX_1440p_SG_head_%d"                       # a head plate 30 high
+HEAD_SIZED = "GFX_1440p_SG_head_%dx%d"              # a head plate of any other height
+STRIPE = "GFX_1440p_SG_stripe_%dx%d"                # the darker band of every second row
+PICK = "GFX_1440p_SG_pick_%dx%d"                    # the lighter band of the chosen row
+
+
+def head_sprite(width, height=None):
+    return HEAD % width if height is None else HEAD_SIZED % (width, height)
 
 # The review questions a design answers in design.json `heuristics` (wiki/Design-Language.md, "Review questions"):
 # Nielsen's ten heuristics and the game usability heuristics of Pinelle et al. (2008), cut to what a redesign here can change.

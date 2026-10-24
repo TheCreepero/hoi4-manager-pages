@@ -1,0 +1,32 @@
+{
+  "exceptions": [
+    {"rule": "font", "window": "*", "item": "hoi_36header", "why": "The pages took the steel look's title font and keep the card look's grounds; it goes when a page moves to steel."},
+    {"rule": "font", "window": "*", "item": "hoi_24header", "why": "The pages took the steel look's font for names and keep the card look's grounds; it goes when a page moves to steel."},
+
+    {"rule": "title", "window": "mod1440_army_readiness", "item": "ar_head", "why": "The manager pages' title strip of 50 predates the ruleset; it goes with the move to steel."},
+    {"rule": "title", "window": "mod1440_states", "item": "st_head", "why": "The manager pages' title strip of 50 predates the ruleset; it goes with the move to steel."},
+    {"rule": "title", "window": "mod1440_figures", "item": "nf_head", "why": "The manager pages' title strip of 50 predates the ruleset; it goes with the move to steel."},
+    {"rule": "title", "window": "mod1440_records_*", "item": "*_head", "why": "The Records' title strip holds the country's flag in its 82x52 frame."},
+
+    {"rule": "close", "window": "mod1440_army_readiness", "item": "ar_fold", "why": "At width - 66, placed before the user's decision of 2026-10-21 put the close button at the strip's right edge; it moves with the page."},
+    {"rule": "close", "window": "mod1440_states", "item": "st_fold", "why": "At width - 66, placed before the user's decision of 2026-10-21 put the close button at the strip's right edge; it moves with the page."},
+    {"rule": "close", "window": "mod1440_figures", "item": "nf_fold", "why": "At width - 66, placed before the user's decision of 2026-10-21 put the close button at the strip's right edge; it moves with the page."},
+    {"rule": "close", "window": "mod1440_records_*", "item": "*_close", "why": "At width - 66, placed before the user's decision of 2026-10-21 put the close button at the strip's right edge; it moves with the window."},
+    {"rule": "close", "window": "mod1440_top_bar_setup", "item": "tb_close", "why": "At width - 50, placed before the user's decision of 2026-10-21 put the close button at the strip's right edge; it moves with the panel."},
+
+    {"rule": "row", "window": "mod1440_army_readiness", "item": "GFX_1440p_SG_stripe_299x26", "why": "The figure cards' rows of 26, set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_army_readiness_row", "item": "GFX_1440p_SG_*_889x50", "why": "An army row with its commander's portrait and two lines, set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_figures", "item": "GFX_1440p_SG_*_584x26", "why": "The figure tables' rows of 26 (NF_ROW), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_figures", "item": "GFX_1440p_SG_*_424x26", "why": "The resource and equipment tables' rows of 26 (NF_ROW), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_figures", "item": "GFX_1440p_SG_stripe_1560x50", "why": "Not a table row: the bands behind the quarters of the History graph."},
+    {"rule": "row", "window": "mod1440_figures_row_*", "item": "GFX_1440p_SG_stripe_358x26", "why": "The modifier lists' rows of 26 (NF_ROW), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_states_row", "item": "GFX_1440p_SG_*_1414x30", "why": "A state row of 30 (ST_ROW), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_wd", "item": "GFX_1440p_SG_stripe_384x26", "why": "The War Diary pane's tables at 26 (WD_TROW), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_wd", "item": "GFX_1440p_SG_stripe_384x46", "why": "The chronicle's rows of 46 (WD_CHRON_ROW), two lines, set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_diary_row", "item": "GFX_1440p_SG_*_1198x34", "why": "A diary line of 34 (WD_ROW) with a portrait of 23x31, set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_of", "item": "GFX_1440p_SG_stripe_642x22", "why": "The service record's lines of 22 in an officer's file, set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_gv", "item": "GFX_1440p_SG_*_526x*", "why": "Government rows of people with their portraits (52 to 90), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_wr", "item": "GFX_1440p_SG_stripe_*", "why": "The rows of a war's file (26 and 58), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_*war_row", "item": "GFX_1440p_SG_pick_258x33", "why": "A war in the list, with its flags, at 33, set before the ruleset's pitches."}
+  ]
+}

@@ -1,8 +1,13 @@
 # Design Language
 
-> (from the 1440p mod) Copied at the split of 2026-10-21 from the HOI4 1440p UI Mod, whose reworked vanilla screens it still describes beside the pages; a later pass trims it to the pages.
+The ruleset every manager page and Records page follows, so that they read as one design. It has four parts, kept in one place each:
 
-The ruleset every reworked screen, manager page and Records page follows, so that they read as one design. The numbers live in `tools/layout.py` (`FONTS`, `GAP`, `ROW_PITCHES`, `STEEL_HEADS`, `PLATES`), the hotkeys in `tools/hotkeys.json`; `tools/lint_layout.py` holds a layout file to them and `tests/ScreenInvariants.Tests.ps1` holds the files to the hotkey table. [Design Rules](Design-Rules.md) keeps the engine limits, the reasons and the evidence; the phases that shaped the look are A9, A10, C1 and the second A3 redesign.
+- **The numbers** in `tools/layout.py`: `FONTS`, `GAP`, `ROW_PITCHES`, `STEEL_HEADS`, `PLATES`, and the pieces the pages are written from (`CARD_GROUND`, `CARD_PLATE`, `TITLE_STRIP`, `CLOSE_BUTTON`, `head_sprite`, `STRIPE`, `PICK`). The hotkeys are in `tools/hotkeys.json`.
+- **The components**: the helpers of the generator every page is built from ("Components" below).
+- **The words**: this page.
+- **The checks**: `tools/lint_layout.py` holds a proposal's layout file to the rules, `tools/lint_gui.py` holds the written pages to them, and `tests/ScreenInvariants.Tests.ps1` holds the files to the hotkey table ("How the rules are checked").
+
+[Design Rules](Design-Rules.md) keeps the engine limits, the reasons and the evidence. The look was shaped by phases A9, A10, C1 and the second A3 redesign of the HOI4 1440p UI Mod, from which this page was copied at the split of 2026-10-21.
 
 The user's standing judgements: bold card-style layouts, not enlarged vanilla (2026-10-16); lists of figures as banded tables, not label-over-value tiles (A3, 2026-10-16); nothing overflows its card in the game. Since 2026-10-21 (user decisions): **the steel look of C1 is the default**, the close button sits at the title strip's right edge, and a hotkey means the same action on every screen.
 
@@ -10,11 +15,11 @@ The user's standing judgements: bold card-style layouts, not enlarged vanilla (2
 
 ## The look
 
-A layout names its look (`"style": "steel"`, the default, or `"card"`). Screens built before 2026-10-21 keep the card style until a phase touches them again, and then move to steel.
+A layout names its look (`"style": "steel"`, the default, or `"card"`). Every page today stands on the card style's grounds with the steel look's fonts; a page moves to steel when a phase touches it, and `tools/lint_gui.py` warns on each page still in the card look.
 
 ### Steel (the default)
 
-Cards cut from vanilla's gunmetal steel bar (`tiled_frontend_upper_bar`, the main menu's riveted bar), recoloured only, on a near-black ground. Each card is a bitmap made at its size: a layout names it by kind, `tools/apply_layout.py` writes the DDS (`gfx/interface/1440p_ui/<prefix>_<name>.dds`) and declares the sprite, and `tools/mockup.py` draws the same image.
+Cards cut from vanilla's gunmetal steel bar (`tiled_frontend_upper_bar`, the main menu's riveted bar), recoloured only, on a near-black ground. Each card is a bitmap made at its size: a layout names it by kind, `tools/stretch_background.py` cuts it and `tools/mockup.py` draws the same image. No page is in steel yet, so this repository has no steel pieces: the first page to move adds them to `gfx/interface/mod1440/` and `interface/mod1440_ui.gfx`, the ground `GFX_1440p_steel_ground` among them.
 
 | Piece | Kind in a layout | Made from | Size and place |
 |---|---|---|---|
@@ -27,7 +32,7 @@ Cards cut from vanilla's gunmetal steel bar (`tiled_frontend_upper_bar`, the mai
 
 A card's head band is its head bar: the head text and the column heads of a table stand in it, so the steel look has no separate head piece. Names and key figures in `hoi_24header`, the figures of a table in `hoi_20b`.
 
-### Card style (screens built before 2026-10-21)
+### Card style (every page today)
 
 | Piece | Kind | Texture | Border | Size |
 |---|---|---|---|---|
@@ -37,7 +42,23 @@ A card's head band is its head bar: the head text and the column heads of a tabl
 | Head bar | `head` | `gfx/interface/tiles/tiled_header_1.dds` | 8 | card width - 16, 30 high (38 with buttons), at card x + 8 |
 | Band | `bands` | `gfx/interface/tiles/black_bg_tile.dds` | 3 | head bar width, one row high |
 
-The vanilla widgets stay children of their window and move onto the plates, so every widget the code looks up is still where it looks (A9, "How the cards are built"). The manager pages and the Records (`GFX_1440p_SG_*`) are the card style on scripted windows; they move to steel when a phase touches them.
+The pages draw this look with their own pieces: the title strip `GFX_tiled_header` (50 high on a manager page, 56 on the Records for the flag), cards on `GFX_tiled_plain_bg_small`, and head plates and bands of the mod (`GFX_1440p_SG_*`). Where they differ from the table, `tools/design_exceptions.json` says so.
+
+## Components
+
+Every page is written by `tools/build_managers.py`, the Records by `tools/build_records.py`, which reaches the same helpers as `M.<name>`. A page builds its pieces from these helpers, and the helpers take their fonts, sprites and grounds from `tools/layout.py`. A new piece becomes a helper and a row here; it is not written by hand on one page.
+
+| Piece | Helper | What it gives |
+|---|---|---|
+| Page frame | `title_strip`, `page_title`, `close_button` | The strip 3 inside the window's edge, the title in the `title` font, the close button with ESCAPE (a manager page: Shift+M, with an ESCAPE twin off the screen) |
+| Card | `card` | A card plate with its title in the `name` font |
+| Column heads | `heads` | A head plate 30 high with the column heads in `hoi_16mbs` |
+| Head plate | `layout.head_sprite(width, height)` | `GFX_1440p_SG_head_<w>` 30 high, `GFX_1440p_SG_head_<w>x<h>` at any other height |
+| Banded rows | `stripes` (rows in the file), `row` and `listing` (rows a list lays out) | The band `STRIPE` on every second row, `PICK` on the chosen row |
+| Figure tile | `tile` | A small label over a large value; a list of figures is a banded table instead ("Tables") |
+| Bar | `bar_sprite` | A share, green, or orange for a low value |
+
+Two head bars are still page code: `head_bar` of National Figures and the one in the War Diary's pane differ in the title's offset (5 and 4) and colour. They become one helper when those pages move to steel.
 
 ## Spacing
 
@@ -91,6 +112,8 @@ Only vanilla pixels: tiles of vanilla textures, pieces cut and widened by `tools
 
 `python -I tools/lint_layout.py scratch/phases/<id>/layout.json` reports errors and warnings: `font` (a font outside the look or its role), `gap` (two neighbouring cards not 6 apart, or overlapping), `inset` (a text closer than 8 to its card's edge), `row` (a table row outside 24, 32, 48), `head` (a steel head band other than 27 or 38), `close` (the close button away from the strip's right edge), `look` (a piece or ground of the other look). A rule may be broken with a reason: `"why": "..."` on the item, or `"exceptions": [{"rule": "gap", "why": "..."}]` on the layout; the finding is then reported as excepted and the reason shows on the design page. The designer runs it before handing in, the orchestrator at gate A ([Workflow](Workflow.md), stage 3).
 
+`python -I tools/lint_gui.py` holds the written pages (`interface/mod1440_*.gui`) to the same rules, each window in its own look: `font`, `row`, `title` (a title strip of another height than the look's, 44 in the card style and 46 in steel), `close`, and `look`, a warning on a page still in the card style. Every deviation the pages have today is listed in `tools/design_exceptions.json` with its reason, by rule, window and item (patterns such as `mod1440_records_*` where one cause covers several). `tests/DesignSystem.Tests.ps1` fails on a deviation that is not listed and on a listed one that no longer occurs. The list is the to-do of the move to steel: a phase that fixes a deviation removes its line, and one that must break a rule adds a line with its reason.
+
 ## Review questions
 
 The rules above keep screens alike; these keep them useful. Every design answers them in `design.json` ([Workflow](Workflow.md), "Handoff files"), and the design page shows the answers beside the figures. They are Nielsen's ten usability heuristics and the game usability heuristics of Pinelle, Wong and Stach (2008), cut to what a redesign here can change; `tools/layout.py` (`HEURISTICS`) holds the same list for the tools.
@@ -118,4 +141,4 @@ Each answer is `pass`, `issue` or `n/a` with a note; an `issue` is fixed in the 
 
 ## What a layout file looks like
 
-The steel look: `tools/examples/steel-layout.json` (the catalogue above, every piece once). A built screen in the card style: `tools/examples/a10-layout.json`. The same file draws the mock-up (`python -I tools/mockup.py <layout> --out <png>`) and lays out the override file (`python -I tools/apply_layout.py <layout>`); its shape is in [Workflow](Workflow.md), "Handoff files".
+The steel look: `tools/examples/steel-layout.json` (the catalogue above, every piece once). A built screen in the card style: `tools/examples/a10-layout.json`, a vanilla screen of the 1440p mod. The file draws the mock-up (`python -I tools/mockup.py <layout> --out <png>`), and the builder writes its numbers into the page's function in the generator; its shape is in [Workflow](Workflow.md), "Handoff files".

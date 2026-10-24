@@ -31,15 +31,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # "python -I" leaves the script's folder off the path; the role-play pages live in a module beside this file
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_records  # noqa: E402
+import layout  # noqa: E402
 
-FONT_TITLE = "hoi_36header"
-FONT_CARD = "hoi_24header"
-FONT_LABEL = "hoi_18mbs"
-FONT_VALUE = "hoi_20b"
-FONT_SMALL = "hoi_16mbs"
+# The fonts by role and the grounds (wiki/Design-Language.md, tools/layout.py): the pages took the fonts of the
+# steel look and keep the grounds of the card look until a phase moves them to steel.
+FONT_TITLE, FONT_CARD, FONT_VALUE, FONT_LABEL, FONT_SMALL = (
+    layout.FONTS[role]["steel"][0] for role in ("title", "name", "value", "caption", "button"))
 
-PAGE_BG = "GFX_tiled_window_1b_thin_border"
-CARD_BG = "GFX_tiled_plain_bg_small"
+PAGE_BG = layout.CARD_GROUND
+CARD_BG = layout.CARD_PLATE
 
 # the languages the game ships (the folders of its localisation directory)
 LANGUAGES = ["english", "braz_por", "french", "german", "japanese", "korean", "polish", "russian", "simp_chinese", "spanish"]
@@ -157,8 +157,7 @@ def flip(variable):
 # bar of column heads, with a darker band on every second row and a lighter one on the chosen row; shares as
 # bars. The sprites are tiles of vanilla textures at the sizes the pages use (interface/mod1440_ui.gfx).
 TILE_W, TILE_H = 156, 64
-STRIPE = "GFX_1440p_SG_stripe_%dx%d"        # the darker band of every second row
-PICK = "GFX_1440p_SG_pick_%dx%d"            # the lighter band of the chosen row
+STRIPE, PICK, head_sprite = layout.STRIPE, layout.PICK, layout.head_sprite
 # The mark of the sorted column: the game's small arrow (22x28) at about half its size, on the upper right corner
 # of the head. A head is 30 px high and its text starts 8 px down, so the arrow covers no letter of a narrow head.
 ARROW, ARROW_DX, ARROW_DY = 0.55, 13, -9
@@ -208,7 +207,7 @@ def heads(name, x, y, width, labels):
     for n, (lx, lw, label, fmt, tip) in enumerate(labels):
         inner += text("%s_%d" % (name, n), lx, 5, lw, B.key("%s_%d" % (name, n), label), FONT_SMALL, fmt, 20,
                       tooltip=B.key("%s_%d_tt" % (name, n), tip) if tip else None)
-    return box(name, x, y, width, 30, inner, HEAD_SPRITES[240])
+    return box(name, x, y, width, 30, inner, head_sprite(240))
 
 
 def tile(name, x, y, label, value, tip=None, when=None, width=TILE_W, zero=None):
@@ -235,6 +234,20 @@ def card(name, x, y, width, height, title, inner):
 def stripes(name, x, y, width, row_height, rows):
     """The darker bands of a table whose rows stand in the file: one behind every second row."""
     return "".join(icon("%s_%d" % (name, n), x, y + n * row_height, STRIPE % (width, row_height)) for n in range(1, rows, 2))
+
+
+def title_strip(name, window_width, height=50):
+    """The title strip across the top of a page, 3 inside the window's edge."""
+    return box(name, 3, 3, window_width - 6, height, "", layout.TITLE_STRIP)
+
+
+def page_title(name, width, words):
+    return text(name, 22, 8, width, B.key(name, words), FONT_TITLE, height=40)
+
+
+def close_button(name, x, y, shortcut="ESCAPE", tooltip=None):
+    """The close button at the right end of the title strip (wiki/Design-Language.md, "Fixed places")."""
+    return button(name, x, y, layout.CLOSE_BUTTON, shortcut=shortcut, tooltip=tooltip)
 
 
 # ---------------------------------------------------------------- Army readiness (D2), docked to Recruit & Deploy
@@ -373,10 +386,6 @@ AR_AL_KEYS = {"div": "num_units", "fight": "num_units_in_combat", "plan": "mod14
 AR_SORT_LAST = -2100000         # what a picked key becomes: below every key a sort can meet
 
 
-def ar_head(width, height=30):
-    return "GFX_1440p_SG_head_%d" % width if height == 30 else "GFX_1440p_SG_head_%dx%d" % (width, height)
-
-
 def ar_text(name, x, y, width, key, font=FONT_LABEL, fmt="left", height=24, fixed=False):
     """A text that lets a click through to the button under it; fixed: a box of its own size for a name another
     mod can make longer (W28)."""
@@ -419,14 +428,14 @@ def ar_plates(prefix, columns, sort_effect, by, up):
         x = 14 + cx
         tooltip = B.key("%s_%s_tt" % (prefix, key), tip)
         if order:
-            out += button("%s_%s" % (prefix, key), x, 36, ar_head(cw), tooltip=tooltip)
+            out += button("%s_%s" % (prefix, key), x, 36, head_sprite(cw), tooltip=tooltip)
             if n == 0:
                 effects += block("%s_%s_click" % (prefix, key), setv(by, 0) + setv(up, 0) + sort_effect)
             else:
                 effects += block("%s_%s_click" % (prefix, key), iff("check_variable = { %s = %d }" % (by, n), flip(up))
                                  + els(setv(by, n) + setv(up, 0)) + sort_effect)
         else:
-            out += icon("%s_%s" % (prefix, key), x, 36, ar_head(cw))
+            out += icon("%s_%s" % (prefix, key), x, 36, head_sprite(cw))
         lx, lw = (x + 8, cw - 16) if fmt == "left" else ((x, cw - 8) if fmt == "right" else (x, cw))
         if order:
             out += ar_text("%s_%s_l" % (prefix, key), lx, 42, lw, B.key("%s_%s_l" % (prefix, key), label), FONT_SMALL, fmt, 20)
@@ -457,8 +466,8 @@ def army_readiness():
     all_armies = "NOT = { %s }\n" % is_one("mod1440_ar_has_sel")
 
     # ---- the head: title strip, the date of the count and its button, the size, the fold
-    head = box("ar_head", 3, 3, AR_W - 6, 50, "", "GFX_tiled_header")
-    head += text("ar_title", 22, 8, 350, B.key("ar_title", "Army Readiness"), FONT_TITLE, height=40)
+    head = title_strip("ar_head", AR_W)
+    head += page_title("ar_title", 350, "Army Readiness")
     head += text("ar_counted", 380, 20, 270, B.key("ar_counted", "Counted [?mod1440_ar_counted.GetDateStringNoHourLong]"), FONT_SMALL, "right", 20)
     triggers += block("ar_counted_visible", counted)
     head += button("ar_count", 662, 10, "GFX_button_123x34", B.key("ar_count", "Count again"), tooltip=B.key(
@@ -472,17 +481,16 @@ def army_readiness():
     effects += block("ar_full_click", setv("mod1440_ar_small", 0) + "mod1440_ar_count = yes\n")
     triggers += block("ar_small_visible", "NOT = { %s }\n" % small) + block("ar_full_visible", small + "\n")
     # the game writes the shortcut into the tooltip by itself (Engine Facts X8)
-    head += button("ar_fold", AR_W - 66, 10, "GFX_closebutton", shortcut="shift+m",
-                   tooltip=B.key("ar_fold_tt", PAGE_CLOSE_TT))
+    head += close_button("ar_fold", AR_W - 66, 10, "shift+m", B.key("ar_fold_tt", PAGE_CLOSE_TT))
     # Escape on a twin off the screen: one widget has one shortcut (Engine Facts GUW-006); a free window takes
     # Escape before the open tab (X9)
-    head += button("ar_fold_esc", -1000, -1000, "GFX_closebutton", shortcut="ESCAPE")
+    head += close_button("ar_fold_esc", -1000, -1000)
     effects += block("ar_fold_click", setv("mod1440_ar_open", 0))
     effects += block("ar_fold_esc_click", setv("mod1440_ar_open", 0))
 
     # ---- the figures: three banded tables of five rows
     for c, (title, rows) in enumerate(AR_FIGURES):
-        inner = icon("ar_card_%d_head" % c, 6, 6, ar_head(AR_FIG_W - 12))
+        inner = icon("ar_card_%d_head" % c, 6, 6, head_sprite(AR_FIG_W - 12))
         inner += ar_text("ar_card_%d_title" % c, 14, 11, AR_FIG_W - 28, B.key("ar_card_%d_title" % c, title), FONT_LABEL, height=22)
         for n, (name, label, value, tip, zero, bar) in enumerate(rows):
             y = AR_FIG_TOP + n * AR_FIG_ROW
@@ -702,7 +710,7 @@ def army_readiness():
     effects += block("ar_row_hit_click", "mod1440_of_me = yes\n" + block("ROOT", "mod1440_ar_choose = yes\n"))
     effects += block("ar_row_hit_right_click", go)
     # the Location button over it: the state where most of his divisions stand
-    entry += button("ar_row_loc", lx, 3, ar_head(lw, 26), tooltip=B.key("ar_row_loc_tt", "Show where most of his divisions stand"))
+    entry += button("ar_row_loc", lx, 3, head_sprite(lw, 26), tooltip=B.key("ar_row_loc_tt", "Show where most of his divisions stand"))
     entry += ('iconType = { name = "ar_row_loc_icon" position = { x = %d y = 5 } spriteType = "GFX_countryaction_gotolocation_big" '
               'scale = 0.68 alwaystransparent = yes }\n' % (lx + 4))
     entry += ar_text("ar_row_loc_name", lx + 26, 7, lw - 30, B.key("ar_row_loc_name", "[?mod1440_al_loc.GetName]"), FONT_SMALL, "centre", 20, fixed=True)
@@ -1259,9 +1267,6 @@ STATE_COLUMNS = [
     ("resistance", "resistance", 60, ("text", "Resist."), "Resistance, for a state that is not a core of yours.", "occ"),
 ]
 STATE_GROUPS = [("free", "Slots"), ("build", "Buildings"), ("res", "Resources"), ("occ", "Occupation")]
-HEAD_SPRITES = {52: "GFX_1440p_SG_head_52", 56: "GFX_1440p_SG_head_56", 60: "GFX_1440p_SG_head_60",
-                84: "GFX_1440p_SG_head_84", 100: "GFX_1440p_SG_head_100", 200: "GFX_1440p_SG_head_200",
-                240: "GFX_1440p_SG_head_240", 300: "GFX_1440p_SG_head_300"}
 # The game's name of each building column, for damaged_building_level@ (the three with a variable of their own)
 ST_BUILDING = {"infra": "infrastructure", "civ": "industrial_complex", "mil": "arms_factory", "dock": "dockyard",
                "refinery": "synthetic_refinery", "silo": "fuel_silo", "air": "air_base", "aa": "anti_air_building",
@@ -1419,7 +1424,7 @@ def states_band():
         for name, label, condition in options:
             entry += box("st_c_chip_%s" % name, x0 + 14 + place * (ST_CHIP_W + 6), 120, ST_CHIP_W, 26,
                          text("st_c_chip_%s_t" % name, 0, 4, ST_CHIP_W, B.key("st_c_chip_%s" % name, label), FONT_SMALL, "centre", 20),
-                         HEAD_SPRITES[240])
+                         head_sprite(240))
             row_triggers += block("st_c_chip_%s_visible" % name, condition)
     for n, resource in enumerate(ST_RESOURCES):
         rx = x0 + 14 + n * 57
@@ -1517,11 +1522,10 @@ def states_table():
     properties = ""
 
     # ---- title strip, with the choices of which states to list: each a button with a second frame for "chosen"
-    body = box("st_head", 3, 3, ST_W - 6, 50, "", "GFX_tiled_header")
-    body += text("st_title", 22, 8, 170, B.key("st_title", "States"), FONT_TITLE, height=40)
+    body = title_strip("st_head", ST_W)
+    body += page_title("st_title", 170, "States")
     body += text("st_hint", ST_W - 86 - 590, 18, 590, B.key("st_hint", "Click a state for its card, right-click to see it on the map. Shift+M hides the page."), FONT_SMALL, "right")
-    body += button("st_fold", ST_W - 66, 10, "GFX_closebutton", shortcut="shift+m",
-                   tooltip=B.key("st_fold_tt", "Hide this page and give the map back"))
+    body += close_button("st_fold", ST_W - 66, 10, "shift+m", B.key("st_fold_tt", "Hide this page and give the map back"))
     effects += block("st_fold_click", "set_variable = { mod1440_st_open = 0 }\nadd_to_variable = { mod1440_st_dirty = 1 }\n")
     choices = [("all", "All", 0, "Every state you control."), ("core", "Cores", 1, "Only the states that are cores of yours."),
                ("other", "Occupied", 2, "Only the states that are not cores of yours.")]
@@ -1545,7 +1549,7 @@ def states_table():
         body += text("st_group_%s" % group, 14 + low, ST_CAPTION_Y, high - low, B.key("st_group_%s" % group, "§g%s§!" % caption), FONT_SMALL, "centre", 20)
 
     # ---- column heads: a click sorts, a second click turns the order
-    body += button("st_sort_name", 14, ST_HEAD_Y, HEAD_SPRITES[ST_NAME], B.key("st_sort_name", "State"),
+    body += button("st_sort_name", 14, ST_HEAD_Y, head_sprite(ST_NAME), B.key("st_sort_name", "State"),
                    tooltip=B.key("st_sort_name_tt", "Back to the order of the game."))
     effects += block("st_sort_name_click", "set_variable = { mod1440_st_sort_by = 0 }\nmod1440_st_list = yes\n")
     keys = ""           # script: the value the list is sorted by
@@ -1557,7 +1561,7 @@ def states_table():
     owned, held = "is_owned_by = ROOT\n", "NOT = { is_owned_by = ROOT }\n"
     entry = icon("st_row_stripe", 0, 0, STRIPE % (ST_ROWS_W, ST_ROW))
     entry += icon("st_row_pick", 0, 0, PICK % (ST_ROWS_W, ST_ROW))
-    entry += button("st_row", 0, 0, HEAD_SPRITES[ST_NAME], tooltip=B.key("st_row_tt", "Click: this state's cards under the table. Right-click: show it on the map and hide the page."))
+    entry += button("st_row", 0, 0, head_sprite(ST_NAME), tooltip=B.key("st_row_tt", "Click: this state's cards under the table. Right-click: show it on the map and hide the page."))
     # the owner's flag beside the name of a state that is held but not owned
     entry += 'iconType = { name = "st_row_flag" position = { x = 8 y = 7 } spriteType = "GFX_flag_smallest" alwaystransparent = yes }\n'
     properties += block("st_row_flag", 'image = "[THIS.Owner.GetFlag]"\n')
@@ -1581,9 +1585,9 @@ def states_table():
         x = 14 + ST_EDGE[name]
         tip_key = B.key("st_sort_%s_tt" % name, tip + "\\nClick to sort, click again to turn the order.")
         if head[0] == "text":
-            body += button("st_sort_%s" % name, x, ST_HEAD_Y, HEAD_SPRITES[width], B.key("st_sort_%s" % name, head[1]), tooltip=tip_key)
+            body += button("st_sort_%s" % name, x, ST_HEAD_Y, head_sprite(width), B.key("st_sort_%s" % name, head[1]), tooltip=tip_key)
         else:
-            body += button("st_sort_%s" % name, x, ST_HEAD_Y, HEAD_SPRITES[width], tooltip=tip_key)
+            body += button("st_sort_%s" % name, x, ST_HEAD_Y, head_sprite(width), tooltip=tip_key)
             sprite, scale, dx, dy = (("GFX_buildings_strip", 0.6, 12, 1) if head[0] == "building" else ("GFX_resources_strip", 0.9, 16, 3))
             body += ('iconType = { name = "st_icon_%s" position = { x = %d y = %d } spriteType = "%s" frame = %d scale = %s '
                      'alwaystransparent = yes }\n' % (name, x + dx, ST_HEAD_Y + dy, sprite, head[1], scale))
@@ -1626,7 +1630,7 @@ def states_table():
 
     # ---- the list, and under it the totals
     body += listing("st_list", "st_grid", 14, ST_LIST_Y, ST_ROWS_W + 30, ST_LIST_H, ST_ROW)
-    body += box("st_totals", 14, ST_TOTAL_Y, ST_ROWS_W, ST_ROW, total, HEAD_SPRITES[240])
+    body += box("st_totals", 14, ST_TOTAL_Y, ST_ROWS_W, ST_ROW, total, head_sprite(240))
     # A click chooses the state for the band; a right-click moves the camera there and hides the page (the
     # left click of the first build). The row's scope is the state.
     effects += block("st_row_click", block("ROOT", "set_variable = { mod1440_st_sel = PREV }\nmod1440_st_pick = yes\n"))
@@ -2114,7 +2118,7 @@ def h_suffix(n):
 def head_bar(name, x, y, width, title, caps=(), height=NF_HEAD_H):
     """The head bar of a table: the vanilla header tile, the title in yellow, the column heads in white
     (x, width, text, format, tooltip or None each)."""
-    out = icon(name, x, y, "GFX_1440p_SG_head_%dx%d" % (width, height))
+    out = icon(name, x, y, head_sprite(width, height))
     out += text(name + "_t", x + 8, y + 5, 220, B.key(name + "_t", "§Y%s§!" % title), FONT_SMALL, height=20)
     for k, (cx, cw, label, fmt, tip) in enumerate(caps):
         out += text("%s_%d" % (name, k), x + cx, y + 5, cw, B.key("%s_%d" % (name, k), label), FONT_SMALL, fmt, 20,
@@ -2398,7 +2402,7 @@ def figure_graph():
               ("max", "Highest", "mod1440_h_max", False, "", "The highest month on the graph: [?mod1440_h_max_date.GetDateStringNoHourLong]."),
               ("min", "Lowest", "mod1440_h_min", False, "", "The lowest month on the graph: [?mod1440_h_min_date.GetDateStringNoHourLong]."),
               ("change", "Over the range", "mod1440_h_change", True, "", "The newest month less the oldest month on the graph.")]
-    inner += icon("h_nums_head", NF_NUM_X, 8, "GFX_1440p_SG_head_%dx26" % (NF_NUM_W * (len(plates) + 1)))
+    inner += icon("h_nums_head", NF_NUM_X, 8, head_sprite(NF_NUM_W * (len(plates) + 1), 26))
     # D9: the month's casualties (series 32) read Deadliest for Highest and In the range, the sum of the months on the
     # graph, for Over the range; Highest and Lowest give their month under the number ("to" it for a monthly count)
     month = "check_variable = { mod1440_h_series = %d }" % H_CAS_MON
@@ -2602,7 +2606,7 @@ def modifier_lists():
         zero = "check_variable = { %sv^i = 0 }\n" % arr
         some = "NOT = { %s }\n" % zero.strip()
         entry = icon(p + "stripe", 0, 0, STRIPE % (NF_ROW_W, NF_ROW))
-        entry += icon(p + "head", 0, 0, "GFX_1440p_SG_head_%dx%d" % (NF_ROW_W, NF_ROW))
+        entry += icon(p + "head", 0, 0, head_sprite(NF_ROW_W, NF_ROW))
         entry += text(p + "hname", 8, 4, 220, B.key(p + "hname", "§Y[?%st^i.GetTokenLocalizedKey]§!" % arr), FONT_SMALL, height=20)
         entry += text(p + "hcount", NF_ROW_W - 8 - 100, 4, 100, B.key(p + "hcount", "§g[?%sv^i|0] of [?%sn^i|0]§!" % (arr, arr)), FONT_SMALL, "right", 20)
         entry += text(p + "hchange", 232, 4, 56, B.key("nf_r_hchange", "§gchange§!"), FONT_SMALL, "right", 20)
@@ -2662,8 +2666,8 @@ def national_figures():
     triggers, properties, effects = "", "", ""
 
     # ---- title strip: the title, the date of the last record, the three views of the modifiers, the close button
-    body = box("nf_head", 3, 3, NF_W - 6, 50, "", "GFX_tiled_header")
-    body += text("nf_title", 22, 8, 300, B.key("nf_title", "National Figures"), FONT_TITLE, height=40)
+    body = title_strip("nf_head", NF_W)
+    body += page_title("nf_title", 300, "National Figures")
     body += text("nf_last", 330, 18, 720, B.key(
         "nf_last", "§gWritten down on the first of each month, the last on [?mod1440_h_last.GetDateStringNoHourLong]§!"), FONT_SMALL, height=20,
         tooltip=B.key("nf_last_tt", "The figures of the tables are today's; their months, the changes and the graph come from what is written down."))
@@ -2680,9 +2684,9 @@ def national_figures():
                        tooltip=B.key("nf_view_%s_tt" % name, tip))
         effects += block("nf_view_%s_click" % name, setv("mod1440_nf_all", k) + "mod1440_nf_fill = yes\n")
         properties += block("nf_view_%s" % name, "frame = mod1440_nf_frame_%s\n" % name)
-    body += button("nf_fold", NF_W - 66, 10, "GFX_closebutton", shortcut="shift+m", tooltip=B.key("nf_fold_tt", PAGE_CLOSE_TT))
+    body += close_button("nf_fold", NF_W - 66, 10, "shift+m", B.key("nf_fold_tt", PAGE_CLOSE_TT))
     # Escape on a twin off the screen (GUW-006): the free window takes it before Politics (X9)
-    body += button("nf_fold_esc", -1000, -1000, "GFX_closebutton", shortcut="ESCAPE")
+    body += close_button("nf_fold_esc", -1000, -1000)
     effects += block("nf_fold_click", setv("mod1440_nf_shown", 0))
     effects += block("nf_fold_esc_click", setv("mod1440_nf_shown", 0))
 
@@ -3648,9 +3652,9 @@ def tb_panel():
     rows, card_h = tb_rows()
     foot_y = TB_CARD_Y + card_h + 12
     height = foot_y + 34 + 14
-    body = box("tb_head", 3, 3, TB_PANEL_W - 6, 44, "", "GFX_tiled_header")
+    body = title_strip("tb_head", TB_PANEL_W, 44)
     body += text("tb_title", 16, 11, 500, B.key("tb_title", "Top bar values"), FONT_CARD, height=30)
-    body += button("tb_close", TB_PANEL_W - 50, 8, "GFX_closebutton", shortcut="ESCAPE", tooltip=B.key("tb_close_tt", "Close"))
+    body += close_button("tb_close", TB_PANEL_W - 50, 8, tooltip=B.key("tb_close_tt", "Close"))
     body += icon("tb_used_bar", 16, 60, bar_sprite(300))
     body += text("tb_used", 330, 56, TB_PANEL_W - 330 - 16, B.key(
         "tb_used", "[?mod1440_tb_used|0] of %d px used, [?mod1440_tb_room|0] left. A value that needs more stays off." % TB_ROOM), FONT_SMALL, height=20)
