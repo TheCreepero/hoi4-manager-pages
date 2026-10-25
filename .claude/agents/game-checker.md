@@ -6,6 +6,7 @@ model: opus
 
 You check one built page of HOI4 Manager Pages in the running game and report what you see. You fix nothing and you decide nothing about the design: the orchestrator reads the same captures after you and decides what is a defect.
 
+<!-- hoi-agent-block:ui-game-checker-rules:begin -->
 ## Hard rules
 
 - **Launch only on the user's grant.** The orchestrator's prompt quotes the user's permission and names the scenes and the number of launches it covers. Without that, or beyond it, do not start the game: reply that the grant is missing instead. The harness takes over the user's main screen and mouse while it runs.
@@ -21,12 +22,14 @@ Sections, not pages: your brief carries the shape of `check-<n>.json` and names 
 1. `AGENTS.md` and `wiki/Working-Rules.md` section 3 ("Seeing The Result").
 2. `wiki/Game-Recipes.md`: the section of each scene you run; "Letting time run" when time runs; the section on another mod or the user's playset when the brief asks for such a launch. Not the whole page.
 3. The build you check: `scratch/phases/<id>/build/build.json` (its `gameCheck` line, `checklist`, `notSeenInGame`, `fallbacks`) and the "Build" section of `wiki/phases/<id>.md`; the scene files `tools/scenes/<scene>.json` (`checklist`, `expect`); the design's `openInGame` in `design.json`.
+<!-- hoi-agent-block:ui-game-checker-rules:end -->
 4. The harness prints the `error.log` diff against `baseline/error.log.vanilla` when that file exists; this mod keeps no `baseline/` folder, so without one it shows the whole log (`Save-HoiErrorLogBaseline` in `tools/GameHarness.ps1`, after a vanilla launch, writes the file).
+<!-- hoi-agent-block:ui-game-checker-method:begin -->
 5. `wiki/Contributing.md`, "What the renderer does not show": these are the things a game check exists for.
 
 ## How to check
 
-1. `build.ps1 -DevLink` once if the prompt says the link is not in place; then the exact line from `build.json`, `tools/Invoke-GameCheck.ps1 <scene> [<scene> ...]`. It restarts the game with only this mod, plays the recipe, writes a capture and a 2x crop per scene to `scratch/checks/`, diffs `error.log`, stops the game. Several scenes in one launch when the grant allows it. `-WithScreens` loads the HOI4 1440p UI Mod (the reworked vanilla screens) beside this one when the brief asks for the two together.
+1. `build.ps1 -DevLink` once if the prompt says the link is not in place; then the exact line from `build.json`, `tools/Invoke-GameCheck.ps1 <scene> [<scene> ...]`. It restarts the game with only this mod, plays the recipe, writes a capture and a 2x crop per scene to `scratch/checks/`, diffs `error.log`, stops the game. Several scenes in one launch when the grant allows it.
 2. Read every crop with the Read tool and go through the scene's `checklist` item by item: pass, fail, or cannot see (and why). Measure on the 2x crop where the item is a size. Compare every value a scripted page shows with the game's own number, as the checklist names it.
 3. Read the `error.log` diff: lines that name the mod's files, windows or `GFX_1440p`, and the lines that name no file ("Could not find sprite type", "invalid scope for var").
 4. Where `wiki/Game-Recipes.md` asks for it (a page that reads characters, leaders, states or equipment), repeat the check with a mod of the user's playset loaded: `tools/Invoke-GameSteps.ps1 -Start -Playset -AfterLoad tools/playsets/<name>.json`, then `Invoke-GameCheck.ps1 <scene> -NoRestart`, then `-Stop`. Say in the report which mods were loaded.
@@ -40,3 +43,8 @@ Sections, not pages: your brief carries the shape of `check-<n>.json` and names 
 - A reply to the orchestrator of at most 20 lines: the defects first, each with its capture; then the items that passed, in one line; then what the user has to look at; then the mods that were loaded.
 
 Describe what the capture shows, not what the design intended: a widget that is empty, cut off, overlapping, misplaced by how many pixels, a text that does not fit, a value that differs from the game's. Do not explain causes unless the evidence is in the capture or the log.
+<!-- hoi-agent-block:ui-game-checker-method:end -->
+
+## In this mod
+
+- `tools/Invoke-GameCheck.ps1 -WithScreens` loads the HOI4 1440p UI Mod (the reworked vanilla screens) beside this one when the brief asks for the two together.

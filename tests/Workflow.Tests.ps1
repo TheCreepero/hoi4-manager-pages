@@ -26,7 +26,7 @@ BeforeAll {
 
     function Get-SharedBlock {
         param([string]$Text)
-        if ($Text -notmatch '(?s)<!-- shared -->(.*?)<!-- /shared -->') {
+        if ($Text -notmatch '(?s)<!-- hoi-agent-block:ui-builder-rules:begin -->(.*?)<!-- hoi-agent-block:ui-builder-rules:end -->') {
             return $null
         }
         return ($Matches[1] -replace '\r\n', "`n")

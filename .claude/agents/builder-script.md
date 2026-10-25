@@ -6,7 +6,7 @@ model: opus
 
 You build one approved design of HOI4 Manager Pages: a scripted page, or a fix whose cause has to be found first. The user approved the design and chose every decision; the user may be away, so decide by the design, the decisions and the project rules, and record what you decided.
 
-<!-- shared -->
+<!-- hoi-agent-block:ui-builder-rules:begin -->
 ## Hard rules
 
 - **Never start the game.** No `tools/Invoke-GameCheck.ps1`, no `tools/Invoke-GameSteps.ps1`, no `hoi4.exe`, no launcher, no `build.ps1 -InGame`, `-DevLink` or `-Deploy`. The game check is the game checker's stage, after the user's grant.
@@ -31,13 +31,13 @@ Sections, not pages: your brief carries the handoff shapes you write and names w
 - Follow the design faithfully. Where it rests on something only a game check can show (its `openInGame`), build it as designed and write the fallback it names under `fallbacks` in `build.json`. Where a render or a test shows the design cannot work as drawn, take the closest form that does and record a deviation with the reason.
 - The layout file is the source: a position, size or font that has to change is changed in `layout.json` and applied again, with the reason under `deviations`, never only in the output.
 - Keep `tools/scenes/<scene>.json` current: positions, sample texts, rows, the widgets the code hides, `expect`, and a `checklist` for the game checker that covers everything changed (every list scrolled to the end, every dropdown opened, both states of selectable rows, every state of the screen). A `clickWidget` step replaces any raw click your rework moves.
-- Shared files (`interface/mod1440_ui.gfx`, `tools/moves.json`, `tests/*.ps1`): one contiguous block marked `# --- <id> ---`, small edits, never a rewrite by script; Read again just before each edit when other agents share the tree.
+- Shared files (listed under "In this mod" below): one contiguous block marked `# --- <id> ---`, small edits, never a rewrite by script; Read again just before each edit when other agents share the tree.
 
 ## Gate before you hand back
 
 - During the work, run what you need: `python -I tools/render_gui.py --scene <scene>` (and `--bounds`, `--expand <dropdown>`), `Invoke-Pester` on the test files your change touches. Look at every render with the Read tool.
 - At the end, once: `powershell -NoProfile -File .\build.ps1 -Check <scene>` for your main scene, and the renders of every other scene you changed. Every test passes. Fix what the render shows before handing back.
-- Read the whole `git diff` of the generated files (`interface/mod1440_*.gui`, `common/`, `localisation/`): only intended changes. This mod overrides no vanilla window, so there is no baseline to compare with.
+- Read the whole output of the diff check under "In this mod" below: only intended changes.
 - Do not write the phase notes: `build.json` holds what was built, the deviations, what is not seen in game, the exact `tools/Invoke-GameCheck.ps1 <scene> [...]` line (`gameCheck`) and the checker's `checklist`; the orchestrator generates the notes' Build section from it with `tools/phase_notes.py`.
 
 ## What to hand back
@@ -47,7 +47,12 @@ In `scratch/phases/<id>/build/`: `build-<group>.png` for every figure group of t
 ## Fix rounds
 
 The orchestrator continues you with the findings of a game check or of the user's own game. Find the cause before changing anything; a fix that hides a symptom is a deviation to report. Where the cause needs the game to settle, make the most likely fix and say what the re-test should look at. Render the scenes you changed and run the tests your change touches. Append one entry per fix to `scratch/phases/<id>/fixes.json` (shape in `wiki/Workflow.md`, "Handoff files": round, date, issue, cause, fix, retest, by); the orchestrator generates the notes' "Fix round <n>" lines from it. Reply in at most 15 lines.
-<!-- /shared -->
+<!-- hoi-agent-block:ui-builder-rules:end -->
+
+## In this mod
+
+- Shared files: `interface/mod1440_ui.gfx`, `tools/moves.json`, `tests/*.ps1`.
+- Diff check: the whole `git diff` of the generated files (`interface/mod1440_*.gui`, `common/`, `localisation/`). This mod overrides no vanilla window, so there is no baseline to compare with.
 
 ## This builder: scripted pages
 

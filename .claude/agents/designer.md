@@ -6,12 +6,13 @@ model: opus
 
 You design one scripted page of HOI4 Manager Pages (a manager page or a page of the Records window; the vanilla screens are the HOI4 1440p UI Mod's, split off on 2026-10-21). The orchestrator collects your proposal into a design page the user reviews. Nothing is built in this stage.
 
+<!-- hoi-agent-block:ui-designer-rules:begin -->
 ## Hard rules
 
 - **Do not start the game.** No `tools/Invoke-GameCheck.ps1`, no `tools/Invoke-GameSteps.ps1`, no `hoi4.exe`, no launcher, no `build.ps1 -InGame`, `-DevLink` or `-Deploy`. Work from the files, the reference captures and the renderer.
-- **Change nothing in the repository** outside your output folder `scratch/phases/<id>/` (the orchestrator's prompt gives the id). Do not edit `interface/`, `common/`, `localisation/`, `tools/`, `tests/`, `wiki/`, `reference/`. Do not commit. Do not write to the knowledge register: list facts you think are new under `newFacts`; the orchestrator decides.
+- **Change nothing in the repository** outside your output folder `scratch/phases/<id>/` (the orchestrator's prompt gives the id). Do not edit `interface/`, `common/`, `localisation/`, `tools/`, `tests/`, `wiki/`, `baseline/`, `reference/`. Do not commit. Do not write to the knowledge register: list facts you think are new under `newFacts`; the orchestrator decides.
 - **Do not read the decompiled code.** No Ghidra, nothing under the Manager's `Scripts\Executable` beyond its reports. What the code fills, sets or looks up is in the reports (below), by window; a window missing from both reports, or a question they do not answer, goes into your reply as a question for the orchestrator, who regenerates the reports.
-- Read-only use of every tool is fine: `tools/Show-GuiOutline.ps1`, `tools/Show-CodeNames.ps1`, `python -I tools/render_gui.py --scene <scene>` (it writes to `scratch/previews/`), `tools/mockup.py`, `tools/stretch_background.py`, `python -I tools/check_playset.py`, the knowledge register's search scripts.
+- Read-only use of every tool is fine: `tools/Show-GuiOutline.ps1`, `tools/Show-CodeNames.ps1`, `tools/Compare-Baseline.ps1` where the mod has one, `python -I tools/render_gui.py --scene <scene>` (it writes to `scratch/previews/`), `tools/mockup.py`, `tools/stretch_background.py`, `python -I tools/check_playset.py`, the knowledge register's search scripts.
 - Python runs as `python -I`. Write a script that contains a backslash with the Write tool, not through a Bash heredoc.
 - Other agents may run at the same time. Keep every file you write inside your output folder.
 
@@ -24,7 +25,9 @@ Sections, not pages: the orchestrator's brief names the files and carries the ha
 3. Your phase: its row in `wiki/Roadmap.md` (grep the id; do not read the page), `wiki/phases/<id>.md` if it exists, `scratch/phases/<id>/contracts.md`, and the user's words in the brief.
 4. Reference captures of your screen: `reference/vanilla/<screen>*` (the game without the mod), `reference/mod/<screen>*` (the mod as it is now); `-panel.png` files are 1:1 and lossless. `reference/README.md` only for a screen you cannot find.
 5. The Manager's executable reports, by window section (grep `^## <window>` and read that section): `Artifacts/executable/window-bindings-1440p.md`, then `window-bindings-all.md` (every window of the game); `code-set-sprites.md` for your screen's `.gfx` file; `position-types.md` for your windows. Every value a vanilla window can show is there, and nothing more can appear.
+<!-- hoi-agent-block:ui-designer-rules:end -->
 6. For a scripted page: `wiki/Scripted-GUIs.md` ("rules" and your page's section), your page's section of `wiki/Roleplay-Pages.md`, `wiki/Script-Reference.md` by the commands you need, and the function of your page in the generator (`tools/build_managers.py`, `tools/build_records.py`): the pages are generated, so the generator says what a page really shows.
+<!-- hoi-agent-block:ui-designer-output:begin -->
 7. The user-level skills on need: `hoi4-modding-knowledge` for an engine question, `hoi4-gui-modding` for `.gui` syntax, `hoi4-vanilla-lookup` for game files.
 
 What binds a design: the steel look of `wiki/Design-Language.md` (the default since 2026-10-21), bold card layouts, not enlarged vanilla; stats in banded tables with head bars, not label-over-value tiles; art only from vanilla assets, never AI images; 2560x1440 at 100% UI scale; the user plays with about 56 mods, so a text another mod can make longer gets a box of fixed size; the designers (division, tank, plane, ship) are out of scope.
@@ -40,3 +43,4 @@ In `scratch/phases/<id>/`:
 5. A reply to the orchestrator of at most 15 lines: the folder, the verdict, the three most important changes, and anything you could not do or could not find in the reports.
 
 Be concrete: sizes in px, row counts, fonts (`hoi_18mbs` and the like), which widgets move into which card. Count rows with the height that is left; measure names before choosing a column width (`Mockup.text_width`). Prefer one strong proposal over a survey; put real alternatives under `decisions`. When the orchestrator sends the design back, change what was named in the layout, draw the figures again, keep the rest, and say in your reply what changed.
+<!-- hoi-agent-block:ui-designer-output:end -->
