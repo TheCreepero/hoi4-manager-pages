@@ -1244,29 +1244,37 @@ def portrait_version():
 # frame of GFX_resources_strip); the tip is a text of the game ("$key$") or of the mod; columns of one group
 # stand together, with a gap to the next group. A resource is shown as the list effect's rounded copy of the
 # state's number: "|0" cuts a fraction off and the state view rounds (Engine Facts X65).
+# --- D10 --- the building columns 52 -> 46 and the resource columns 56 -> 54 make room for In a year (68) after People:
+# the row stays 1414 and the page 1472 (scratch/phases/D10/layout.json). In a year sorts by the state's fall in a year
+# (mod1440_pop_fall, the largest fall first) and shows its change (mod1440_pop_dy), both worked out in the monthly round.
+ST_B_W, ST_R_W = 46, 54
 STATE_COLUMNS = [
     ("free", "mod1440_st_free", 100, ("text", "Free"), "Free building slots for factories and the other buildings that share slots, counted when the list was made. The bar is the share of the slots that shared buildings already take; it counts the game's own shared buildings only, so a building another mod adds is not in it (the free number is the game's own).", "free"),
-    ("infra", "infrastructure_level", 52, ("building", 3), "Infrastructure.", "build"),
-    ("civ", "industrial_complex_level", 52, ("building", 1), "Civilian factories.", "build"),
-    ("mil", "arms_factory_level", 52, ("building", 2), "Military factories.", "build"),
-    ("dock", "building_level@dockyard", 52, ("building", 4), "Naval dockyards.", "build"),
-    ("refinery", "building_level@synthetic_refinery", 52, ("building", 10), "Synthetic refineries.", "build"),
-    ("silo", "building_level@fuel_silo", 52, ("building", 14), "Fuel silos.", "build"),
-    ("air", "building_level@air_base", 52, ("building", 5), "Air base.", "build"),
-    ("aa", "building_level@anti_air_building", 52, ("building", 9), "Anti-air.", "build"),
-    ("radar", "building_level@radar_station", 52, ("building", 11), "Radar station.", "build"),
-    ("oil", "mod1440_st_r_oil", 56, ("resource", 1), "Oil.", "res"),
-    ("aluminium", "mod1440_st_r_aluminium", 56, ("resource", 2), "Aluminium.", "res"),
-    ("rubber", "mod1440_st_r_rubber", 56, ("resource", 3), "Rubber.", "res"),
-    ("tungsten", "mod1440_st_r_tungsten", 56, ("resource", 4), "Tungsten.", "res"),
-    ("steel", "mod1440_st_r_steel", 56, ("resource", 5), "Steel.", "res"),
-    ("chromium", "mod1440_st_r_chromium", 56, ("resource", 6), "Chromium.", "res"),
-    ("coal", "mod1440_st_r_coal", 56, ("resource", 7), "Coal.", "res"),
+    ("infra", "infrastructure_level", ST_B_W, ("building", 3), "Infrastructure.", "build"),
+    ("civ", "industrial_complex_level", ST_B_W, ("building", 1), "Civilian factories.", "build"),
+    ("mil", "arms_factory_level", ST_B_W, ("building", 2), "Military factories.", "build"),
+    ("dock", "building_level@dockyard", ST_B_W, ("building", 4), "Naval dockyards.", "build"),
+    ("refinery", "building_level@synthetic_refinery", ST_B_W, ("building", 10), "Synthetic refineries.", "build"),
+    ("silo", "building_level@fuel_silo", ST_B_W, ("building", 14), "Fuel silos.", "build"),
+    ("air", "building_level@air_base", ST_B_W, ("building", 5), "Air base.", "build"),
+    ("aa", "building_level@anti_air_building", ST_B_W, ("building", 9), "Anti-air.", "build"),
+    ("radar", "building_level@radar_station", ST_B_W, ("building", 11), "Radar station.", "build"),
+    ("oil", "mod1440_st_r_oil", ST_R_W, ("resource", 1), "Oil.", "res"),
+    ("aluminium", "mod1440_st_r_aluminium", ST_R_W, ("resource", 2), "Aluminium.", "res"),
+    ("rubber", "mod1440_st_r_rubber", ST_R_W, ("resource", 3), "Rubber.", "res"),
+    ("tungsten", "mod1440_st_r_tungsten", ST_R_W, ("resource", 4), "Tungsten.", "res"),
+    ("steel", "mod1440_st_r_steel", ST_R_W, ("resource", 5), "Steel.", "res"),
+    ("chromium", "mod1440_st_r_chromium", ST_R_W, ("resource", 6), "Chromium.", "res"),
+    ("coal", "mod1440_st_r_coal", ST_R_W, ("resource", 7), "Coal.", "res"),
     ("pop", "state_population_k", 84, ("text", "People"), "Population of the state, in thousands.", "people"),
+    ("pop_year", "mod1440_pop_fall", 68, ("text", "In a year"), "The change of the state's population over the last twelve months, in percent: §Rred§! a fall, §Ggreen§! a rise. Written down on the first of each month; empty with fewer than thirteen months.", "people"),
     ("compliance", "compliance", 60, ("text", "Compl."), "Compliance, for a state that is not a core of yours.", "occ"),
     ("resistance", "resistance", 60, ("text", "Resist."), "Resistance, for a state that is not a core of yours.", "occ"),
 ]
-STATE_GROUPS = [("free", "Slots"), ("build", "Buildings"), ("res", "Resources"), ("occ", "Occupation")]
+STATE_GROUPS = [("free", "Slots"), ("build", "Buildings"), ("res", "Resources"), ("people", "Population"), ("occ", "Occupation")]
+# the head icons of the narrower columns: the building strip at 0.6 from x+9 (was 12), the resources at 0.9 from x+15 (16)
+ST_ICON_DX = {"building": 9, "resource": 15}
+# --- end D10 ---
 # The game's name of each building column, for damaged_building_level@ (the three with a variable of their own)
 ST_BUILDING = {"infra": "infrastructure", "civ": "industrial_complex", "mil": "arms_factory", "dock": "dockyard",
                "refinery": "synthetic_refinery", "silo": "fuel_silo", "air": "air_base", "aa": "anti_air_building",
@@ -1331,6 +1339,11 @@ for _name, _title, _w in ST_CARDS:
     ST_CARD_AT[_name] = (_x, _w)
     _x += _w + 12
 ST_CHIP_W = 96                  # four chips side by side in the card of the state
+# --- D10 --- the three right cards and the graph card that takes their place stand from x 442 of the band (page 449)
+ST_CARDS_X0 = ST_CARD_AT["slots"][0]
+ST_PEOPLE_W = 58                # the state's People in its card, clear of the switch: "41250K" is 52 px
+ST_POP_SWITCH = (147, 1153)     # the Population switch, page x and y: the state card's bottom row, left of Show on map
+# --- end D10 ---
 ST_SAMPLES = {                  # what the renderer writes for the values of the band (tools/scenes/states.json)
     "THIS.GetName": "Hessen", "THIS.GetCapitalVictoryPointName": "Frankfurt", "?mod1440_st_cat.GetTokenLocalizedKey": "Dense Urban Region",
     "THIS.Owner.GetNameDef": "the German Reich", "?mod1440_sr_from.GetNameWithFlag": "Poland", "?mod1440_sr_date.GetDateStringNoHourLong": "27 September, 1939",
@@ -1345,7 +1358,8 @@ def st_sample(window, inside):
     """A sample for a value of the States page, or None for the shared rules of sample_for."""
     if window == "mod1440_states_row" and inside.startswith("?mod1440_st_r_"):
         return "250"
-    if window == "mod1440_states_card" or window == "mod1440_states" and inside.startswith("?modifier@"):
+    # D10: the three right cards and the country's modifiers stand in mod1440_states_cards and its row
+    if window in ("mod1440_states_card", "mod1440_states_cards_row") or window in ("mod1440_states", "mod1440_states_cards") and inside.startswith("?modifier@"):
         if inside in ST_SAMPLES:
             return ST_SAMPLES[inside]
         if inside.startswith("?damaged_building_level"):
@@ -1379,12 +1393,21 @@ def states_band():
     """The band under the table: four cards for the chosen state. The cards and what belongs to the country
     stand in the page; what belongs to the state is a list of one row (the array mod1440_st_card holds the
     chosen state), so that its texts and triggers run in the state's scope (Engine Facts X10, X36, X39).
-    Returns the page's widgets, the row, the triggers of each and the effects."""
+    D10: the three right cards (Building Slots, Buildings, Occupation) stand in a scripted GUI of their own,
+    mod1440_states_cards, with a list of one row of their own (mod1440_states_cards_row) and the country's
+    modifiers, so that the Population view's graph card (mod1440_states_pop) takes their place without the two
+    ever drawn over each other: a nested container cannot be hidden (X15). The state card stays in the page.
+    Returns the page's widgets, the state card's row, the cards' window and row, the triggers of the page, of the
+    state card's row and of the cards' window, the effects and the properties."""
     page, entry, triggers, row_triggers, effects, properties = "", "", "", "", "", ""
+    cards, card_triggers, card_properties = "", "", ""      # --- D10 --- the window of the three right cards
     for name, title, width in ST_CARDS:
         x, w = ST_CARD_AT[name]
         inner = text("st_band_%s_title" % name, 14, 8, w - 28, B.key("st_band_%s_title" % name, title), FONT_CARD, height=30) if title else ""
-        page += box("st_band_%s" % name, ST_CARD_X + x, ST_BAND_Y, w, ST_BAND_H, inner, CARD_BG)
+        if name == "state":
+            page += box("st_band_%s" % name, ST_CARD_X + x, ST_BAND_Y, w, ST_BAND_H, inner, CARD_BG)
+        else:
+            cards += box("st_band_%s" % name, x - ST_CARDS_X0, 0, w, ST_BAND_H, inner, CARD_BG)
     page += text("st_c_none", ST_CARD_X + 14, ST_BAND_Y + 14, 400, B.key("st_c_none", "No state is listed. Choose All in the title strip."), FONT_LABEL)
     triggers += block("st_c_none_visible", "check_variable = { mod1440_st_rows^num < 1 }\n")
 
@@ -1435,18 +1458,25 @@ def states_band():
         row_triggers += block("st_c_res_%d_visible" % n, more_than_zero(variable))
         row_triggers += block("st_c_res_%d_z_visible" % n, "NOT = { %s }\n" % more_than_zero(variable).strip())
     entry += text("st_c_people_l", x0 + 14, 194, 80, B.key("st_c_people_l", "People"), FONT_SMALL, height=20)
-    entry += text("st_c_people", x0 + 80, 192, 160, B.key("st_c_people", "[?state_population_k|0]K"), FONT_LABEL, height=22)
+    # D10: 58 wide (was 160), clear of the Population switch beside it; "41250K" is 52 px
+    entry += text("st_c_people", x0 + 80, 192, ST_PEOPLE_W, B.key("st_c_people", "[?state_population_k|0]K"), FONT_LABEL, height=22)
     entry += button("st_c_goto", x0 + ST_CARD_AT["state"][1] - 162, ST_BAND_H - 46, "GFX_button_148x34", B.key("st_c_goto", "Show on map"),
                     tooltip=B.key("st_c_goto_tt", "Moves the camera to this state and hides the page"))
     effects += block("st_c_goto_click", block("ROOT", "goto_state = PREV\nset_variable = { mod1440_st_open = 0 }\nadd_to_variable = { mod1440_st_dirty = 1 }\n"))
 
+    # ---- D10: the state card's row is done; from here on entry and row_triggers are the row of the window
+    # mod1440_states_cards, whose x counts from that window
+    state_entry, entry = entry, ""
+    state_row_triggers, row_triggers = row_triggers, ""
+
     # ---- building slots: the free count, a bar of the used share, the shared buildings by icon
     x0, w = ST_CARD_AT["slots"]
+    x0 -= ST_CARDS_X0
     entry += text("st_c_free", x0 + 14, 44, 60, B.key("st_c_free", "[?mod1440_st_free|G0]"), FONT_TITLE, height=40)
     entry += text("st_c_of", x0 + 74, 58, w - 88, B.key("st_c_of", "free of [?mod1440_st_slots|0]"), FONT_LABEL, height=22)
     tip = B.key("st_c_bar_tt", "Shared slots in use: the shared buildings over the free slots and the shared buildings. Only the game's own shared buildings are counted; a building another mod adds is not, so with such a mod the bar is short. The free number is the game's own.")
     entry += scaled("st_c_bar", x0 + 14, 98, bar_sprite(w - 28), 1, tooltip=tip)
-    properties += block("st_c_bar", "frame = mod1440_st_used\n")
+    card_properties += block("st_c_bar", "frame = mod1440_st_used\n")
     entry += text("st_c_used", x0 + 14, 120, w - 28, B.key("st_c_used", "[?mod1440_st_used_n|0] used by shared buildings:"), FONT_SMALL, height=20)
     for n, (name, building, frame) in enumerate(ST_SHARED):
         sx = x0 + 14 + n * 54
@@ -1462,6 +1492,7 @@ def states_band():
 
     # ---- buildings: the nine icons, the level under each, a damaged level in red, damage and bombing
     x0, w = ST_CARD_AT["build"]
+    x0 -= ST_CARDS_X0
     for n, (name, value, width, head, tip_text, group) in enumerate(c for c in STATE_COLUMNS if c[5] == "build"):
         bx = x0 + 12 + n * 42
         damaged = "damaged_building_level@" + ST_BUILDING[name]
@@ -1486,6 +1517,7 @@ def states_band():
 
     # ---- occupation: the state's figures for a state that is not a core, then the country's modifiers
     x0, w = ST_CARD_AT["occ"]
+    x0 -= ST_CARDS_X0
     for n, (name, label, value) in enumerate((
             ("compliance", "$COMPLIANCE$", "[?compliance|1]%  [?compliance_speed|+=2]"),
             ("resistance", "$RESISTANCE$", "[?resistance|1]%  [?resistance_speed|-=2]"),
@@ -1496,24 +1528,40 @@ def states_band():
         row_triggers += block("st_c_occ_%s_l_visible" % name, noncore) + block("st_c_occ_%s_visible" % name, noncore)
     entry += text("st_c_occ_core", x0 + 14, 44, w - 28, B.key("st_c_occ_core", "§gA core of yours: no occupation.§!"), FONT_SMALL, height=20)
     row_triggers += block("st_c_occ_core_visible", core)
-    page += text("st_c_mod_caption", ST_CARD_X + x0 + 14, ST_BAND_Y + 112, w - 28, B.key("st_c_mod_caption", "§gYour country's modifiers§!"), FONT_SMALL, height=20)
+    # D10: the country's modifiers belong to the cards' window, after its list of one row (drawn over it)
+    mods = text("st_c_mod_caption", x0 + 14, 112, w - 28, B.key("st_c_mod_caption", "§gYour country's modifiers§!"), FONT_SMALL, height=20)
     for n, (key, token, fmt) in enumerate((("MODIFIER_COMPLIANCE_GROWTH", "compliance_growth", "+=%1"),
                                            ("MODIFIER_RESISTANCE_TARGET", "resistance_target", "-=%1"),
                                            ("MODIFIER_REQUIRED_GARRISON_FACTOR", "required_garrison_factor", "-=%1"))):
-        y = ST_BAND_Y + 134 + n * 21
+        y = 134 + n * 21
         variable = "modifier@" + token
-        page += text("st_c_mod_%d_l" % n, ST_CARD_X + x0 + 14, y, 190, key, FONT_SMALL, height=20)
-        page += text("st_c_mod_%d" % n, ST_CARD_X + x0 + 200, y, w - 214, B.key("st_c_mod_%d" % n, "[?%s|%s]" % (variable, fmt)), FONT_SMALL, "right", 20)
-        page += text("st_c_mod_%d_z" % n, ST_CARD_X + x0 + 200, y, w - 214, B.key("st_c_mod_z", "§g-§!"), FONT_SMALL, "right", 20)
+        mods += text("st_c_mod_%d_l" % n, x0 + 14, y, 190, key, FONT_SMALL, height=20)
+        mods += text("st_c_mod_%d" % n, x0 + 200, y, w - 214, B.key("st_c_mod_%d" % n, "[?%s|%s]" % (variable, fmt)), FONT_SMALL, "right", 20)
+        mods += text("st_c_mod_%d_z" % n, x0 + 200, y, w - 214, B.key("st_c_mod_z", "§g-§!"), FONT_SMALL, "right", 20)
         changed = "NOT = { check_variable = { %s = 0 } }\n" % variable
-        triggers += block("st_c_mod_%d_visible" % n, changed) + block("st_c_mod_%d_z_visible" % n, "check_variable = { %s = 0 }\n" % variable)
+        card_triggers += block("st_c_mod_%d_visible" % n, changed) + block("st_c_mod_%d_z_visible" % n, "check_variable = { %s = 0 }\n" % variable)
 
-    # the list of one row, between the cards and the country's modifiers: drawn over the one, under the other
-    grid = ('gridboxtype = {\n\tname = "st_card_grid"\n\tposition = { x = %d y = %d }\n\tsize = { width = %d height = %d }\n'
-            '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n' % (ST_CARD_X, ST_BAND_Y, ST_CARD_W, ST_BAND_H))
-    cards_end = page.index('instantTextboxType = { name = "st_c_mod_caption"')
-    page = page[:cards_end] + grid + page[cards_end:]
-    return page, row("mod1440_states_card", ST_CARD_W, ST_BAND_H, entry), triggers, row_triggers, effects, properties
+    # the lists of one row: the state card's in the page, after its card; the three cards' in their window, between
+    # the cards and the country's modifiers: drawn over the one, under the other
+    def one_row(name, x, y, width):
+        return ('gridboxtype = {\n\tname = "%s"\n\tposition = { x = %d y = %d }\n\tsize = { width = %d height = %d }\n'
+                '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n' % (name, x, y, width, ST_BAND_H))
+    state_w = ST_CARD_AT["state"][1]
+    page += one_row("st_card_grid", ST_CARD_X, ST_BAND_Y, state_w)
+    # --- D10 --- the switch of the Population view, in the state card's bottom row (page 147,1153): drawn over the row
+    page += button("st_pop_view", ST_POP_SWITCH[0], ST_POP_SWITCH[1], "GFX_sort_button_120x29", B.key("st_pop_view", "Population"),
+                   tooltip=B.key("st_pop_view_tt", "Shows the chosen state's population month by month in place of its slots, buildings and "
+                                 "occupation; a click on a row then draws that state. Click again for the cards. The page remembers the view."))
+    effects += block("st_pop_view_click", flip("mod1440_pop_view") + setv("mod1440_pop_vf", 1)
+                     + iff(is_one("mod1440_pop_view"), setv("mod1440_pop_vf", 2) + "mod1440_pop_draw = yes\n")
+                     + "add_to_variable = { mod1440_st_dirty = 1 }\n")
+    properties += block("st_pop_view", "frame = mod1440_pop_vf\n")
+    cards_w = ST_CARD_W - ST_CARDS_X0
+    cards += one_row("st_cards_grid", 0, 0, cards_w) + mods
+    cards_gui = box("mod1440_states_cards", ST_X + ST_CARD_X + ST_CARDS_X0, ST_Y + ST_BAND_Y, cards_w, ST_BAND_H, cards)
+    cards_gui += row("mod1440_states_cards_row", cards_w, ST_BAND_H, entry)
+    return (page, row("mod1440_states_card", state_w, ST_BAND_H, state_entry), cards_gui, triggers, state_row_triggers,
+            card_triggers + row_triggers, effects, properties, card_properties)
 
 
 def states_table():
@@ -1583,12 +1631,15 @@ def states_table():
     total = text("st_total_label", 10, 5, ST_NAME - 16, B.key("st_total_label", "Total of the [?mod1440_st_rows^num|0] listed"), FONT_SMALL, height=20)
     for number, (name, value, width, head, tip, group) in enumerate(STATE_COLUMNS, start=1):
         x = 14 + ST_EDGE[name]
-        tip_key = B.key("st_sort_%s_tt" % name, tip + "\\nClick to sort, click again to turn the order.")
+        # --- D10 --- In a year sorts the largest fall first
+        order = "\\nClick to sort, the largest fall first; click again to turn the order." if name == "pop_year" else "\\nClick to sort, click again to turn the order."
+        tip_key = B.key("st_sort_%s_tt" % name, tip + order)
         if head[0] == "text":
             body += button("st_sort_%s" % name, x, ST_HEAD_Y, head_sprite(width), B.key("st_sort_%s" % name, head[1]), tooltip=tip_key)
         else:
             body += button("st_sort_%s" % name, x, ST_HEAD_Y, head_sprite(width), tooltip=tip_key)
-            sprite, scale, dx, dy = (("GFX_buildings_strip", 0.6, 12, 1) if head[0] == "building" else ("GFX_resources_strip", 0.9, 16, 3))
+            sprite, scale, dx, dy = (("GFX_buildings_strip", 0.6, ST_ICON_DX["building"], 1) if head[0] == "building"
+                                     else ("GFX_resources_strip", 0.9, ST_ICON_DX["resource"], 3))
             body += ('iconType = { name = "st_icon_%s" position = { x = %d y = %d } spriteType = "%s" frame = %d scale = %s '
                      'alwaystransparent = yes }\n' % (name, x + dx, ST_HEAD_Y + dy, sprite, head[1], scale))
         effects += block("st_sort_%s_click" % name, (
@@ -1602,6 +1653,20 @@ def states_table():
         # a value stands in the middle of its column, under the middle of its head; the free count in the
         # middle of what the bar leaves of its column
         cell_x, cell_w = (ST_EDGE[name] + ST_FREE_BAR, width - ST_FREE_BAR) if name == "free" else (ST_EDGE[name], width)
+        if name == "pop_year":
+            # --- D10 --- the change in a year, red for a fall and green for a rise, empty when 0 or unknown; the total
+            # is the summed population of the listed states now against twelve months before, in the bar's white
+            change = "[?mod1440_pop_dy|=1]%"
+            entry += text("st_cell_pop_year", cell_x, 4, cell_w, B.key("st_cell_pop_year", "§R%s§!" % change), FONT_LABEL, "centre", 22)
+            entry += text("st_cell_pop_year_up", cell_x, 4, cell_w, B.key("st_cell_pop_year_up", "§G%s§!" % change), FONT_LABEL, "centre", 22)
+            row_triggers += block("st_cell_pop_year_visible", "check_variable = { mod1440_pop_dy < 0 }\n")
+            row_triggers += block("st_cell_pop_year_up_visible", "check_variable = { mod1440_pop_dy > 0 }\n")
+            total += text("st_total_pop_year", cell_x, 4, cell_w, B.key("st_total_pop_year", "[?mod1440_st_sum_pop_year|=1]%"), FONT_LABEL, "centre", 22)
+            triggers += block("st_total_pop_year_visible", is_one("mod1440_st_pop_has") + "\nNOT = { check_variable = { mod1440_st_sum_pop_year = 0 } }\n")
+            sums += iff(is_one("mod1440_pop_hy"), "add_to_variable = { ROOT.mod1440_st_pop_ya = mod1440_pop_ya }\n"
+                        "add_to_variable = { ROOT.mod1440_st_pop_last = mod1440_pop_last }\n")
+            clear += setv("mod1440_st_pop_ya", 0) + setv("mod1440_st_pop_last", 0)
+            continue
         entry += text("st_cell_%s" % name, cell_x, 4, cell_w, B.key("st_cell_%s" % name, "[?%s%s" % (value, fmt)), FONT_LABEL, "centre", 22)
         if group == "occ":
             row_triggers += block("st_cell_%s_visible" % name, "NOT = { is_core_of = ROOT }\n")
@@ -1637,15 +1702,19 @@ def states_table():
     effects += block("st_row_right_click", block("ROOT", "goto_state = PREV\nset_variable = { mod1440_st_open = 0 }\nadd_to_variable = { mod1440_st_dirty = 1 }\n"))
 
     # ---- the band of the chosen state
-    band, card_row, band_triggers, card_triggers, band_effects, band_properties = states_band()
+    (band, card_row, cards_gui, band_triggers, card_triggers, cards_triggers, band_effects, band_properties,
+     cards_properties) = states_band()
     body += band
     triggers += band_triggers
     effects += band_effects
     properties += band_properties
+    # --- D10 --- the graph card of the Population view
+    pop_gui, pop_script = states_pop()
 
     gui = box("mod1440_states", ST_X, ST_Y, ST_W, ST_H, body, PAGE_BG)
     gui += row("mod1440_states_row", ST_ROWS_W, ST_ROW, entry)
     gui += card_row
+    gui += cards_gui + pop_gui
     handle = button("st_unfold", 0, 0, "GFX_button_148x34", B.key("st_unfold", "States"), shortcut="shift+m",
                     tooltip=B.key("st_unfold_tt", "Show every state you control as a table"))
     gui += box("mod1440_states_handle", ST_X, 8, 148, 34, handle)
@@ -1656,6 +1725,15 @@ def states_table():
         lists=(block("st_grid", 'array = mod1440_st_rows\nchange_scope = yes\nentry_container = "mod1440_states_row"\n')
                + block("st_card_grid", 'array = mod1440_st_card\nchange_scope = yes\nentry_container = "mod1440_states_card"\n')),
         effects=effects, triggers=triggers + row_triggers + card_triggers, properties=properties)
+    # --- D10 --- the two views of the band's right part, windows of their own over the page and never shown together:
+    # the three cards (Building Slots, Buildings, Occupation) and the graph card (Population). Declared after the page.
+    shown = "check_variable = { mod1440_st_open = 1 }\n"
+    script += "\n" + scripted_gui(
+        "mod1440_states_cards", "mod1440_states_cards", "construction_tab",
+        visible=shown + "NOT = { %s }\n" % is_one("mod1440_pop_view"), dirty="mod1440_st_dirty",
+        lists=block("st_cards_grid", 'array = mod1440_st_card\nchange_scope = yes\nentry_container = "mod1440_states_cards_row"\n'),
+        triggers=cards_triggers, properties=cards_properties)
+    script += "\n" + pop_script
     script += "\n" + scripted_gui(
         "mod1440_states_handle", "mod1440_states_handle", "construction_tab",
         visible="NOT = { check_variable = { mod1440_st_open = 1 } }\n",
@@ -1665,6 +1743,13 @@ def states_table():
     frames += "".join(block("if", "limit = { check_variable = { mod1440_st_show = %d } }\nset_variable = { mod1440_st_frame_%d = 2 }\n" % (v, v))
                       for v in (0, 1, 2))
     frames += block("if", "limit = { check_variable = { mod1440_st_only_free = 1 } }\nset_variable = { mod1440_st_frame_free = 2 }\n")
+    # --- D10 --- the frame of the Population switch, and the change in a year of the listed states together: their
+    # population of the newest month against twelve months before, of the states that have both (mod1440_pop_hy)
+    frames += setv("mod1440_pop_vf", 1) + iff(is_one("mod1440_pop_view"), setv("mod1440_pop_vf", 2))
+    pop_total = (setv("mod1440_st_sum_pop_year", 0) + setv("mod1440_st_pop_has", 0)
+                 + iff("check_variable = { mod1440_st_pop_ya > 0 }", (
+                     setv("mod1440_st_sum_pop_year", "mod1440_st_pop_last") + "subtract_from_variable = { mod1440_st_sum_pop_year = mod1440_st_pop_ya }\n"
+                     + pop_percent("mod1440_st_sum_pop_year", "mod1440_st_pop_ya", "variable") + setv("mod1440_st_pop_has", 1))))
     # every second row of the list gets the darker band (the variable is the state's own)
     bands = tmp("st_odd", 0) + block("for_each_scope_loop", (
         "array = mod1440_st_rows\n" + setv("mod1440_st_odd", "st_odd")
@@ -1701,6 +1786,7 @@ def states_table():
                 + block("if", block("limit", "check_variable = { ROOT.mod1440_st_show = 2 }\nis_core_of = ROOT\n") + "set_temp_variable = { st_keep = 0 }\n")
                 + block("if", block("limit", "check_variable = { ROOT.mod1440_st_only_free = 1 }\ncheck_variable = { mod1440_st_free < 1 }\n") + "set_temp_variable = { st_keep = 0 }\n")
                 + iff("check_variable = { st_keep = 1 }", "add_to_array = { ROOT.mod1440_st_rows = THIS }\n" + sums)))
+            + pop_total
             + "mod1440_st_sort = yes\n" + bands + arrows + frames
             + "mod1440_st_pick = yes\n"))
         + "\n# States: the state of the cards, for the country in scope. The one in mod1440_st_sel if it is listed, else\n"
@@ -1712,6 +1798,7 @@ def states_table():
                 iff("NOT = { is_in_array = { array = mod1440_st_rows value = mod1440_st_sel } }", setv("mod1440_st_sel", "mod1440_st_rows^0"))
                 + block("var:mod1440_st_sel", setv("mod1440_st_picked", 1))
                 + "add_to_array = { mod1440_st_card = mod1440_st_sel }\n"))
+            + iff(is_one("mod1440_pop_view"), "mod1440_pop_draw = yes\n")       # --- D10 --- the graph follows the chosen state
             + "add_to_variable = { mod1440_st_dirty = 1 }\n"))
         + "\n# States: puts the list into the order of the chosen column, largest first, or smallest first when turned.\n"
         "# The search for the next largest is the game's own loop, so 150 states take a few milliseconds (X22).\n"
@@ -1732,6 +1819,649 @@ def states_table():
             + block("for_each_loop", "array = mod1440_st_sorted\nvalue = st_copy\nadd_to_array = { mod1440_st_rows = st_copy }\n")))))
     daily = block("if", "limit = { check_variable = { mod1440_st_open = 1 } }\nmod1440_st_list = yes\n")
     return gui, script, listing_script, daily
+
+
+# ---------------------------------------------------------------- State population history (D10), on the States page
+
+# --- D10 ---
+# Every state of the map is written down on the first of each month (its state_population_k), ten years at most, in
+# one round a month for the whole game (mod1440_pop_round): one array per state, mod1440_pop_k, a value a month, and
+# the months for all in three global arrays (the date, its year, its day number). The States page shows the chosen
+# state's months in a graph card that takes the place of the band's three right cards, the Population view
+# (scratch/phases/D10/design.json, layout.json; decisions of 2026-10-26).
+POP_KEEP = 120                  # months kept: ten years, for every state (decision 3)
+POP_GAP = 20                    # days at least between two rounds: on_monthly runs for each player, the round once
+POP_X, POP_Y = ST_X + ST_CARD_X + ST_CARDS_X0, ST_Y + ST_BAND_Y        # the graph card on construction_tab (page 449,964)
+POP_W, POP_H = ST_CARD_W - ST_CARDS_X0, ST_BAND_H                        # 1016 x 232: the three cards and their gaps
+POP_CHART_X, POP_CHART_Y = 78, 48       # the frame of the graph in the card (page 527,1012), 608 x 172
+POP_CHART_W, POP_CHART_H = 600, 152     # the columns, as wide in every range
+POP_INSET, POP_AXIS = 4, 20             # the columns stand 4 inside the frame; the years under them
+POP_STEPS = POP_CHART_H                 # heights a column can have: one per pixel (History's H_STEPS pattern, X17)
+POP_YEARS = 10                          # year marks: ten years have at most ten first months
+# The ranges: (months, px from one column to the next, a column's width, caption). 24 x 25 = 60 x 10 = 120 x 5.
+POP_RANGES = [(24, 25, 22, "2 years"), (60, 10, 8, "5 years"), (120, 5, 4, "10 years")]
+POP_RANGE_X, POP_RANGE_W, POP_ZOOM_X, POP_BUTTON_Y = 234, 100, 546, 8
+# the table of figures beside the chart (page 1151,972): a head bar of 30 and seven rows of 24; its columns from its
+# left edge, (x, width)
+POP_TAB_X, POP_TAB_Y, POP_TAB_W, POP_HEAD, POP_ROW = 702, 8, 300, 30, 24
+POP_TAB_COLS = {"label": (8, 76), "people": (84, 72), "pct": (168, 50), "month": (220, 72)}
+
+
+def pop_first_x(step):
+    """Card x of the first year mark: a text 40 wide under the middle of the first column."""
+    return POP_CHART_X + POP_INSET + step // 2 - 20
+
+
+def pop_percent(variable, base, kind="temp_variable"):
+    """Script: the change held in `variable` as a percentage of `base`. A variable keeps three decimals and holds at
+    most about 2.1 million, and a large state's change times 100 could pass that: times 10, over the base, times 10,
+    which leaves the percentage in steps of 0.01."""
+    return ("multiply_{k} = {{ {v} = 10 }}\ndivide_{k} = {{ {v} = {b} }}\nmultiply_{k} = {{ {v} = 10 }}\n"
+            .format(k=kind, v=variable, b=base))
+
+
+def pop_change(name, x, y, width, variable, has, suffix, font, same=True):
+    """A change in the table of figures: green for a rise, red for a fall, a grey dash for none (same), nothing
+    while it is not known (has). Returns the widgets and their triggers."""
+    number = "[?%s|=1]%s" % (variable, suffix)
+    known = is_one(has) + "\n"
+    out = text(name + "_up", x, y, width, B.key(name + "_up", "§G%s§!" % number), font, "right", 24)
+    out += text(name + "_dn", x, y, width, B.key(name + "_dn", "§R%s§!" % number), font, "right", 24)
+    triggers = (block(name + "_up_visible", known + "check_variable = { %s > 0 }\n" % variable)
+                + block(name + "_dn_visible", known + "check_variable = { %s < 0 }\n" % variable))
+    if same:
+        out += text(name + "_same", x, y, width, B.key("pop_same", DASH), font, "right", 24)
+        triggers += block(name + "_same_visible", known + "check_variable = { %s = 0 }\n" % variable)
+    return out, triggers
+
+
+# The rows of the table of figures: (name, label, tooltip, people: (kind, variable), percent variable or None, month
+# variable, the variable that says the row is known). kind "value" a number of thousands, "change" a signed change.
+POP_TABLE = [
+    ("latest", "Latest", "The newest month written down for this state: the changes count from it. Today's People in the state card is a newer number until the next first of the month.",
+     ("value", "mod1440_pop_latest"), None, "mod1440_pop_d0", "mod1440_pop_hl"),
+    ("month", "In a month", "The change since the month before; Month is the month compared with.",
+     ("change", "mod1440_pop_cm"), "mod1440_pop_cmp", "mod1440_pop_d1", "mod1440_pop_hm"),
+    ("year", "In a year", "The change since twelve months before; Month is the month compared with.",
+     ("change", "mod1440_pop_cy"), "mod1440_pop_cyp", "mod1440_pop_d2", "mod1440_pop_hy"),
+    ("first", "Since first", "The change since the first month written down for this state (ten years at most).",
+     ("change", "mod1440_pop_cf"), "mod1440_pop_cfp", "mod1440_pop_d3", "mod1440_pop_hf"),
+    ("max", "Highest", "The highest month written down for this state, and its month.",
+     ("value", "mod1440_pop_max"), None, "mod1440_pop_d4", "mod1440_pop_hl"),
+    ("min", "Lowest", "The lowest month written down for this state, and its month.",
+     ("value", "mod1440_pop_min"), None, "mod1440_pop_d5", "mod1440_pop_hl"),
+]
+
+
+def states_pop():
+    """The graph card of the Population view: a scripted GUI of its own over the band's three right cards, shown
+    while the page is open and the view is on (a nested container cannot be hidden, X15). The title, the range and
+    Zoom in; the chart with one grid per range, whose columns are progress bars script fills (X17), the months before
+    the state was the player's in the unit list's preparing colour; the scale, the year marks and the line of the
+    month taken, which script moves (X4); the table of figures. Returns the .gui windows and the scripted GUI."""
+    triggers, properties, effects = "", "", ""
+    has = more_than_zero("mod1440_pop_valid")
+    inner = text("pop_title", 14, 8, 118, B.key("pop_title", "Population"), FONT_CARD, height=30)
+    inner += text("pop_unit", 132, 15, 90, B.key("pop_unit", "§gin thousands§!"), FONT_SMALL, height=20)
+    # the range: 2, 5 or 10 years, the chosen one on frame 2; until the player picks one, the shortest that holds
+    # every month written down
+    for k, (span, step, width, caption) in enumerate(POP_RANGES):
+        name = "pop_range_%d" % span
+        inner += button(name, POP_RANGE_X + k * (POP_RANGE_W + 4), POP_BUTTON_Y, "GFX_sort_button_100x29", B.key(name, caption),
+                        tooltip=B.key(name + "_tt", "The last %s on the graph, a column a month. Until you pick a range, the graph takes the "
+                                                    "shortest that holds every month written down." % caption))
+        effects += block(name + "_click", setv("mod1440_pop_range", span) + "mod1440_pop_draw = yes\n")
+        properties += block(name, "frame = mod1440_pop_rf_%d\n" % span)
+    # Zoom in is on by default for a population (decision 4): mod1440_pop_flat is 1 when the player turned it off
+    inner += button("pop_zoom", POP_ZOOM_X, POP_BUTTON_Y, "GFX_sort_button_140x29", B.key("pop_zoom", "Zoom in"), tooltip=B.key(
+        "pop_zoom_tt", "On: the columns start at the lowest month instead of at zero, so that a fall of a few percent shows; the "
+                       "scale on the left gives the numbers. Click to start them at zero, again to zoom in."))
+    effects += block("pop_zoom_click", flip("mod1440_pop_flat") + "mod1440_pop_draw = yes\n")
+    properties += block("pop_zoom", "frame = mod1440_pop_zf\n")
+
+    # the scale on the left: five heights, from the foot of the columns to the top
+    for k in range(5):
+        inner += text("pop_scale_%d" % k, 14, POP_CHART_Y + POP_CHART_H - k * (POP_CHART_H // 4) - 10, POP_CHART_X - 22,
+                      B.key("pop_scale_%d" % k, "[?mod1440_pop_s%d|1]" % k), FONT_SMALL, "right", 20)
+        triggers += block("pop_scale_%d_visible" % k, has)
+    # the chart: bands on the second and fourth quarter, one grid per range, of which script fills one
+    chart = "".join(icon("pop_band_%d" % k, POP_INSET, k * (POP_CHART_H // 4), STRIPE % (POP_CHART_W, POP_CHART_H // 4)) for k in (1, 3))
+    columns, lists = "", ""
+    for span, step, width, caption in POP_RANGES:
+        chart += ('gridboxtype = {\n\tname = "pop_grid_%d"\n\tposition = { x = %d y = 0 }\n\tsize = { width = %d height = %d }\n'
+                  '\tslotsize = { width = %d height = %d }\n\tadd_horizontal = yes\n\tmax_slots_horizontal = %d\n\tformat = "UPPER_LEFT"\n}\n'
+                  % (span, POP_INSET, POP_CHART_W, POP_CHART_H + POP_AXIS, step, POP_CHART_H + POP_AXIS, span))
+        lists += block("pop_grid_%d" % span, 'array = mod1440_pop_bars_%d\nentry_container = "mod1440_states_pop_col_%d"\n' % (span, span))
+        # a column: the month's height (v, -1 for a month before the state's record: no column), in the preparing
+        # colour before the state came into the player's hands (mod1440_pop_pre_<span>), in green from then on
+        at = (step - width) // 2
+        cells = ""
+        for widget, sprite, words in (("pop_pre", "column_prep", ", before it was yours"), ("pop_bar", "column", "")):
+            tip = B.key(widget + "_tt", "[?mod1440_pop_sdate^i.GetDateStringNoHourLong]: [?mod1440_pop_now^i|1]K%s" % words)
+            cells += ('iconType = { name = "%s%d" position = { x = %d y = 0 } spriteType = "GFX_1440p_SG_%s_%dx%d" pdx_tooltip = "%s" }\n'
+                      % (widget, span, at, sprite, width, POP_CHART_H, tip))
+            properties += block("%s%d" % (widget, span), "frame = v\n")
+        columns += row("mod1440_states_pop_col_%d" % span, step, POP_CHART_H + POP_AXIS, cells)
+        before = "check_variable = { mod1440_pop_pre_%d^i = 1 }" % span
+        triggers += block("pop_pre%d_visible" % span, "check_variable = { v > -1 }\n%s\n" % before)
+        triggers += block("pop_bar%d_visible" % span, "check_variable = { v > -1 }\nNOT = { %s }\n" % before)
+    inner += box("pop_chart", POP_CHART_X, POP_CHART_Y, POP_CHART_W + 2 * POP_INSET, POP_CHART_H + POP_AXIS, chart, CARD_BG)
+    # a state with no month written down (a game that got the mod after its start, until the first of next month)
+    inner += text("pop_none", POP_CHART_X + 20, POP_CHART_Y + 50, POP_CHART_W - 40, B.key(
+        "pop_none", "Nothing is written down for this state yet. Every state is written down on the first of each month: the first "
+                    "column comes then."), FONT_LABEL, height=48)
+    triggers += block("pop_none_visible", "NOT = { %s }\n" % has.strip())
+
+    # Under the columns, the year at each first month of a new year; the line of the first month in the player's
+    # hands. Script moves them (x properties, X4).
+    for k in range(POP_YEARS):
+        inner += text("pop_year_%d" % k, pop_first_x(POP_RANGES[0][1]), POP_CHART_Y + POP_CHART_H + 1, 40,
+                      B.key("pop_year_%d" % k, "[?mod1440_pop_yl_%d|0]" % k), FONT_SMALL, "centre", 18)
+        properties += block("pop_year_%d" % k, "x = mod1440_pop_yx_%d\n" % k)
+        triggers += block("pop_year_%d_visible" % k, more_than_zero("mod1440_pop_yl_%d" % k))
+    inner += ('iconType = { name = "pop_mark" position = { x = %d y = %d } spriteType = "GFX_1440p_SG_line_2x%d" alwaystransparent = yes }\n'
+              % (POP_CHART_X + POP_INSET, POP_CHART_Y, POP_CHART_H))
+    properties += block("pop_mark", "x = mod1440_pop_mark_x\n")
+    triggers += block("pop_mark_visible", is_one("mod1440_pop_mark") + "\n")
+
+    # ---- the table of figures: a head bar and seven rows, a band on every second
+    tx = POP_TAB_X
+    inner += icon("pop_head", tx, POP_TAB_Y, head_sprite(POP_TAB_W))
+    for name, label, tip in (("people", "People", "In thousands, as the game's People."),
+                             ("pct", "%", "The change in percent of the month compared with."),
+                             ("month", "Month", "The month the row's number belongs to; for a change, the month compared with.")):
+        cx, cw = POP_TAB_COLS[name]
+        inner += text("pop_h_%s" % name, tx + cx, POP_TAB_Y + 4, cw, B.key("pop_h_%s" % name, label), FONT_LABEL, "right", 22,
+                      tooltip=B.key("pop_h_%s_tt" % name, tip))
+    top = POP_TAB_Y + POP_HEAD
+    inner += stripes("pop_stripe", tx, top, POP_TAB_W, POP_ROW, len(POP_TABLE) + 1)
+    lx, lw = POP_TAB_COLS["label"]
+    px, pw = POP_TAB_COLS["people"]
+    cx, cw = POP_TAB_COLS["pct"]
+    mx, mw = POP_TAB_COLS["month"]
+    for r, (name, label, tip, (kind, variable), pct, month, known) in enumerate(POP_TABLE):
+        y = top + r * POP_ROW
+        inner += text("pop_l_%s" % name, tx + lx, y + 3, lw, B.key("pop_l_%s" % name, label), FONT_LABEL, height=22,
+                      tooltip=B.key("pop_l_%s_tt" % name, tip))
+        if kind == "value":
+            inner += text("pop_v_%s" % name, tx + px, y + 2, pw, B.key("pop_v_%s" % name, "[?%s|1]K" % variable), FONT_VALUE, "right", 24)
+            triggers += block("pop_v_%s_visible" % name, is_one(known) + "\n")
+        else:
+            part, more = pop_change("pop_v_%s" % name, tx + px, y + 2, pw, variable, known, "K", FONT_VALUE)
+            inner += part
+            triggers += more
+        if pct:
+            part, more = pop_change("pop_p_%s" % name, tx + cx, y + 3, cw, pct, known, "%", FONT_LABEL, same=False)
+            inner += part
+            triggers += more
+        inner += text("pop_m_%s" % name, tx + mx, y + 3, mw, B.key("pop_m_%s" % name, "§g[?%s.GetDateStringNoHour]§!" % month), FONT_LABEL, "right", 22)
+        triggers += block("pop_m_%s_visible" % name, is_one(known) + "\n")
+    # Yours since: the day the state came into the player's hands, from the War Diary's record on the state (E1)
+    y = top + len(POP_TABLE) * POP_ROW
+    tip = B.key("pop_l_since_tt", "The day this state came into your hands, as the War Diary keeps it. On the graph the months before it "
+                                  "are blue-grey, a yellow line marks the first month in your hands. A dash: yours since before the record began.")
+    inner += text("pop_l_since", tx + lx, y + 3, lw + pw + cw, B.key("pop_l_since", "§YYours since§!"), FONT_LABEL, height=22, tooltip=tip)
+    inner += text("pop_m_since", tx + mx, y + 3, mw, B.key("pop_m_since", "§g[?mod1440_pop_since.GetDateStringNoHour]§!"), FONT_LABEL, "right", 22)
+    inner += text("pop_m_since_none", tx + mx, y + 3, mw, B.key("pop_m_since_none", DASH), FONT_LABEL, "right", 22)
+    triggers += block("pop_m_since_visible", is_one("mod1440_pop_taken") + "\n")
+    triggers += block("pop_m_since_none_visible", "NOT = { %s }\n" % is_one("mod1440_pop_taken"))
+
+    gui = box("mod1440_states_pop", POP_X, POP_Y, POP_W, POP_H, inner, CARD_BG) + columns
+    script = scripted_gui(
+        "mod1440_states_pop", "mod1440_states_pop", "construction_tab",
+        visible="check_variable = { mod1440_st_open = 1 }\n%s\n" % is_one("mod1440_pop_view"), dirty="mod1440_st_dirty",
+        lists=lists, effects=effects, triggers=triggers, properties=properties)
+    return gui, script
+
+
+def pop_script():
+    """The monthly round over every state and the drawing of the chosen state. Returns the scripted effects."""
+    # ---- the round: once a month in all
+    month = (
+        "".join("add_to_array = { global.mod1440_pop_%s = global.%s }\n" % (a, g) for a, g in (("date", "date"), ("year", "year"), ("days", "num_days")))
+        + iff("check_variable = { global.mod1440_pop_date^num > %d }" % POP_KEEP,
+              "".join("remove_from_array = { array = global.mod1440_pop_%s index = 0 }\n" % a for a in ("date", "year", "days")))
+        + tmp("pr_n", "global.mod1440_pop_date^num")
+        + block("every_state", (
+            # a state with fewer months than the dates (a save of an earlier build has none) gets -1 for the months
+            # before its first, which draws no column and counts for nothing (as History pads its newer series)
+            tmp("pr_p", "pr_n") + "subtract_from_temp_variable = { pr_p = mod1440_pop_k^num }\nsubtract_from_temp_variable = { pr_p = 1 }\n"
+            + iff("check_variable = { pr_p > 0 }", block("for_loop_effect", "start = 0\nend = pr_p\nvalue = pr_q\n"
+                                                         "add_to_array = { array = mod1440_pop_k value = -1 index = 0 }\n"))
+            + "add_to_array = { mod1440_pop_k = state_population_k }\n"
+            + iff("check_variable = { mod1440_pop_k^num > pr_n }", "remove_from_array = { array = mod1440_pop_k index = 0 }\n")
+            + "mod1440_pop_year = yes\n")))
+    year = (
+        setv("mod1440_pop_dy", 0) + setv("mod1440_pop_fall", 0) + setv("mod1440_pop_hy", 0) + setv("mod1440_pop_ya", 0) + setv("mod1440_pop_last", 0)
+        + tmp("pr_i", "mod1440_pop_k^num") + "subtract_from_temp_variable = { pr_i = 13 }\n"
+        + iff("check_variable = { pr_i > -1 }", (
+            tmp("pr_a", "mod1440_pop_k^pr_i") + "add_to_temp_variable = { pr_i = 12 }\n" + tmp("pr_b", "mod1440_pop_k^pr_i")
+            + iff("check_variable = { pr_a > 0 } check_variable = { pr_b > -1 }", (
+                setv("mod1440_pop_hy", 1) + setv("mod1440_pop_ya", "pr_a") + setv("mod1440_pop_last", "pr_b")
+                + setv("mod1440_pop_dy", "pr_b") + "subtract_from_variable = { mod1440_pop_dy = pr_a }\n"
+                + pop_percent("mod1440_pop_dy", "pr_a", "variable")
+                + setv("mod1440_pop_fall", 0) + "subtract_from_variable = { mod1440_pop_fall = mod1440_pop_dy }\n")))))
+    opened = "is_ai = no\n%s\n%s\n" % (is_one("mod1440_st_open"), is_one("mod1440_pop_view"))
+    round_ = (
+        tmp("pr_gap", "global.num_days") + "subtract_from_temp_variable = { pr_gap = global.mod1440_pop_day }\n"
+        + iff("check_variable = { pr_gap > %d }" % (POP_GAP - 1), (
+            setv("global.mod1440_pop_day", "global.num_days") + "mod1440_pop_month = yes\n"
+            # an open page in the Population view gets the new month at once
+            + block("every_country", "limit = { %s }\nmod1440_pop_draw = yes\n" % opened.replace("\n", " ").strip()))))
+
+    # ---- the drawing, for the country in scope
+    draw = "".join("clear_temp_array = pd_%s\n" % a for a in ("date", "year", "day", "all"))
+    for arr, g in (("date", "date"), ("year", "year"), ("day", "days")):
+        draw += block("for_each_loop", "array = global.mod1440_pop_%s\nvalue = pd_v\nadd_to_temp_array = { pd_%s = pd_v }\n" % (g, arr))
+    draw += tmp("pd_since", 0) + tmp("pd_sdate", 0)
+    draw += iff("check_variable = { mod1440_st_card^num > 0 }", block("var:mod1440_st_sel", (
+        block("for_each_loop", "array = mod1440_pop_k\nvalue = pd_v\nadd_to_temp_array = { pd_all = pd_v }\n")
+        + iff("check_variable = { mod1440_sr_day > 0 }", tmp("pd_since", "mod1440_sr_day") + tmp("pd_sdate", "mod1440_sr_date")))))
+    # n: the state's months that have a date; the newest of both stand at the end of their arrays
+    draw += (tmp("pd_n", "pd_all^num") + iff("check_variable = { pd_date^num < pd_n }", tmp("pd_n", "pd_date^num"))
+             + tmp("pd_va", "pd_all^num") + "subtract_from_temp_variable = { pd_va = pd_n }\n"
+             + tmp("pd_da", "pd_date^num") + "subtract_from_temp_variable = { pd_da = pd_n }\n")
+    # the range: the player's, or the shortest that holds every month written down
+    draw += (tmp("pd_span", "mod1440_pop_range")
+             + iff("check_variable = { pd_span = 0 }", tmp("pd_span", POP_RANGES[0][0])
+                   + "".join(iff("check_variable = { pd_n > %d }" % POP_RANGES[k - 1][0], tmp("pd_span", POP_RANGES[k][0])) for k in range(1, len(POP_RANGES))))
+             + "".join(setv("mod1440_pop_rf_%d" % r[0], 1) for r in POP_RANGES)
+             + "".join(iff("check_variable = { pd_span = %d }" % span, tmp("pd_step", step) + tmp("pd_yoff", pop_first_x(step))
+                           + tmp("pd_mx", POP_CHART_X + POP_INSET + (step - width) // 2 - 1) + setv("mod1440_pop_rf_%d" % span, 2), "if" if k == 0 else "else_if")
+                       for k, (span, step, width, caption) in enumerate(POP_RANGES))
+             + tmp("pd_from", "pd_n") + "subtract_from_temp_variable = { pd_from = pd_span }\n" + iff("check_variable = { pd_from < 0 }", tmp("pd_from", 0))
+             + tmp("pd_cnt", "pd_n") + "subtract_from_temp_variable = { pd_cnt = pd_from }\n")
+    # every month: the first, the highest and the lowest written down, those of the range, and the first month in the
+    # player's hands (pd_t, the first whose day is not before the day the state was taken; pd_n when none is)
+    first_of = lambda pre: tmp(pre + "hi", "pd_v") + tmp(pre + "lo", "pd_v")   # noqa: E731
+    draw += ("".join(tmp(v, 0) for v in ("pd_valid", "pd_hi", "pd_lo", "pd_hi_k", "pd_lo_k", "pd_first", "pd_first_k", "pd_shn", "pd_shi", "pd_slo"))
+             + tmp("pd_t", "pd_n")
+             + block("for_loop_effect", (
+                 "start = 0\nend = pd_n\nvalue = pd_k\n"
+                 + tmp("pd_j", "pd_k") + "add_to_temp_variable = { pd_j = pd_va }\n" + tmp("pd_v", "pd_all^pd_j")
+                 + tmp("pd_i", "pd_k") + "add_to_temp_variable = { pd_i = pd_da }\n"
+                 + iff("check_variable = { pd_since > 0 } check_variable = { pd_t = pd_n }", tmp("pd_dd", "pd_day^pd_i")
+                       + iff("NOT = { check_variable = { pd_dd < pd_since } }", tmp("pd_t", "pd_k")))
+                 + iff("check_variable = { pd_v > -1 }", (
+                     "add_to_temp_variable = { pd_valid = 1 }\n"
+                     + iff("check_variable = { pd_valid = 1 }", tmp("pd_first", "pd_v") + tmp("pd_first_k", "pd_k") + first_of("pd_")
+                           + tmp("pd_hi_k", "pd_k") + tmp("pd_lo_k", "pd_k"))
+                     + els(iff("check_variable = { pd_v > pd_hi }", tmp("pd_hi", "pd_v") + tmp("pd_hi_k", "pd_k"))
+                           + iff("check_variable = { pd_v < pd_lo }", tmp("pd_lo", "pd_v") + tmp("pd_lo_k", "pd_k")))
+                     + iff("NOT = { check_variable = { pd_k < pd_from } }", (
+                         "add_to_temp_variable = { pd_shn = 1 }\n"
+                         + iff("check_variable = { pd_shn = 1 }", first_of("pd_s"))
+                         + els(iff("check_variable = { pd_v > pd_shi }", tmp("pd_shi", "pd_v"))
+                               + iff("check_variable = { pd_v < pd_slo }", tmp("pd_slo", "pd_v"))))))))))
+    draw += setv("mod1440_pop_valid", "pd_valid") + setv("mod1440_pop_n", "pd_n")
+
+    # the table of figures: the newest month, its changes in a month, a year and since the first month, the highest
+    # and the lowest, and the day the state came into the player's hands
+    def date_of(variable, index):
+        return tmp("pd_di", index) + "add_to_temp_variable = { pd_di = pd_da }\n" + tmp("pd_dv", "pd_date^pd_di") + setv(variable, "pd_dv")
+
+    def change(back, has, variable, pct, month):
+        return iff("check_variable = { pd_n > %d }" % back, (
+            tmp("pd_bk", "pd_n") + "subtract_from_temp_variable = { pd_bk = %d }\n" % (back + 1)
+            + tmp("pd_j", "pd_bk") + "add_to_temp_variable = { pd_j = pd_va }\n" + tmp("pd_b", "pd_all^pd_j")
+            + iff("check_variable = { pd_b > -1 }", (
+                setv(has, 1) + setv(variable, "pd_l") + "subtract_from_variable = { %s = pd_b }\n" % variable + setv(pct, 0)
+                + iff("check_variable = { pd_b > 0 }", setv(pct, variable) + pop_percent(pct, "pd_b", "variable"))
+                + date_of(month, "pd_bk")))))
+
+    draw += "".join(setv("mod1440_pop_%s" % v, 0) for v in ("hl", "hm", "hy", "hf", "taken"))
+    draw += iff("check_variable = { pd_n > 0 }", (
+        tmp("pd_j", "pd_n") + "add_to_temp_variable = { pd_j = pd_va }\nsubtract_from_temp_variable = { pd_j = 1 }\n" + tmp("pd_l", "pd_all^pd_j")
+        + iff("check_variable = { pd_l > -1 }", (
+            setv("mod1440_pop_hl", 1) + setv("mod1440_pop_latest", "pd_l")
+            + tmp("pd_last", "pd_n") + "subtract_from_temp_variable = { pd_last = 1 }\n" + date_of("mod1440_pop_d0", "pd_last")
+            + change(1, "mod1440_pop_hm", "mod1440_pop_cm", "mod1440_pop_cmp", "mod1440_pop_d1")
+            + change(12, "mod1440_pop_hy", "mod1440_pop_cy", "mod1440_pop_cyp", "mod1440_pop_d2")
+            + iff("check_variable = { pd_valid > 1 }", (
+                setv("mod1440_pop_hf", 1) + setv("mod1440_pop_cf", "pd_l") + "subtract_from_variable = { mod1440_pop_cf = pd_first }\n"
+                + setv("mod1440_pop_cfp", 0)
+                + iff("check_variable = { pd_first > 0 }", setv("mod1440_pop_cfp", "mod1440_pop_cf") + pop_percent("mod1440_pop_cfp", "pd_first", "variable"))
+                + date_of("mod1440_pop_d3", "pd_first_k")))
+            + setv("mod1440_pop_max", "pd_hi") + date_of("mod1440_pop_d4", "pd_hi_k")
+            + setv("mod1440_pop_min", "pd_lo") + date_of("mod1440_pop_d5", "pd_lo_k")))))
+    draw += iff("check_variable = { pd_since > 0 }", setv("mod1440_pop_taken", 1) + setv("mod1440_pop_since", "pd_sdate"))
+
+    # the scale: from zero, or zoomed in (the default) from the lowest month of the range, to its highest
+    draw += (tmp("pd_base", 0) + iff("NOT = { %s }" % is_one("mod1440_pop_flat"), tmp("pd_base", "pd_slo"))
+             + tmp("pd_range", "pd_shi") + "subtract_from_temp_variable = { pd_range = pd_base }\n"
+             + tmp("pd_quarter", "pd_range") + "divide_temp_variable = { pd_quarter = 4 }\n"
+             + setv("mod1440_pop_s0", "pd_base")
+             + "".join(setv("mod1440_pop_s%d" % k, "mod1440_pop_s%d" % (k - 1)) + "add_to_variable = { mod1440_pop_s%d = pd_quarter }\n" % k for k in (1, 2, 3))
+             + setv("mod1440_pop_s4", "pd_shi"))
+    # the months of the range as column heights, 0 to POP_STEPS; -1 for a month before the state's record
+    draw += ("".join("clear_array = mod1440_pop_bars_%d\nclear_array = mod1440_pop_pre_%d\n" % (r[0], r[0]) for r in POP_RANGES)
+             + "".join("clear_array = mod1440_pop_%s\n" % a for a in ("now", "sdate", "syear"))
+             + block("for_loop_effect", (
+                 "start = 0\nend = pd_cnt\nvalue = pd_k\n"
+                 + tmp("pd_kk", "pd_k") + "add_to_temp_variable = { pd_kk = pd_from }\n"
+                 + tmp("pd_j", "pd_kk") + "add_to_temp_variable = { pd_j = pd_va }\n" + tmp("pd_v", "pd_all^pd_j")
+                 + tmp("pd_i", "pd_kk") + "add_to_temp_variable = { pd_i = pd_da }\n"
+                 + tmp("pd_dv", "pd_date^pd_i") + "add_to_array = { mod1440_pop_sdate = pd_dv }\n"
+                 + tmp("pd_dv", "pd_year^pd_i") + "add_to_array = { mod1440_pop_syear = pd_dv }\n"
+                 + "add_to_array = { mod1440_pop_now = pd_v }\n"
+                 + tmp("pd_bar", -1)
+                 + iff("check_variable = { pd_v > -1 }", (
+                     tmp("pd_bar", 0)
+                     + iff("check_variable = { pd_range > 0 }", tmp("pd_bar", "pd_v") + "subtract_from_temp_variable = { pd_bar = pd_base }\n"
+                           "divide_temp_variable = { pd_bar = pd_range }\nmultiply_temp_variable = { pd_bar = %d }\n" % POP_STEPS)
+                     # every month the same: the columns stand at full height
+                     + iff("NOT = { check_variable = { pd_v = 0 } }", tmp("pd_bar", POP_STEPS), "else_if")
+                     # from the lowest month, the lowest keeps a sliver: it was written down
+                     + iff("NOT = { check_variable = { pd_base = 0 } }", iff("check_variable = { pd_bar < 4 }", tmp("pd_bar", 4)))
+                     + iff("check_variable = { pd_bar < 0 }", tmp("pd_bar", 0)) + iff("check_variable = { pd_bar > %d }" % POP_STEPS, tmp("pd_bar", POP_STEPS))))
+                 + tmp("pd_pre", 0) + iff("check_variable = { pd_since > 0 } check_variable = { pd_kk < pd_t }", tmp("pd_pre", 1))
+                 + "".join(iff("check_variable = { pd_span = %d }" % r[0], "add_to_array = { mod1440_pop_bars_%d = pd_bar }\nadd_to_array = { mod1440_pop_pre_%d = pd_pre }\n"
+                               % (r[0], r[0]), "if" if k == 0 else "else_if") for k, r in enumerate(POP_RANGES)))))
+    # the year marks under the first month of each year after the first month on the graph
+    marks = "".join(iff("check_variable = { pd_slot = %d }" % k, setv("mod1440_pop_yl_%d" % k, "pd_y") + setv("mod1440_pop_yx_%d" % k, "pd_x"),
+                        "if" if k == 0 else "else_if") for k in range(POP_YEARS))
+    draw += ("".join(setv("mod1440_pop_yl_%d" % k, 0) for k in range(POP_YEARS)) + tmp("pd_before", 0) + tmp("pd_slot", 0)
+             + block("for_each_loop", (
+                 "array = mod1440_pop_syear\nvalue = pd_y\nindex = pd_yi\n"
+                 + iff("check_variable = { pd_yi > 0 } check_variable = { pd_y > 0 }", iff("NOT = { check_variable = { pd_y = pd_before } }", (
+                     tmp("pd_x", "pd_yi") + "multiply_temp_variable = { pd_x = pd_step }\nadd_to_temp_variable = { pd_x = pd_yoff }\n"
+                     + marks + "add_to_temp_variable = { pd_slot = 1 }\n")))
+                 + tmp("pd_before", "pd_y"))))
+    # the line of the first month in the player's hands, when it stands inside the range
+    draw += (setv("mod1440_pop_mark", 0) + tmp("pd_ts", "pd_t") + "subtract_from_temp_variable = { pd_ts = pd_from }\n"
+             + iff("check_variable = { pd_since > 0 } check_variable = { pd_ts > 0 } check_variable = { pd_ts < pd_cnt }", (
+                 setv("mod1440_pop_mark", 1) + setv("mod1440_pop_mark_x", "pd_ts") + "multiply_variable = { mod1440_pop_mark_x = pd_step }\n"
+                 + "add_to_variable = { mod1440_pop_mark_x = pd_mx }\n")))
+    draw += (setv("mod1440_pop_zf", 1) + iff("NOT = { %s }" % is_one("mod1440_pop_flat"), setv("mod1440_pop_zf", 2))
+             + "add_to_variable = { mod1440_st_dirty = 1 }\n")
+
+    # an effect stands before the effects that call it: a game left open learns a new one called from an earlier one
+    # of the same file only at its second reload (X70)
+    return ("# States, population history (D10), in a state's scope: its change over the last twelve months in percent\n"
+            "# (mod1440_pop_dy), the fall the In a year column sorts by (mod1440_pop_fall), and the two months the totals add\n"
+            "# up (mod1440_pop_ya, _last).\n"
+            + block("mod1440_pop_year", year)
+            + "\n# States (D10): the month itself, without the guard: the date, its year and day number for all, and each state's\n"
+            "# state_population_k; the oldest past %d months is forgotten. Counts nothing but the states (rule 5).\n" % POP_KEEP
+            + block("mod1440_pop_month", month)
+            + "\n# States (D10): the chosen state's months, for the country in scope: the range, the scale, the column heights of\n"
+            "# the range (the months before the state came into the player's hands marked), the year marks, the line of the\n"
+            "# month taken and the table of figures. On a row click, the switch, a range, Zoom in, and after the round while\n"
+            "# the page is open; never in a trigger drawn each tick (rule 5).\n"
+            + block("mod1440_pop_draw", draw)
+            + "\n# States (D10): once a month in all, every state of the map written down. Called from each player's on_monthly\n"
+            "# and once from on_startup; runs when the last round is %d days or more ago, and sets the stamp first, so that\n" % POP_GAP
+            + "# several players, or an on_monthly that fires on another day for another country, make one round a month.\n"
+            "# Then an open page in the Population view is drawn again.\n"
+            + block("mod1440_pop_round", round_))
+# --- D10 --- The scene: the page in the cards view as before (Hessen on 1 January 1936), and the Population view as
+# the design draws it (scratch/phases/D10/work/data.py): Warsaw under Devastation Overhaul, held by Germany, written
+# down from 1 January 1936 to 1 January 1945 (109 months), taken from Poland on 27 September 1939, the list sorted by
+# In a year. The render states population, years2 and flat draw it; a check of 1 January 1936 has one month.
+POP_SAMPLE_TAKEN = 45           # the first month in German hands, 1 October 1939
+POP_SAMPLE_SINCE = "1939.9.27"
+
+
+def pop_sample_series():
+    """The Warsaw sample of the design, month by month from January 1936 to January 1945."""
+    v, out = 2650.0, []
+    for j in range(109):
+        y, m = 1936 + j // 12, j % 12 + 1
+        if (y, m) == (1939, 9):
+            v *= 0.9996
+        elif (y, m) == (1939, 10):
+            v *= 0.952
+        elif (1939, 10) < (y, m) < (1944, 9):
+            v *= 0.9984 if m % 3 else 0.9971
+        elif (y, m) == (1944, 9):
+            v *= 0.936
+        elif (y, m) == (1944, 10):
+            v *= 0.925
+        elif (y, m) == (1944, 11):
+            v *= 0.988
+        elif (y, m) > (1944, 11):
+            v *= 0.997
+        out.append(round(v, 1))
+    return out
+
+
+POP_SAMPLE = pop_sample_series()
+# the list of the design's page figure, sorted by In a year, the largest fall first: (name, change, colour of the name)
+POP_SAMPLE_ROWS = [
+    ("Warsaw", -16.1, "Y"), ("Kraków", -9.8, "L"), ("Ermland-Masuren", -8.9, ""), ("Rhineland", -7.2, ""),
+    ("Westfalen", -6.6, ""), ("Danzig", -5.9, "L"), ("Holstein", -5.1, ""), ("Brandenburg", -4.8, ""),
+    ("Hessen", -3.4, ""), ("Sachsen", -3.1, ""), ("Hannover", -2.9, ""), ("Württemberg", -2.5, ""),
+    ("Weser-Ems", -2.2, ""), ("Hinterpommern", -1.9, ""), ("Oberbayern", -1.6, ""), ("Lower Silesia", -1.3, ""),
+    ("Franken", -1.1, ""), ("Moselland", -0.9, ""), ("Niederbayern", -0.7, ""), ("Vorpommern", -0.6, ""),
+    ("Thüringen", -0.4, ""), ("Mecklenburg", -0.3, ""), ("Bohemia", -0.2, "L"), ("Luxembourg", 0.0, "L"),
+]
+
+
+def pop_date(j):
+    return "%d.%d.1" % (1936 + j // 12, j % 12 + 1)
+
+
+def pop_table_sample():
+    """The table of figures for the Warsaw sample: the samples of the texts shown and the twins hidden."""
+    v = POP_SAMPLE
+    n = len(v)
+    samples, hide = {}, []
+    hi, lo = max(v), min(v)
+    samples["pop_v_latest"] = "%.1fK" % v[-1]
+    samples["pop_m_latest"] = "§g%s§!" % pop_date(n - 1)
+    for name, back in (("month", 1), ("year", 12), ("first", n - 1)):
+        old = v[n - 1 - back]
+        change = round(v[-1] - old, 1)
+        pct = (v[-1] - old) / old * 100.0
+        shown = "dn" if change < 0 else "up" if change > 0 else "same"
+        hide += ["pop_v_%s_%s" % (name, s) for s in ("up", "dn", "same") if s != shown]
+        if shown != "same":
+            samples["pop_v_%s_%s" % (name, shown)] = ("§R%+.1fK§!" if change < 0 else "§G%+.1fK§!") % change
+        pshown = "dn" if pct < 0 else "up"
+        hide.append("pop_p_%s_%s" % (name, "up" if pshown == "dn" else "dn"))
+        samples["pop_p_%s_%s" % (name, pshown)] = ("§R%+.1f%%§!" if pct < 0 else "§G%+.1f%%§!") % pct
+        samples["pop_m_%s" % name] = "§g%s§!" % pop_date(n - 1 - back)
+    samples["pop_v_max"] = "%.1fK" % hi
+    samples["pop_m_max"] = "§g%s§!" % pop_date(v.index(hi))
+    samples["pop_v_min"] = "%.1fK" % lo
+    samples["pop_m_min"] = "§g%s§!" % pop_date(v.index(lo))
+    samples["pop_m_since"] = "§g%s§!" % POP_SAMPLE_SINCE
+    return samples, hide + ["pop_none", "pop_m_since_none"]
+
+
+def pop_graph_sample(span, zoom=True):
+    """The graph of the Warsaw sample over the last span months as mod1440_pop_draw draws it: the window's hidden
+    widgets, samples, places of the year marks and the line, frames, rows of the grids, and the column window's
+    "only" and fills."""
+    step, width = [(r[1], r[2]) for r in POP_RANGES if r[0] == span][0]
+    v = POP_SAMPLE
+    first = max(0, len(v) - span)
+    shown = v[first:]
+    hi, lo = max(shown), min(shown)
+    base = lo if zoom else 0.0
+    rng = hi - base
+    samples, hide = pop_table_sample()
+    for k in range(5):
+        samples["pop_scale_%d" % k] = "%.1f" % (hi if k == 4 else base + k * rng / 4.0)
+    place = {}
+    marks = [i for i in range(1, len(shown)) if (first + i) % 12 == 0]
+    for k, i in enumerate(marks):
+        place["pop_year_%d" % k] = [pop_first_x(step) + i * step, POP_CHART_Y + POP_CHART_H + 1]
+        samples["pop_year_%d" % k] = str(1936 + (first + i) // 12)
+    hide += ["pop_year_%d" % k for k in range(len(marks), POP_YEARS)]
+    ts = POP_SAMPLE_TAKEN - first
+    if 0 < ts < len(shown):
+        place["pop_mark"] = [POP_CHART_X + POP_INSET + (step - width) // 2 - 1 + ts * step, POP_CHART_Y]
+    else:
+        hide.append("pop_mark")
+    only = {"pop_pre%d" % span: [], "pop_bar%d" % span: []}
+    fills = {"pop_pre%d" % span: [], "pop_bar%d" % span: []}
+    for i, x in enumerate(shown):
+        h = (x - base) / rng * POP_CHART_H if rng > 0 else POP_CHART_H
+        if base != 0 and h < 4:
+            h = 4
+        h = max(0.0, min(float(POP_CHART_H), h))
+        w = "pop_pre%d" % span if first + i < POP_SAMPLE_TAKEN else "pop_bar%d" % span
+        only[w].append(i)
+        fills[w].append(round(h / POP_CHART_H, 3))
+    frames = {"pop_range_%d" % span: 2, "pop_zoom": 2 if zoom else 1}
+    rows = {"pop_grid_%d" % r[0]: (len(shown) if r[0] == span else 0) for r in POP_RANGES}
+    col = {"name": "mod1440_states_pop_col_%d" % span, "only": only, "fills": {w: f for w, f in fills.items() if f}}
+    return hide, samples, place, frames, rows, col
+
+
+# what script hides in the default state: the band as Hessen shows it on 1 January 1936 (a core, inland, six of nine
+# slots free, coal its only resource, nothing damaged), every row a core that is not the chosen one
+ST_CARD_HIDE = (["st_c_where_cap", "st_c_owner_owned", "st_c_owner_held", "st_c_taken", "st_c_chip_noncore", "st_c_chip_occupied",
+                 "st_c_chip_coastal", "st_c_chip_capital", "st_c_chip_island", "st_c_chip_dmz", "st_c_chip_border"]
+                + ["st_c_res_%d" % n for n in range(6)] + ["st_c_res_6_z"])
+ST_CARDS_HIDE = (["st_c_sh_other", "st_c_dmg", "st_c_bombed", "st_c_sh_civ_z", "st_c_sh_mil_z"]
+                 + ["st_c_sh_%s" % n for n in ("dock", "refinery", "silo")]
+                 + ["st_c_b_%s_z" % n for n in ("infra", "civ", "mil")]
+                 + ["st_c_b_%s" % n for n in ("dock", "refinery", "silo", "air", "aa", "radar")]
+                 + ["st_c_b_%s_dmg" % n for n in ST_BUILDING]
+                 + ["st_c_occ_%s%s" % (n, part) for n in ("compliance", "resistance", "target") for part in ("", "_l")])
+ST_ROW_HIDE = (["st_row_occ", "st_row_chosen", "st_row_held", "st_row_held_chosen", "st_row_flag", "st_row_pick"]
+               + ["st_cell_%s_dmg" % c[0] for c in STATE_COLUMNS if c[5] == "build"] + ["st_cell_compliance", "st_cell_resistance"])
+ST_PAGE_HIDE = ["st_arrow_up", "st_arrow_down", "st_c_none"]
+ST_CARDS_AT = [ST_X - 9 + ST_CARD_X + ST_CARDS_X0, 78 + ST_Y + ST_BAND_Y]       # the tab's corner at -9,78
+ST_POP_STATES = ["population", "pop_row", "years2", "flat"]
+ST_CARD_STATES = ["", "pick", "cards", "sort_year", "goto", "back"]
+
+
+def st_pop_state(name, span, zoom, steps, note):
+    """A render state of the Population view, the Warsaw sample: the page's list sorted by In a year with Warsaw
+    chosen, its state card, and the graph card over the three cards."""
+    hide, samples, place, frames, rows, col = pop_graph_sample(span, zoom)
+    occ = [r for r, (n, c, colour) in enumerate(POP_SAMPLE_ROWS) if colour == "L"]
+    names = [r for r, (n, c, colour) in enumerate(POP_SAMPLE_ROWS) if colour == ""]
+    state_rows = {"st_grid": 24, "st_card_grid": 1, "st_cards_grid": 0}
+    state_rows.update(rows)
+    return {
+        "name": name, "steps": steps, "_note": note,
+        "hide": {"mod1440_states": ["st_arrow_up", "st_c_none"],
+                 "mod1440_states_row": [w for w in ST_ROW_HIDE if w not in ("st_row_occ", "st_row_chosen", "st_row_pick")] + ["st_cell_pop_year_up"],
+                 "mod1440_states_card": [w for w in ST_CARD_HIDE if w not in ("st_c_owner_owned", "st_c_taken", "st_c_chip_noncore")]
+                 + ["st_c_owner_core", "st_c_untaken", "st_c_chip_core"],
+                 "mod1440_states_pop": hide},
+        "only": {"mod1440_states_row": {"st_row_name": names, "st_row_occ": occ, "st_row_chosen": [0], "st_row_pick": [0],
+                                        "st_cell_pop_year": [r for r, (n, c, colour) in enumerate(POP_SAMPLE_ROWS) if c < 0]},
+                 col["name"]: col["only"]},
+        "fills": {col["name"]: col["fills"]},
+        "place": {"mod1440_states": {"st_arrow_down": [14 + ST_EDGE["pop_year"] + 68 - ARROW_DX, ST_HEAD_Y + ARROW_DY]},
+                  "mod1440_states_pop": place},
+        "frames": {"mod1440_states": {"st_pop_view": 2}, "mod1440_states_pop": frames},
+        "rows": state_rows,
+        "samples": {"mod1440_states_pop": samples,
+                    # a sample list holds one text per drawn instance: the rows each twin is shown in
+                    "mod1440_states_row": {"st_row_name": [POP_SAMPLE_ROWS[r][0] for r in names],
+                                           "st_row_occ": ["§L%s§!" % POP_SAMPLE_ROWS[r][0] for r in occ],
+                                           "st_row_chosen": ["§Y%s§!" % POP_SAMPLE_ROWS[0][0]],
+                                           "st_cell_pop_year": ["§R%+.1f%%§!" % c if c < 0 else "" for n, c, colour in POP_SAMPLE_ROWS]},
+                    "mod1440_states_card": {"st_c_name": "Warsaw", "st_c_where": "Capital Warsaw  ·  Large City",
+                                            "st_c_owner_owned": "Owned by §Ythe German Reich§!, not a core",
+                                            "st_c_taken": "Taken from §YPoland§! on 27 September, 1939", "st_c_people": "1906K"}},
+    }
+
+
+def st_scene():
+    """The scene of the States page (D3, D10)."""
+    pop_hide, pop_samples, pop_place, pop_frames, pop_rows, pop_col = pop_graph_sample(120)
+    windows = [
+        {"name": "mod1440_states", "at": [703, 78], "sidePanel": True,
+         "rows": {"st_grid": 24, "st_card_grid": 1},
+         "listRows": {"st_grid": "mod1440_states_row", "st_card_grid": "mod1440_states_card"},
+         "hide": ST_PAGE_HIDE,
+         "_note": "Docked to Construction: the tab's corner at -9,78 plus the container's 712,0. The vanilla window has clipping = no. The state card under the table is a list of one row, the chosen state."},
+        {"name": "mod1440_states_row", "skip": True, "hide": ST_ROW_HIDE + ["st_cell_pop_year_up"],
+         "_note": "Every row is drawn as a core of yours that is not the chosen one: script shows the other names, the flag, the mark of the chosen row and the red levels instead where they apply. In a year: the sample falls of the design."},
+        {"name": "mod1440_states_card", "skip": True, "hide": ST_CARD_HIDE,
+         "_note": "The state card as Hessen shows it on 1 January 1936: a core, inland, coal its only resource."},
+        # D10: the three right cards in a scripted GUI of their own over the page, shown in the cards view
+        {"name": "mod1440_states_cards", "at": ST_CARDS_AT, "sidePanel": True, "drawIn": ST_CARD_STATES,
+         "rows": {"st_cards_grid": 1}, "listRows": {"st_cards_grid": "mod1440_states_cards_row"},
+         "hide": ["st_c_mod_0_z", "st_c_mod_1_z", "st_c_mod_2"],
+         "_note": "D10: Building Slots, Buildings and Occupation, a scripted GUI of their own docked to Construction at 1161,964 (page 449,964), shown while the Population view is off. The third modifier is 0 for Germany in 1936 and shows its grey dash."},
+        {"name": "mod1440_states_cards_row", "skip": True, "hide": ST_CARDS_HIDE,
+         "_note": "The three cards as Hessen shows them on 1 January 1936: six of nine slots free, nothing damaged, a core."},
+        # D10: the graph card of the Population view
+        {"name": "mod1440_states_pop", "at": ST_CARDS_AT, "sidePanel": True, "drawIn": ST_POP_STATES,
+         "rows": pop_rows, "listRows": {"pop_grid_%d" % r[0]: "mod1440_states_pop_col_%d" % r[0] for r in POP_RANGES},
+         "hide": pop_hide, "place": pop_place, "frames": pop_frames,
+         "_note": "D10: the graph card, a scripted GUI of its own at the three cards' place, shown while the Population view is on; the render states population, years2 and flat draw the design's Warsaw sample (109 months). The two range grids not in use are empty."},
+    ] + [{"name": "mod1440_states_pop_col_%d" % r[0], "skip": True} for r in POP_RANGES]
+    pop_view = {"clickWidget": "mod1440_states/st_pop_view", "wait": 1.2}
+    population = st_pop_state("population", 120, True, [pop_view],
+                              "The Population view: the chosen state's months in place of the three cards. Rendered with the design's Warsaw sample; a check of 1 January 1936 shows one column (the month on_startup wrote) unless effect mod1440_chk_pop_months ran first.")
+    pop_row = st_pop_state("pop_row", 120, True, [{"clickWidget": "mod1440_states_row/st_row#0", "wait": 1.2}],
+                           "A click on the first row in the Population view: the graph and the figures follow the chosen state.")
+    years2 = st_pop_state("years2", 24, True, [{"clickWidget": "mod1440_states_pop/pop_range_24", "state": "population", "wait": 1.0}],
+                          "2 years: the last 24 months as columns of 22 px; the year marks under their Januaries.")
+    flat = st_pop_state("flat", 24, False, [{"clickWidget": "mod1440_states_pop/pop_zoom", "state": "population", "wait": 1.0}],
+                        "Zoom in off: the columns stand on zero and the scale starts at 0.")
+    cards = {"name": "cards", "steps": [{"clickWidget": "mod1440_states_pop/pop_zoom", "state": "population", "wait": 0.8},
+                                        {"clickWidget": "mod1440_states_pop/pop_range_120", "state": "population", "wait": 0.8},
+                                        {"clickWidget": "mod1440_states/st_pop_view", "wait": 1.2}],
+             "_note": "Zoom in and 10 years again, then the switch back: the three cards return."}
+    sort_year = {"name": "sort_year", "steps": [{"clickWidget": "mod1440_states/st_sort_pop_year", "wait": 1.2}],
+                 "_note": "A click on In a year sorts by the largest fall; on 1 January 1936 no state has a year yet, so the cells are empty and the order is the game's."}
+    samples = {"mod1440_states_row": {"st_cell_pop_year": ["§R%+.1f%%§!" % c if c < 0 else "" for n, c, colour in POP_SAMPLE_ROWS]},
+               "mod1440_states": {"st_total_pop_year": "-3.6%"},
+               "mod1440_states_pop": pop_samples}
+    return {
+        "phase": "D3", "file": "mod1440_states.gui", "screenshot": "reference/vanilla/construction.jpg",
+        "windows": windows, "samples": samples,
+        "setup": [{"move": "open_construction"}, {"key": "shift+m", "wait": 1.5, "_note": "the page is hidden until asked for"}],
+        # A left click on the fourth row chooses it; D10: the Population view, a row, a range and Zoom in, back to the
+        # cards, In a year sorted; a right-click on the third moves the camera and hides the page; Shift+M brings the
+        # page back with the state still chosen. The teardown then hides it as before.
+        "captures": [{"name": "pick", "steps": [{"clickWidget": "mod1440_states_row/st_row#3", "wait": 1.2}]},
+                     population, pop_row, years2, flat, cards, sort_year,
+                     {"name": "goto", "steps": [{"clickWidget": "mod1440_states_row/st_row#2", "button": "right", "wait": 1.5}]},
+                     {"name": "back", "steps": [{"key": "shift+m", "wait": 1.5}]}],
+        "teardown": [{"key": "shift+m", "wait": 0.8, "_note": "hide it again: the page remembers per country whether it is open"}],
+        "expect": ["mod1440_states/st_fold", "mod1440_states/st_refresh", "mod1440_states/st_pop_view", "mod1440_states_cards/st_band_slots"],
+        "crop": [690, 70, ST_W + 30, 1230],
+        "manual": ["A country with occupied states: the Occupied choice, compliance and resistance, the other colour of a name, the owner's flag in the row and the card, the occupation card",
+                   "A bombed state: the red levels in its row and card, the line of damage and the day of the last bombing",
+                   "Tooltips: the slot bar of a row and of the slots card say that only the game's own shared buildings are counted",
+                   "D10, the user's game: a month written by the real monthly hook (the first of a month passes), with the user's playset (Road to 56, Devastation Overhaul): the new column, In a year after thirteen months, the totals",
+                   "D10, the user's game: the save's size before and after ten years of months for every state (about 137,000 numbers with Road to 56)",
+                   "D10, the user's game: a state taken in a war, its months before in blue-grey and the yellow line at the first month in the player's hands"],
+        "checklist": ST_CHECKLIST,
+    }
+
+
+# The game checker's list (scratch/phases/D10/build/build.json): a check that stays in January 1936; the effects of
+# tools/check_effects.py run from the console with nothing selected
+ST_CHECKLIST = [
+    "The page opens with the first state of the list chosen: its row on the light band, its name yellow, its cards under the table",
+    "A left click on another state chooses it: the band and the mark follow, the page stays open",
+    "A right-click on a state, and Show on map in the band, move the camera there and hide the page",
+    "Sort by a column, choose Cores, press Refresh: the chosen state keeps its mark while it is listed",
+    "Hessen against its state view: 6 free of 9 slots, the slot bar a third full, coal 17 (the state view's number), buildings 4, 2, 1",
+    "The state card: Capital Frankfurt and Dense Urban Region, Core of the German Reich, the Core and Inland chips",
+    "The occupation card: compliance growth -2.0% and resistance target +5.0% as on National Figures, required garrisons a grey dash",
+    "A click on a column head sorts, a second click turns the order; State gives the game's order back",
+    "The totals against the sum of a column",
+    # D10
+    "D10 table (no effect): the building columns 46 px and the resource columns 54 px wide, their icons centred over the values; a caption Population over People and In a year; the row still ends at the scrollbar and the page at 1472 px",
+    "D10 1 January 1936, no effect: In a year is empty in every row and in the totals bar (one month written down by on_startup)",
+    "D10 drawn over or under (capture population, no effect): after the Population switch the graph card stands over the three right cards with nothing of them showing through; after a second click (capture cards) the three cards are back and the graph is gone. If neither the graph nor the cards show, see fallbacks",
+    "D10 1 January 1936, the Population view, no effect: one column at the left of the 2-year range, 22 px wide, at full height; its tooltip gives 1 January, 1936 and the state's population as the People column has it; Latest equals the People of the state card; In a month, In a year and Since first empty; Highest and Lowest equal Latest; Yours since a grey dash",
+    "D10 the switch keeps frame 2 (gold chevrons) while on; a click on another row in the Population view (capture pop_row) draws that state at once; Shift+M and the close button hide the page and the graph card with it",
+    "D10 after `effect mod1440_chk_pop_months` (120 made-up months for every state, the page open): 120 columns of 4 px on the 10-year range by default, year marks 1937 to 1945 under the columns of their Januaries, Zoom in on (frame 2), the lowest column a 4 px sliver",
+    "D10 after `effect mod1440_chk_pop_months`: 2 years and 5 years show the last 24 and 60 months (columns of 22 and 8 px); Zoom in off starts the columns at zero and the scale at 0; the scale's five values against the tooltips of the highest and the lowest column",
+    "D10 after `effect mod1440_chk_pop_months`: In a year in every row, red, different from state to state, and the totals bar's In a year in white; a click on the In a year head sorts the largest fall first, a second click turns it; the arrow stands on its head",
+    "D10 after `effect mod1440_chk_pop_months`: the table of figures against the columns: Latest is the last column's tooltip (today's People), In a month the last less the one before, In a year the last less the 13th from the end, in thousands and in percent, red for a fall (the made-up dates are all 1 January 1936)",
+    "D10 after `effect mod1440_chk_pop_months` then `effect mod1440_chk_pop_taken` (Brandenburg, state 64, taken between month 44 and 45 of the made-up record): with Brandenburg chosen the first 45 columns of the 10-year range are blue-grey, the rest green, a 2 px yellow line before the 46th; Yours since gives a date; on 5 years the line moves with its month, on 2 years it is gone and every column is green",
+    "D10 after `effect mod1440_chk_pop_clear` (a save of an earlier build: no months): the graph card says that nothing is written down yet, no column, no scale, no value in the table; In a year empty everywhere",
+    "D10 after `effect mod1440_chk_pop_round` and `effect mod1440_chk_pop_round10` (paused): game.log has the MOD1440 lines with their times before and after one round and ten rounds over every state, and the months counted; the graph gains the months. Once in vanilla (1081 states); with Road to 56 (1143) if granted",
+    "D10 after `effect mod1440_chk_pop_twice`: game.log says the guarded round twice on one day wrote one month (months before and after differ by one; the stamp equals today's day number)",
+    "D10 the value check: the chosen state's People in its card and the graph's Latest (no effect: the month on_startup wrote) against the population of the same state in the game's state view (select the state on the map)",
+    "D10 error.log: no line names mod1440_pop, mod1440_states_pop, mod1440_states_cards, GFX_1440p_SG_column_*x152 or GFX_1440p_SG_line_2x152",
+]
+# --- end D10 ---
 
 
 # ---------------------------------------------------------------- National Figures and History (D4, D5), docked to Politics
@@ -3898,56 +4628,7 @@ TB_CHECKLIST = [
 # value, so that the renderer draws numbers and the tests measure them against their boxes.
 SCENES = {
     "army_readiness": ar_scene(),      # D2 round 2
-    "states": {
-        "phase": "D3", "file": "mod1440_states.gui", "screenshot": "reference/vanilla/construction.jpg",
-        "windows": [
-            {"name": "mod1440_states", "at": [703, 78], "sidePanel": True,
-             "rows": {"st_grid": 24, "st_card_grid": 1},
-             "listRows": {"st_grid": "mod1440_states_row", "st_card_grid": "mod1440_states_card"},
-             "hide": ["st_arrow_up", "st_arrow_down", "st_c_none"] + ["st_c_mod_%d_z" % n for n in (0, 1)] + ["st_c_mod_2"],
-             "_note": "Docked to Construction: the tab's corner at -9,78 plus the container's 712,0. The vanilla window has clipping = no. The band under the table is a list of one row, the chosen state; the third modifier is 0 for Germany in 1936 and shows its grey dash."},
-            {"name": "mod1440_states_row", "skip": True,
-             "hide": ["st_row_occ", "st_row_chosen", "st_row_held", "st_row_held_chosen", "st_row_flag", "st_row_pick"]
-                     + ["st_cell_%s_dmg" % c[0] for c in STATE_COLUMNS if c[5] == "build"] + ["st_cell_compliance", "st_cell_resistance"],
-             "_note": "Every row is drawn as a core of yours that is not the chosen one: script shows the other names, the flag, the mark of the chosen row and the red levels instead where they apply."},
-            {"name": "mod1440_states_card", "skip": True,
-             "hide": (["st_c_where_cap", "st_c_owner_owned", "st_c_owner_held", "st_c_taken", "st_c_chip_noncore", "st_c_chip_occupied",
-                       "st_c_chip_coastal", "st_c_chip_capital", "st_c_chip_island", "st_c_chip_dmz", "st_c_chip_border",
-                       "st_c_sh_other", "st_c_dmg", "st_c_bombed", "st_c_sh_civ_z", "st_c_sh_mil_z"]
-                      + ["st_c_sh_%s" % n for n in ("dock", "refinery", "silo")]
-                      + ["st_c_res_%d" % n for n in range(6)] + ["st_c_res_6_z"]
-                      + ["st_c_b_%s_z" % n for n in ("infra", "civ", "mil")]
-                      + ["st_c_b_%s" % n for n in ("dock", "refinery", "silo", "air", "aa", "radar")]
-                      + ["st_c_b_%s_dmg" % n for n in ST_BUILDING]
-                      + ["st_c_occ_%s%s" % (n, part) for n in ("compliance", "resistance", "target") for part in ("", "_l")]),
-             "_note": "The band as Hessen shows it on 1 January 1936: a core, inland, six of nine slots free, coal its only resource, nothing damaged."},
-        ],
-        "setup": [{"move": "open_construction"}, {"key": "shift+m", "wait": 1.5, "_note": "the page is hidden until asked for"}],
-        # A left click on the fourth row chooses it; a right-click on the third moves the camera and hides the page;
-        # Shift+M brings the page back with the fourth still chosen. The teardown then hides it as before.
-        "captures": [
-            {"name": "pick", "steps": [{"clickWidget": "mod1440_states_row/st_row#3", "wait": 1.2}]},
-            {"name": "goto", "steps": [{"clickWidget": "mod1440_states_row/st_row#2", "button": "right", "wait": 1.5}]},
-            {"name": "back", "steps": [{"key": "shift+m", "wait": 1.5}]},
-        ],
-        "teardown": [{"key": "shift+m", "wait": 0.8, "_note": "hide it again: the page remembers per country whether it is open"}],
-        "expect": ["mod1440_states/st_fold", "mod1440_states/st_refresh", "mod1440_states/st_band_slots"],
-        "crop": [690, 70, ST_W + 30, 1230],
-        "manual": ["A country with occupied states: the Occupied choice, compliance and resistance, the other colour of a name, the owner's flag in the row and the card, the occupation card",
-                   "A bombed state: the red levels in its row and card, the line of damage and the day of the last bombing",
-                   "Tooltips: the slot bar of a row and of the slots card say that only the game's own shared buildings are counted"],
-        "checklist": [
-            "The page opens with the first state of the list chosen: its row on the light band, its name yellow, its cards under the table",
-            "A left click on another state chooses it: the band and the mark follow, the page stays open",
-            "A right-click on a state, and Show on map in the band, move the camera there and hide the page",
-            "Sort by a column, choose Cores, press Refresh: the chosen state keeps its mark while it is listed",
-            "Hessen against its state view: 6 free of 9 slots, the slot bar a third full, coal 17 (the state view's number), buildings 4, 2, 1",
-            "The state card: Capital Frankfurt and Dense Urban Region, Core of the German Reich, the Core and Inland chips",
-            "The occupation card: compliance growth -2.0% and resistance target +5.0% as on National Figures, required garrisons a grey dash",
-            "A click on a column head sorts, a second click turns the order; State gives the game's order back",
-            "The totals against the sum of a column",
-        ],
-    },
+    "states": st_scene(),        # D3, D10
     # --- D4 round 2 ---
     "national_figures": {
         "phase": "D4", "file": "mod1440_figures.gui", "screenshot": "reference/vanilla/politics.jpg",
@@ -4107,7 +4788,9 @@ def build():
     history_daily = ""      # since D4 and D5 are one page, its daily drawing is part of figures_daily
     B.files["interface/mod1440_figures.gui"] = HEADER_GUI + "guiTypes = {\n" + indent(gui) + "}\n"
     B.files["common/scripted_guis/mod1440_figures.txt"] = HEADER_TXT + block("scripted_gui", script)
-    B.files["common/scripted_effects/mod1440_effects.txt"] = HEADER_TXT + count + "\n" + listing + "\n" + shares + "\n" + recording
+    # --- D10 --- the population round and drawing stand before the listing, which calls the drawing
+    B.files["common/scripted_effects/mod1440_effects.txt"] = (HEADER_TXT + count + "\n" + pop_script() + "\n" + listing + "\n" + shares
+                                                              + "\n" + recording)
     # The top bar strip (D7): the strip, its fixed twin, the edit button and the panel
     gui, script, tb_script = top_bar()
     B.files["interface/mod1440_top_bar.gui"] = HEADER_GUI + "guiTypes = {\n" + indent(gui) + "}\n"
@@ -4123,11 +4806,14 @@ def build():
     # The hooks. A new game: count and write down once for every country, so that whichever country the
     # player takes has its numbers from the first day. After that only a player's country costs time.
     B.files["common/on_actions/mod1440_on_actions.txt"] = HEADER_TXT + block("on_actions", (
+        # D10: the state population round once, outside every_country: it covers every state of the map itself
         block("on_startup", block("effect", block("every_country", "mod1440_ar_count = yes\n" + monthly
-                                                 + block("if", "limit = { is_ai = no }\nmod1440_ev_init = yes\nmod1440_tb_default = yes\n"))))
+                                                 + block("if", "limit = { is_ai = no }\nmod1440_ev_init = yes\nmod1440_tb_default = yes\n"))
+                                  + "mod1440_pop_round = yes\n"))
         + block("on_daily", block("effect", block("if", "limit = { is_ai = no }\nmod1440_ar_count = yes\n" + states_daily
                                                   + figures_daily + history_daily + "mod1440_rec_daily = yes\n" + tb_daily())))
-        + block("on_monthly", block("effect", block("if", "limit = { is_ai = no }\n" + monthly)))
+        # D10: the population round after History's record; it is guarded, so it runs once a month in all
+        + block("on_monthly", block("effect", block("if", "limit = { is_ai = no }\n" + monthly + "mod1440_pop_round = yes\n")))
         + "".join(block(name, block("effect", body)) for name, body in sorted(hooks.items()))))
 
     everything = "".join(B.files.values()) + "".join(B.loc.values())

@@ -52,8 +52,8 @@ scripted_gui = {
 			st_c_flag = {
 				image = "[THIS.Owner.GetFlag]"
 			}
-			st_c_bar = {
-				frame = mod1440_st_used
+			st_pop_view = {
+				frame = mod1440_pop_vf
 			}
 		}
 
@@ -397,7 +397,7 @@ scripted_gui = {
 				}
 				mod1440_st_list = yes
 			}
-			st_sort_compliance_click = {
+			st_sort_pop_year_click = {
 				if = {
 					limit = { check_variable = { mod1440_st_sort_by = 19 } }
 					if = {
@@ -414,7 +414,7 @@ scripted_gui = {
 				}
 				mod1440_st_list = yes
 			}
-			st_sort_resistance_click = {
+			st_sort_compliance_click = {
 				if = {
 					limit = { check_variable = { mod1440_st_sort_by = 20 } }
 					if = {
@@ -427,6 +427,23 @@ scripted_gui = {
 				}
 				else = {
 					set_variable = { mod1440_st_sort_by = 20 }
+					set_variable = { mod1440_st_up = 0 }
+				}
+				mod1440_st_list = yes
+			}
+			st_sort_resistance_click = {
+				if = {
+					limit = { check_variable = { mod1440_st_sort_by = 21 } }
+					if = {
+						limit = { check_variable = { mod1440_st_up = 1 } }
+						set_variable = { mod1440_st_up = 0 }
+					}
+					else = {
+						set_variable = { mod1440_st_up = 1 }
+					}
+				}
+				else = {
+					set_variable = { mod1440_st_sort_by = 21 }
 					set_variable = { mod1440_st_up = 0 }
 				}
 				mod1440_st_list = yes
@@ -450,6 +467,22 @@ scripted_gui = {
 					set_variable = { mod1440_st_open = 0 }
 					add_to_variable = { mod1440_st_dirty = 1 }
 				}
+			}
+			st_pop_view_click = {
+				if = {
+					limit = { check_variable = { mod1440_pop_view = 1 } }
+					set_variable = { mod1440_pop_view = 0 }
+				}
+				else = {
+					set_variable = { mod1440_pop_view = 1 }
+				}
+				set_variable = { mod1440_pop_vf = 1 }
+				if = {
+					limit = { check_variable = { mod1440_pop_view = 1 } }
+					set_variable = { mod1440_pop_vf = 2 }
+					mod1440_pop_draw = yes
+				}
+				add_to_variable = { mod1440_st_dirty = 1 }
 			}
 		}
 
@@ -508,6 +541,10 @@ scripted_gui = {
 			st_total_pop_visible = {
 				check_variable = { mod1440_st_sum_pop > 0 }
 			}
+			st_total_pop_year_visible = {
+				check_variable = { mod1440_st_pop_has = 1 }
+				NOT = { check_variable = { mod1440_st_sum_pop_year = 0 } }
+			}
 			st_arrow_down_visible = {
 				check_variable = { mod1440_st_sort_by > 0 }
 				NOT = { check_variable = { mod1440_st_up = 1 } }
@@ -518,24 +555,6 @@ scripted_gui = {
 			}
 			st_c_none_visible = {
 				check_variable = { mod1440_st_rows^num < 1 }
-			}
-			st_c_mod_0_visible = {
-				NOT = { check_variable = { modifier@compliance_growth = 0 } }
-			}
-			st_c_mod_0_z_visible = {
-				check_variable = { modifier@compliance_growth = 0 }
-			}
-			st_c_mod_1_visible = {
-				NOT = { check_variable = { modifier@resistance_target = 0 } }
-			}
-			st_c_mod_1_z_visible = {
-				check_variable = { modifier@resistance_target = 0 }
-			}
-			st_c_mod_2_visible = {
-				NOT = { check_variable = { modifier@required_garrison_factor = 0 } }
-			}
-			st_c_mod_2_z_visible = {
-				check_variable = { modifier@required_garrison_factor = 0 }
 			}
 			st_row_stripe_visible = {
 				check_variable = { mod1440_st_odd = 1 }
@@ -658,6 +677,12 @@ scripted_gui = {
 			st_cell_coal_visible = {
 				check_variable = { mod1440_st_r_coal > 0 }
 			}
+			st_cell_pop_year_visible = {
+				check_variable = { mod1440_pop_dy < 0 }
+			}
+			st_cell_pop_year_up_visible = {
+				check_variable = { mod1440_pop_dy > 0 }
+			}
 			st_cell_compliance_visible = {
 				NOT = { is_core_of = ROOT }
 			}
@@ -760,6 +785,58 @@ scripted_gui = {
 			}
 			st_c_res_6_z_visible = {
 				NOT = { check_variable = { mod1440_st_r_coal > 0 } }
+			}
+		}
+
+		ai_enabled = {
+			always = no
+		}
+	}
+
+	mod1440_states_cards = {
+		context_type = player_context
+		window_name = "mod1440_states_cards"
+		parent_window_token = construction_tab
+
+		visible = {
+			check_variable = { mod1440_st_open = 1 }
+			NOT = { check_variable = { mod1440_pop_view = 1 } }
+		}
+
+		dirty = mod1440_st_dirty
+
+		dynamic_lists = {
+			st_cards_grid = {
+				array = mod1440_st_card
+				change_scope = yes
+				entry_container = "mod1440_states_cards_row"
+			}
+		}
+
+		properties = {
+			st_c_bar = {
+				frame = mod1440_st_used
+			}
+		}
+
+		triggers = {
+			st_c_mod_0_visible = {
+				NOT = { check_variable = { modifier@compliance_growth = 0 } }
+			}
+			st_c_mod_0_z_visible = {
+				check_variable = { modifier@compliance_growth = 0 }
+			}
+			st_c_mod_1_visible = {
+				NOT = { check_variable = { modifier@resistance_target = 0 } }
+			}
+			st_c_mod_1_z_visible = {
+				check_variable = { modifier@resistance_target = 0 }
+			}
+			st_c_mod_2_visible = {
+				NOT = { check_variable = { modifier@required_garrison_factor = 0 } }
+			}
+			st_c_mod_2_z_visible = {
+				check_variable = { modifier@required_garrison_factor = 0 }
 			}
 			st_c_sh_civ_visible = {
 				check_variable = { industrial_complex_level > 0 }
@@ -908,6 +985,300 @@ scripted_gui = {
 			}
 			st_c_occ_core_visible = {
 				is_core_of = ROOT
+			}
+		}
+
+		ai_enabled = {
+			always = no
+		}
+	}
+
+	mod1440_states_pop = {
+		context_type = player_context
+		window_name = "mod1440_states_pop"
+		parent_window_token = construction_tab
+
+		visible = {
+			check_variable = { mod1440_st_open = 1 }
+			check_variable = { mod1440_pop_view = 1 }
+		}
+
+		dirty = mod1440_st_dirty
+
+		dynamic_lists = {
+			pop_grid_24 = {
+				array = mod1440_pop_bars_24
+				entry_container = "mod1440_states_pop_col_24"
+			}
+			pop_grid_60 = {
+				array = mod1440_pop_bars_60
+				entry_container = "mod1440_states_pop_col_60"
+			}
+			pop_grid_120 = {
+				array = mod1440_pop_bars_120
+				entry_container = "mod1440_states_pop_col_120"
+			}
+		}
+
+		properties = {
+			pop_range_24 = {
+				frame = mod1440_pop_rf_24
+			}
+			pop_range_60 = {
+				frame = mod1440_pop_rf_60
+			}
+			pop_range_120 = {
+				frame = mod1440_pop_rf_120
+			}
+			pop_zoom = {
+				frame = mod1440_pop_zf
+			}
+			pop_pre24 = {
+				frame = v
+			}
+			pop_bar24 = {
+				frame = v
+			}
+			pop_pre60 = {
+				frame = v
+			}
+			pop_bar60 = {
+				frame = v
+			}
+			pop_pre120 = {
+				frame = v
+			}
+			pop_bar120 = {
+				frame = v
+			}
+			pop_year_0 = {
+				x = mod1440_pop_yx_0
+			}
+			pop_year_1 = {
+				x = mod1440_pop_yx_1
+			}
+			pop_year_2 = {
+				x = mod1440_pop_yx_2
+			}
+			pop_year_3 = {
+				x = mod1440_pop_yx_3
+			}
+			pop_year_4 = {
+				x = mod1440_pop_yx_4
+			}
+			pop_year_5 = {
+				x = mod1440_pop_yx_5
+			}
+			pop_year_6 = {
+				x = mod1440_pop_yx_6
+			}
+			pop_year_7 = {
+				x = mod1440_pop_yx_7
+			}
+			pop_year_8 = {
+				x = mod1440_pop_yx_8
+			}
+			pop_year_9 = {
+				x = mod1440_pop_yx_9
+			}
+			pop_mark = {
+				x = mod1440_pop_mark_x
+			}
+		}
+
+		effects = {
+			pop_range_24_click = {
+				set_variable = { mod1440_pop_range = 24 }
+				mod1440_pop_draw = yes
+			}
+			pop_range_60_click = {
+				set_variable = { mod1440_pop_range = 60 }
+				mod1440_pop_draw = yes
+			}
+			pop_range_120_click = {
+				set_variable = { mod1440_pop_range = 120 }
+				mod1440_pop_draw = yes
+			}
+			pop_zoom_click = {
+				if = {
+					limit = { check_variable = { mod1440_pop_flat = 1 } }
+					set_variable = { mod1440_pop_flat = 0 }
+				}
+				else = {
+					set_variable = { mod1440_pop_flat = 1 }
+				}
+				mod1440_pop_draw = yes
+			}
+		}
+
+		triggers = {
+			pop_scale_0_visible = {
+				check_variable = { mod1440_pop_valid > 0 }
+			}
+			pop_scale_1_visible = {
+				check_variable = { mod1440_pop_valid > 0 }
+			}
+			pop_scale_2_visible = {
+				check_variable = { mod1440_pop_valid > 0 }
+			}
+			pop_scale_3_visible = {
+				check_variable = { mod1440_pop_valid > 0 }
+			}
+			pop_scale_4_visible = {
+				check_variable = { mod1440_pop_valid > 0 }
+			}
+			pop_pre24_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_pop_pre_24^i = 1 }
+			}
+			pop_bar24_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_pop_pre_24^i = 1 } }
+			}
+			pop_pre60_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_pop_pre_60^i = 1 }
+			}
+			pop_bar60_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_pop_pre_60^i = 1 } }
+			}
+			pop_pre120_visible = {
+				check_variable = { v > -1 }
+				check_variable = { mod1440_pop_pre_120^i = 1 }
+			}
+			pop_bar120_visible = {
+				check_variable = { v > -1 }
+				NOT = { check_variable = { mod1440_pop_pre_120^i = 1 } }
+			}
+			pop_none_visible = {
+				NOT = { check_variable = { mod1440_pop_valid > 0 } }
+			}
+			pop_year_0_visible = {
+				check_variable = { mod1440_pop_yl_0 > 0 }
+			}
+			pop_year_1_visible = {
+				check_variable = { mod1440_pop_yl_1 > 0 }
+			}
+			pop_year_2_visible = {
+				check_variable = { mod1440_pop_yl_2 > 0 }
+			}
+			pop_year_3_visible = {
+				check_variable = { mod1440_pop_yl_3 > 0 }
+			}
+			pop_year_4_visible = {
+				check_variable = { mod1440_pop_yl_4 > 0 }
+			}
+			pop_year_5_visible = {
+				check_variable = { mod1440_pop_yl_5 > 0 }
+			}
+			pop_year_6_visible = {
+				check_variable = { mod1440_pop_yl_6 > 0 }
+			}
+			pop_year_7_visible = {
+				check_variable = { mod1440_pop_yl_7 > 0 }
+			}
+			pop_year_8_visible = {
+				check_variable = { mod1440_pop_yl_8 > 0 }
+			}
+			pop_year_9_visible = {
+				check_variable = { mod1440_pop_yl_9 > 0 }
+			}
+			pop_mark_visible = {
+				check_variable = { mod1440_pop_mark = 1 }
+			}
+			pop_v_latest_visible = {
+				check_variable = { mod1440_pop_hl = 1 }
+			}
+			pop_m_latest_visible = {
+				check_variable = { mod1440_pop_hl = 1 }
+			}
+			pop_v_month_up_visible = {
+				check_variable = { mod1440_pop_hm = 1 }
+				check_variable = { mod1440_pop_cm > 0 }
+			}
+			pop_v_month_dn_visible = {
+				check_variable = { mod1440_pop_hm = 1 }
+				check_variable = { mod1440_pop_cm < 0 }
+			}
+			pop_v_month_same_visible = {
+				check_variable = { mod1440_pop_hm = 1 }
+				check_variable = { mod1440_pop_cm = 0 }
+			}
+			pop_p_month_up_visible = {
+				check_variable = { mod1440_pop_hm = 1 }
+				check_variable = { mod1440_pop_cmp > 0 }
+			}
+			pop_p_month_dn_visible = {
+				check_variable = { mod1440_pop_hm = 1 }
+				check_variable = { mod1440_pop_cmp < 0 }
+			}
+			pop_m_month_visible = {
+				check_variable = { mod1440_pop_hm = 1 }
+			}
+			pop_v_year_up_visible = {
+				check_variable = { mod1440_pop_hy = 1 }
+				check_variable = { mod1440_pop_cy > 0 }
+			}
+			pop_v_year_dn_visible = {
+				check_variable = { mod1440_pop_hy = 1 }
+				check_variable = { mod1440_pop_cy < 0 }
+			}
+			pop_v_year_same_visible = {
+				check_variable = { mod1440_pop_hy = 1 }
+				check_variable = { mod1440_pop_cy = 0 }
+			}
+			pop_p_year_up_visible = {
+				check_variable = { mod1440_pop_hy = 1 }
+				check_variable = { mod1440_pop_cyp > 0 }
+			}
+			pop_p_year_dn_visible = {
+				check_variable = { mod1440_pop_hy = 1 }
+				check_variable = { mod1440_pop_cyp < 0 }
+			}
+			pop_m_year_visible = {
+				check_variable = { mod1440_pop_hy = 1 }
+			}
+			pop_v_first_up_visible = {
+				check_variable = { mod1440_pop_hf = 1 }
+				check_variable = { mod1440_pop_cf > 0 }
+			}
+			pop_v_first_dn_visible = {
+				check_variable = { mod1440_pop_hf = 1 }
+				check_variable = { mod1440_pop_cf < 0 }
+			}
+			pop_v_first_same_visible = {
+				check_variable = { mod1440_pop_hf = 1 }
+				check_variable = { mod1440_pop_cf = 0 }
+			}
+			pop_p_first_up_visible = {
+				check_variable = { mod1440_pop_hf = 1 }
+				check_variable = { mod1440_pop_cfp > 0 }
+			}
+			pop_p_first_dn_visible = {
+				check_variable = { mod1440_pop_hf = 1 }
+				check_variable = { mod1440_pop_cfp < 0 }
+			}
+			pop_m_first_visible = {
+				check_variable = { mod1440_pop_hf = 1 }
+			}
+			pop_v_max_visible = {
+				check_variable = { mod1440_pop_hl = 1 }
+			}
+			pop_m_max_visible = {
+				check_variable = { mod1440_pop_hl = 1 }
+			}
+			pop_v_min_visible = {
+				check_variable = { mod1440_pop_hl = 1 }
+			}
+			pop_m_min_visible = {
+				check_variable = { mod1440_pop_hl = 1 }
+			}
+			pop_m_since_visible = {
+				check_variable = { mod1440_pop_taken = 1 }
+			}
+			pop_m_since_none_visible = {
+				NOT = { check_variable = { mod1440_pop_taken = 1 } }
 			}
 		}
 

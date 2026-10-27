@@ -201,10 +201,11 @@ Describe 'Scripted GUIs' {
 
     It 'belong to the player and to nobody else' {
         # One exception: the card in the state view belongs to the state the player has selected, and shows
-        # itself only for a state the player controls. So does its line of who took it (e-diary-wars).
+        # itself only for a state the player controls. So do its line of who took it (e-diary-wars) and the handle
+        # that brings the card back while it is hidden (2026-10-27).
         $problems = foreach ($gui in $script:Guis) {
             $context = Get-GuiValue -Node $gui.Node -Key 'context_type'
-            if ($gui.Name -eq 'mod1440_state_card' -or $gui.Name -eq 'mod1440_state_card_by') {
+            if ($gui.Name -like 'mod1440_state_card*') {
                 if ($context -ne 'selected_state_context') { "$($gui.Name): context is not selected_state_context" }
                 $visible = Get-GuiBlock -Node $gui.Node -Key 'visible'
                 if (-not $visible -or (Get-GuiValue -Node $visible -Key 'is_controlled_by') -ne 'ROOT') { "$($gui.Name): not limited to states the player controls" }

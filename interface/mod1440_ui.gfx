@@ -1719,4 +1719,101 @@ spriteTypes = {
 		steps = 18
 	}
 	# --- end D9 ---
+
+	# --- d10-population --- the States page's Population view (scratch/phases/D10/layout.json): the heads of the
+	# narrower table columns and of In a year, the bands of the graph and of its table of figures, the columns of the
+	# three ranges (152 high, a step a pixel) in History's green and, before the state was the player's, in the unit
+	# list's preparing colour, and the line of the month taken in the colour of an experience bar
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_46"
+		size = { x = 46 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_68"
+		size = { x = 68 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_600x38"
+		size = { x = 600 y = 38 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_300x24"
+		size = { x = 300 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_22x152"
+		textureFile1 = "gfx/interface/navieslist_bar_org.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 22 y = 152 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 152
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_8x152"
+		textureFile1 = "gfx/interface/navieslist_bar_org.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 8 y = 152 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 152
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_4x152"
+		textureFile1 = "gfx/interface/navieslist_bar_org.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 4 y = 152 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 152
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_prep_22x152"
+		textureFile1 = "gfx/interface/unitlist_bar_prepare.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 22 y = 152 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 152
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_prep_8x152"
+		textureFile1 = "gfx/interface/unitlist_bar_prepare.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 8 y = 152 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 152
+	}
+	progressbartype = {
+		name = "GFX_1440p_SG_column_prep_4x152"
+		textureFile1 = "gfx/interface/unitlist_bar_prepare.dds"
+		textureFile2 = "gfx/interface/navieslist_bar_bg.dds"
+		size = { x = 4 y = 152 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = no
+		steps = 152
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_line_2x152"
+		size = { x = 2 y = 152 }
+		textureFile = "gfx/interface/unit_xp_bar.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = no
+	}
+	# --- end d10-population ---
 }

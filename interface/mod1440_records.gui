@@ -1517,9 +1517,10 @@ guiTypes = {
 		size = { width = 540 height = 142 }
 		background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
 		iconType = { name = "sc_head" position = { x = 6 y = 6 } spriteType = "GFX_1440p_SG_head_528x30" }
-		instantTextboxType = { name = "sc_title" position = { x = 14 y = 10 } font = "hoi_18mbs" text = "MOD1440_SC_TITLE" maxWidth = 330 maxHeight = 22 format = left fixedsize = yes }
-		instantTextboxType = { name = "sc_lines" position = { x = 324 y = 12 } font = "hoi_16mbs" text = "MOD1440_SC_LINES" maxWidth = 200 maxHeight = 20 format = right }
-		instantTextboxType = { name = "sc_lines_1" position = { x = 324 y = 12 } font = "hoi_16mbs" text = "MOD1440_SC_LINES_1" maxWidth = 200 maxHeight = 20 format = right }
+		instantTextboxType = { name = "sc_title" position = { x = 14 y = 10 } font = "hoi_18mbs" text = "MOD1440_SC_TITLE" maxWidth = 290 maxHeight = 22 format = left fixedsize = yes }
+		instantTextboxType = { name = "sc_lines" position = { x = 306 y = 12 } font = "hoi_16mbs" text = "MOD1440_SC_LINES" maxWidth = 184 maxHeight = 20 format = right }
+		instantTextboxType = { name = "sc_lines_1" position = { x = 306 y = 12 } font = "hoi_16mbs" text = "MOD1440_SC_LINES_1" maxWidth = 184 maxHeight = 20 format = right }
+		buttonType = { name = "sc_hide" position = { x = 498 y = 5 } quadTextureSprite = "GFX_closebutton" clicksound = click_default pdx_tooltip = "MOD1440_SC_HIDE_TT" }
 		iconType = { name = "sc_flag" position = { x = 14 y = 44 } spriteType = "GFX_flag_small2" }
 		instantTextboxType = { name = "sc_taken" position = { x = 62 y = 48 } font = "hoi_18mbs" text = "MOD1440_SC_TAKEN" maxWidth = 464 maxHeight = 22 format = left fixedsize = yes }
 		instantTextboxType = { name = "sc_received" position = { x = 62 y = 48 } font = "hoi_18mbs" text = "MOD1440_SC_RECEIVED" maxWidth = 464 maxHeight = 22 format = left fixedsize = yes }
@@ -1536,5 +1537,11 @@ guiTypes = {
 		size = { width = 528 height = 32 }
 		iconType = { name = "sc_by_face" position = { x = 8 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
 		instantTextboxType = { name = "sc_by" position = { x = 48 y = 6 } font = "hoi_18mbs" text = "MOD1440_SC_BY" maxWidth = 464 maxHeight = 22 format = left fixedsize = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_state_card_handle"
+		position = { x = 570 y = 6 }
+		size = { width = 100 height = 29 }
+		buttonType = { name = "sc_show" position = { x = 0 y = 0 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_SC_SHOW" pdx_tooltip = "MOD1440_SC_SHOW_TT" }
 	}
 }

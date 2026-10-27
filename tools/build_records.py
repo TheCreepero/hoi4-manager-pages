@@ -3067,11 +3067,21 @@ def frame(portrait_version):
         + block("rec_badge_war_visible", new + M.more_than_zero("mod1440_rec_new_war")))
 
     # ---- the state card (E1 part C, E6): who took the state and when, by whose troops, the citation, its lines
+    # 2026-10-27 (user): the card can be hidden. Landlord's windows stand at 462,8 to 564,138 of the state view,
+    # under the card's left part (tools/check_playset.py guis), so a close button in the head strip hides the card
+    # and a small Record button, placed right of Landlord's at 570, brings it back. The choice is kept per country
+    # (mod1440_sc_hidden on ROOT, 1 = hidden; a save of an earlier build reads 0 and shows the card as before).
+    # No ESCAPE on the close button: ESCAPE closes the state view itself, and would hide the card for good.
     card_w, card_h = 540, 142
+    close_w, close_h = layout.CLOSE_SIZE
+    close_x = 6 + (card_w - 12) - close_w - 4           # its right edge 4 inside the head strip's (Design Language, Fixed places)
     inner = M.icon("sc_head", 6, 6, layout.head_sprite(card_w - 12, 30))
-    inner += M.text("sc_title", 14, 10, 330, B.key("sc_title", "£victory_points  The record of §Y[THIS.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
-    inner += M.text("sc_lines", card_w - 16 - 200, 12, 200, B.key("sc_lines", "[?mod1440_sr_lines|0] lines in the War Diary"), M.FONT_SMALL, "right", 20)
-    inner += M.text("sc_lines_1", card_w - 16 - 200, 12, 200, B.key("sc_lines_1", "1 line in the War Diary"), M.FONT_SMALL, "right", 20)
+    inner += M.text("sc_title", 14, 10, 290, B.key("sc_title", "£victory_points  The record of §Y[THIS.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
+    lines_w = 184
+    inner += M.text("sc_lines", close_x - 8 - lines_w, 12, lines_w, B.key("sc_lines", "[?mod1440_sr_lines|0] lines in the War Diary"), M.FONT_SMALL, "right", 20)
+    inner += M.text("sc_lines_1", close_x - 8 - lines_w, 12, lines_w, B.key("sc_lines_1", "1 line in the War Diary"), M.FONT_SMALL, "right", 20)
+    inner += M.button("sc_hide", close_x, 5, layout.CLOSE_BUTTON, tooltip=B.key(
+        "sc_hide_tt", "Hide this card. The Record button that takes its place brings it back; the choice is kept for your country."))
     inner += M.icon("sc_flag", 14, 44, FLAG_SMALL)
     inner += M.text("sc_taken", 62, 48, card_w - 76, B.key(
         "sc_taken", "Taken from §Y[?mod1440_sr_from.GetName]§! on [?mod1440_sr_date.%s], held [?mod1440_sr_held|0] days" % LONG), M.FONT_LABEL, height=22, fixed=True)
@@ -3095,6 +3105,10 @@ def frame(portrait_version):
     by = portrait("sc_by_face", 8, 0, WD_FACE) + M.text("sc_by", 48, 6, card_w - 76, B.key("sc_by", "by the troops of §Y[?mod1440_sr_by.GetName]§!"),
                                                         M.FONT_LABEL, height=22, fixed=True)
     gui += M.box("mod1440_state_card_by", 470 + 6, 74, card_w - 12, 32, by)
+    # the handle while the card is hidden: right of Landlord's windows, on the line of the card's head strip
+    handle = M.button("sc_show", 0, 0, "GFX_sort_button_100x29", B.key("sc_show", "£victory_points Record"), tooltip=B.key(
+        "sc_show_tt", "Show the record of this state: when it was taken and by whose troops, the citation of your divisions, its lines in the War Diary."))
+    gui += M.box("mod1440_state_card_handle", 570, 6, 100, 29, handle)
     cite = (tmp("hn_n", 0)
             + block("every_state_division", "limit = { OWNER = { tag = ROOT } }\n" + block(
                 "add_history_entry", 'key = mod1440_hn_cited\nsubject = "Citation"\nallow = yes\n') + "add_to_temp_variable = { hn_n = 1 }\n")
@@ -3106,11 +3120,14 @@ def frame(portrait_version):
                                + "clear_array = mod1440_wd_back\n" + setv("mod1440_wd_from", 0) + "mod1440_ev_init = yes\n"
                                + setv("mod1440_rec_open", 1) + "mod1440_rec_show = yes\n"))
     mine = "is_controlled_by = ROOT\n"
+    hidden = block("ROOT", is_one("mod1440_sc_hidden") + "\n")
+    shown_card = mine + block("ROOT", "NOT = { %s }\n" % is_one("mod1440_sc_hidden"))
     taken = "check_variable = { mod1440_sr_day > 0 }\n"
     state_script = block("mod1440_state_card", (
         'context_type = selected_state_context\nwindow_name = "mod1440_state_card"\nparent_window_token = selected_state_view\n\n'
-        + block("visible", mine) + "\n" + block("properties", flown("sc_flag", "?mod1440_sr_from")) + "\n"
-        + block("effects", block("sc_cite_click", cite) + block("sc_its_lines_click", its_lines)) + "\n"
+        + block("visible", shown_card) + "\n" + block("properties", flown("sc_flag", "?mod1440_sr_from")) + "\n"
+        + block("effects", block("sc_cite_click", cite) + block("sc_its_lines_click", its_lines)
+                + block("sc_hide_click", block("ROOT", setv("mod1440_sc_hidden", 1)))) + "\n"
         + block("triggers", (
             block("sc_lines_visible", "check_variable = { mod1440_sr_lines > 1 }\n")
             + block("sc_lines_1_visible", "check_variable = { mod1440_sr_lines = 1 }\n")
@@ -3125,8 +3142,13 @@ def frame(portrait_version):
         + "\n" + block("ai_enabled", "always = no\n")))
     state_script += block("mod1440_state_card_by", (
         'context_type = selected_state_context\nwindow_name = "mod1440_state_card_by"\nparent_window_token = selected_state_view\n\n'
-        + block("visible", mine + taken + is_one("mod1440_sr_has_by") + "\n") + "\n"
+        + block("visible", shown_card + taken + is_one("mod1440_sr_has_by") + "\n") + "\n"
         + block("properties", shown("sc_by_face", "mod1440_sr_by_p")) + "\n"
+        + block("ai_enabled", "always = no\n")))
+    state_script += block("mod1440_state_card_handle", (
+        'context_type = selected_state_context\nwindow_name = "mod1440_state_card_handle"\nparent_window_token = selected_state_view\n\n'
+        + block("visible", mine + hidden) + "\n"
+        + block("effects", block("sc_show_click", block("ROOT", setv("mod1440_sc_hidden", 0)))) + "\n"
         + block("ai_enabled", "always = no\n")))
     token("hn_capture", "Took part in the capture of $PROVINCE$")
     token("hn_cited", "Cited by the high command at $PROVINCE$")

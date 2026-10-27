@@ -106,3 +106,12 @@ Status: **built and checked by render and tests; not seen in game.**
 - The larger card in the user's playset (Devastation Overhaul draws at 451,194 of the same view, Landlord adds buttons): to be seen with `tools/Invoke-GameSteps.ps1 -Start -Playset`.
 
 **Not seen in game:** any of it. Game check `tools/Invoke-GameCheck.ps1 war_diary wars`; the tester's checklist is items 8 and 10 of the [E1 notes](E1-war-diary.md), and: a landing and an airborne drop in a game with fighting, with the History tab of a division that took part.
+
+## The card can be hidden (2026-10-27)
+
+User request outside a phase: the card covered a button of Landlord, the state coring mod of the playset. `tools/check_playset.py guis` reads Landlord's two windows at 462,40 and 464,8 (100x130) of the state view, under the card's left part (470,0, 540x142); the Compatibility note of 2026-10-13 was taken with the 500x94 card.
+
+- **A close button** (`sc_hide`, the game's close sprite, its right edge 4 px inside the head strip's) hides the card and its "by the troops of" window; the lines count moved left of it, the title's box narrowed to 290. No ESCAPE on it: ESCAPE closes the state view, and would hide the card for good.
+- **A Record button** (`mod1440_state_card_handle`, the game's 100x29 sort button at 570,6, right of Landlord's windows) brings it back while it is hidden.
+- **Kept per country:** `mod1440_sc_hidden` on the player's country, 1 = hidden; a save of an earlier build reads 0 and shows the card as before. The windows stay in `selected_state_context`, so `tests/ScriptedGuis.Tests.ps1` now excepts every `mod1440_state_card*` window.
+- Built with `build_managers.py`; `--check`, `lint_gui.py` (0 errors) and the suite (274 passed) clean. **Not seen in game:** the two buttons, and whether `ROOT = { check_variable }` holds in the `visible` block of the state context (X47 names ROOT for texts and click effects). Game check: select a state you control, close the card, select another state (the Record button, Landlord's buttons free), bring it back, and once with a save and a load.

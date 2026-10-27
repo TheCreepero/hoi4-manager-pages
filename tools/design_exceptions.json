@@ -19,6 +19,7 @@
     {"rule": "row", "window": "mod1440_figures", "item": "GFX_1440p_SG_*_584x26", "why": "The figure tables' rows of 26 (NF_ROW), set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_figures", "item": "GFX_1440p_SG_*_424x26", "why": "The resource and equipment tables' rows of 26 (NF_ROW), set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_figures", "item": "GFX_1440p_SG_stripe_1560x50", "why": "Not a table row: the bands behind the quarters of the History graph."},
+    {"rule": "row", "window": "mod1440_states_pop", "item": "GFX_1440p_SG_stripe_600x38", "why": "Not a table row: the bands behind the quarters of the population graph (D10), as History's."},
     {"rule": "row", "window": "mod1440_figures_row_*", "item": "GFX_1440p_SG_stripe_358x26", "why": "The modifier lists' rows of 26 (NF_ROW), set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_states_row", "item": "GFX_1440p_SG_*_1414x30", "why": "A state row of 30 (ST_ROW), set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_records_wd", "item": "GFX_1440p_SG_stripe_384x26", "why": "The War Diary pane's tables at 26 (WD_TROW), set before the ruleset's pitches."},

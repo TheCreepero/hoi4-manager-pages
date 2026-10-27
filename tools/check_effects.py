@@ -831,6 +831,135 @@ mod1440_chk_sizes3 = {
 """
 # --- end E1 ---
 
+# --- D10 ---
+# The population history of every state (the States page's Population view), as Germany on 1 January 1936: made-up
+# months for every state without running time, a state taken in month 45 of them, a save without months, and the time
+# of the monthly round over every state, paused. Each draws the page again when it is open.
+POP_REDRAW = "    if = {\n        limit = { check_variable = { mod1440_st_open = 1 } }\n        mod1440_st_list = yes\n    }\n"
+HISTORY += ("""
+# ---- States, D10: the population history
+
+# 120 made-up months for every state: the date of each is today's (a date cannot be made up), the year and the day
+# number those of a month before today (30 days a month), the oldest in January 1936. Each state stands still for
+# 45 months and then falls by 0.05% to 0.45% of today's population a month (by its population modulo 9), to today's
+# number in the newest month, so that In a year differs from state to state.
+mod1440_chk_pop_months = {
+    clear_array = global.mod1440_pop_date
+    clear_array = global.mod1440_pop_year
+    clear_array = global.mod1440_pop_days
+    for_loop_effect = {
+        start = 0
+        end = 120
+        value = t
+        add_to_array = { global.mod1440_pop_date = global.date }
+        set_temp_variable = { mo = t }
+        modulo_temp_variable = { mo = 12 }
+        set_temp_variable = { yr = t }
+        subtract_from_temp_variable = { yr = mo }
+        divide_temp_variable = { yr = 12 }
+        add_to_temp_variable = { yr = 1936 }
+        add_to_array = { global.mod1440_pop_year = yr }
+        set_temp_variable = { dn = t }
+        subtract_from_temp_variable = { dn = 119 }
+        multiply_temp_variable = { dn = 30 }
+        add_to_temp_variable = { dn = global.num_days }
+        add_to_array = { global.mod1440_pop_days = dn }
+    }
+    set_variable = { global.mod1440_pop_day = global.num_days }
+    every_state = {
+        clear_array = mod1440_pop_k
+        set_temp_variable = { s = state_population_k }
+        modulo_temp_variable = { s = 9 }
+        add_to_temp_variable = { s = 1 }
+        multiply_temp_variable = { s = 0.0005 }
+        for_loop_effect = {
+            start = 0
+            end = 120
+            value = t
+            set_temp_variable = { f = 119 }
+            subtract_from_temp_variable = { f = t }
+            if = {
+                limit = { check_variable = { t < 45 } }
+                set_temp_variable = { f = 74 }
+            }
+            multiply_temp_variable = { f = s }
+            add_to_temp_variable = { f = 1 }
+            set_temp_variable = { v = state_population_k }
+            multiply_temp_variable = { v = f }
+            add_to_array = { mod1440_pop_k = v }
+        }
+        mod1440_pop_year = yes
+    }
+""" + POP_REDRAW + """    64 = {
+        log = "MOD1440 check: pop months, [?global.mod1440_pop_date^num] months, Brandenburg [?mod1440_pop_k^num] values, first [?mod1440_pop_k^0] last [?mod1440_pop_k^119] now [?state_population_k], in a year [?mod1440_pop_dy]% (fall [?mod1440_pop_fall], has [?mod1440_pop_hy])"
+    }
+}
+
+# Brandenburg (64) taken from Poland between month 44 and month 45 of the made-up months (needs mod1440_chk_pop_months):
+# the first 45 columns in the preparing colour, the line at the 46th, Yours since the day.
+mod1440_chk_pop_taken = {
+    POL = {
+        64 = {
+            set_variable = { mod1440_sr_from = PREV }
+        }
+    }
+    64 = {
+        set_variable = { mod1440_sr_day = global.num_days }
+        subtract_from_variable = { mod1440_sr_day = 2235 }
+        set_variable = { mod1440_sr_date = global.date }
+        log = "MOD1440 check: pop taken, Brandenburg day [?mod1440_sr_day], today [?global.num_days]"
+    }
+""" + POP_REDRAW + """}
+
+# As a save of a build before D10: no month for any state, no stamp of the last round.
+mod1440_chk_pop_clear = {
+    clear_array = global.mod1440_pop_date
+    clear_array = global.mod1440_pop_year
+    clear_array = global.mod1440_pop_days
+    clear_variable = global.mod1440_pop_day
+    every_state = {
+        clear_array = mod1440_pop_k
+        clear_variable = mod1440_pop_dy
+        clear_variable = mod1440_pop_fall
+        clear_variable = mod1440_pop_hy
+        clear_variable = mod1440_pop_ya
+        clear_variable = mod1440_pop_last
+    }
+""" + POP_REDRAW + """    log = "MOD1440 check: pop clear, [?global.mod1440_pop_date^num] months"
+}
+
+# The monthly round once, as the first of a month would run it (the stamp put back), paused: game.log gives the time
+# of the line before and after it. A month is added for every state.
+mod1440_chk_pop_round = {
+    log = "MOD1440 check: pop round begins, [?global.mod1440_pop_date^num] months"
+    set_variable = { global.mod1440_pop_day = 0 }
+    mod1440_pop_round = yes
+    log = "MOD1440 check: pop round ends, [?global.mod1440_pop_date^num] months"
+""" + POP_REDRAW + """}
+
+# Ten months of the round without its guard, for a time game.log can measure in seconds.
+mod1440_chk_pop_round10 = {
+    log = "MOD1440 check: pop ten rounds begin, [?global.mod1440_pop_date^num] months"
+    for_loop_effect = {
+        start = 0
+        end = 10
+        value = t
+        mod1440_pop_month = yes
+    }
+    log = "MOD1440 check: pop ten rounds end, [?global.mod1440_pop_date^num] months"
+""" + POP_REDRAW + """}
+
+# The guard: the round twice on one day writes one month (the stamp put back first, as the first of a month would).
+mod1440_chk_pop_twice = {
+    log = "MOD1440 check: pop twice begins, [?global.mod1440_pop_date^num] months"
+    set_variable = { global.mod1440_pop_day = 0 }
+    mod1440_pop_round = yes
+    mod1440_pop_round = yes
+    log = "MOD1440 check: pop twice ends, [?global.mod1440_pop_date^num] months (one more), stamp [?global.mod1440_pop_day] today [?global.num_days]"
+""" + POP_REDRAW + """}
+""").replace("    ", "\t")
+# --- end D10 ---
+
 if __name__ == "__main__":
     if "--restore" in sys.argv:
         if os.path.isfile(PATH):

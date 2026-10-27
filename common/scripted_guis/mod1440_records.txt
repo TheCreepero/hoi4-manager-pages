@@ -5182,6 +5182,9 @@ scripted_gui = {
 
 		visible = {
 			is_controlled_by = ROOT
+			ROOT = {
+				NOT = { check_variable = { mod1440_sc_hidden = 1 } }
+			}
 		}
 
 		properties = {
@@ -5241,6 +5244,11 @@ scripted_gui = {
 					mod1440_rec_show = yes
 				}
 			}
+			sc_hide_click = {
+				ROOT = {
+					set_variable = { mod1440_sc_hidden = 1 }
+				}
+			}
 		}
 
 		triggers = {
@@ -5295,6 +5303,9 @@ scripted_gui = {
 
 		visible = {
 			is_controlled_by = ROOT
+			ROOT = {
+				NOT = { check_variable = { mod1440_sc_hidden = 1 } }
+			}
 			check_variable = { mod1440_sr_day > 0 }
 			check_variable = { mod1440_sr_has_by = 1 }
 		}
@@ -5302,6 +5313,30 @@ scripted_gui = {
 		properties = {
 			sc_by_face = {
 				image = "[?mod1440_sr_by_p.GetTokenKey]"
+			}
+		}
+
+		ai_enabled = {
+			always = no
+		}
+	}
+	mod1440_state_card_handle = {
+		context_type = selected_state_context
+		window_name = "mod1440_state_card_handle"
+		parent_window_token = selected_state_view
+
+		visible = {
+			is_controlled_by = ROOT
+			ROOT = {
+				check_variable = { mod1440_sc_hidden = 1 }
+			}
+		}
+
+		effects = {
+			sc_show_click = {
+				ROOT = {
+					set_variable = { mod1440_sc_hidden = 0 }
+				}
 			}
 		}
 

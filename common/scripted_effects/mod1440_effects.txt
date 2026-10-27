@@ -5764,6 +5764,559 @@ mod1440_ar_worst_1 = {
 	}
 }
 
+# States, population history (D10), in a state's scope: its change over the last twelve months in percent
+# (mod1440_pop_dy), the fall the In a year column sorts by (mod1440_pop_fall), and the two months the totals add
+# up (mod1440_pop_ya, _last).
+mod1440_pop_year = {
+	set_variable = { mod1440_pop_dy = 0 }
+	set_variable = { mod1440_pop_fall = 0 }
+	set_variable = { mod1440_pop_hy = 0 }
+	set_variable = { mod1440_pop_ya = 0 }
+	set_variable = { mod1440_pop_last = 0 }
+	set_temp_variable = { pr_i = mod1440_pop_k^num }
+	subtract_from_temp_variable = { pr_i = 13 }
+	if = {
+		limit = { check_variable = { pr_i > -1 } }
+		set_temp_variable = { pr_a = mod1440_pop_k^pr_i }
+		add_to_temp_variable = { pr_i = 12 }
+		set_temp_variable = { pr_b = mod1440_pop_k^pr_i }
+		if = {
+			limit = { check_variable = { pr_a > 0 } check_variable = { pr_b > -1 } }
+			set_variable = { mod1440_pop_hy = 1 }
+			set_variable = { mod1440_pop_ya = pr_a }
+			set_variable = { mod1440_pop_last = pr_b }
+			set_variable = { mod1440_pop_dy = pr_b }
+			subtract_from_variable = { mod1440_pop_dy = pr_a }
+			multiply_variable = { mod1440_pop_dy = 10 }
+			divide_variable = { mod1440_pop_dy = pr_a }
+			multiply_variable = { mod1440_pop_dy = 10 }
+			set_variable = { mod1440_pop_fall = 0 }
+			subtract_from_variable = { mod1440_pop_fall = mod1440_pop_dy }
+		}
+	}
+}
+
+# States (D10): the month itself, without the guard: the date, its year and day number for all, and each state's
+# state_population_k; the oldest past 120 months is forgotten. Counts nothing but the states (rule 5).
+mod1440_pop_month = {
+	add_to_array = { global.mod1440_pop_date = global.date }
+	add_to_array = { global.mod1440_pop_year = global.year }
+	add_to_array = { global.mod1440_pop_days = global.num_days }
+	if = {
+		limit = { check_variable = { global.mod1440_pop_date^num > 120 } }
+		remove_from_array = { array = global.mod1440_pop_date index = 0 }
+		remove_from_array = { array = global.mod1440_pop_year index = 0 }
+		remove_from_array = { array = global.mod1440_pop_days index = 0 }
+	}
+	set_temp_variable = { pr_n = global.mod1440_pop_date^num }
+	every_state = {
+		set_temp_variable = { pr_p = pr_n }
+		subtract_from_temp_variable = { pr_p = mod1440_pop_k^num }
+		subtract_from_temp_variable = { pr_p = 1 }
+		if = {
+			limit = { check_variable = { pr_p > 0 } }
+			for_loop_effect = {
+				start = 0
+				end = pr_p
+				value = pr_q
+				add_to_array = { array = mod1440_pop_k value = -1 index = 0 }
+			}
+		}
+		add_to_array = { mod1440_pop_k = state_population_k }
+		if = {
+			limit = { check_variable = { mod1440_pop_k^num > pr_n } }
+			remove_from_array = { array = mod1440_pop_k index = 0 }
+		}
+		mod1440_pop_year = yes
+	}
+}
+
+# States (D10): the chosen state's months, for the country in scope: the range, the scale, the column heights of
+# the range (the months before the state came into the player's hands marked), the year marks, the line of the
+# month taken and the table of figures. On a row click, the switch, a range, Zoom in, and after the round while
+# the page is open; never in a trigger drawn each tick (rule 5).
+mod1440_pop_draw = {
+	clear_temp_array = pd_date
+	clear_temp_array = pd_year
+	clear_temp_array = pd_day
+	clear_temp_array = pd_all
+	for_each_loop = {
+		array = global.mod1440_pop_date
+		value = pd_v
+		add_to_temp_array = { pd_date = pd_v }
+	}
+	for_each_loop = {
+		array = global.mod1440_pop_year
+		value = pd_v
+		add_to_temp_array = { pd_year = pd_v }
+	}
+	for_each_loop = {
+		array = global.mod1440_pop_days
+		value = pd_v
+		add_to_temp_array = { pd_day = pd_v }
+	}
+	set_temp_variable = { pd_since = 0 }
+	set_temp_variable = { pd_sdate = 0 }
+	if = {
+		limit = { check_variable = { mod1440_st_card^num > 0 } }
+		var:mod1440_st_sel = {
+			for_each_loop = {
+				array = mod1440_pop_k
+				value = pd_v
+				add_to_temp_array = { pd_all = pd_v }
+			}
+			if = {
+				limit = { check_variable = { mod1440_sr_day > 0 } }
+				set_temp_variable = { pd_since = mod1440_sr_day }
+				set_temp_variable = { pd_sdate = mod1440_sr_date }
+			}
+		}
+	}
+	set_temp_variable = { pd_n = pd_all^num }
+	if = {
+		limit = { check_variable = { pd_date^num < pd_n } }
+		set_temp_variable = { pd_n = pd_date^num }
+	}
+	set_temp_variable = { pd_va = pd_all^num }
+	subtract_from_temp_variable = { pd_va = pd_n }
+	set_temp_variable = { pd_da = pd_date^num }
+	subtract_from_temp_variable = { pd_da = pd_n }
+	set_temp_variable = { pd_span = mod1440_pop_range }
+	if = {
+		limit = { check_variable = { pd_span = 0 } }
+		set_temp_variable = { pd_span = 24 }
+		if = {
+			limit = { check_variable = { pd_n > 24 } }
+			set_temp_variable = { pd_span = 60 }
+		}
+		if = {
+			limit = { check_variable = { pd_n > 60 } }
+			set_temp_variable = { pd_span = 120 }
+		}
+	}
+	set_variable = { mod1440_pop_rf_24 = 1 }
+	set_variable = { mod1440_pop_rf_60 = 1 }
+	set_variable = { mod1440_pop_rf_120 = 1 }
+	if = {
+		limit = { check_variable = { pd_span = 24 } }
+		set_temp_variable = { pd_step = 25 }
+		set_temp_variable = { pd_yoff = 74 }
+		set_temp_variable = { pd_mx = 82 }
+		set_variable = { mod1440_pop_rf_24 = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { pd_span = 60 } }
+		set_temp_variable = { pd_step = 10 }
+		set_temp_variable = { pd_yoff = 67 }
+		set_temp_variable = { pd_mx = 82 }
+		set_variable = { mod1440_pop_rf_60 = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { pd_span = 120 } }
+		set_temp_variable = { pd_step = 5 }
+		set_temp_variable = { pd_yoff = 64 }
+		set_temp_variable = { pd_mx = 81 }
+		set_variable = { mod1440_pop_rf_120 = 2 }
+	}
+	set_temp_variable = { pd_from = pd_n }
+	subtract_from_temp_variable = { pd_from = pd_span }
+	if = {
+		limit = { check_variable = { pd_from < 0 } }
+		set_temp_variable = { pd_from = 0 }
+	}
+	set_temp_variable = { pd_cnt = pd_n }
+	subtract_from_temp_variable = { pd_cnt = pd_from }
+	set_temp_variable = { pd_valid = 0 }
+	set_temp_variable = { pd_hi = 0 }
+	set_temp_variable = { pd_lo = 0 }
+	set_temp_variable = { pd_hi_k = 0 }
+	set_temp_variable = { pd_lo_k = 0 }
+	set_temp_variable = { pd_first = 0 }
+	set_temp_variable = { pd_first_k = 0 }
+	set_temp_variable = { pd_shn = 0 }
+	set_temp_variable = { pd_shi = 0 }
+	set_temp_variable = { pd_slo = 0 }
+	set_temp_variable = { pd_t = pd_n }
+	for_loop_effect = {
+		start = 0
+		end = pd_n
+		value = pd_k
+		set_temp_variable = { pd_j = pd_k }
+		add_to_temp_variable = { pd_j = pd_va }
+		set_temp_variable = { pd_v = pd_all^pd_j }
+		set_temp_variable = { pd_i = pd_k }
+		add_to_temp_variable = { pd_i = pd_da }
+		if = {
+			limit = { check_variable = { pd_since > 0 } check_variable = { pd_t = pd_n } }
+			set_temp_variable = { pd_dd = pd_day^pd_i }
+			if = {
+				limit = { NOT = { check_variable = { pd_dd < pd_since } } }
+				set_temp_variable = { pd_t = pd_k }
+			}
+		}
+		if = {
+			limit = { check_variable = { pd_v > -1 } }
+			add_to_temp_variable = { pd_valid = 1 }
+			if = {
+				limit = { check_variable = { pd_valid = 1 } }
+				set_temp_variable = { pd_first = pd_v }
+				set_temp_variable = { pd_first_k = pd_k }
+				set_temp_variable = { pd_hi = pd_v }
+				set_temp_variable = { pd_lo = pd_v }
+				set_temp_variable = { pd_hi_k = pd_k }
+				set_temp_variable = { pd_lo_k = pd_k }
+			}
+			else = {
+				if = {
+					limit = { check_variable = { pd_v > pd_hi } }
+					set_temp_variable = { pd_hi = pd_v }
+					set_temp_variable = { pd_hi_k = pd_k }
+				}
+				if = {
+					limit = { check_variable = { pd_v < pd_lo } }
+					set_temp_variable = { pd_lo = pd_v }
+					set_temp_variable = { pd_lo_k = pd_k }
+				}
+			}
+			if = {
+				limit = { NOT = { check_variable = { pd_k < pd_from } } }
+				add_to_temp_variable = { pd_shn = 1 }
+				if = {
+					limit = { check_variable = { pd_shn = 1 } }
+					set_temp_variable = { pd_shi = pd_v }
+					set_temp_variable = { pd_slo = pd_v }
+				}
+				else = {
+					if = {
+						limit = { check_variable = { pd_v > pd_shi } }
+						set_temp_variable = { pd_shi = pd_v }
+					}
+					if = {
+						limit = { check_variable = { pd_v < pd_slo } }
+						set_temp_variable = { pd_slo = pd_v }
+					}
+				}
+			}
+		}
+	}
+	set_variable = { mod1440_pop_valid = pd_valid }
+	set_variable = { mod1440_pop_n = pd_n }
+	set_variable = { mod1440_pop_hl = 0 }
+	set_variable = { mod1440_pop_hm = 0 }
+	set_variable = { mod1440_pop_hy = 0 }
+	set_variable = { mod1440_pop_hf = 0 }
+	set_variable = { mod1440_pop_taken = 0 }
+	if = {
+		limit = { check_variable = { pd_n > 0 } }
+		set_temp_variable = { pd_j = pd_n }
+		add_to_temp_variable = { pd_j = pd_va }
+		subtract_from_temp_variable = { pd_j = 1 }
+		set_temp_variable = { pd_l = pd_all^pd_j }
+		if = {
+			limit = { check_variable = { pd_l > -1 } }
+			set_variable = { mod1440_pop_hl = 1 }
+			set_variable = { mod1440_pop_latest = pd_l }
+			set_temp_variable = { pd_last = pd_n }
+			subtract_from_temp_variable = { pd_last = 1 }
+			set_temp_variable = { pd_di = pd_last }
+			add_to_temp_variable = { pd_di = pd_da }
+			set_temp_variable = { pd_dv = pd_date^pd_di }
+			set_variable = { mod1440_pop_d0 = pd_dv }
+			if = {
+				limit = { check_variable = { pd_n > 1 } }
+				set_temp_variable = { pd_bk = pd_n }
+				subtract_from_temp_variable = { pd_bk = 2 }
+				set_temp_variable = { pd_j = pd_bk }
+				add_to_temp_variable = { pd_j = pd_va }
+				set_temp_variable = { pd_b = pd_all^pd_j }
+				if = {
+					limit = { check_variable = { pd_b > -1 } }
+					set_variable = { mod1440_pop_hm = 1 }
+					set_variable = { mod1440_pop_cm = pd_l }
+					subtract_from_variable = { mod1440_pop_cm = pd_b }
+					set_variable = { mod1440_pop_cmp = 0 }
+					if = {
+						limit = { check_variable = { pd_b > 0 } }
+						set_variable = { mod1440_pop_cmp = mod1440_pop_cm }
+						multiply_variable = { mod1440_pop_cmp = 10 }
+						divide_variable = { mod1440_pop_cmp = pd_b }
+						multiply_variable = { mod1440_pop_cmp = 10 }
+					}
+					set_temp_variable = { pd_di = pd_bk }
+					add_to_temp_variable = { pd_di = pd_da }
+					set_temp_variable = { pd_dv = pd_date^pd_di }
+					set_variable = { mod1440_pop_d1 = pd_dv }
+				}
+			}
+			if = {
+				limit = { check_variable = { pd_n > 12 } }
+				set_temp_variable = { pd_bk = pd_n }
+				subtract_from_temp_variable = { pd_bk = 13 }
+				set_temp_variable = { pd_j = pd_bk }
+				add_to_temp_variable = { pd_j = pd_va }
+				set_temp_variable = { pd_b = pd_all^pd_j }
+				if = {
+					limit = { check_variable = { pd_b > -1 } }
+					set_variable = { mod1440_pop_hy = 1 }
+					set_variable = { mod1440_pop_cy = pd_l }
+					subtract_from_variable = { mod1440_pop_cy = pd_b }
+					set_variable = { mod1440_pop_cyp = 0 }
+					if = {
+						limit = { check_variable = { pd_b > 0 } }
+						set_variable = { mod1440_pop_cyp = mod1440_pop_cy }
+						multiply_variable = { mod1440_pop_cyp = 10 }
+						divide_variable = { mod1440_pop_cyp = pd_b }
+						multiply_variable = { mod1440_pop_cyp = 10 }
+					}
+					set_temp_variable = { pd_di = pd_bk }
+					add_to_temp_variable = { pd_di = pd_da }
+					set_temp_variable = { pd_dv = pd_date^pd_di }
+					set_variable = { mod1440_pop_d2 = pd_dv }
+				}
+			}
+			if = {
+				limit = { check_variable = { pd_valid > 1 } }
+				set_variable = { mod1440_pop_hf = 1 }
+				set_variable = { mod1440_pop_cf = pd_l }
+				subtract_from_variable = { mod1440_pop_cf = pd_first }
+				set_variable = { mod1440_pop_cfp = 0 }
+				if = {
+					limit = { check_variable = { pd_first > 0 } }
+					set_variable = { mod1440_pop_cfp = mod1440_pop_cf }
+					multiply_variable = { mod1440_pop_cfp = 10 }
+					divide_variable = { mod1440_pop_cfp = pd_first }
+					multiply_variable = { mod1440_pop_cfp = 10 }
+				}
+				set_temp_variable = { pd_di = pd_first_k }
+				add_to_temp_variable = { pd_di = pd_da }
+				set_temp_variable = { pd_dv = pd_date^pd_di }
+				set_variable = { mod1440_pop_d3 = pd_dv }
+			}
+			set_variable = { mod1440_pop_max = pd_hi }
+			set_temp_variable = { pd_di = pd_hi_k }
+			add_to_temp_variable = { pd_di = pd_da }
+			set_temp_variable = { pd_dv = pd_date^pd_di }
+			set_variable = { mod1440_pop_d4 = pd_dv }
+			set_variable = { mod1440_pop_min = pd_lo }
+			set_temp_variable = { pd_di = pd_lo_k }
+			add_to_temp_variable = { pd_di = pd_da }
+			set_temp_variable = { pd_dv = pd_date^pd_di }
+			set_variable = { mod1440_pop_d5 = pd_dv }
+		}
+	}
+	if = {
+		limit = { check_variable = { pd_since > 0 } }
+		set_variable = { mod1440_pop_taken = 1 }
+		set_variable = { mod1440_pop_since = pd_sdate }
+	}
+	set_temp_variable = { pd_base = 0 }
+	if = {
+		limit = { NOT = { check_variable = { mod1440_pop_flat = 1 } } }
+		set_temp_variable = { pd_base = pd_slo }
+	}
+	set_temp_variable = { pd_range = pd_shi }
+	subtract_from_temp_variable = { pd_range = pd_base }
+	set_temp_variable = { pd_quarter = pd_range }
+	divide_temp_variable = { pd_quarter = 4 }
+	set_variable = { mod1440_pop_s0 = pd_base }
+	set_variable = { mod1440_pop_s1 = mod1440_pop_s0 }
+	add_to_variable = { mod1440_pop_s1 = pd_quarter }
+	set_variable = { mod1440_pop_s2 = mod1440_pop_s1 }
+	add_to_variable = { mod1440_pop_s2 = pd_quarter }
+	set_variable = { mod1440_pop_s3 = mod1440_pop_s2 }
+	add_to_variable = { mod1440_pop_s3 = pd_quarter }
+	set_variable = { mod1440_pop_s4 = pd_shi }
+	clear_array = mod1440_pop_bars_24
+	clear_array = mod1440_pop_pre_24
+	clear_array = mod1440_pop_bars_60
+	clear_array = mod1440_pop_pre_60
+	clear_array = mod1440_pop_bars_120
+	clear_array = mod1440_pop_pre_120
+	clear_array = mod1440_pop_now
+	clear_array = mod1440_pop_sdate
+	clear_array = mod1440_pop_syear
+	for_loop_effect = {
+		start = 0
+		end = pd_cnt
+		value = pd_k
+		set_temp_variable = { pd_kk = pd_k }
+		add_to_temp_variable = { pd_kk = pd_from }
+		set_temp_variable = { pd_j = pd_kk }
+		add_to_temp_variable = { pd_j = pd_va }
+		set_temp_variable = { pd_v = pd_all^pd_j }
+		set_temp_variable = { pd_i = pd_kk }
+		add_to_temp_variable = { pd_i = pd_da }
+		set_temp_variable = { pd_dv = pd_date^pd_i }
+		add_to_array = { mod1440_pop_sdate = pd_dv }
+		set_temp_variable = { pd_dv = pd_year^pd_i }
+		add_to_array = { mod1440_pop_syear = pd_dv }
+		add_to_array = { mod1440_pop_now = pd_v }
+		set_temp_variable = { pd_bar = -1 }
+		if = {
+			limit = { check_variable = { pd_v > -1 } }
+			set_temp_variable = { pd_bar = 0 }
+			if = {
+				limit = { check_variable = { pd_range > 0 } }
+				set_temp_variable = { pd_bar = pd_v }
+				subtract_from_temp_variable = { pd_bar = pd_base }
+				divide_temp_variable = { pd_bar = pd_range }
+				multiply_temp_variable = { pd_bar = 152 }
+			}
+			else_if = {
+				limit = { NOT = { check_variable = { pd_v = 0 } } }
+				set_temp_variable = { pd_bar = 152 }
+			}
+			if = {
+				limit = { NOT = { check_variable = { pd_base = 0 } } }
+				if = {
+					limit = { check_variable = { pd_bar < 4 } }
+					set_temp_variable = { pd_bar = 4 }
+				}
+			}
+			if = {
+				limit = { check_variable = { pd_bar < 0 } }
+				set_temp_variable = { pd_bar = 0 }
+			}
+			if = {
+				limit = { check_variable = { pd_bar > 152 } }
+				set_temp_variable = { pd_bar = 152 }
+			}
+		}
+		set_temp_variable = { pd_pre = 0 }
+		if = {
+			limit = { check_variable = { pd_since > 0 } check_variable = { pd_kk < pd_t } }
+			set_temp_variable = { pd_pre = 1 }
+		}
+		if = {
+			limit = { check_variable = { pd_span = 24 } }
+			add_to_array = { mod1440_pop_bars_24 = pd_bar }
+			add_to_array = { mod1440_pop_pre_24 = pd_pre }
+		}
+		else_if = {
+			limit = { check_variable = { pd_span = 60 } }
+			add_to_array = { mod1440_pop_bars_60 = pd_bar }
+			add_to_array = { mod1440_pop_pre_60 = pd_pre }
+		}
+		else_if = {
+			limit = { check_variable = { pd_span = 120 } }
+			add_to_array = { mod1440_pop_bars_120 = pd_bar }
+			add_to_array = { mod1440_pop_pre_120 = pd_pre }
+		}
+	}
+	set_variable = { mod1440_pop_yl_0 = 0 }
+	set_variable = { mod1440_pop_yl_1 = 0 }
+	set_variable = { mod1440_pop_yl_2 = 0 }
+	set_variable = { mod1440_pop_yl_3 = 0 }
+	set_variable = { mod1440_pop_yl_4 = 0 }
+	set_variable = { mod1440_pop_yl_5 = 0 }
+	set_variable = { mod1440_pop_yl_6 = 0 }
+	set_variable = { mod1440_pop_yl_7 = 0 }
+	set_variable = { mod1440_pop_yl_8 = 0 }
+	set_variable = { mod1440_pop_yl_9 = 0 }
+	set_temp_variable = { pd_before = 0 }
+	set_temp_variable = { pd_slot = 0 }
+	for_each_loop = {
+		array = mod1440_pop_syear
+		value = pd_y
+		index = pd_yi
+		if = {
+			limit = { check_variable = { pd_yi > 0 } check_variable = { pd_y > 0 } }
+			if = {
+				limit = { NOT = { check_variable = { pd_y = pd_before } } }
+				set_temp_variable = { pd_x = pd_yi }
+				multiply_temp_variable = { pd_x = pd_step }
+				add_to_temp_variable = { pd_x = pd_yoff }
+				if = {
+					limit = { check_variable = { pd_slot = 0 } }
+					set_variable = { mod1440_pop_yl_0 = pd_y }
+					set_variable = { mod1440_pop_yx_0 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 1 } }
+					set_variable = { mod1440_pop_yl_1 = pd_y }
+					set_variable = { mod1440_pop_yx_1 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 2 } }
+					set_variable = { mod1440_pop_yl_2 = pd_y }
+					set_variable = { mod1440_pop_yx_2 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 3 } }
+					set_variable = { mod1440_pop_yl_3 = pd_y }
+					set_variable = { mod1440_pop_yx_3 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 4 } }
+					set_variable = { mod1440_pop_yl_4 = pd_y }
+					set_variable = { mod1440_pop_yx_4 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 5 } }
+					set_variable = { mod1440_pop_yl_5 = pd_y }
+					set_variable = { mod1440_pop_yx_5 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 6 } }
+					set_variable = { mod1440_pop_yl_6 = pd_y }
+					set_variable = { mod1440_pop_yx_6 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 7 } }
+					set_variable = { mod1440_pop_yl_7 = pd_y }
+					set_variable = { mod1440_pop_yx_7 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 8 } }
+					set_variable = { mod1440_pop_yl_8 = pd_y }
+					set_variable = { mod1440_pop_yx_8 = pd_x }
+				}
+				else_if = {
+					limit = { check_variable = { pd_slot = 9 } }
+					set_variable = { mod1440_pop_yl_9 = pd_y }
+					set_variable = { mod1440_pop_yx_9 = pd_x }
+				}
+				add_to_temp_variable = { pd_slot = 1 }
+			}
+		}
+		set_temp_variable = { pd_before = pd_y }
+	}
+	set_variable = { mod1440_pop_mark = 0 }
+	set_temp_variable = { pd_ts = pd_t }
+	subtract_from_temp_variable = { pd_ts = pd_from }
+	if = {
+		limit = { check_variable = { pd_since > 0 } check_variable = { pd_ts > 0 } check_variable = { pd_ts < pd_cnt } }
+		set_variable = { mod1440_pop_mark = 1 }
+		set_variable = { mod1440_pop_mark_x = pd_ts }
+		multiply_variable = { mod1440_pop_mark_x = pd_step }
+		add_to_variable = { mod1440_pop_mark_x = pd_mx }
+	}
+	set_variable = { mod1440_pop_zf = 1 }
+	if = {
+		limit = { NOT = { check_variable = { mod1440_pop_flat = 1 } } }
+		set_variable = { mod1440_pop_zf = 2 }
+	}
+	add_to_variable = { mod1440_st_dirty = 1 }
+}
+
+# States (D10): once a month in all, every state of the map written down. Called from each player's on_monthly
+# and once from on_startup; runs when the last round is 20 days or more ago, and sets the stamp first, so that
+# several players, or an on_monthly that fires on another day for another country, make one round a month.
+# Then an open page in the Population view is drawn again.
+mod1440_pop_round = {
+	set_temp_variable = { pr_gap = global.num_days }
+	subtract_from_temp_variable = { pr_gap = global.mod1440_pop_day }
+	if = {
+		limit = { check_variable = { pr_gap > 19 } }
+		set_variable = { global.mod1440_pop_day = global.num_days }
+		mod1440_pop_month = yes
+		every_country = {
+			limit = { is_ai = no check_variable = { mod1440_st_open = 1 } check_variable = { mod1440_pop_view = 1 } }
+			mod1440_pop_draw = yes
+		}
+	}
+}
+
 # States: makes the list of the page again, for the country in scope. For each state it controls: count the
 # free shared slots and what the cards need, keep the state if the choices of the page want it and add it
 # to the totals; then sort, and choose the state of the cards.
@@ -5787,6 +6340,8 @@ mod1440_st_list = {
 	set_variable = { mod1440_st_sum_chromium = 0 }
 	set_variable = { mod1440_st_sum_coal = 0 }
 	set_variable = { mod1440_st_sum_pop = 0 }
+	set_variable = { mod1440_st_pop_ya = 0 }
+	set_variable = { mod1440_st_pop_last = 0 }
 	for_each_scope_loop = {
 		array = controlled_states
 		if = {
@@ -6309,7 +6864,23 @@ mod1440_st_list = {
 			add_to_variable = { ROOT.mod1440_st_sum_chromium = mod1440_st_r_chromium }
 			add_to_variable = { ROOT.mod1440_st_sum_coal = mod1440_st_r_coal }
 			add_to_variable = { ROOT.mod1440_st_sum_pop = state_population_k }
+			if = {
+				limit = { check_variable = { mod1440_pop_hy = 1 } }
+				add_to_variable = { ROOT.mod1440_st_pop_ya = mod1440_pop_ya }
+				add_to_variable = { ROOT.mod1440_st_pop_last = mod1440_pop_last }
+			}
 		}
+	}
+	set_variable = { mod1440_st_sum_pop_year = 0 }
+	set_variable = { mod1440_st_pop_has = 0 }
+	if = {
+		limit = { check_variable = { mod1440_st_pop_ya > 0 } }
+		set_variable = { mod1440_st_sum_pop_year = mod1440_st_pop_last }
+		subtract_from_variable = { mod1440_st_sum_pop_year = mod1440_st_pop_ya }
+		multiply_variable = { mod1440_st_sum_pop_year = 10 }
+		divide_variable = { mod1440_st_sum_pop_year = mod1440_st_pop_ya }
+		multiply_variable = { mod1440_st_sum_pop_year = 10 }
+		set_variable = { mod1440_st_pop_has = 1 }
 	}
 	mod1440_st_sort = yes
 	set_temp_variable = { st_odd = 0 }
@@ -6330,78 +6901,82 @@ mod1440_st_list = {
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 2 } }
-		set_variable = { mod1440_st_arrow_x = 373 }
+		set_variable = { mod1440_st_arrow_x = 367 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 3 } }
-		set_variable = { mod1440_st_arrow_x = 425 }
+		set_variable = { mod1440_st_arrow_x = 413 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 4 } }
-		set_variable = { mod1440_st_arrow_x = 477 }
+		set_variable = { mod1440_st_arrow_x = 459 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 5 } }
-		set_variable = { mod1440_st_arrow_x = 529 }
+		set_variable = { mod1440_st_arrow_x = 505 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 6 } }
-		set_variable = { mod1440_st_arrow_x = 581 }
+		set_variable = { mod1440_st_arrow_x = 551 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 7 } }
-		set_variable = { mod1440_st_arrow_x = 633 }
+		set_variable = { mod1440_st_arrow_x = 597 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 8 } }
-		set_variable = { mod1440_st_arrow_x = 685 }
+		set_variable = { mod1440_st_arrow_x = 643 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 9 } }
-		set_variable = { mod1440_st_arrow_x = 737 }
+		set_variable = { mod1440_st_arrow_x = 689 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 10 } }
-		set_variable = { mod1440_st_arrow_x = 789 }
+		set_variable = { mod1440_st_arrow_x = 735 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 11 } }
-		set_variable = { mod1440_st_arrow_x = 855 }
+		set_variable = { mod1440_st_arrow_x = 799 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 12 } }
-		set_variable = { mod1440_st_arrow_x = 911 }
+		set_variable = { mod1440_st_arrow_x = 853 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 13 } }
-		set_variable = { mod1440_st_arrow_x = 967 }
+		set_variable = { mod1440_st_arrow_x = 907 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 14 } }
-		set_variable = { mod1440_st_arrow_x = 1023 }
+		set_variable = { mod1440_st_arrow_x = 961 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 15 } }
-		set_variable = { mod1440_st_arrow_x = 1079 }
+		set_variable = { mod1440_st_arrow_x = 1015 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 16 } }
-		set_variable = { mod1440_st_arrow_x = 1135 }
+		set_variable = { mod1440_st_arrow_x = 1069 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 17 } }
-		set_variable = { mod1440_st_arrow_x = 1191 }
+		set_variable = { mod1440_st_arrow_x = 1123 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 18 } }
-		set_variable = { mod1440_st_arrow_x = 1285 }
+		set_variable = { mod1440_st_arrow_x = 1217 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 19 } }
-		set_variable = { mod1440_st_arrow_x = 1355 }
+		set_variable = { mod1440_st_arrow_x = 1285 }
 	}
 	else_if = {
 		limit = { check_variable = { mod1440_st_sort_by = 20 } }
+		set_variable = { mod1440_st_arrow_x = 1355 }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_st_sort_by = 21 } }
 		set_variable = { mod1440_st_arrow_x = 1415 }
 	}
 	set_variable = { mod1440_st_frame_0 = 1 }
@@ -6424,6 +6999,11 @@ mod1440_st_list = {
 		limit = { check_variable = { mod1440_st_only_free = 1 } }
 		set_variable = { mod1440_st_frame_free = 2 }
 	}
+	set_variable = { mod1440_pop_vf = 1 }
+	if = {
+		limit = { check_variable = { mod1440_pop_view = 1 } }
+		set_variable = { mod1440_pop_vf = 2 }
+	}
 	mod1440_st_pick = yes
 }
 
@@ -6445,6 +7025,10 @@ mod1440_st_pick = {
 			set_variable = { mod1440_st_picked = 1 }
 		}
 		add_to_array = { mod1440_st_card = mod1440_st_sel }
+	}
+	if = {
+		limit = { check_variable = { mod1440_pop_view = 1 } }
+		mod1440_pop_draw = yes
 	}
 	add_to_variable = { mod1440_st_dirty = 1 }
 }
@@ -6532,10 +7116,14 @@ mod1440_st_sort = {
 			}
 			else_if = {
 				limit = { check_variable = { ROOT.mod1440_st_sort_by = 19 } }
-				set_temp_variable = { st_key = compliance }
+				set_temp_variable = { st_key = mod1440_pop_fall }
 			}
 			else_if = {
 				limit = { check_variable = { ROOT.mod1440_st_sort_by = 20 } }
+				set_temp_variable = { st_key = compliance }
+			}
+			else_if = {
+				limit = { check_variable = { ROOT.mod1440_st_sort_by = 21 } }
 				set_temp_variable = { st_key = resistance }
 			}
 			if = {
