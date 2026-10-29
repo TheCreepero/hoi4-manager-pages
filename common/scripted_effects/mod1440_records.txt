@@ -357,7 +357,7 @@ mod1440_rec_odd = {
 	}
 }
 
-# The Records: the text keys a save keeps (tools/build_records.py, kept_tokens()). k: 58 keys, v: 2080 keys.
+# The Records: the text keys a save keeps (tools/build_records.py, kept_tokens()). k: 60 keys, v: 2082 keys.
 mod1440_tk_now_k = {
 	clear_temp_array = tk_kn
 	clear_temp_array = tk_kc
@@ -477,6 +477,10 @@ mod1440_tk_now_k = {
 	add_to_temp_array = { tk_kc = 103 }
 	add_to_temp_array = { tk_kn = token:mod1440_wr_out_gone }
 	add_to_temp_array = { tk_kc = 104 }
+	add_to_temp_array = { tk_kn = token:mod1440_wr_out_we_capitulated }
+	add_to_temp_array = { tk_kc = 105 }
+	add_to_temp_array = { tk_kn = token:mod1440_wr_out_we_subject }
+	add_to_temp_array = { tk_kc = 106 }
 }
 mod1440_tk_now_v = {
 	clear_temp_array = tk_vn
@@ -3485,6 +3489,8 @@ mod1440_tk_now_v = {
 	add_to_temp_array = { tk_vc = 10802 }
 	add_to_temp_array = { tk_vn = token:mod1440_vp_10803 }
 	add_to_temp_array = { tk_vc = 10803 }
+	add_to_temp_array = { tk_vn = token:mod1440_vp_10810 }
+	add_to_temp_array = { tk_vc = 10810 }
 	add_to_temp_array = { tk_vn = token:mod1440_vp_10811 }
 	add_to_temp_array = { tk_vc = 10811 }
 	add_to_temp_array = { tk_vn = token:mod1440_vp_10826 }
@@ -4073,6 +4079,8 @@ mod1440_tk_now_v = {
 	add_to_temp_array = { tk_vc = 12262 }
 	add_to_temp_array = { tk_vn = token:mod1440_vp_12268 }
 	add_to_temp_array = { tk_vc = 12268 }
+	add_to_temp_array = { tk_vn = token:mod1440_vp_12269 }
+	add_to_temp_array = { tk_vc = 12269 }
 	add_to_temp_array = { tk_vn = token:mod1440_vp_12276 }
 	add_to_temp_array = { tk_vc = 12276 }
 	add_to_temp_array = { tk_vn = token:mod1440_vp_12284 }
@@ -4726,7 +4734,7 @@ mod1440_tk_map_v = {
 mod1440_tk_check = {
 	set_temp_variable = { tk_bad = 0 }
 	if = {
-		limit = { NOT = { check_variable = { mod1440_tk_ver = 157340 } } }
+		limit = { NOT = { check_variable = { mod1440_tk_ver = 588685 } } }
 		set_temp_variable = { tk_bad = 1 }
 	}
 	else = {
@@ -5018,6 +5026,16 @@ mod1440_tk_check = {
 		set_temp_variable = { tk_t = token:mod1440_wr_out_gone }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_k^57 = tk_t } } }
+			set_temp_variable = { tk_bad = 1 }
+		}
+		set_temp_variable = { tk_t = token:mod1440_wr_out_we_capitulated }
+		if = {
+			limit = { NOT = { check_variable = { mod1440_tk_k^58 = tk_t } } }
+			set_temp_variable = { tk_bad = 1 }
+		}
+		set_temp_variable = { tk_t = token:mod1440_wr_out_we_subject }
+		if = {
+			limit = { NOT = { check_variable = { mod1440_tk_k^59 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
 		set_temp_variable = { tk_t = token:mod1440_vp_35 }
@@ -5490,189 +5508,194 @@ mod1440_tk_check = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1488 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_10830 }
+		set_temp_variable = { tk_t = token:mod1440_vp_10826 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1504 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_10887 }
+		set_temp_variable = { tk_t = token:mod1440_vp_10886 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1520 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_10934 }
+		set_temp_variable = { tk_t = token:mod1440_vp_10933 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1536 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11050 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11023 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1552 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11161 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11159 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1568 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11297 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11293 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1584 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11372 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11371 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1600 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11437 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11435 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1616 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11519 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11516 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1632 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11564 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11563 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1648 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11650 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11646 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1664 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11746 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11735 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1680 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11822 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11818 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1696 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11902 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11901 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1712 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_11974 }
+		set_temp_variable = { tk_t = token:mod1440_vp_11972 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1728 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12026 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12021 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1744 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12110 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12103 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1760 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12190 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12189 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1776 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12251 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12248 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1792 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12331 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12320 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1808 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12384 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12376 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1824 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12467 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12461 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1840 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12583 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12571 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1856 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12674 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12646 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1872 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12738 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12735 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1888 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12811 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12806 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1904 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12883 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12867 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1920 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_12972 }
+		set_temp_variable = { tk_t = token:mod1440_vp_12960 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1936 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13015 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13011 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1952 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13056 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13047 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1968 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13091 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13089 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^1984 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13252 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13249 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^2000 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13296 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13293 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^2016 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13340 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13331 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^2032 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13407 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13405 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^2048 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
-		set_temp_variable = { tk_t = token:mod1440_vp_13463 }
+		set_temp_variable = { tk_t = token:mod1440_vp_13461 }
 		if = {
 			limit = { NOT = { check_variable = { mod1440_tk_v^2064 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
+		set_temp_variable = { tk_t = token:mod1440_vp_13531 }
+		if = {
+			limit = { NOT = { check_variable = { mod1440_tk_v^2080 = tk_t } } }
+			set_temp_variable = { tk_bad = 1 }
+		}
 		set_temp_variable = { tk_t = token:mod1440_vp_13534 }
 		if = {
-			limit = { NOT = { check_variable = { mod1440_tk_v^2079 = tk_t } } }
+			limit = { NOT = { check_variable = { mod1440_tk_v^2081 = tk_t } } }
 			set_temp_variable = { tk_bad = 1 }
 		}
 	}
@@ -6165,7 +6188,7 @@ mod1440_tk_fix = {
 		value = tk_o
 		add_to_array = { mod1440_tk_vc = tk_o }
 	}
-	set_variable = { mod1440_tk_ver = 157340 }
+	set_variable = { mod1440_tk_ver = 588685 }
 	add_to_variable = { global.mod1440_tk_ep = 1 }
 	every_state = {
 		limit = { check_variable = { mod1440_sr_has_by = 1 } }
@@ -6174,7 +6197,7 @@ mod1440_tk_fix = {
 		PREV = {
 			var:tk_who = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_temp_variable = { tk_p = mod1440_p }
@@ -6378,7 +6401,7 @@ mod1440_wd_list = {
 							set_temp_variable = { wd_ch = mod1440_ev_a^mg_m }
 							var:wd_ch = {
 								if = {
-									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 									mod1440_p_officer = yes
 								}
 								set_temp_variable = { wd_ap = mod1440_p }
@@ -6391,7 +6414,7 @@ mod1440_wd_list = {
 							set_temp_variable = { wd_ch = mod1440_ev_c^mg_m }
 							var:wd_ch = {
 								if = {
-									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 									mod1440_p_officer = yes
 								}
 								set_temp_variable = { wd_cp = mod1440_p }
@@ -6541,7 +6564,7 @@ mod1440_wd_list = {
 								set_temp_variable = { wd_ch = mod1440_tr_a^mg_m }
 								var:wd_ch = {
 									if = {
-										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 										mod1440_p_officer = yes
 									}
 									set_temp_variable = { wd_ap = mod1440_p }
@@ -6554,7 +6577,7 @@ mod1440_wd_list = {
 								set_temp_variable = { wd_ch = mod1440_tr_c^mg_m }
 								var:wd_ch = {
 									if = {
-										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 										mod1440_p_officer = yes
 									}
 									set_temp_variable = { wd_cp = mod1440_p }
@@ -6710,7 +6733,7 @@ mod1440_wd_list = {
 						set_temp_variable = { wd_ch = mod1440_tr_a^wd_m }
 						var:wd_ch = {
 							if = {
-								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 								mod1440_p_officer = yes
 							}
 							set_temp_variable = { wd_ap = mod1440_p }
@@ -6723,7 +6746,7 @@ mod1440_wd_list = {
 						set_temp_variable = { wd_ch = mod1440_tr_c^wd_m }
 						var:wd_ch = {
 							if = {
-								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 								mod1440_p_officer = yes
 							}
 							set_temp_variable = { wd_cp = mod1440_p }
@@ -6877,7 +6900,7 @@ mod1440_wd_list = {
 						set_temp_variable = { wd_ch = mod1440_kp_a^wd_m }
 						var:wd_ch = {
 							if = {
-								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 								mod1440_p_officer = yes
 							}
 							set_temp_variable = { wd_ap = mod1440_p }
@@ -6890,7 +6913,7 @@ mod1440_wd_list = {
 						set_temp_variable = { wd_ch = mod1440_kp_c^wd_m }
 						var:wd_ch = {
 							if = {
-								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+								limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 								mod1440_p_officer = yes
 							}
 							set_temp_variable = { wd_cp = mod1440_p }
@@ -7071,7 +7094,7 @@ mod1440_wd_list = {
 								set_temp_variable = { wd_ch = mod1440_ev_a^mg_m }
 								var:wd_ch = {
 									if = {
-										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 										mod1440_p_officer = yes
 									}
 									set_temp_variable = { wd_ap = mod1440_p }
@@ -7084,7 +7107,7 @@ mod1440_wd_list = {
 								set_temp_variable = { wd_ch = mod1440_ev_c^mg_m }
 								var:wd_ch = {
 									if = {
-										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 										mod1440_p_officer = yes
 									}
 									set_temp_variable = { wd_cp = mod1440_p }
@@ -7237,7 +7260,7 @@ mod1440_wd_list = {
 									set_temp_variable = { wd_ch = mod1440_tr_a^mg_m }
 									var:wd_ch = {
 										if = {
-											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 											mod1440_p_officer = yes
 										}
 										set_temp_variable = { wd_ap = mod1440_p }
@@ -7250,7 +7273,7 @@ mod1440_wd_list = {
 									set_temp_variable = { wd_ch = mod1440_tr_c^mg_m }
 									var:wd_ch = {
 										if = {
-											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 											mod1440_p_officer = yes
 										}
 										set_temp_variable = { wd_cp = mod1440_p }
@@ -7434,7 +7457,7 @@ mod1440_wd_list = {
 								set_temp_variable = { wd_ch = mod1440_ev_a^mg_m }
 								var:wd_ch = {
 									if = {
-										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 										mod1440_p_officer = yes
 									}
 									set_temp_variable = { wd_ap = mod1440_p }
@@ -7447,7 +7470,7 @@ mod1440_wd_list = {
 								set_temp_variable = { wd_ch = mod1440_ev_c^mg_m }
 								var:wd_ch = {
 									if = {
-										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+										limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 										mod1440_p_officer = yes
 									}
 									set_temp_variable = { wd_cp = mod1440_p }
@@ -7600,7 +7623,7 @@ mod1440_wd_list = {
 									set_temp_variable = { wd_ch = mod1440_tr_a^mg_m }
 									var:wd_ch = {
 										if = {
-											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 											mod1440_p_officer = yes
 										}
 										set_temp_variable = { wd_ap = mod1440_p }
@@ -7613,7 +7636,7 @@ mod1440_wd_list = {
 									set_temp_variable = { wd_ch = mod1440_tr_c^mg_m }
 									var:wd_ch = {
 										if = {
-											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+											limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 											mod1440_p_officer = yes
 										}
 										set_temp_variable = { wd_cp = mod1440_p }
@@ -7771,7 +7794,7 @@ mod1440_wd_list = {
 							set_temp_variable = { wd_ch = mod1440_ev_a^wd_m }
 							var:wd_ch = {
 								if = {
-									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 									mod1440_p_officer = yes
 								}
 								set_temp_variable = { wd_ap = mod1440_p }
@@ -7784,7 +7807,7 @@ mod1440_wd_list = {
 							set_temp_variable = { wd_ch = mod1440_ev_c^wd_m }
 							var:wd_ch = {
 								if = {
-									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+									limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 									mod1440_p_officer = yes
 								}
 								set_temp_variable = { wd_cp = mod1440_p }
@@ -8633,6 +8656,62 @@ mod1440_ch_remap = {
 		limit = { check_variable = { rm_lost > 0 } }
 		set_variable = { mod1440_gv_begun = 0 }
 	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wr_lu0^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wr_lu0^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wr_lu0^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wr_lt0^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wr_lt0^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wr_lt0^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wr_lt1^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wr_lt1^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wr_lt1^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wo_lu0^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wo_lu0^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wo_lu0^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wo_lu1^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wo_lu1^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wo_lu1^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wo_lt0^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wo_lt0^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wo_lt0^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wo_lt1^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_wo_lt1^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_wo_lt1^rm_i = rm_to }
+	}
 }
 
 # Characters: once for a country, marks everybody whose place its lists hold already (a game saved by an
@@ -8754,7 +8833,7 @@ mod1440_gv_marks = {
 }
 
 # Officers: the traits of the officer in scope, kept on him (tools/traits_table.py and traits_mods_table.py:
-# 228 traits; a general is asked about 174, an admiral about 125). Run when num_traits has changed.
+# 230 traits; a general is asked about 176, an admiral about 128). Run when num_traits has changed.
 mod1440_of_traits = {
 	clear_array = mod1440_of_tr
 	if = {
@@ -8932,6 +9011,14 @@ mod1440_of_traits = {
 				add_to_array = { mod1440_of_tr = token:JAP_government_supporter }
 			}
 			if = {
+				limit = { has_trait = CHI_dubious_loyalty }
+				add_to_array = { mod1440_of_tr = token:CHI_dubious_loyalty }
+			}
+			if = {
+				limit = { has_trait = CHI_watched_officer }
+				add_to_array = { mod1440_of_tr = token:CHI_watched_officer }
+			}
+			if = {
 				limit = { has_trait = ETH_hero_of_ethiopia }
 				add_to_array = { mod1440_of_tr = token:ETH_hero_of_ethiopia }
 			}
@@ -8951,6 +9038,9 @@ mod1440_of_traits = {
 				limit = { has_trait = POL_sanation_left_leader }
 				add_to_array = { mod1440_of_tr = token:POL_sanation_left_leader }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = POL_sanation_right_leader }
 				add_to_array = { mod1440_of_tr = token:POL_sanation_right_leader }
@@ -8959,9 +9049,6 @@ mod1440_of_traits = {
 				limit = { has_trait = peasant_sympathiser }
 				add_to_array = { mod1440_of_tr = token:peasant_sympathiser }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = trait_SOV_cowed_by_stalin_navy }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_cowed_by_stalin_navy }
@@ -8981,6 +9068,10 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = trait_SOV_foreign_military_advisor }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_foreign_military_advisor }
+			}
+			if = {
+				limit = { has_trait = communist_sympathizer }
+				add_to_array = { mod1440_of_tr = token:communist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = sick }
@@ -9014,6 +9105,9 @@ mod1440_of_traits = {
 				limit = { has_trait = hidden_sympathies }
 				add_to_array = { mod1440_of_tr = token:hidden_sympathies }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = recently_promoted }
 				add_to_array = { mod1440_of_tr = token:recently_promoted }
@@ -9026,9 +9120,6 @@ mod1440_of_traits = {
 				limit = { has_trait = SWE_wounded_in_protests }
 				add_to_array = { mod1440_of_tr = token:SWE_wounded_in_protests }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = SWE_disillusioned_with_the_government }
 				add_to_array = { mod1440_of_tr = token:SWE_disillusioned_with_the_government }
@@ -9081,6 +9172,9 @@ mod1440_of_traits = {
 				limit = { has_trait = safety_first }
 				add_to_array = { mod1440_of_tr = token:safety_first }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = smoke_screen_expert }
 				add_to_array = { mod1440_of_tr = token:smoke_screen_expert }
@@ -9093,9 +9187,6 @@ mod1440_of_traits = {
 				limit = { has_trait = loading_drill_master }
 				add_to_array = { mod1440_of_tr = token:loading_drill_master }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = hunter_killer }
 				add_to_array = { mod1440_of_tr = token:hunter_killer }
@@ -9148,6 +9239,9 @@ mod1440_of_traits = {
 				limit = { has_trait = seawolf }
 				add_to_array = { mod1440_of_tr = token:seawolf }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = spotter }
 				add_to_array = { mod1440_of_tr = token:spotter }
@@ -9160,9 +9254,6 @@ mod1440_of_traits = {
 				limit = { has_trait = superior_tactician }
 				add_to_array = { mod1440_of_tr = token:superior_tactician }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = air_controller }
 				add_to_array = { mod1440_of_tr = token:air_controller }
@@ -9215,6 +9306,9 @@ mod1440_of_traits = {
 				limit = { has_trait = r56w_trait_army_vibrates }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_vibrates }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = r56w_trait_army_packed_lunch }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_packed_lunch }
@@ -9227,9 +9321,6 @@ mod1440_of_traits = {
 				limit = { has_trait = r56w_trait_army_knows_what_you_did }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_knows_what_you_did }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = r56w_trait_army_force_user }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_force_user }
@@ -9485,6 +9576,10 @@ mod1440_of_traits = {
 				add_to_array = { mod1440_of_tr = token:XSM_dubious_loyalty }
 			}
 			if = {
+				limit = { has_trait = CHI_watched_officer }
+				add_to_array = { mod1440_of_tr = token:CHI_watched_officer }
+			}
+			if = {
 				limit = { has_trait = INS_loyalty_to_indonesia }
 				add_to_array = { mod1440_of_tr = token:INS_loyalty_to_indonesia }
 			}
@@ -9528,13 +9623,13 @@ mod1440_of_traits = {
 				limit = { has_trait = trait_SOV_stalinist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_stalinist }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = trait_SOV_trotskyist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_trotskyist }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = trait_SOV_bukharinist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_bukharinist }
@@ -9542,6 +9637,10 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = trait_SOV_foreign_military_advisor }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_foreign_military_advisor }
+			}
+			if = {
+				limit = { has_trait = communist_sympathizer }
+				add_to_array = { mod1440_of_tr = token:communist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = SWE_promoted_away_from_power }
@@ -9591,6 +9690,9 @@ mod1440_of_traits = {
 				limit = { has_trait = SWE_wounded_in_protests }
 				add_to_array = { mod1440_of_tr = token:SWE_wounded_in_protests }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = SWE_disillusioned_with_the_government }
 				add_to_array = { mod1440_of_tr = token:SWE_disillusioned_with_the_government }
@@ -9599,9 +9701,6 @@ mod1440_of_traits = {
 				limit = { has_trait = logistics_wizard }
 				add_to_array = { mod1440_of_tr = token:logistics_wizard }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = offensive_doctrine }
 				add_to_array = { mod1440_of_tr = token:offensive_doctrine }
@@ -9658,6 +9757,9 @@ mod1440_of_traits = {
 				limit = { has_trait = scavenger }
 				add_to_array = { mod1440_of_tr = token:scavenger }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = infantry_expert }
 				add_to_array = { mod1440_of_tr = token:infantry_expert }
@@ -9666,9 +9768,6 @@ mod1440_of_traits = {
 				limit = { has_trait = ambusher }
 				add_to_array = { mod1440_of_tr = token:ambusher }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = invader_ii }
 				add_to_array = { mod1440_of_tr = token:invader_ii }
@@ -9725,6 +9824,9 @@ mod1440_of_traits = {
 				limit = { has_trait = hill_fighter }
 				add_to_array = { mod1440_of_tr = token:hill_fighter }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = jungle_rat }
 				add_to_array = { mod1440_of_tr = token:jungle_rat }
@@ -9733,9 +9835,6 @@ mod1440_of_traits = {
 				limit = { has_trait = ranger }
 				add_to_array = { mod1440_of_tr = token:ranger }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = urban_assault_specialist }
 				add_to_array = { mod1440_of_tr = token:urban_assault_specialist }
@@ -9792,6 +9891,9 @@ mod1440_of_traits = {
 				limit = { has_trait = promising }
 				add_to_array = { mod1440_of_tr = token:promising }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = air_force_ties }
 				add_to_array = { mod1440_of_tr = token:air_force_ties }
@@ -9800,9 +9902,6 @@ mod1440_of_traits = {
 				limit = { has_trait = artillerist }
 				add_to_array = { mod1440_of_tr = token:artillerist }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = caring_leader }
 				add_to_array = { mod1440_of_tr = token:caring_leader }
@@ -9859,6 +9958,9 @@ mod1440_of_traits = {
 				limit = { has_trait = attentive_surgeon }
 				add_to_array = { mod1440_of_tr = token:attentive_surgeon }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = EGY_aristocrat }
 				add_to_array = { mod1440_of_tr = token:EGY_aristocrat }
@@ -9867,9 +9969,6 @@ mod1440_of_traits = {
 				limit = { has_trait = AFG_barakzai_royalist }
 				add_to_array = { mod1440_of_tr = token:AFG_barakzai_royalist }
 			}
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = AUS_nazi_loyalties }
 				add_to_array = { mod1440_of_tr = token:AUS_nazi_loyalties }
@@ -9926,6 +10025,9 @@ mod1440_of_traits = {
 				limit = { has_trait = r56w_trait_navy_hates_water }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_hates_water }
 			}
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_tr^num < num_traits } }
 			if = {
 				limit = { has_trait = r56w_trait_navy_rubber_duck }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_rubber_duck }
@@ -10026,7 +10128,7 @@ mod1440_of_traits = {
 	}
 	set_variable = { mod1440_of_tr_k = mod1440_of_tr^num }
 	set_variable = { mod1440_of_tr_n = num_traits }
-	set_variable = { mod1440_of_tr_v = 698074 }
+	set_variable = { mod1440_of_tr_v = 646776 }
 	set_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep }
 	set_temp_variable = { tr_shown = mod1440_of_tr_i }
 	clamp_temp_variable = { var = tr_shown max = 6 }
@@ -10636,11 +10738,11 @@ mod1440_of_seen = {
 			}
 		}
 		if = {
-			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 			mod1440_p_officer = yes
 		}
 		if = {
-			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 698074 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
+			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
 			mod1440_of_traits = yes
 		}
 		if = {
@@ -10682,11 +10784,11 @@ mod1440_of_seen = {
 			}
 		}
 		if = {
-			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 			mod1440_p_officer = yes
 		}
 		if = {
-			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 698074 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
+			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
 			mod1440_of_traits = yes
 		}
 		if = {
@@ -10831,12 +10933,12 @@ mod1440_of_list = {
 	for_each_scope_loop = {
 		array = mod1440_of_known
 		if = {
-			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 			mod1440_p_officer = yes
 		}
 		set_temp_variable = { of_keep = 1 }
 		if = {
-			limit = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 698074 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } }
+			limit = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } }
 			mod1440_of_traits = yes
 		}
 		if = {
@@ -11071,7 +11173,7 @@ mod1440_of_card = {
 				set_variable = { PREV.mod1440_of_c_status = 4 }
 			}
 			if = {
-				limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 698074 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
+				limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
 				mod1440_of_traits = yes
 			}
 			set_variable = { PREV.mod1440_of_c_traits = num_traits }
@@ -11093,7 +11195,7 @@ mod1440_of_card = {
 			set_variable = { PREV.mod1440_of_c_vps = mod1440_of_vps }
 			set_variable = { PREV.mod1440_of_c_vpl = mod1440_of_vpl }
 			if = {
-				limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+				limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 				mod1440_p_officer = yes
 			}
 			set_variable = { PREV.mod1440_of_c_p = mod1440_p }
@@ -12304,7 +12406,7 @@ mod1440_md_takeback = {
 mod1440_gv_daily = {
 	set_temp_variable = { gv_stale = 0 }
 	if = {
-		limit = { OR = { NOT = { check_variable = { mod1440_gv_adv_ver = 938068 } } NOT = { check_variable = { mod1440_gv_adv_ver_ep = global.mod1440_tk_ep } } } }
+		limit = { OR = { NOT = { check_variable = { mod1440_gv_adv_ver = 453881 } } NOT = { check_variable = { mod1440_gv_adv_ver_ep = global.mod1440_tk_ep } } } }
 		set_temp_variable = { gv_stale = 1 }
 		for_each_loop = {
 			array = mod1440_gv_rul
@@ -12345,13 +12447,13 @@ mod1440_gv_daily = {
 	}
 	set_temp_variable = { p_face = token:GFX_portrait_unknown }
 	if = {
-		limit = { OR = { OR = { NOT = { check_variable = { mod1440_ld_p_ver = 95029 } } NOT = { check_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_ld_p_of = country_leader } } } }
+		limit = { OR = { OR = { NOT = { check_variable = { mod1440_ld_p_ver = 568382 } } NOT = { check_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_ld_p_of = country_leader } } } }
 		set_temp_variable = { p_ld = country_leader }
 		var:p_ld = {
 			mod1440_p_leader = yes
 		}
 		set_variable = { mod1440_ld_p = p_tok }
-		set_variable = { mod1440_ld_p_ver = 95029 }
+		set_variable = { mod1440_ld_p_ver = 568382 }
 		set_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep }
 		set_variable = { mod1440_ld_p_of = country_leader }
 	}
@@ -13224,25 +13326,87 @@ mod1440_gv_daily = {
 	add_to_temp_variable = { ct_sum = mod1440_ct^25 }
 	set_variable = { mod1440_gv_n_appointed = ct_sum }
 	set_variable = { mod1440_gv_begun = 1 }
-	set_variable = { mod1440_gv_adv_ver = 938068 }
+	set_variable = { mod1440_gv_adv_ver = 453881 }
 	set_variable = { mod1440_gv_adv_ver_ep = global.mod1440_tk_ep }
 	mod1440_gv_marks = yes
 }
 
-# Wars: a row for the enemy in wr_c, from today (wr_old = 1: the war ran when the record began).
+# Wars: a row for the enemy in wr_c, from today (wr_old = 1: the war ran when the record began; wr_how: 1 we
+# declared, 2 they declared, 3 it joined, 0 not known). It joins the war of an open row whose enemy fights on its
+# side, against whom the country has the same role; it keeps the readings of the first day and both heads of
+# government.
 mod1440_wr_open = {
 	mod1440_wr_grow = yes
+	set_temp_variable = { wr_me = THIS }
 	if = {
-		limit = { NOT = { is_in_array = { array = mod1440_wr_enemy value = wr_c } } }
+		limit = { check_variable = { wr_c = wr_me } }
+		log = "MOD1440 records: no war row for [This.GetTag] against itself"
+	}
+	if = {
+		limit = { NOT = { is_in_array = { array = mod1440_wr_enemy value = wr_c } } NOT = { check_variable = { wr_c = wr_me } } }
 		add_to_variable = { mod1440_wr_next = 1 }
-		set_temp_variable = { wr_e0 = 0 }
-		var:wr_c = {
-			set_temp_variable = { wr_e0 = casualties }
+		set_temp_variable = { wr_g = mod1440_wr_next }
+		set_temp_variable = { wr_r = 0 }
+		if = {
+			limit = { has_offensive_war_with = var:wr_c }
+			set_temp_variable = { wr_r = 1 }
 		}
+		set_temp_variable = { wr_b = 0 }
+		for_each_loop = {
+			array = mod1440_wr_enemy
+			value = wr_v
+			index = wr_i
+			break = wr_b
+			set_temp_variable = { wr_r2 = 0 }
+			if = {
+				limit = { has_offensive_war_with = var:wr_v }
+				set_temp_variable = { wr_r2 = 1 }
+			}
+			if = {
+				limit = { check_variable = { wr_r2 = wr_r } var:wr_c = { has_war_together_with = var:wr_v } }
+				set_temp_variable = { wr_g = mod1440_wr_grp^wr_i }
+				set_temp_variable = { wr_b = 1 }
+			}
+		}
+		set_temp_variable = { wr_k0 = 0 }
+		set_temp_variable = { wr_t0 = 0 }
+		if = {
+			limit = { var:wr_c = { exists = yes } OR = { check_variable = { wr_old = 0 } is_in_array = { array = mod1440_wo_enemy value = wr_c } } }
+			set_variable = { mod1440_wr_kv = THIS }
+			set_variable = { mod1440_wr_ko = wr_c }
+			set_temp_variable = { kr_prev = 0 }
+			mod1440_wr_kread = yes
+			set_temp_variable = { wr_k0 = kr }
+			set_variable = { mod1440_wr_kv = wr_c }
+			set_variable = { mod1440_wr_ko = THIS }
+			set_temp_variable = { kr_prev = 0 }
+			mod1440_wr_kread = yes
+			set_temp_variable = { wr_t0 = kr }
+		}
+		mod1440_wr_hog = yes
+		set_temp_variable = { wr_lu = hg_l }
+		set_temp_variable = { wr_pu = hg_p }
+		set_temp_variable = { wr_gu = hg_g }
+		set_temp_variable = { wr_lt = 0 }
+		set_temp_variable = { wr_pt = token:GFX_portrait_unknown }
+		set_temp_variable = { wr_gt = 0 }
+		var:wr_c = {
+			if = {
+				limit = { exists = yes }
+				mod1440_wr_hog = yes
+				set_temp_variable = { wr_lt = hg_l }
+				set_temp_variable = { wr_pt = hg_p }
+				set_temp_variable = { wr_gt = hg_g }
+			}
+		}
+		set_temp_variable = { ch_v = wr_lu }
+		mod1440_ch_mark = yes
+		set_temp_variable = { ch_v = wr_lt }
+		mod1440_ch_mark = yes
 		add_to_array = { mod1440_wr_enemy = wr_c }
 		add_to_array = { mod1440_wr_since = global.date }
 		add_to_array = { mod1440_wr_day0 = global.num_days }
-		add_to_array = { mod1440_wr_cas0 = casualties }
+		add_to_array = { mod1440_wr_cas0 = 0 }
 		add_to_array = { mod1440_wr_taken = 0 }
 		add_to_array = { mod1440_wr_lost = 0 }
 		add_to_array = { mod1440_wr_days = 0 }
@@ -13253,9 +13417,26 @@ mod1440_wr_open = {
 		add_to_array = { mod1440_wr_vpt = 0 }
 		add_to_array = { mod1440_wr_vpl = 0 }
 		add_to_array = { mod1440_wr_id = mod1440_wr_next }
-		add_to_array = { mod1440_wr_ecas0 = wr_e0 }
+		add_to_array = { mod1440_wr_ecas0 = 0 }
 		add_to_array = { mod1440_wr_ecas = 0 }
+		add_to_array = { mod1440_wr_grp = wr_g }
+		add_to_array = { mod1440_wr_how = wr_how }
+		add_to_array = { mod1440_wr_kday = global.num_days }
+		add_to_array = { mod1440_wr_kus0 = wr_k0 }
+		add_to_array = { mod1440_wr_kthem0 = wr_t0 }
+		add_to_array = { mod1440_wr_kus = 0 }
+		add_to_array = { mod1440_wr_kthem = 0 }
+		add_to_array = { mod1440_wr_lu0 = wr_lu }
+		add_to_array = { mod1440_wr_pu0 = wr_pu }
+		add_to_array = { mod1440_wr_gu0 = wr_gu }
+		add_to_array = { mod1440_wr_lt0 = wr_lt }
+		add_to_array = { mod1440_wr_pt0 = wr_pt }
+		add_to_array = { mod1440_wr_gt0 = wr_gt }
+		add_to_array = { mod1440_wr_lt1 = wr_lt }
+		add_to_array = { mod1440_wr_pt1 = wr_pt }
+		add_to_array = { mod1440_wr_gt1 = wr_gt }
 	}
+	mod1440_wr_count_wars = yes
 }
 mod1440_wr_grow = {
 	if = {
@@ -13380,10 +13561,514 @@ mod1440_wr_grow = {
 			}
 		}
 	}
+	if = {
+		limit = { check_variable = { mod1440_wr_grp^num < mod1440_wr_enemy^num } }
+		for_loop_effect = {
+			start = 0
+			end = 200
+			value = gr_n
+			if = {
+				limit = { check_variable = { mod1440_wr_grp^num < mod1440_wr_enemy^num } }
+				set_temp_variable = { gr_i = mod1440_wr_grp^num }
+				set_temp_variable = { gr_c = mod1440_wr_enemy^gr_i }
+				set_temp_variable = { gr_g = mod1440_wr_id^gr_i }
+				set_temp_variable = { gr_r = 0 }
+				if = {
+					limit = { has_offensive_war_with = var:gr_c }
+					set_temp_variable = { gr_r = 1 }
+				}
+				set_temp_variable = { gr_b = 0 }
+				for_loop_effect = {
+					start = 0
+					end = gr_i
+					value = gr_k
+					if = {
+						limit = { check_variable = { gr_b = 0 } }
+						set_temp_variable = { gr_v = mod1440_wr_enemy^gr_k }
+						set_temp_variable = { gr_r2 = 0 }
+						if = {
+							limit = { has_offensive_war_with = var:gr_v }
+							set_temp_variable = { gr_r2 = 1 }
+						}
+						if = {
+							limit = { check_variable = { gr_r2 = gr_r } var:gr_c = { has_war_together_with = var:gr_v } }
+							set_temp_variable = { gr_g = mod1440_wr_grp^gr_k }
+							set_temp_variable = { gr_b = 1 }
+						}
+					}
+				}
+				set_temp_variable = { gr_k0 = 0 }
+				set_temp_variable = { gr_t0 = 0 }
+				set_temp_variable = { gr_kd = mod1440_wr_day0^gr_i }
+				if = {
+					limit = { is_in_array = { array = mod1440_wo_enemy value = gr_c } var:gr_c = { exists = yes } }
+					set_variable = { mod1440_wr_kv = THIS }
+					set_variable = { mod1440_wr_ko = gr_c }
+					set_temp_variable = { kr_prev = 0 }
+					mod1440_wr_kread = yes
+					set_temp_variable = { gr_k0 = kr }
+					set_variable = { mod1440_wr_kv = gr_c }
+					set_variable = { mod1440_wr_ko = THIS }
+					set_temp_variable = { kr_prev = 0 }
+					mod1440_wr_kread = yes
+					set_temp_variable = { gr_t0 = kr }
+					set_temp_variable = { gr_kd = global.num_days }
+				}
+				mod1440_wr_hog = yes
+				set_temp_variable = { gr_u_l = hg_l }
+				set_temp_variable = { gr_u_p = hg_p }
+				set_temp_variable = { gr_u_g = hg_g }
+				set_temp_variable = { gr_s = mod1440_wr_since^gr_i }
+				set_temp_variable = { gr_hit = 0 }
+				for_each_loop = {
+					array = mod1440_gv_rul
+					value = gr_v
+					index = gr_k
+					break = gr_hit
+					set_temp_variable = { gr_f = mod1440_gv_rul_from^gr_k }
+					if = {
+						limit = { NOT = { check_variable = { gr_f > gr_s } } }
+						set_temp_variable = { gr_u_l = gr_v }
+						set_temp_variable = { gr_u_p = mod1440_gv_rul_p^gr_k }
+						set_temp_variable = { gr_u_g = mod1440_gv_rul_g^gr_k }
+						set_temp_variable = { gr_hit = 1 }
+					}
+				}
+				if = {
+					limit = { check_variable = { gr_hit = 0 } check_variable = { mod1440_gv_rul^num > 0 } }
+					set_temp_variable = { gr_k = mod1440_gv_rul^num }
+					subtract_from_temp_variable = { gr_k = 1 }
+					set_temp_variable = { gr_u_l = mod1440_gv_rul^gr_k }
+					set_temp_variable = { gr_u_p = mod1440_gv_rul_p^gr_k }
+					set_temp_variable = { gr_u_g = mod1440_gv_rul_g^gr_k }
+				}
+				if = {
+					limit = { check_variable = { gr_u_p = 0 } }
+					set_temp_variable = { gr_u_p = token:GFX_portrait_unknown }
+				}
+				set_temp_variable = { gr_lt = 0 }
+				set_temp_variable = { gr_pt = token:GFX_portrait_unknown }
+				set_temp_variable = { gr_gt = 0 }
+				var:gr_c = {
+					if = {
+						limit = { exists = yes }
+						mod1440_wr_hog = yes
+						set_temp_variable = { gr_lt = hg_l }
+						set_temp_variable = { gr_pt = hg_p }
+						set_temp_variable = { gr_gt = hg_g }
+					}
+				}
+				set_temp_variable = { ch_v = gr_u_l }
+				mod1440_ch_mark = yes
+				set_temp_variable = { ch_v = gr_lt }
+				mod1440_ch_mark = yes
+				add_to_array = { mod1440_wr_grp = gr_g }
+				add_to_array = { mod1440_wr_how = 0 }
+				add_to_array = { mod1440_wr_kday = gr_kd }
+				add_to_array = { mod1440_wr_kus0 = gr_k0 }
+				add_to_array = { mod1440_wr_kthem0 = gr_t0 }
+				add_to_array = { mod1440_wr_kus = 0 }
+				add_to_array = { mod1440_wr_kthem = 0 }
+				add_to_array = { mod1440_wr_lu0 = gr_u_l }
+				add_to_array = { mod1440_wr_pu0 = gr_u_p }
+				add_to_array = { mod1440_wr_gu0 = gr_u_g }
+				add_to_array = { mod1440_wr_lt0 = 0 }
+				add_to_array = { mod1440_wr_pt0 = token:GFX_portrait_unknown }
+				add_to_array = { mod1440_wr_gt0 = 0 }
+				add_to_array = { mod1440_wr_lt1 = gr_lt }
+				add_to_array = { mod1440_wr_pt1 = gr_pt }
+				add_to_array = { mod1440_wr_gt1 = gr_gt }
+			}
+		}
+		log = "MOD1440 records: the rows of wr were given their wars, casualties and leaders (E4 round 2)"
+	}
+	if = {
+		limit = { check_variable = { mod1440_wo_grp^num < mod1440_wo_enemy^num } }
+		for_loop_effect = {
+			start = 0
+			end = 200
+			value = gr_n
+			if = {
+				limit = { check_variable = { mod1440_wo_grp^num < mod1440_wo_enemy^num } }
+				set_temp_variable = { gr_i = mod1440_wo_grp^num }
+				set_temp_variable = { gr_c = mod1440_wo_enemy^gr_i }
+				set_temp_variable = { gr_u = mod1440_wo_until^gr_i }
+				set_temp_variable = { gr_g = mod1440_wo_id^gr_i }
+				set_temp_variable = { gr_b = 0 }
+				for_loop_effect = {
+					start = 0
+					end = gr_i
+					value = gr_k
+					if = {
+						limit = { check_variable = { gr_b = 0 } }
+						set_temp_variable = { gr_v = mod1440_wo_until^gr_k }
+						if = {
+							limit = { check_variable = { gr_v = gr_u } }
+							set_temp_variable = { gr_g = mod1440_wo_grp^gr_k }
+							set_temp_variable = { gr_b = 1 }
+						}
+					}
+				}
+				set_temp_variable = { gr_ku = -1 }
+				set_temp_variable = { gr_kt = -1 }
+				set_temp_variable = { gr_seen = 0 }
+				for_each_loop = {
+					array = mod1440_wo_enemy
+					value = gr_v
+					if = {
+						limit = { check_variable = { gr_v = gr_c } }
+						add_to_temp_variable = { gr_seen = 1 }
+					}
+				}
+				for_each_loop = {
+					array = mod1440_wr_enemy
+					value = gr_v
+					if = {
+						limit = { check_variable = { gr_v = gr_c } }
+						add_to_temp_variable = { gr_seen = 1 }
+					}
+				}
+				if = {
+					limit = { check_variable = { gr_seen = 1 } var:gr_c = { exists = yes } NOT = { has_war_with = var:gr_c } }
+					set_variable = { mod1440_wr_kv = THIS }
+					set_variable = { mod1440_wr_ko = gr_c }
+					set_temp_variable = { kr_prev = 0 }
+					mod1440_wr_kread = yes
+					if = {
+						limit = { check_variable = { kr > 0 } }
+						set_temp_variable = { gr_ku = kr }
+						set_variable = { mod1440_wr_kv = gr_c }
+						set_variable = { mod1440_wr_ko = THIS }
+						set_temp_variable = { kr_prev = 0 }
+						mod1440_wr_kread = yes
+						set_temp_variable = { gr_kt = kr }
+					}
+				}
+				mod1440_wr_hog = yes
+				set_temp_variable = { gr_a_l = hg_l }
+				set_temp_variable = { gr_a_p = hg_p }
+				set_temp_variable = { gr_a_g = hg_g }
+				set_temp_variable = { gr_s = mod1440_wo_since^gr_i }
+				set_temp_variable = { gr_hit = 0 }
+				for_each_loop = {
+					array = mod1440_gv_rul
+					value = gr_v
+					index = gr_k
+					break = gr_hit
+					set_temp_variable = { gr_f = mod1440_gv_rul_from^gr_k }
+					if = {
+						limit = { NOT = { check_variable = { gr_f > gr_s } } }
+						set_temp_variable = { gr_a_l = gr_v }
+						set_temp_variable = { gr_a_p = mod1440_gv_rul_p^gr_k }
+						set_temp_variable = { gr_a_g = mod1440_gv_rul_g^gr_k }
+						set_temp_variable = { gr_hit = 1 }
+					}
+				}
+				if = {
+					limit = { check_variable = { gr_hit = 0 } check_variable = { mod1440_gv_rul^num > 0 } }
+					set_temp_variable = { gr_k = mod1440_gv_rul^num }
+					subtract_from_temp_variable = { gr_k = 1 }
+					set_temp_variable = { gr_a_l = mod1440_gv_rul^gr_k }
+					set_temp_variable = { gr_a_p = mod1440_gv_rul_p^gr_k }
+					set_temp_variable = { gr_a_g = mod1440_gv_rul_g^gr_k }
+				}
+				if = {
+					limit = { check_variable = { gr_a_p = 0 } }
+					set_temp_variable = { gr_a_p = token:GFX_portrait_unknown }
+				}
+				mod1440_wr_hog = yes
+				set_temp_variable = { gr_z_l = hg_l }
+				set_temp_variable = { gr_z_p = hg_p }
+				set_temp_variable = { gr_z_g = hg_g }
+				set_temp_variable = { gr_s = mod1440_wo_until^gr_i }
+				set_temp_variable = { gr_hit = 0 }
+				for_each_loop = {
+					array = mod1440_gv_rul
+					value = gr_v
+					index = gr_k
+					break = gr_hit
+					set_temp_variable = { gr_f = mod1440_gv_rul_from^gr_k }
+					if = {
+						limit = { NOT = { check_variable = { gr_f > gr_s } } }
+						set_temp_variable = { gr_z_l = gr_v }
+						set_temp_variable = { gr_z_p = mod1440_gv_rul_p^gr_k }
+						set_temp_variable = { gr_z_g = mod1440_gv_rul_g^gr_k }
+						set_temp_variable = { gr_hit = 1 }
+					}
+				}
+				if = {
+					limit = { check_variable = { gr_hit = 0 } check_variable = { mod1440_gv_rul^num > 0 } }
+					set_temp_variable = { gr_k = mod1440_gv_rul^num }
+					subtract_from_temp_variable = { gr_k = 1 }
+					set_temp_variable = { gr_z_l = mod1440_gv_rul^gr_k }
+					set_temp_variable = { gr_z_p = mod1440_gv_rul_p^gr_k }
+					set_temp_variable = { gr_z_g = mod1440_gv_rul_g^gr_k }
+				}
+				if = {
+					limit = { check_variable = { gr_z_p = 0 } }
+					set_temp_variable = { gr_z_p = token:GFX_portrait_unknown }
+				}
+				set_temp_variable = { ch_v = gr_a_l }
+				mod1440_ch_mark = yes
+				set_temp_variable = { ch_v = gr_z_l }
+				mod1440_ch_mark = yes
+				add_to_array = { mod1440_wo_grp = gr_g }
+				add_to_array = { mod1440_wo_how = 0 }
+				add_to_array = { mod1440_wo_kday = -1 }
+				add_to_array = { mod1440_wo_kus = gr_ku }
+				add_to_array = { mod1440_wo_kthem = gr_kt }
+				add_to_array = { mod1440_wo_lu0 = gr_a_l }
+				add_to_array = { mod1440_wo_pu0 = gr_a_p }
+				add_to_array = { mod1440_wo_gu0 = gr_a_g }
+				add_to_array = { mod1440_wo_lu1 = gr_z_l }
+				add_to_array = { mod1440_wo_pu1 = gr_z_p }
+				add_to_array = { mod1440_wo_gu1 = gr_z_g }
+				add_to_array = { mod1440_wo_lt0 = 0 }
+				add_to_array = { mod1440_wo_pt0 = token:GFX_portrait_unknown }
+				add_to_array = { mod1440_wo_gt0 = 0 }
+				add_to_array = { mod1440_wo_lt1 = 0 }
+				add_to_array = { mod1440_wo_pt1 = token:GFX_portrait_unknown }
+				add_to_array = { mod1440_wo_gt1 = 0 }
+			}
+		}
+		log = "MOD1440 records: the rows of wo were given their wars, casualties and leaders (E4 round 2)"
+	}
+	if = {
+		limit = { NOT = { check_variable = { mod1440_wr_fix1 = 1 } } }
+		set_variable = { mod1440_wr_fix1 = 1 }
+		set_temp_variable = { gr_me = THIS }
+		set_temp_variable = { gr_go = 1 }
+		while_loop_effect = {
+			limit = { check_variable = { gr_go = 1 } }
+			set_temp_variable = { gr_go = 0 }
+			set_temp_variable = { gr_x = -1 }
+			set_temp_variable = { gr_b = 0 }
+			for_each_loop = {
+				array = mod1440_wr_enemy
+				value = gr_v
+				index = gr_k
+				break = gr_b
+				if = {
+					limit = { check_variable = { gr_v = gr_me } }
+					set_temp_variable = { gr_x = gr_k }
+					set_temp_variable = { gr_b = 1 }
+				}
+			}
+			if = {
+				limit = { check_variable = { gr_x > -1 } }
+				remove_from_array = { array = mod1440_wr_enemy index = gr_x }
+				remove_from_array = { array = mod1440_wr_since index = gr_x }
+				remove_from_array = { array = mod1440_wr_day0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_cas0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_taken index = gr_x }
+				remove_from_array = { array = mod1440_wr_lost index = gr_x }
+				remove_from_array = { array = mod1440_wr_days index = gr_x }
+				remove_from_array = { array = mod1440_wr_cas index = gr_x }
+				remove_from_array = { array = mod1440_wr_capd index = gr_x }
+				remove_from_array = { array = mod1440_wr_old index = gr_x }
+				remove_from_array = { array = mod1440_wr_surr index = gr_x }
+				remove_from_array = { array = mod1440_wr_vpt index = gr_x }
+				remove_from_array = { array = mod1440_wr_vpl index = gr_x }
+				remove_from_array = { array = mod1440_wr_id index = gr_x }
+				remove_from_array = { array = mod1440_wr_ecas0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_ecas index = gr_x }
+				remove_from_array = { array = mod1440_wr_grp index = gr_x }
+				remove_from_array = { array = mod1440_wr_how index = gr_x }
+				remove_from_array = { array = mod1440_wr_kday index = gr_x }
+				remove_from_array = { array = mod1440_wr_kus0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_kthem0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_kus index = gr_x }
+				remove_from_array = { array = mod1440_wr_kthem index = gr_x }
+				remove_from_array = { array = mod1440_wr_lu0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_pu0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_gu0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_lt0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_pt0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_gt0 index = gr_x }
+				remove_from_array = { array = mod1440_wr_lt1 index = gr_x }
+				remove_from_array = { array = mod1440_wr_pt1 index = gr_x }
+				remove_from_array = { array = mod1440_wr_gt1 index = gr_x }
+				set_temp_variable = { gr_go = 1 }
+				log = "MOD1440 records: a row of wr against the country itself was dropped (E4 fix round 1)"
+			}
+		}
+		set_temp_variable = { gr_go = 1 }
+		while_loop_effect = {
+			limit = { check_variable = { gr_go = 1 } }
+			set_temp_variable = { gr_go = 0 }
+			set_temp_variable = { gr_x = -1 }
+			set_temp_variable = { gr_b = 0 }
+			for_each_loop = {
+				array = mod1440_wo_enemy
+				value = gr_v
+				index = gr_k
+				break = gr_b
+				if = {
+					limit = { check_variable = { gr_v = gr_me } }
+					set_temp_variable = { gr_x = gr_k }
+					set_temp_variable = { gr_b = 1 }
+				}
+			}
+			if = {
+				limit = { check_variable = { gr_x > -1 } }
+				remove_from_array = { array = mod1440_wo_enemy index = gr_x }
+				remove_from_array = { array = mod1440_wo_since index = gr_x }
+				remove_from_array = { array = mod1440_wo_until index = gr_x }
+				remove_from_array = { array = mod1440_wo_days index = gr_x }
+				remove_from_array = { array = mod1440_wo_cas index = gr_x }
+				remove_from_array = { array = mod1440_wo_taken index = gr_x }
+				remove_from_array = { array = mod1440_wo_lost index = gr_x }
+				remove_from_array = { array = mod1440_wo_outcome index = gr_x }
+				remove_from_array = { array = mod1440_wo_old index = gr_x }
+				remove_from_array = { array = mod1440_wo_vpt index = gr_x }
+				remove_from_array = { array = mod1440_wo_vpl index = gr_x }
+				remove_from_array = { array = mod1440_wo_id index = gr_x }
+				remove_from_array = { array = mod1440_wo_day0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_ecas index = gr_x }
+				remove_from_array = { array = mod1440_wo_oc index = gr_x }
+				remove_from_array = { array = mod1440_wo_fr index = gr_x }
+				remove_from_array = { array = mod1440_wo_grp index = gr_x }
+				remove_from_array = { array = mod1440_wo_how index = gr_x }
+				remove_from_array = { array = mod1440_wo_kday index = gr_x }
+				remove_from_array = { array = mod1440_wo_kus index = gr_x }
+				remove_from_array = { array = mod1440_wo_kthem index = gr_x }
+				remove_from_array = { array = mod1440_wo_lu0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_pu0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_gu0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_lu1 index = gr_x }
+				remove_from_array = { array = mod1440_wo_pu1 index = gr_x }
+				remove_from_array = { array = mod1440_wo_gu1 index = gr_x }
+				remove_from_array = { array = mod1440_wo_lt0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_pt0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_gt0 index = gr_x }
+				remove_from_array = { array = mod1440_wo_lt1 index = gr_x }
+				remove_from_array = { array = mod1440_wo_pt1 index = gr_x }
+				remove_from_array = { array = mod1440_wo_gt1 index = gr_x }
+				set_temp_variable = { gr_go = 1 }
+				log = "MOD1440 records: a row of wo against the country itself was dropped (E4 fix round 1)"
+			}
+		}
+		mod1440_wr_count_wars = yes
+	}
 }
 
-# Wars: the war with wr_c is over: its row moves to the finished wars with the end date, its length, what it
-# cost and how it ended. The file that was open stays on the same war.
+# Wars: how many wars the country fights today (its open rows by their war), for the tab (E4 fix round 1).
+mod1440_wr_count_wars = {
+	clear_temp_array = wn_g
+	for_each_loop = {
+		array = mod1440_wr_grp
+		value = wn_v
+		if = {
+			limit = { NOT = { is_in_array = { array = wn_g value = wn_v } } }
+			add_to_temp_array = { wn_g = wn_v }
+		}
+	}
+	set_variable = { mod1440_wr_wars = wn_g^num }
+}
+
+# Wars: in the scope of a country, its head of government (hg_l, his place), his portrait as a text key (hg_p,
+# looked up when another one rules or the table changed, kept on the country) and his ideology group (hg_g: 1
+# fascism, 2 democratic, 3 communism, 4 neutrality, 0 another).
+mod1440_wr_hog = {
+	set_temp_variable = { hg_l = country_leader }
+	if = {
+		limit = { OR = { OR = { NOT = { check_variable = { mod1440_ld_p_ver = 568382 } } NOT = { check_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_ld_p_of = country_leader } } } }
+		set_temp_variable = { p_ld = country_leader }
+		set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+		var:p_ld = {
+			mod1440_p_leader = yes
+		}
+		set_variable = { mod1440_ld_p = p_tok }
+		set_variable = { mod1440_ld_p_ver = 568382 }
+		set_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep }
+		set_variable = { mod1440_ld_p_of = country_leader }
+	}
+	set_temp_variable = { hg_p = mod1440_ld_p }
+	if = {
+		limit = { check_variable = { hg_p = 0 } }
+		set_temp_variable = { hg_p = token:GFX_portrait_unknown }
+	}
+	set_temp_variable = { hg_g = 0 }
+	if = {
+		limit = { has_government = fascism }
+		set_temp_variable = { hg_g = 1 }
+	}
+	if = {
+		limit = { has_government = democratic }
+		set_temp_variable = { hg_g = 2 }
+	}
+	if = {
+		limit = { has_government = communism }
+		set_temp_variable = { hg_g = 3 }
+	}
+	if = {
+		limit = { has_government = neutrality }
+		set_temp_variable = { hg_g = 4 }
+	}
+}
+
+# Wars: the dead of the country mod1440_wr_kv by the hand of mod1440_wr_ko, in thousands to 0.1, into kr; kr_prev is
+# yesterday's reading. casualties_inflicted_by answers yes or no, so the number is searched (meta_trigger, SCR-054).
+mod1440_wr_kread = {
+	set_variable = { mod1440_wr_kn = kr_prev }
+	set_temp_variable = { kr_lo = 0 }
+	set_temp_variable = { kr_hi = kr_prev }
+	if = {
+		limit = { NOT = { meta_trigger = { text = { [V] = { casualties_inflicted_by = { opponent = [O] thousands > [N] } } } V = "[?mod1440_wr_kv.GetTag]" O = "[?mod1440_wr_ko.GetTag]" N = "[?mod1440_wr_kn|1]" } } }
+		if = {
+			limit = { check_variable = { kr_prev > 0 } }
+			set_variable = { mod1440_wr_kn = 0 }
+			if = {
+				limit = { NOT = { meta_trigger = { text = { [V] = { casualties_inflicted_by = { opponent = [O] thousands > [N] } } } V = "[?mod1440_wr_kv.GetTag]" O = "[?mod1440_wr_ko.GetTag]" N = "[?mod1440_wr_kn|1]" } } }
+				set_temp_variable = { kr_hi = 0 }
+			}
+		}
+	}
+	else = {
+		set_temp_variable = { kr_lo = kr_prev }
+		set_temp_variable = { kr_st = 0.1 }
+		set_temp_variable = { kr_up = 1 }
+		while_loop_effect = {
+			limit = { check_variable = { kr_up = 1 } check_variable = { kr_st < 1000000 } }
+			set_temp_variable = { kr_t = kr_lo }
+			add_to_temp_variable = { kr_t = kr_st }
+			set_variable = { mod1440_wr_kn = kr_t }
+			if = {
+				limit = { meta_trigger = { text = { [V] = { casualties_inflicted_by = { opponent = [O] thousands > [N] } } } V = "[?mod1440_wr_kv.GetTag]" O = "[?mod1440_wr_ko.GetTag]" N = "[?mod1440_wr_kn|1]" } }
+				set_temp_variable = { kr_lo = kr_t }
+				multiply_temp_variable = { kr_st = 2 }
+			}
+			else = {
+				set_temp_variable = { kr_hi = kr_t }
+				set_temp_variable = { kr_up = 0 }
+			}
+		}
+	}
+	set_temp_variable = { kr_d = kr_hi }
+	subtract_from_temp_variable = { kr_d = kr_lo }
+	while_loop_effect = {
+		limit = { check_variable = { kr_d > 0.15 } }
+		set_temp_variable = { kr_t = kr_lo }
+		add_to_temp_variable = { kr_t = kr_hi }
+		multiply_temp_variable = { kr_t = 5 }
+		round_temp_variable = kr_t
+		divide_temp_variable = { kr_t = 10 }
+		set_variable = { mod1440_wr_kn = kr_t }
+		if = {
+			limit = { meta_trigger = { text = { [V] = { casualties_inflicted_by = { opponent = [O] thousands > [N] } } } V = "[?mod1440_wr_kv.GetTag]" O = "[?mod1440_wr_ko.GetTag]" N = "[?mod1440_wr_kn|1]" } }
+			set_temp_variable = { kr_lo = kr_t }
+		}
+		else = {
+			set_temp_variable = { kr_hi = kr_t }
+		}
+		set_temp_variable = { kr_d = kr_hi }
+		subtract_from_temp_variable = { kr_d = kr_lo }
+	}
+	set_temp_variable = { kr = kr_lo }
+}
+
+# Wars: the war with wr_c is over: its row moves to the finished wars with the end date, its length, its dead
+# frozen (one more reading, the higher of it and yesterday's), how it ended and our head of government of the day.
 mod1440_wr_close = {
 	mod1440_wr_grow = yes
 	set_temp_variable = { wr_j = -1 }
@@ -13420,20 +14105,67 @@ mod1440_wr_close = {
 			set_temp_variable = { wr_out = token:mod1440_wr_out_annexed }
 			set_temp_variable = { wr_oc = 4 }
 		}
+		if = {
+			limit = { has_capitulated = yes }
+			set_temp_variable = { wr_out = token:mod1440_wr_out_we_capitulated }
+			set_temp_variable = { wr_oc = 6 }
+		}
+		if = {
+			limit = { var:wr_c = { exists = yes } is_subject_of = var:wr_c }
+			set_temp_variable = { wr_out = token:mod1440_wr_out_we_subject }
+			set_temp_variable = { wr_oc = 7 }
+		}
 		set_temp_variable = { wr_fr = 1 }
 		if = {
 			limit = { check_variable = { wr_oc = 1 } }
 			set_temp_variable = { wr_fr = 3 }
 		}
+		if = {
+			limit = { check_variable = { wr_oc > 5 } }
+			set_temp_variable = { wr_fr = 2 }
+		}
 		set_temp_variable = { wr_d = global.num_days }
 		subtract_from_temp_variable = { wr_d = mod1440_wr_day0^wr_j }
-		set_temp_variable = { wr_k = casualties }
-		subtract_from_temp_variable = { wr_k = mod1440_wr_cas0^wr_j }
+		set_temp_variable = { wr_ku = mod1440_wr_kus^wr_j }
+		set_temp_variable = { wr_kt = mod1440_wr_kthem^wr_j }
+		if = {
+			limit = { var:wr_c = { exists = yes } }
+			set_variable = { mod1440_wr_kv = THIS }
+			set_variable = { mod1440_wr_ko = wr_c }
+			set_temp_variable = { kr_prev = mod1440_wr_kus^wr_j }
+			add_to_temp_variable = { kr_prev = mod1440_wr_kus0^wr_j }
+			mod1440_wr_kread = yes
+			set_temp_variable = { kr_v = kr }
+			subtract_from_temp_variable = { kr_v = mod1440_wr_kus0^wr_j }
+			set_temp_variable = { kr_o = wr_ku }
+			if = {
+				limit = { check_variable = { kr_v > kr_o } }
+				set_temp_variable = { wr_ku = kr_v }
+			}
+			set_variable = { mod1440_wr_kv = wr_c }
+			set_variable = { mod1440_wr_ko = THIS }
+			set_temp_variable = { kr_prev = mod1440_wr_kthem^wr_j }
+			add_to_temp_variable = { kr_prev = mod1440_wr_kthem0^wr_j }
+			mod1440_wr_kread = yes
+			set_temp_variable = { kr_v = kr }
+			subtract_from_temp_variable = { kr_v = mod1440_wr_kthem0^wr_j }
+			set_temp_variable = { kr_o = wr_kt }
+			if = {
+				limit = { check_variable = { kr_v > kr_o } }
+				set_temp_variable = { wr_kt = kr_v }
+			}
+		}
+		mod1440_wr_hog = yes
+		set_temp_variable = { wr_lu = hg_l }
+		set_temp_variable = { wr_pu = hg_p }
+		set_temp_variable = { wr_gu = hg_g }
+		set_temp_variable = { ch_v = wr_lu }
+		mod1440_ch_mark = yes
 		add_to_array = { array = mod1440_wo_enemy value = wr_c index = 0 }
 		add_to_array = { array = mod1440_wo_since value = mod1440_wr_since^wr_j index = 0 }
 		add_to_array = { array = mod1440_wo_until value = global.date index = 0 }
 		add_to_array = { array = mod1440_wo_days value = wr_d index = 0 }
-		add_to_array = { array = mod1440_wo_cas value = wr_k index = 0 }
+		add_to_array = { array = mod1440_wo_cas value = 0 index = 0 }
 		add_to_array = { array = mod1440_wo_taken value = mod1440_wr_taken^wr_j index = 0 }
 		add_to_array = { array = mod1440_wo_lost value = mod1440_wr_lost^wr_j index = 0 }
 		add_to_array = { array = mod1440_wo_outcome value = wr_out index = 0 }
@@ -13445,6 +14177,23 @@ mod1440_wr_close = {
 		add_to_array = { array = mod1440_wo_ecas value = mod1440_wr_ecas^wr_j index = 0 }
 		add_to_array = { array = mod1440_wo_oc value = wr_oc index = 0 }
 		add_to_array = { array = mod1440_wo_fr value = wr_fr index = 0 }
+		add_to_array = { array = mod1440_wo_grp value = mod1440_wr_grp^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_how value = mod1440_wr_how^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_kday value = mod1440_wr_kday^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_kus value = wr_ku index = 0 }
+		add_to_array = { array = mod1440_wo_kthem value = wr_kt index = 0 }
+		add_to_array = { array = mod1440_wo_lu0 value = mod1440_wr_lu0^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_pu0 value = mod1440_wr_pu0^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_gu0 value = mod1440_wr_gu0^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_lu1 value = wr_lu index = 0 }
+		add_to_array = { array = mod1440_wo_pu1 value = wr_pu index = 0 }
+		add_to_array = { array = mod1440_wo_gu1 value = wr_gu index = 0 }
+		add_to_array = { array = mod1440_wo_lt0 value = mod1440_wr_lt0^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_pt0 value = mod1440_wr_pt0^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_gt0 value = mod1440_wr_gt0^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_lt1 value = mod1440_wr_lt1^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_pt1 value = mod1440_wr_pt1^wr_j index = 0 }
+		add_to_array = { array = mod1440_wo_gt1 value = mod1440_wr_gt1^wr_j index = 0 }
 		remove_from_array = { array = mod1440_wr_enemy index = wr_j }
 		remove_from_array = { array = mod1440_wr_since index = wr_j }
 		remove_from_array = { array = mod1440_wr_day0 index = wr_j }
@@ -13461,22 +14210,23 @@ mod1440_wr_close = {
 		remove_from_array = { array = mod1440_wr_id index = wr_j }
 		remove_from_array = { array = mod1440_wr_ecas0 index = wr_j }
 		remove_from_array = { array = mod1440_wr_ecas index = wr_j }
-		if = {
-			limit = { check_variable = { mod1440_wr_sel_kind = 2 } }
-			add_to_variable = { mod1440_wr_sel_i = 1 }
-		}
-		else_if = {
-			limit = { check_variable = { mod1440_wr_sel_kind = 1 } }
-			if = {
-				limit = { check_variable = { mod1440_wr_sel_i = wr_j } }
-				set_variable = { mod1440_wr_sel_kind = 2 }
-				set_variable = { mod1440_wr_sel_i = 0 }
-			}
-			else_if = {
-				limit = { check_variable = { mod1440_wr_sel_i > wr_j } }
-				subtract_from_variable = { mod1440_wr_sel_i = 1 }
-			}
-		}
+		remove_from_array = { array = mod1440_wr_grp index = wr_j }
+		remove_from_array = { array = mod1440_wr_how index = wr_j }
+		remove_from_array = { array = mod1440_wr_kday index = wr_j }
+		remove_from_array = { array = mod1440_wr_kus0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_kthem0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_kus index = wr_j }
+		remove_from_array = { array = mod1440_wr_kthem index = wr_j }
+		remove_from_array = { array = mod1440_wr_lu0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_pu0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_gu0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_lt0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_pt0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_gt0 index = wr_j }
+		remove_from_array = { array = mod1440_wr_lt1 index = wr_j }
+		remove_from_array = { array = mod1440_wr_pt1 index = wr_j }
+		remove_from_array = { array = mod1440_wr_gt1 index = wr_j }
+		mod1440_wr_count_wars = yes
 		if = {
 			limit = { check_variable = { mod1440_wo_enemy^num > 200 } }
 			set_temp_variable = { wr_last = mod1440_wo_enemy^num }
@@ -13497,13 +14247,30 @@ mod1440_wr_close = {
 			remove_from_array = { array = mod1440_wo_ecas index = wr_last }
 			remove_from_array = { array = mod1440_wo_oc index = wr_last }
 			remove_from_array = { array = mod1440_wo_fr index = wr_last }
+			remove_from_array = { array = mod1440_wo_grp index = wr_last }
+			remove_from_array = { array = mod1440_wo_how index = wr_last }
+			remove_from_array = { array = mod1440_wo_kday index = wr_last }
+			remove_from_array = { array = mod1440_wo_kus index = wr_last }
+			remove_from_array = { array = mod1440_wo_kthem index = wr_last }
+			remove_from_array = { array = mod1440_wo_lu0 index = wr_last }
+			remove_from_array = { array = mod1440_wo_pu0 index = wr_last }
+			remove_from_array = { array = mod1440_wo_gu0 index = wr_last }
+			remove_from_array = { array = mod1440_wo_lu1 index = wr_last }
+			remove_from_array = { array = mod1440_wo_pu1 index = wr_last }
+			remove_from_array = { array = mod1440_wo_gu1 index = wr_last }
+			remove_from_array = { array = mod1440_wo_lt0 index = wr_last }
+			remove_from_array = { array = mod1440_wo_pt0 index = wr_last }
+			remove_from_array = { array = mod1440_wo_gt0 index = wr_last }
+			remove_from_array = { array = mod1440_wo_lt1 index = wr_last }
+			remove_from_array = { array = mod1440_wo_pt1 index = wr_last }
+			remove_from_array = { array = mod1440_wo_gt1 index = wr_last }
 		}
 	}
 }
 
 # Wars: one more state taken from (wr_f = 1) or lost to (wr_f = 2) the enemy in wr_c, or one more victory
 # point taken (3) or lost (4). What was taken counts also for the general on the spot (of_best, of_who), in
-# this war: arrays on the officer (mod1440_ow_*), one element per war by the war's number; tr_cap 1 a capital.
+# this war: arrays on the officer (mod1440_ow_*), one element per row by the row's number; tr_cap 1 a capital.
 mod1440_wr_count = {
 	mod1440_wr_grow = yes
 	set_temp_variable = { wr_j = -1 }
@@ -13590,10 +14357,111 @@ mod1440_wr_annexed = {
 	}
 }
 
-# Wars: the numbers of today's rows, each enemy's surrender progress for its bar and its casualties since the
-# war began, and a line in the War Diary when an enemy or the country itself has capitulated.
+# Wars: the numbers of today's rows: days, each enemy's surrender progress, both sides' dead (never falling), the
+# enemy's head of government when another one rules; a line in the War Diary when an enemy or the country itself
+# has capitulated. The portraits kept on the rows are looked up again when the text keys' numbers moved.
 mod1440_wr_daily = {
 	mod1440_wr_grow = yes
+	if = {
+		limit = { OR = { NOT = { check_variable = { mod1440_wr_p_ver = 568382 } } NOT = { check_variable = { mod1440_wr_p_ver_ep = global.mod1440_tk_ep } } } }
+		for_loop_effect = {
+			start = 0
+			end = mod1440_wr_grp^num
+			value = rl_i
+			set_temp_variable = { rl_e = mod1440_wr_enemy^rl_i }
+			set_temp_variable = { rl_l = mod1440_wr_lu0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_l = {
+					mod1440_p_leader = yes
+				}
+			}
+			set_variable = { mod1440_wr_pu0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wr_lt0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wr_pt0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wr_lt1^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wr_pt1^rl_i = p_tok }
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_wo_grp^num
+			value = rl_i
+			set_temp_variable = { rl_e = mod1440_wo_enemy^rl_i }
+			set_temp_variable = { rl_l = mod1440_wo_lu0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_l = {
+					mod1440_p_leader = yes
+				}
+			}
+			set_variable = { mod1440_wo_pu0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wo_lu1^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_l = {
+					mod1440_p_leader = yes
+				}
+			}
+			set_variable = { mod1440_wo_pu1^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wo_lt0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wo_pt0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wo_lt1^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wo_pt1^rl_i = p_tok }
+		}
+		set_variable = { mod1440_wr_p_ver = 568382 }
+		set_variable = { mod1440_wr_p_ver_ep = global.mod1440_tk_ep }
+	}
 	for_each_loop = {
 		array = mod1440_wr_enemy
 		value = wr_v
@@ -13601,18 +14469,11 @@ mod1440_wr_daily = {
 		set_temp_variable = { wr_d = global.num_days }
 		subtract_from_temp_variable = { wr_d = mod1440_wr_day0^wr_i }
 		set_variable = { mod1440_wr_days^wr_i = wr_d }
-		set_temp_variable = { wr_k = casualties }
-		subtract_from_temp_variable = { wr_k = mod1440_wr_cas0^wr_i }
-		set_variable = { mod1440_wr_cas^wr_i = wr_k }
 		set_temp_variable = { wr_s = 0 }
-		set_temp_variable = { wr_e = mod1440_wr_ecas0^wr_i }
 		var:wr_v = {
 			set_temp_variable = { wr_s = surrender_progress }
-			set_temp_variable = { wr_e = casualties }
 		}
 		multiply_temp_variable = { wr_s = 100 }
-		subtract_from_temp_variable = { wr_e = mod1440_wr_ecas0^wr_i }
-		set_variable = { mod1440_wr_ecas^wr_i = wr_e }
 		set_variable = { mod1440_wr_surr^wr_i = wr_s }
 		if = {
 			limit = { check_variable = { mod1440_wr_capd^wr_i = 0 } var:wr_v = { has_capitulated = yes } }
@@ -13631,7 +14492,51 @@ mod1440_wr_daily = {
 			set_temp_variable = { ev_n = 0 }
 			mod1440_ev_add = yes
 		}
+		if = {
+			limit = { var:wr_v = { exists = yes } }
+			set_variable = { mod1440_wr_kv = THIS }
+			set_variable = { mod1440_wr_ko = wr_v }
+			set_temp_variable = { kr_prev = mod1440_wr_kus^wr_i }
+			add_to_temp_variable = { kr_prev = mod1440_wr_kus0^wr_i }
+			mod1440_wr_kread = yes
+			set_temp_variable = { kr_v = kr }
+			subtract_from_temp_variable = { kr_v = mod1440_wr_kus0^wr_i }
+			set_temp_variable = { kr_o = mod1440_wr_kus^wr_i }
+			if = {
+				limit = { check_variable = { kr_v > kr_o } }
+				set_variable = { mod1440_wr_kus^wr_i = kr_v }
+			}
+			set_variable = { mod1440_wr_kv = wr_v }
+			set_variable = { mod1440_wr_ko = THIS }
+			set_temp_variable = { kr_prev = mod1440_wr_kthem^wr_i }
+			add_to_temp_variable = { kr_prev = mod1440_wr_kthem0^wr_i }
+			mod1440_wr_kread = yes
+			set_temp_variable = { kr_v = kr }
+			subtract_from_temp_variable = { kr_v = mod1440_wr_kthem0^wr_i }
+			set_temp_variable = { kr_o = mod1440_wr_kthem^wr_i }
+			if = {
+				limit = { check_variable = { kr_v > kr_o } }
+				set_variable = { mod1440_wr_kthem^wr_i = kr_v }
+			}
+			set_temp_variable = { wr_cl = 0 }
+			var:wr_v = {
+				set_temp_variable = { wr_cl = country_leader }
+			}
+			set_temp_variable = { wr_ol = mod1440_wr_lt1^wr_i }
+			if = {
+				limit = { NOT = { check_variable = { wr_cl = wr_ol } } }
+				var:wr_v = {
+					mod1440_wr_hog = yes
+				}
+				set_variable = { mod1440_wr_lt1^wr_i = hg_l }
+				set_variable = { mod1440_wr_pt1^wr_i = hg_p }
+				set_variable = { mod1440_wr_gt1^wr_i = hg_g }
+				set_temp_variable = { ch_v = hg_l }
+				mod1440_ch_mark = yes
+			}
+		}
 	}
+	mod1440_wr_count_wars = yes
 	if = {
 		limit = { has_capitulated = yes NOT = { check_variable = { mod1440_ev_capd = 1 } } }
 		set_variable = { mod1440_ev_capd = 1 }
@@ -13655,122 +14560,644 @@ mod1440_wr_daily = {
 	}
 }
 
-# Wars: what the page needs when it is on show. With nothing chosen yet, the file opens on the first war
-# there is.
-mod1440_wr_show = {
-	if = {
-		limit = { check_variable = { mod1440_wr_sel_kind < 1 } }
+# Wars: the two lists of the page, one plate per war (mod1440_wv_* of today, mod1440_wp_* finished, newest first):
+# its first enemy, how many more, its days or the year it began, both sides' dead summed over its rows. A walk over
+# the rows when the page shows (rule 5).
+mod1440_wr_lists = {
+	clear_array = mod1440_wv_g
+	clear_array = mod1440_wv_c
+	clear_array = mod1440_wv_first
+	clear_array = mod1440_wv_n
+	clear_array = mod1440_wv_d0
+	clear_array = mod1440_wv_days
+	clear_array = mod1440_wv_kus
+	clear_array = mod1440_wv_kthem
+	clear_array = mod1440_wv_known
+	clear_array = mod1440_wv_surr
+	clear_array = mod1440_wv_pk
+	clear_array = mod1440_wp_g
+	clear_array = mod1440_wp_c
+	clear_array = mod1440_wp_first
+	clear_array = mod1440_wp_n
+	clear_array = mod1440_wp_d0
+	clear_array = mod1440_wp_year
+	clear_array = mod1440_wp_kus
+	clear_array = mod1440_wp_kthem
+	clear_array = mod1440_wp_known
+	clear_array = mod1440_wp_oc
+	clear_array = mod1440_wp_fr
+	clear_array = mod1440_wp_pk
+	set_temp_variable = { ls_all = 0 }
+	for_each_loop = {
+		array = mod1440_wr_enemy
+		value = ls_v
+		index = ls_i
+		set_temp_variable = { ls_g = mod1440_wr_grp^ls_i }
+		set_temp_variable = { ls_j = -1 }
+		set_temp_variable = { ls_b = 0 }
+		for_each_loop = {
+			array = mod1440_wv_g
+			value = ls_x
+			index = ls_k
+			break = ls_b
+			if = {
+				limit = { check_variable = { ls_x = ls_g } }
+				set_temp_variable = { ls_j = ls_k }
+				set_temp_variable = { ls_b = 1 }
+			}
+		}
 		if = {
-			limit = { check_variable = { mod1440_wr_enemy^num > 0 } }
-			set_variable = { mod1440_wr_sel_kind = 1 }
-			set_variable = { mod1440_wr_sel_i = 0 }
+			limit = { check_variable = { ls_j < 0 } }
+			add_to_array = { mod1440_wv_g = ls_g }
+			add_to_array = { mod1440_wv_c = ls_v }
+			add_to_array = { mod1440_wv_first = mod1440_wr_id^ls_i }
+			add_to_array = { mod1440_wv_n = -1 }
+			add_to_array = { mod1440_wv_d0 = mod1440_wr_day0^ls_i }
+			add_to_array = { mod1440_wv_days = 0 }
+			add_to_array = { mod1440_wv_kus = 0 }
+			add_to_array = { mod1440_wv_kthem = 0 }
+			add_to_array = { mod1440_wv_known = 0 }
+			add_to_array = { mod1440_wv_surr = mod1440_wr_surr^ls_i }
+			add_to_array = { mod1440_wv_pk = 0 }
+			set_temp_variable = { ls_j = mod1440_wv_g^num }
+			subtract_from_temp_variable = { ls_j = 1 }
+		}
+		add_to_variable = { mod1440_wv_n^ls_j = 1 }
+		set_temp_variable = { ls_u = mod1440_wr_kus^ls_i }
+		set_temp_variable = { ls_t = mod1440_wr_kthem^ls_i }
+		if = {
+			limit = { check_variable = { ls_u > -1 } }
+			add_to_variable = { mod1440_wv_kus^ls_j = ls_u }
+			add_to_variable = { mod1440_wv_kthem^ls_j = ls_t }
+			add_to_variable = { mod1440_wv_known^ls_j = 1 }
+			add_to_temp_variable = { ls_all = ls_t }
+		}
+		set_temp_variable = { ls_id = mod1440_wr_id^ls_i }
+		set_temp_variable = { ls_f = mod1440_wv_first^ls_j }
+		if = {
+			limit = { check_variable = { ls_id < ls_f } }
+			set_variable = { mod1440_wv_first^ls_j = ls_id }
+			set_variable = { mod1440_wv_c^ls_j = mod1440_wr_enemy^ls_i }
+		}
+		set_temp_variable = { ls_d = mod1440_wr_day0^ls_i }
+		set_temp_variable = { ls_e = mod1440_wv_d0^ls_j }
+		if = {
+			limit = { check_variable = { ls_d > -1 } OR = { check_variable = { ls_e < 0 } check_variable = { ls_d < ls_e } } }
+			set_variable = { mod1440_wv_d0^ls_j = ls_d }
+		}
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wo_enemy^num
+		value = ls_i
+		set_temp_variable = { ls_g = mod1440_wo_grp^ls_i }
+		set_temp_variable = { ls_j = -1 }
+		set_temp_variable = { ls_b = 0 }
+		for_each_loop = {
+			array = mod1440_wv_g
+			value = ls_x
+			index = ls_k
+			break = ls_b
+			if = {
+				limit = { check_variable = { ls_x = ls_g } }
+				set_temp_variable = { ls_j = ls_k }
+				set_temp_variable = { ls_b = 1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { ls_j > -1 } }
+			add_to_variable = { mod1440_wv_n^ls_j = 1 }
+			set_temp_variable = { ls_u = mod1440_wo_kus^ls_i }
+			set_temp_variable = { ls_t = mod1440_wo_kthem^ls_i }
+			if = {
+				limit = { check_variable = { ls_u > -1 } }
+				add_to_variable = { mod1440_wv_kus^ls_j = ls_u }
+				add_to_variable = { mod1440_wv_kthem^ls_j = ls_t }
+				add_to_variable = { mod1440_wv_known^ls_j = 1 }
+				add_to_temp_variable = { ls_all = ls_t }
+			}
+			set_temp_variable = { ls_id = mod1440_wo_id^ls_i }
+			set_temp_variable = { ls_f = mod1440_wv_first^ls_j }
+			if = {
+				limit = { check_variable = { ls_id < ls_f } }
+				set_variable = { mod1440_wv_first^ls_j = ls_id }
+				set_variable = { mod1440_wv_c^ls_j = mod1440_wo_enemy^ls_i }
+			}
+			set_temp_variable = { ls_d = mod1440_wo_day0^ls_i }
+			set_temp_variable = { ls_e = mod1440_wv_d0^ls_j }
+			if = {
+				limit = { check_variable = { ls_d > -1 } OR = { check_variable = { ls_e < 0 } check_variable = { ls_d < ls_e } } }
+				set_variable = { mod1440_wv_d0^ls_j = ls_d }
+			}
+		}
+		else = {
+			set_temp_variable = { ls_j = -1 }
+			set_temp_variable = { ls_b = 0 }
+			for_each_loop = {
+				array = mod1440_wp_g
+				value = ls_x
+				index = ls_k
+				break = ls_b
+				if = {
+					limit = { check_variable = { ls_x = ls_g } }
+					set_temp_variable = { ls_j = ls_k }
+					set_temp_variable = { ls_b = 1 }
+				}
+			}
+			if = {
+				limit = { check_variable = { ls_j < 0 } }
+				add_to_array = { mod1440_wp_g = ls_g }
+				add_to_array = { mod1440_wp_c = mod1440_wo_enemy^ls_i }
+				add_to_array = { mod1440_wp_first = mod1440_wo_id^ls_i }
+				add_to_array = { mod1440_wp_n = -1 }
+				add_to_array = { mod1440_wp_d0 = mod1440_wo_day0^ls_i }
+				add_to_array = { mod1440_wp_year = 0 }
+				add_to_array = { mod1440_wp_kus = 0 }
+				add_to_array = { mod1440_wp_kthem = 0 }
+				add_to_array = { mod1440_wp_known = 0 }
+				add_to_array = { mod1440_wp_oc = mod1440_wo_oc^ls_i }
+				add_to_array = { mod1440_wp_fr = mod1440_wo_fr^ls_i }
+				add_to_array = { mod1440_wp_pk = 0 }
+				set_temp_variable = { ls_j = mod1440_wp_g^num }
+				subtract_from_temp_variable = { ls_j = 1 }
+			}
+			add_to_variable = { mod1440_wp_n^ls_j = 1 }
+			set_temp_variable = { ls_u = mod1440_wo_kus^ls_i }
+			set_temp_variable = { ls_t = mod1440_wo_kthem^ls_i }
+			if = {
+				limit = { check_variable = { ls_u > -1 } }
+				add_to_variable = { mod1440_wp_kus^ls_j = ls_u }
+				add_to_variable = { mod1440_wp_kthem^ls_j = ls_t }
+				add_to_variable = { mod1440_wp_known^ls_j = 1 }
+				add_to_temp_variable = { ls_all = ls_t }
+			}
+			set_temp_variable = { ls_id = mod1440_wo_id^ls_i }
+			set_temp_variable = { ls_f = mod1440_wp_first^ls_j }
+			if = {
+				limit = { check_variable = { ls_id < ls_f } }
+				set_variable = { mod1440_wp_first^ls_j = ls_id }
+				set_variable = { mod1440_wp_c^ls_j = mod1440_wo_enemy^ls_i }
+				set_variable = { mod1440_wp_oc^ls_j = mod1440_wo_oc^ls_i }
+				set_variable = { mod1440_wp_fr^ls_j = mod1440_wo_fr^ls_i }
+			}
+			set_temp_variable = { ls_d = mod1440_wo_day0^ls_i }
+			set_temp_variable = { ls_e = mod1440_wp_d0^ls_j }
+			if = {
+				limit = { check_variable = { ls_d > -1 } OR = { check_variable = { ls_e < 0 } check_variable = { ls_d < ls_e } } }
+				set_variable = { mod1440_wp_d0^ls_j = ls_d }
+			}
+		}
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wv_g^num
+		value = ls_j
+		set_temp_variable = { ls_d = global.num_days }
+		subtract_from_temp_variable = { ls_d = mod1440_wv_d0^ls_j }
+		set_variable = { mod1440_wv_days^ls_j = ls_d }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wp_g^num
+		value = ls_j
+		set_temp_variable = { ls_d = mod1440_wp_d0^ls_j }
+		if = {
+			limit = { check_variable = { ls_d > -1 } }
+			divide_temp_variable = { ls_d = 365 }
+			subtract_from_temp_variable = { ls_d = 0.499 }
+			round_temp_variable = ls_d
+			set_variable = { mod1440_wp_year^ls_j = ls_d }
+		}
+	}
+	set_variable = { mod1440_wr_kthem_all = ls_all }
+	mod1440_wr_picks = yes
+}
+mod1440_wr_picks = {
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wv_g^num
+		value = pk_j
+		set_temp_variable = { pk_g = mod1440_wv_g^pk_j }
+		set_variable = { mod1440_wv_pk^pk_j = 0 }
+		if = {
+			limit = { check_variable = { pk_g = mod1440_wr_sel_g } }
+			set_variable = { mod1440_wv_pk^pk_j = 1 }
+		}
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wp_g^num
+		value = pk_j
+		set_temp_variable = { pk_g = mod1440_wp_g^pk_j }
+		set_variable = { mod1440_wp_pk^pk_j = 0 }
+		if = {
+			limit = { check_variable = { pk_g = mod1440_wr_sel_g } }
+			set_variable = { mod1440_wp_pk^pk_j = 1 }
+		}
+	}
+}
+
+# Wars: what the page needs when it is on show. With no war chosen, or one that is no more, the file opens on the
+# first war there is.
+mod1440_wr_show = {
+	mod1440_wr_grow = yes
+	mod1440_wr_lists = yes
+	set_temp_variable = { sh_a = -1 }
+	set_temp_variable = { ls_b = 0 }
+	for_each_loop = {
+		array = mod1440_wv_g
+		value = ls_x
+		index = ls_k
+		break = ls_b
+		if = {
+			limit = { check_variable = { ls_x = mod1440_wr_sel_g } }
+			set_temp_variable = { sh_a = ls_k }
+			set_temp_variable = { ls_b = 1 }
+		}
+	}
+	set_temp_variable = { sh_b = -1 }
+	set_temp_variable = { ls_b = 0 }
+	for_each_loop = {
+		array = mod1440_wp_g
+		value = ls_x
+		index = ls_k
+		break = ls_b
+		if = {
+			limit = { check_variable = { ls_x = mod1440_wr_sel_g } }
+			set_temp_variable = { sh_b = ls_k }
+			set_temp_variable = { ls_b = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { sh_a < 0 } check_variable = { sh_b < 0 } }
+		set_variable = { mod1440_wr_sel_e = 0 }
+		if = {
+			limit = { check_variable = { mod1440_wv_g^num > 0 } }
+			set_variable = { mod1440_wr_sel_g = mod1440_wv_g^0 }
 		}
 		else_if = {
-			limit = { check_variable = { mod1440_wo_enemy^num > 0 } }
-			set_variable = { mod1440_wr_sel_kind = 2 }
-			set_variable = { mod1440_wr_sel_i = 0 }
+			limit = { check_variable = { mod1440_wp_g^num > 0 } }
+			set_variable = { mod1440_wr_sel_g = mod1440_wp_g^0 }
 		}
+		mod1440_wr_picks = yes
 	}
 	mod1440_wr_card = yes
 }
 
-# Wars: copies the chosen war to the variables its file reads, looks up the two portraits, gathers the lines
-# the War Diary has about this enemy, newest first, places their marks on the track and counts the commanders.
+# Wars: the file of the chosen war (mod1440_wr_sel_g): its rows in the order they joined (mod1440_we_*, the enemies
+# table), the war's figures, our heads of government, the War Diary's lines about its enemies within its dates,
+# the marks of the track and the commanders' tally over its rows.
 mod1440_wr_card = {
 	mod1440_wr_grow = yes
 	mod1440_ev_grow = yes
+	if = {
+		limit = { OR = { NOT = { check_variable = { mod1440_wr_p_ver = 568382 } } NOT = { check_variable = { mod1440_wr_p_ver_ep = global.mod1440_tk_ep } } } }
+		for_loop_effect = {
+			start = 0
+			end = mod1440_wr_grp^num
+			value = rl_i
+			set_temp_variable = { rl_e = mod1440_wr_enemy^rl_i }
+			set_temp_variable = { rl_l = mod1440_wr_lu0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_l = {
+					mod1440_p_leader = yes
+				}
+			}
+			set_variable = { mod1440_wr_pu0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wr_lt0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wr_pt0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wr_lt1^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wr_pt1^rl_i = p_tok }
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_wo_grp^num
+			value = rl_i
+			set_temp_variable = { rl_e = mod1440_wo_enemy^rl_i }
+			set_temp_variable = { rl_l = mod1440_wo_lu0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_l = {
+					mod1440_p_leader = yes
+				}
+			}
+			set_variable = { mod1440_wo_pu0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wo_lu1^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_l = {
+					mod1440_p_leader = yes
+				}
+			}
+			set_variable = { mod1440_wo_pu1^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wo_lt0^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wo_pt0^rl_i = p_tok }
+			set_temp_variable = { rl_l = mod1440_wo_lt1^rl_i }
+			set_temp_variable = { p_tok = token:GFX_portrait_unknown }
+			if = {
+				limit = { NOT = { check_variable = { rl_l = 0 } } }
+				var:rl_e = {
+					if = {
+						limit = { exists = yes }
+						var:rl_l = {
+							mod1440_p_leader = yes
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_wo_pt1^rl_i = p_tok }
+		}
+		set_variable = { mod1440_wr_p_ver = 568382 }
+		set_variable = { mod1440_wr_p_ver_ep = global.mod1440_tk_ep }
+	}
 	set_variable = { mod1440_wr_c_has = 0 }
 	if = {
 		limit = { check_variable = { mod1440_wr_c_enemy = 0 } }
 		set_variable = { mod1440_wr_c_enemy = THIS }
 	}
 	if = {
-		limit = { check_variable = { mod1440_wr_sel_kind = 1 } check_variable = { mod1440_wr_sel_i < mod1440_wr_enemy^num } }
-		set_variable = { mod1440_wr_c_has = 1 }
-		set_variable = { mod1440_wr_c_enemy = mod1440_wr_enemy^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_since = mod1440_wr_since^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_old = mod1440_wr_old^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_days = mod1440_wr_days^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_cas = mod1440_wr_cas^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_taken = mod1440_wr_taken^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_lost = mod1440_wr_lost^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_vpt = mod1440_wr_vpt^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_vpl = mod1440_wr_vpl^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_surr = mod1440_wr_surr^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_capd = mod1440_wr_capd^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_id = mod1440_wr_id^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_day0 = mod1440_wr_day0^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_ecas = mod1440_wr_ecas^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_endday = global.num_days }
-		set_variable = { mod1440_wr_c_until = global.date }
+		limit = { check_variable = { mod1440_wr_c_te = 0 } }
+		set_variable = { mod1440_wr_c_te = THIS }
 	}
-	else_if = {
-		limit = { check_variable = { mod1440_wr_sel_kind = 2 } check_variable = { mod1440_wr_sel_i < mod1440_wo_enemy^num } }
-		set_variable = { mod1440_wr_c_has = 1 }
-		set_variable = { mod1440_wr_c_enemy = mod1440_wo_enemy^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_since = mod1440_wo_since^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_old = mod1440_wo_old^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_days = mod1440_wo_days^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_cas = mod1440_wo_cas^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_taken = mod1440_wo_taken^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_lost = mod1440_wo_lost^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_vpt = mod1440_wo_vpt^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_vpl = mod1440_wo_vpl^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_until = mod1440_wo_until^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_outcome = mod1440_wo_outcome^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_id = mod1440_wo_id^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_day0 = mod1440_wo_day0^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_ecas = mod1440_wo_ecas^mod1440_wr_sel_i }
-		set_variable = { mod1440_wr_c_surr = 0 }
-		set_variable = { mod1440_wr_c_capd = 0 }
-		set_variable = { mod1440_wr_c_endday = mod1440_wr_c_day0 }
-		add_to_variable = { mod1440_wr_c_endday = mod1440_wr_c_days }
-	}
-	clear_array = mod1440_wr_pk
-	for_each_loop = {
-		array = mod1440_wr_enemy
-		value = wr_v
-		index = wr_i
-		set_temp_variable = { wr_p = 0 }
+	clear_array = mod1440_we_c
+	clear_array = mod1440_we_id
+	clear_array = mod1440_we_open
+	clear_array = mod1440_we_idx
+	clear_array = mod1440_we_since
+	clear_array = mod1440_we_until
+	clear_array = mod1440_we_day0
+	clear_array = mod1440_we_end
+	clear_array = mod1440_we_oc
+	clear_array = mod1440_we_surr
+	clear_array = mod1440_we_capd
+	clear_array = mod1440_we_kus
+	clear_array = mod1440_we_kthem
+	clear_array = mod1440_we_st
+	clear_array = mod1440_we_sl
+	clear_array = mod1440_we_vpt
+	clear_array = mod1440_we_vpl
+	clear_array = mod1440_we_old
+	clear_array = mod1440_we_odd
+	clear_array = mod1440_we_pk
+	clear_array = mod1440_wr_t_id
+	clear_array = mod1440_wr_t_open
+	clear_array = mod1440_wr_t_idx
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wr_enemy^num
+		value = cd_i
 		if = {
-			limit = { check_variable = { mod1440_wr_sel_kind = 1 } check_variable = { mod1440_wr_sel_i = wr_i } }
-			set_temp_variable = { wr_p = 1 }
+			limit = { check_variable = { mod1440_wr_grp^cd_i = mod1440_wr_sel_g } }
+			add_to_array = { mod1440_wr_t_id = mod1440_wr_id^cd_i }
+			add_to_array = { mod1440_wr_t_open = 1 }
+			add_to_array = { mod1440_wr_t_idx = cd_i }
 		}
-		add_to_array = { mod1440_wr_pk = wr_p }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_wo_enemy^num
+		value = cd_i
+		if = {
+			limit = { check_variable = { mod1440_wo_grp^cd_i = mod1440_wr_sel_g } }
+			add_to_array = { mod1440_wr_t_id = mod1440_wo_id^cd_i }
+			add_to_array = { mod1440_wr_t_open = 0 }
+			add_to_array = { mod1440_wr_t_idx = cd_i }
+		}
+	}
+	set_temp_variable = { cd_n = mod1440_wr_t_id^num }
+	set_temp_variable = { cd_odd = 0 }
+	for_loop_effect = {
+		start = 0
+		end = cd_n
+		value = cd_k
+		find_lowest_in_array = {
+			array = mod1440_wr_t_id
+			value = cd_lo
+			index = cd_at
+		}
+		set_temp_variable = { cd_o = mod1440_wr_t_open^cd_at }
+		set_temp_variable = { cd_x = mod1440_wr_t_idx^cd_at }
+		set_variable = { mod1440_wr_t_id^cd_at = 2000000 }
+		if = {
+			limit = { check_variable = { cd_o = 1 } }
+			add_to_array = { mod1440_we_c = mod1440_wr_enemy^cd_x }
+			add_to_array = { mod1440_we_id = mod1440_wr_id^cd_x }
+			add_to_array = { mod1440_we_open = 1 }
+			add_to_array = { mod1440_we_idx = cd_x }
+			add_to_array = { mod1440_we_since = mod1440_wr_since^cd_x }
+			add_to_array = { mod1440_we_until = global.date }
+			add_to_array = { mod1440_we_day0 = mod1440_wr_day0^cd_x }
+			add_to_array = { mod1440_we_end = global.num_days }
+			add_to_array = { mod1440_we_oc = 0 }
+			add_to_array = { mod1440_we_surr = mod1440_wr_surr^cd_x }
+			add_to_array = { mod1440_we_capd = mod1440_wr_capd^cd_x }
+			add_to_array = { mod1440_we_kus = mod1440_wr_kus^cd_x }
+			add_to_array = { mod1440_we_kthem = mod1440_wr_kthem^cd_x }
+			add_to_array = { mod1440_we_st = mod1440_wr_taken^cd_x }
+			add_to_array = { mod1440_we_sl = mod1440_wr_lost^cd_x }
+			add_to_array = { mod1440_we_vpt = mod1440_wr_vpt^cd_x }
+			add_to_array = { mod1440_we_vpl = mod1440_wr_vpl^cd_x }
+			add_to_array = { mod1440_we_old = mod1440_wr_old^cd_x }
+			add_to_array = { mod1440_we_odd = cd_odd }
+			add_to_array = { mod1440_we_pk = 0 }
+		}
+		else = {
+			set_temp_variable = { cd_end = -1 }
+			set_temp_variable = { cd_d = mod1440_wo_day0^cd_x }
+			if = {
+				limit = { check_variable = { cd_d > -1 } }
+				set_temp_variable = { cd_end = cd_d }
+				add_to_temp_variable = { cd_end = mod1440_wo_days^cd_x }
+			}
+			add_to_array = { mod1440_we_c = mod1440_wo_enemy^cd_x }
+			add_to_array = { mod1440_we_id = mod1440_wo_id^cd_x }
+			add_to_array = { mod1440_we_open = 0 }
+			add_to_array = { mod1440_we_idx = cd_x }
+			add_to_array = { mod1440_we_since = mod1440_wo_since^cd_x }
+			add_to_array = { mod1440_we_until = mod1440_wo_until^cd_x }
+			add_to_array = { mod1440_we_day0 = mod1440_wo_day0^cd_x }
+			add_to_array = { mod1440_we_end = cd_end }
+			add_to_array = { mod1440_we_oc = mod1440_wo_oc^cd_x }
+			add_to_array = { mod1440_we_surr = 0 }
+			add_to_array = { mod1440_we_capd = 0 }
+			add_to_array = { mod1440_we_kus = mod1440_wo_kus^cd_x }
+			add_to_array = { mod1440_we_kthem = mod1440_wo_kthem^cd_x }
+			add_to_array = { mod1440_we_st = mod1440_wo_taken^cd_x }
+			add_to_array = { mod1440_we_sl = mod1440_wo_lost^cd_x }
+			add_to_array = { mod1440_we_vpt = mod1440_wo_vpt^cd_x }
+			add_to_array = { mod1440_we_vpl = mod1440_wo_vpl^cd_x }
+			add_to_array = { mod1440_we_old = mod1440_wo_old^cd_x }
+			add_to_array = { mod1440_we_odd = cd_odd }
+			add_to_array = { mod1440_we_pk = 0 }
+		}
+		if = {
+			limit = { check_variable = { cd_odd = 0 } }
+			set_temp_variable = { cd_odd = 1 }
+		}
+		else = {
+			set_temp_variable = { cd_odd = 0 }
+		}
 	}
 	if = {
-		limit = { check_variable = { mod1440_wr_c_has = 1 } }
-		set_variable = { mod1440_wr_c_ours = surrender_progress }
-		multiply_variable = { mod1440_wr_c_ours = 100 }
-		set_variable = { mod1440_wr_c_exists = 0 }
-		if = {
-			limit = { var:mod1440_wr_c_enemy = { exists = yes } }
-			set_variable = { mod1440_wr_c_exists = 1 }
-		}
-		set_variable = { mod1440_wr_c_efac = 0 }
-		if = {
-			limit = { var:mod1440_wr_c_enemy = { is_in_faction = yes } }
-			set_variable = { mod1440_wr_c_efac = 1 }
-		}
-		set_temp_variable = { p_face = token:GFX_portrait_unknown }
-		var:mod1440_wr_c_enemy = {
+		limit = { check_variable = { cd_n > 0 } }
+		set_variable = { mod1440_wr_c_has = 1 }
+		set_variable = { mod1440_wr_c_count = cd_n }
+		set_variable = { mod1440_wr_c_n = cd_n }
+		subtract_from_variable = { mod1440_wr_c_n = 1 }
+		set_variable = { mod1440_wr_c_enemy = mod1440_we_c^0 }
+		set_variable = { mod1440_wr_c_since = mod1440_we_since^0 }
+		set_variable = { mod1440_wr_c_old = mod1440_we_old^0 }
+		set_variable = { mod1440_wr_c_id = mod1440_we_id^0 }
+		set_variable = { mod1440_wr_c_open = 0 }
+		set_variable = { mod1440_wr_c_kus = 0 }
+		set_variable = { mod1440_wr_c_kthem = 0 }
+		set_variable = { mod1440_wr_c_taken = 0 }
+		set_variable = { mod1440_wr_c_lost = 0 }
+		set_variable = { mod1440_wr_c_vpt = 0 }
+		set_variable = { mod1440_wr_c_vpl = 0 }
+		set_variable = { mod1440_wr_c_gave = 0 }
+		set_variable = { mod1440_wr_c_kunk = 0 }
+		set_variable = { mod1440_wr_c_day0 = -1 }
+		set_variable = { mod1440_wr_c_endday = -1 }
+		set_variable = { mod1440_wr_c_until = mod1440_we_until^0 }
+		set_temp_variable = { cd_last = 0 }
+		set_temp_variable = { cd_known = 0 }
+		for_loop_effect = {
+			start = 0
+			end = cd_n
+			value = cd_k
 			if = {
-				limit = { exists = yes }
-				if = {
-					limit = { OR = { OR = { NOT = { check_variable = { mod1440_ld_p_ver = 95029 } } NOT = { check_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_ld_p_of = country_leader } } } }
-					set_temp_variable = { p_ld = country_leader }
-					var:p_ld = {
-						mod1440_p_leader = yes
-					}
-					set_variable = { mod1440_ld_p = p_tok }
-					set_variable = { mod1440_ld_p_ver = 95029 }
-					set_variable = { mod1440_ld_p_ver_ep = global.mod1440_tk_ep }
-					set_variable = { mod1440_ld_p_of = country_leader }
-				}
-				set_temp_variable = { p_face = mod1440_ld_p }
+				limit = { check_variable = { mod1440_we_open^cd_k = 1 } }
+				set_variable = { mod1440_wr_c_open = 1 }
+			}
+			set_temp_variable = { cd_d = mod1440_we_day0^cd_k }
+			set_temp_variable = { cd_e = mod1440_wr_c_day0 }
+			if = {
+				limit = { check_variable = { cd_d > -1 } OR = { check_variable = { cd_e < 0 } check_variable = { cd_d < cd_e } } }
+				set_variable = { mod1440_wr_c_day0 = cd_d }
+			}
+			set_temp_variable = { cd_d = mod1440_we_end^cd_k }
+			if = {
+				limit = { check_variable = { cd_d > mod1440_wr_c_endday } }
+				set_variable = { mod1440_wr_c_endday = cd_d }
+				set_variable = { mod1440_wr_c_until = mod1440_we_until^cd_k }
+				set_temp_variable = { cd_last = cd_k }
+			}
+			if = {
+				limit = { check_variable = { mod1440_we_kus^cd_k > -1 } }
+				add_to_variable = { mod1440_wr_c_kus = mod1440_we_kus^cd_k }
+				add_to_variable = { mod1440_wr_c_kthem = mod1440_we_kthem^cd_k }
+				add_to_temp_variable = { cd_known = 1 }
+			}
+			add_to_variable = { mod1440_wr_c_taken = mod1440_we_st^cd_k }
+			add_to_variable = { mod1440_wr_c_lost = mod1440_we_sl^cd_k }
+			add_to_variable = { mod1440_wr_c_vpt = mod1440_we_vpt^cd_k }
+			add_to_variable = { mod1440_wr_c_vpl = mod1440_we_vpl^cd_k }
+			set_temp_variable = { cd_oc = mod1440_we_oc^cd_k }
+			if = {
+				limit = { OR = { AND = { check_variable = { mod1440_we_open^cd_k = 0 } check_variable = { cd_oc > 1 } check_variable = { cd_oc < 6 } } AND = { check_variable = { mod1440_we_open^cd_k = 1 } check_variable = { mod1440_we_capd^cd_k > 0 } } } }
+				add_to_variable = { mod1440_wr_c_gave = 1 }
 			}
 		}
-		set_variable = { mod1440_wr_c_p = p_face }
+		if = {
+			limit = { check_variable = { cd_known = 0 } }
+			set_variable = { mod1440_wr_c_kunk = 1 }
+		}
+		if = {
+			limit = { check_variable = { mod1440_wr_c_open = 1 } }
+			set_variable = { mod1440_wr_c_endday = global.num_days }
+			set_variable = { mod1440_wr_c_until = global.date }
+		}
+		set_variable = { mod1440_wr_c_days = mod1440_wr_c_endday }
+		if = {
+			limit = { check_variable = { mod1440_wr_c_day0 > -1 } }
+			subtract_from_variable = { mod1440_wr_c_days = mod1440_wr_c_day0 }
+		}
+		else = {
+			set_variable = { mod1440_wr_c_days = 0 }
+		}
+		set_variable = { mod1440_wr_c_surr = mod1440_we_surr^0 }
+		set_variable = { mod1440_wr_c_outcome = token:mod1440_blank }
+		if = {
+			limit = { check_variable = { mod1440_we_open^0 = 0 } }
+			set_temp_variable = { cd_x = mod1440_we_idx^0 }
+			set_variable = { mod1440_wr_c_outcome = mod1440_wo_outcome^cd_x }
+		}
+		set_temp_variable = { cd_x = mod1440_we_idx^0 }
+		if = {
+			limit = { check_variable = { mod1440_we_open^0 = 1 } }
+			set_variable = { mod1440_wr_c_ul0 = mod1440_wr_lu0^cd_x }
+			set_variable = { mod1440_wr_c_up0 = mod1440_wr_pu0^cd_x }
+			set_variable = { mod1440_wr_c_ug0 = mod1440_wr_gu0^cd_x }
+		}
+		else = {
+			set_variable = { mod1440_wr_c_ul0 = mod1440_wo_lu0^cd_x }
+			set_variable = { mod1440_wr_c_up0 = mod1440_wo_pu0^cd_x }
+			set_variable = { mod1440_wr_c_ug0 = mod1440_wo_gu0^cd_x }
+		}
+		if = {
+			limit = { check_variable = { mod1440_wr_c_open = 1 } }
+			mod1440_wr_hog = yes
+			set_variable = { mod1440_wr_c_ul1 = hg_l }
+			set_variable = { mod1440_wr_c_up1 = hg_p }
+			set_variable = { mod1440_wr_c_ug1 = hg_g }
+		}
+		else = {
+			set_temp_variable = { cd_x = mod1440_we_idx^cd_last }
+			set_variable = { mod1440_wr_c_ul1 = mod1440_wo_lu1^cd_x }
+			set_variable = { mod1440_wr_c_up1 = mod1440_wo_pu1^cd_x }
+			set_variable = { mod1440_wr_c_ug1 = mod1440_wo_gu1^cd_x }
+		}
+		mod1440_wr_faces_u = yes
+		mod1440_wr_them = yes
+		set_temp_variable = { cd_lo = mod1440_wr_c_day0 }
+		subtract_from_temp_variable = { cd_lo = 1 }
+		if = {
+			limit = { check_variable = { mod1440_wr_c_day0 < 0 } }
+			set_temp_variable = { cd_lo = -10 }
+		}
+		set_temp_variable = { cd_hi = mod1440_wr_c_endday }
+		add_to_temp_variable = { cd_hi = 1 }
 		clear_array = mod1440_wr_ln_date
 		clear_array = mod1440_wr_ln_day
 		clear_array = mod1440_wr_ln_kind
@@ -13778,6 +15205,7 @@ mod1440_wr_card = {
 		clear_array = mod1440_wr_ln_a
 		clear_array = mod1440_wr_ln_sa
 		clear_array = mod1440_wr_ln_p
+		clear_array = mod1440_wr_ln_b
 		set_temp_variable = { mg_e = mod1440_ev_date^num }
 		subtract_from_temp_variable = { mg_e = 1 }
 		set_temp_variable = { mg_t = mod1440_tr_date^num }
@@ -13811,20 +15239,25 @@ mod1440_wr_card = {
 				set_temp_variable = { mg_m = mg_e }
 				subtract_from_temp_variable = { mg_e = 1 }
 				if = {
-					limit = { check_variable = { mod1440_wr_ln_date^num < 20 } check_variable = { mod1440_ev_sb^mg_m = 1 } check_variable = { mod1440_ev_b^mg_m = mod1440_wr_c_enemy } }
-					add_to_array = { mod1440_wr_ln_date = mod1440_ev_date^mg_m }
-					add_to_array = { mod1440_wr_ln_day = mod1440_ev_day^mg_m }
-					add_to_array = { mod1440_wr_ln_kind = mod1440_ev_kind^mg_m }
-					add_to_array = { mod1440_wr_ln_fam = mod1440_ev_fam^mg_m }
-					add_to_array = { mod1440_wr_ln_p = mod1440_ev_p^mg_m }
+					limit = { check_variable = { mod1440_wr_ln_date^num < 31 } check_variable = { mod1440_ev_sb^mg_m = 1 } check_variable = { mod1440_ev_day^mg_m > cd_lo } check_variable = { mod1440_ev_day^mg_m < cd_hi } }
+					set_temp_variable = { cd_b = mod1440_ev_b^mg_m }
 					if = {
-						limit = { check_variable = { mod1440_ev_sa^mg_m > 1 } }
-						add_to_array = { mod1440_wr_ln_a = mod1440_ev_a^mg_m }
-						add_to_array = { mod1440_wr_ln_sa = mod1440_ev_sa^mg_m }
-					}
-					else = {
-						add_to_array = { mod1440_wr_ln_a = 0 }
-						add_to_array = { mod1440_wr_ln_sa = 0 }
+						limit = { is_in_array = { array = mod1440_we_c value = cd_b } }
+						add_to_array = { mod1440_wr_ln_date = mod1440_ev_date^mg_m }
+						add_to_array = { mod1440_wr_ln_day = mod1440_ev_day^mg_m }
+						add_to_array = { mod1440_wr_ln_kind = mod1440_ev_kind^mg_m }
+						add_to_array = { mod1440_wr_ln_fam = mod1440_ev_fam^mg_m }
+						add_to_array = { mod1440_wr_ln_p = mod1440_ev_p^mg_m }
+						add_to_array = { mod1440_wr_ln_b = mod1440_ev_b^mg_m }
+						if = {
+							limit = { check_variable = { mod1440_ev_sa^mg_m > 1 } }
+							add_to_array = { mod1440_wr_ln_a = mod1440_ev_a^mg_m }
+							add_to_array = { mod1440_wr_ln_sa = mod1440_ev_sa^mg_m }
+						}
+						else = {
+							add_to_array = { mod1440_wr_ln_a = 0 }
+							add_to_array = { mod1440_wr_ln_sa = 0 }
+						}
 					}
 				}
 			}
@@ -13835,41 +15268,47 @@ mod1440_wr_card = {
 				if = {
 					limit = { NOT = { check_variable = { mod1440_tr_x^mg_m = 1 } } }
 					if = {
-						limit = { check_variable = { mod1440_wr_ln_date^num < 20 } check_variable = { mod1440_tr_sb^mg_m = 1 } check_variable = { mod1440_tr_b^mg_m = mod1440_wr_c_enemy } }
-						add_to_array = { mod1440_wr_ln_date = mod1440_tr_date^mg_m }
-						add_to_array = { mod1440_wr_ln_day = mod1440_tr_day^mg_m }
-						add_to_array = { mod1440_wr_ln_kind = mod1440_tr_kind^mg_m }
-						add_to_array = { mod1440_wr_ln_fam = mod1440_tr_fam^mg_m }
-						add_to_array = { mod1440_wr_ln_p = mod1440_tr_p^mg_m }
+						limit = { check_variable = { mod1440_wr_ln_date^num < 31 } check_variable = { mod1440_tr_sb^mg_m = 1 } check_variable = { mod1440_tr_day^mg_m > cd_lo } check_variable = { mod1440_tr_day^mg_m < cd_hi } }
+						set_temp_variable = { cd_b = mod1440_tr_b^mg_m }
 						if = {
-							limit = { check_variable = { mod1440_tr_sa^mg_m > 1 } }
-							add_to_array = { mod1440_wr_ln_a = mod1440_tr_a^mg_m }
-							add_to_array = { mod1440_wr_ln_sa = mod1440_tr_sa^mg_m }
-						}
-						else = {
-							add_to_array = { mod1440_wr_ln_a = 0 }
-							add_to_array = { mod1440_wr_ln_sa = 0 }
+							limit = { is_in_array = { array = mod1440_we_c value = cd_b } }
+							add_to_array = { mod1440_wr_ln_date = mod1440_tr_date^mg_m }
+							add_to_array = { mod1440_wr_ln_day = mod1440_tr_day^mg_m }
+							add_to_array = { mod1440_wr_ln_kind = mod1440_tr_kind^mg_m }
+							add_to_array = { mod1440_wr_ln_fam = mod1440_tr_fam^mg_m }
+							add_to_array = { mod1440_wr_ln_p = mod1440_tr_p^mg_m }
+							add_to_array = { mod1440_wr_ln_b = mod1440_tr_b^mg_m }
+							if = {
+								limit = { check_variable = { mod1440_tr_sa^mg_m > 1 } }
+								add_to_array = { mod1440_wr_ln_a = mod1440_tr_a^mg_m }
+								add_to_array = { mod1440_wr_ln_sa = mod1440_tr_sa^mg_m }
+							}
+							else = {
+								add_to_array = { mod1440_wr_ln_a = 0 }
+								add_to_array = { mod1440_wr_ln_sa = 0 }
+							}
 						}
 					}
 				}
 			}
 		}
 		set_variable = { mod1440_wr_ln_n = mod1440_wr_ln_date^num }
+		set_temp_variable = { cd_cap = 0 }
+		set_temp_variable = { cd_ck = token:mod1440_ev_capital_taken }
 		for_loop_effect = {
 			start = 0
-			end = 20
-			value = pad_n
+			end = mod1440_ev_date^num
+			value = cd_m
 			if = {
-				limit = { check_variable = { mod1440_wr_ln_date^num < 20 } }
-				add_to_array = { mod1440_wr_ln_date = 0 }
-				add_to_array = { mod1440_wr_ln_day = 0 }
-				add_to_array = { mod1440_wr_ln_kind = token:mod1440_blank }
-				add_to_array = { mod1440_wr_ln_fam = 0 }
-				add_to_array = { mod1440_wr_ln_a = 0 }
-				add_to_array = { mod1440_wr_ln_sa = 0 }
-				add_to_array = { mod1440_wr_ln_p = 0 }
+				limit = { check_variable = { mod1440_ev_kind^cd_m = cd_ck } check_variable = { mod1440_ev_sb^cd_m = 1 } check_variable = { mod1440_ev_day^cd_m > cd_lo } check_variable = { mod1440_ev_day^cd_m < cd_hi } }
+				set_temp_variable = { cd_b = mod1440_ev_b^cd_m }
+				if = {
+					limit = { is_in_array = { array = mod1440_we_c value = cd_b } }
+					add_to_temp_variable = { cd_cap = 1 }
+				}
 			}
 		}
+		set_variable = { mod1440_wr_c_capt = cd_cap }
 		set_variable = { mod1440_wr_c_day0d = mod1440_wr_c_since }
 		set_variable = { mod1440_wr_c_endd = mod1440_wr_c_until }
 		clear_array = mod1440_wr_mx
@@ -13907,31 +15346,42 @@ mod1440_wr_card = {
 		clear_array = mod1440_wr_kt_vp
 		clear_array = mod1440_wr_kt_cap
 		clear_array = mod1440_wr_kt_score
-		set_temp_variable = { kt_id = mod1440_wr_c_id }
+		clear_temp_array = kt_ids
+		for_each_loop = {
+			array = mod1440_we_id
+			value = kt_v
+			add_to_temp_array = { kt_ids = kt_v }
+		}
 		for_each_scope_loop = {
 			array = mod1440_of_known
-			set_temp_variable = { kt_j = -1 }
+			set_temp_variable = { kt_st = 0 }
+			set_temp_variable = { kt_vp = 0 }
+			set_temp_variable = { kt_cap = 0 }
+			set_temp_variable = { kt_any = 0 }
 			for_each_loop = {
 				array = mod1440_ow_id
 				value = kt_v
 				index = kt_i
 				if = {
-					limit = { check_variable = { kt_v = kt_id } }
-					set_temp_variable = { kt_j = kt_i }
+					limit = { is_in_array = { array = kt_ids value = kt_v } }
+					add_to_temp_variable = { kt_st = mod1440_ow_st^kt_i }
+					add_to_temp_variable = { kt_vp = mod1440_ow_vp^kt_i }
+					add_to_temp_variable = { kt_cap = mod1440_ow_cap^kt_i }
+					set_temp_variable = { kt_any = 1 }
 				}
 			}
 			if = {
-				limit = { check_variable = { kt_j > -1 } }
+				limit = { check_variable = { kt_any = 1 } }
 				mod1440_of_me = yes
 				if = {
 					limit = { NOT = { check_variable = { of_me = 0 } } }
 					add_to_array = { PREV.mod1440_wr_kt_c = of_me }
-					add_to_array = { PREV.mod1440_wr_kt_st = mod1440_ow_st^kt_j }
-					add_to_array = { PREV.mod1440_wr_kt_vp = mod1440_ow_vp^kt_j }
-					add_to_array = { PREV.mod1440_wr_kt_cap = mod1440_ow_cap^kt_j }
-					set_temp_variable = { kt_s = mod1440_ow_st^kt_j }
+					add_to_array = { PREV.mod1440_wr_kt_st = kt_st }
+					add_to_array = { PREV.mod1440_wr_kt_vp = kt_vp }
+					add_to_array = { PREV.mod1440_wr_kt_cap = kt_cap }
+					set_temp_variable = { kt_s = kt_st }
 					multiply_temp_variable = { kt_s = 1000 }
-					add_to_temp_variable = { kt_s = mod1440_ow_vp^kt_j }
+					add_to_temp_variable = { kt_s = kt_vp }
 					add_to_array = { PREV.mod1440_wr_kt_score = kt_s }
 				}
 			}
@@ -13958,7 +15408,7 @@ mod1440_wr_card = {
 			add_to_variable = { mod1440_wr_k_n = 1 }
 			var:mod1440_wr_k_0 = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_variable = { PREV.mod1440_wr_k_0_p = mod1440_p }
@@ -13994,7 +15444,7 @@ mod1440_wr_card = {
 			add_to_variable = { mod1440_wr_k_n = 1 }
 			var:mod1440_wr_k_1 = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_variable = { PREV.mod1440_wr_k_1_p = mod1440_p }
@@ -14030,7 +15480,7 @@ mod1440_wr_card = {
 			add_to_variable = { mod1440_wr_k_n = 1 }
 			var:mod1440_wr_k_2 = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_variable = { PREV.mod1440_wr_k_2_p = mod1440_p }
@@ -14066,7 +15516,7 @@ mod1440_wr_card = {
 			add_to_variable = { mod1440_wr_k_n = 1 }
 			var:mod1440_wr_k_3 = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_variable = { PREV.mod1440_wr_k_3_p = mod1440_p }
@@ -14102,7 +15552,7 @@ mod1440_wr_card = {
 			add_to_variable = { mod1440_wr_k_n = 1 }
 			var:mod1440_wr_k_4 = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_variable = { PREV.mod1440_wr_k_4_p = mod1440_p }
@@ -14117,42 +15567,148 @@ mod1440_wr_card = {
 				}
 			}
 		}
-		set_variable = { mod1440_wr_k_5 = country_leader }
-		set_variable = { mod1440_wr_k_5_p = token:GFX_portrait_unknown }
-		set_variable = { mod1440_wr_k_5_st = 0 }
-		set_variable = { mod1440_wr_k_5_vp = 0 }
-		set_variable = { mod1440_wr_k_5_cap = 0 }
-		set_variable = { mod1440_wr_k_5_rank = 0 }
+	}
+	for_loop_effect = {
+		start = 0
+		end = 31
+		value = pad_n
 		if = {
-			limit = { check_variable = { mod1440_wr_kt_score^num > 5 } }
-			find_highest_in_array = {
-				array = mod1440_wr_kt_score
-				value = kt_hi
-				index = kt_at
-			}
-			set_variable = { mod1440_wr_k_5 = mod1440_wr_kt_c^kt_at }
-			set_variable = { mod1440_wr_k_5_st = mod1440_wr_kt_st^kt_at }
-			set_variable = { mod1440_wr_k_5_vp = mod1440_wr_kt_vp^kt_at }
-			set_variable = { mod1440_wr_k_5_cap = mod1440_wr_kt_cap^kt_at }
-			set_variable = { mod1440_wr_kt_score^kt_at = -1 }
-			add_to_variable = { mod1440_wr_k_n = 1 }
-			var:mod1440_wr_k_5 = {
-				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
-					mod1440_p_officer = yes
-				}
-				set_variable = { PREV.mod1440_wr_k_5_p = mod1440_p }
-				set_variable = { PREV.mod1440_wr_k_5_rank = 2 }
-				if = {
-					limit = { is_field_marshal = yes }
-					set_variable = { PREV.mod1440_wr_k_5_rank = 1 }
-				}
-				if = {
-					limit = { is_navy_leader = yes }
-					set_variable = { PREV.mod1440_wr_k_5_rank = 3 }
-				}
-			}
+			limit = { check_variable = { mod1440_wr_ln_date^num < 31 } }
+			add_to_array = { mod1440_wr_ln_date = 0 }
+			add_to_array = { mod1440_wr_ln_day = 0 }
+			add_to_array = { mod1440_wr_ln_kind = token:mod1440_blank }
+			add_to_array = { mod1440_wr_ln_fam = 0 }
+			add_to_array = { mod1440_wr_ln_a = 0 }
+			add_to_array = { mod1440_wr_ln_sa = 0 }
+			add_to_array = { mod1440_wr_ln_p = 0 }
+			add_to_array = { mod1440_wr_ln_b = THIS }
 		}
+	}
+}
+mod1440_wr_faces_u = {
+	set_temp_variable = { fc_unk = token:GFX_portrait_unknown }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_up0 = 0 } }
+		set_variable = { mod1440_wr_c_up0 = token:GFX_portrait_unknown }
+	}
+	set_variable = { mod1440_wr_c_ufb0 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_up0 = fc_unk } }
+		set_variable = { mod1440_wr_c_ufb0 = 1 }
+	}
+	set_variable = { mod1440_wr_c_unr0 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_ul0 = 0 } }
+		set_variable = { mod1440_wr_c_unr0 = 1 }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_c_up1 = 0 } }
+		set_variable = { mod1440_wr_c_up1 = token:GFX_portrait_unknown }
+	}
+	set_variable = { mod1440_wr_c_ufb1 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_up1 = fc_unk } }
+		set_variable = { mod1440_wr_c_ufb1 = 1 }
+	}
+	set_variable = { mod1440_wr_c_unr1 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_ul1 = 0 } }
+		set_variable = { mod1440_wr_c_unr1 = 1 }
+	}
+	set_variable = { mod1440_wr_c_utw = 0 }
+	set_temp_variable = { fc_a = mod1440_wr_c_ul0 }
+	set_temp_variable = { fc_b = mod1440_wr_c_ul1 }
+	if = {
+		limit = { check_variable = { fc_a = fc_b } }
+		set_variable = { mod1440_wr_c_utw = 1 }
+	}
+}
+
+# Wars: their side of the file: the heads of government of the enemy chosen in the table (mod1440_wr_sel_e).
+mod1440_wr_them = {
+	set_temp_variable = { th_k = -1 }
+	set_temp_variable = { th_b = 0 }
+	for_each_loop = {
+		array = mod1440_we_id
+		value = th_v
+		index = th_i
+		break = th_b
+		if = {
+			limit = { check_variable = { th_v = mod1440_wr_sel_e } }
+			set_temp_variable = { th_k = th_i }
+			set_temp_variable = { th_b = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { th_k < 0 } check_variable = { mod1440_we_id^num > 0 } }
+		set_temp_variable = { th_k = 0 }
+		set_variable = { mod1440_wr_sel_e = mod1440_we_id^0 }
+	}
+	if = {
+		limit = { check_variable = { th_k > -1 } }
+		for_loop_effect = {
+			start = 0
+			end = mod1440_we_pk^num
+			value = th_i
+			set_variable = { mod1440_we_pk^th_i = 0 }
+		}
+		set_variable = { mod1440_we_pk^th_k = 1 }
+		set_variable = { mod1440_wr_c_te = mod1440_we_c^th_k }
+		set_variable = { mod1440_wr_c_topen = mod1440_we_open^th_k }
+		set_temp_variable = { th_x = mod1440_we_idx^th_k }
+		if = {
+			limit = { check_variable = { mod1440_wr_c_topen = 1 } }
+			set_variable = { mod1440_wr_c_tl0 = mod1440_wr_lt0^th_x }
+			set_variable = { mod1440_wr_c_tl1 = mod1440_wr_lt1^th_x }
+			set_variable = { mod1440_wr_c_tp0 = mod1440_wr_pt0^th_x }
+			set_variable = { mod1440_wr_c_tp1 = mod1440_wr_pt1^th_x }
+			set_variable = { mod1440_wr_c_tg0 = mod1440_wr_gt0^th_x }
+			set_variable = { mod1440_wr_c_tg1 = mod1440_wr_gt1^th_x }
+		}
+		else = {
+			set_variable = { mod1440_wr_c_tl0 = mod1440_wo_lt0^th_x }
+			set_variable = { mod1440_wr_c_tl1 = mod1440_wo_lt1^th_x }
+			set_variable = { mod1440_wr_c_tp0 = mod1440_wo_pt0^th_x }
+			set_variable = { mod1440_wr_c_tp1 = mod1440_wo_pt1^th_x }
+			set_variable = { mod1440_wr_c_tg0 = mod1440_wo_gt0^th_x }
+			set_variable = { mod1440_wr_c_tg1 = mod1440_wo_gt1^th_x }
+		}
+	}
+	set_temp_variable = { fc_unk = token:GFX_portrait_unknown }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tp0 = 0 } }
+		set_variable = { mod1440_wr_c_tp0 = token:GFX_portrait_unknown }
+	}
+	set_variable = { mod1440_wr_c_tfb0 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tp0 = fc_unk } }
+		set_variable = { mod1440_wr_c_tfb0 = 1 }
+	}
+	set_variable = { mod1440_wr_c_tnr0 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tl0 = 0 } }
+		set_variable = { mod1440_wr_c_tnr0 = 1 }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tp1 = 0 } }
+		set_variable = { mod1440_wr_c_tp1 = token:GFX_portrait_unknown }
+	}
+	set_variable = { mod1440_wr_c_tfb1 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tp1 = fc_unk } }
+		set_variable = { mod1440_wr_c_tfb1 = 1 }
+	}
+	set_variable = { mod1440_wr_c_tnr1 = 0 }
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tl1 = 0 } }
+		set_variable = { mod1440_wr_c_tnr1 = 1 }
+	}
+	set_variable = { mod1440_wr_c_ttw = 0 }
+	set_temp_variable = { fc_a = mod1440_wr_c_tl0 }
+	set_temp_variable = { fc_b = mod1440_wr_c_tl1 }
+	if = {
+		limit = { check_variable = { fc_a = fc_b } }
+		set_variable = { mod1440_wr_c_ttw = 1 }
 	}
 }
 
@@ -14170,6 +15726,42 @@ mod1440_rec_show = {
 	if = {
 		limit = { check_variable = { mod1440_gv_p = 0 } }
 		set_variable = { mod1440_gv_p = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_c_up0 = 0 } }
+		set_variable = { mod1440_wr_c_up0 = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_c_up1 = 0 } }
+		set_variable = { mod1440_wr_c_up1 = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tp0 = 0 } }
+		set_variable = { mod1440_wr_c_tp0 = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_c_tp1 = 0 } }
+		set_variable = { mod1440_wr_c_tp1 = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_k_0_p = 0 } }
+		set_variable = { mod1440_wr_k_0_p = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_k_1_p = 0 } }
+		set_variable = { mod1440_wr_k_1_p = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_k_2_p = 0 } }
+		set_variable = { mod1440_wr_k_2_p = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_k_3_p = 0 } }
+		set_variable = { mod1440_wr_k_3_p = token:GFX_portrait_unknown }
+	}
+	if = {
+		limit = { check_variable = { mod1440_wr_k_4_p = 0 } }
+		set_variable = { mod1440_wr_k_4_p = token:GFX_portrait_unknown }
 	}
 	if = {
 		limit = { check_variable = { mod1440_wd_state = 0 } }
@@ -14274,6 +15866,7 @@ mod1440_ev_init = {
 			add_to_array = { mod1440_ev_enemies = ev_c }
 			set_temp_variable = { wr_c = ev_c }
 			set_temp_variable = { wr_old = 1 }
+			set_temp_variable = { wr_how = 0 }
 			mod1440_wr_open = yes
 		}
 		for_each_loop = {
@@ -14331,6 +15924,7 @@ mod1440_rec_daily = {
 			mod1440_ev_add = yes
 			set_temp_variable = { wr_c = ev_c }
 			set_temp_variable = { wr_old = 0 }
+			set_temp_variable = { wr_how = 3 }
 			mod1440_wr_open = yes
 		}
 	}
@@ -14731,6 +16325,7 @@ mod1440_ev_war_on = {
 	set_temp_variable = { ev_n = 0 }
 	mod1440_ev_add = yes
 	set_temp_variable = { wr_old = 0 }
+	set_temp_variable = { wr_how = 1 }
 	mod1440_wr_open = yes
 	if = {
 		limit = { NOT = { is_in_array = { array = mod1440_ev_enemies value = wr_c } } }
@@ -14752,6 +16347,7 @@ mod1440_ev_war_by = {
 	set_temp_variable = { ev_n = 0 }
 	mod1440_ev_add = yes
 	set_temp_variable = { wr_old = 0 }
+	set_temp_variable = { wr_how = 2 }
 	mod1440_wr_open = yes
 	if = {
 		limit = { NOT = { is_in_array = { array = mod1440_ev_enemies value = wr_c } } }
@@ -14850,7 +16446,7 @@ mod1440_tr_taken = {
 			limit = { check_variable = { of_best > 0 } }
 			var:of_who = {
 				if = {
-					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+					limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 					mod1440_p_officer = yes
 				}
 				set_temp_variable = { sr_p = mod1440_p }

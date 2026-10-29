@@ -27,7 +27,7 @@
     {"rule": "row", "window": "mod1440_records_diary_row", "item": "GFX_1440p_SG_*_1198x34", "why": "A diary line of 34 (WD_ROW) with a portrait of 23x31, set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_records_of", "item": "GFX_1440p_SG_stripe_642x22", "why": "The service record's lines of 22 in an officer's file, set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_records_gv", "item": "GFX_1440p_SG_*_526x*", "why": "Government rows of people with their portraits (52 to 90), set before the ruleset's pitches."},
-    {"rule": "row", "window": "mod1440_records_wr", "item": "GFX_1440p_SG_stripe_*", "why": "The rows of a war's file (26 and 58), set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_wr", "item": "GFX_1440p_SG_stripe_580x26", "why": "Not a table row: the inside of the track of a war's file (the war score bar's frame), kept from E4's first build; the file's tables are at 24, 32 and 48 since E4 round 2."},
     {"rule": "row", "window": "mod1440_records_*war_row", "item": "GFX_1440p_SG_pick_258x33", "why": "A war in the list, with its flags, at 33, set before the ruleset's pitches."}
   ]
 }

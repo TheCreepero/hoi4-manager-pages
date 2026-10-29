@@ -45,13 +45,14 @@ TAB_SPRITE_ON = "GFX_1440p_SG_tab_236x44_on"
 TAB_ICON = {0: "army_experience", 1: "command_power", 2: "pol_power", 3: "victory_points"}
 # what a tab counts, in the window's scope; the Officers page's count is chosen by its own section
 OF_TAB_COUNT = "[?mod1440_of_serving|0]"   # the officers serving today, counted by the daily round (e-officers-gov)
-TAB_COUNT = {0: "[?mod1440_ev_date^num|0] lines", 1: OF_TAB_COUNT, 2: "", 3: "[?mod1440_wr_enemy^num|0] at war"}
+# E4 fix round 1: the Wars tab counts wars of today (mod1440_wr_wars, kept by mod1440_wr_count_wars), as its page does
+TAB_COUNT = {0: "[?mod1440_ev_date^num|0] lines", 1: OF_TAB_COUNT, 2: "", 3: "[?mod1440_wr_wars|0] at war"}
 # what each page is for: the tooltip of its tab (the hints of the old title strip)
 PAGE_HINTS = {
     0: "What happened, day by day: written by the mod as the game goes, from the day it is active.",
     1: "Every general and admiral, with what the mod has written down about him. Click one for his record.",
     2: "Who rules and who serves. A date is the day the mod first saw the name in office.",
-    3: "One row per enemy. Click a war for its file.",
+    3: "One row per war, its enemies joined. Click a war for its file.",     # E4 round 2
 }
 LOG_KEEP = 1000         # lines of each log (500 until 2026-10-16)
 MARK_KEEP = 300         # lines the player has marked: the chronicle, which age never trims
@@ -1805,7 +1806,11 @@ def places():
             # the offices: one holder who cannot be found, and the copies are taken again without a line
             + tmp("rm_lost", 0) + in_variable("mod1440_gv_leader") + offices
             + in_array("mod1440_gv_adv") + in_array("mod1440_gv_hc") + in_array("mod1440_gv_rul")
-            + iff("check_variable = { rm_lost > 0 }", setv("mod1440_gv_begun", 0))))
+            + iff("check_variable = { rm_lost > 0 }", setv("mod1440_gv_begun", 0))
+            # E4 round 2: the heads of government kept on the rows of the wars, at the start and at the end (a head
+            # who cannot be found becomes "not recorded")
+            + "".join(in_array(name) for name in ("mod1440_wr_lu0", "mod1440_wr_lt0", "mod1440_wr_lt1",
+                                                  "mod1440_wo_lu0", "mod1440_wo_lu1", "mod1440_wo_lt0", "mod1440_wo_lt1"))))
     )
 
     def adopt_array(name, test=None):
@@ -2246,57 +2251,111 @@ def government(portrait_version):
 
 # ---------------------------------------------------------------- Wars (E4), with the counters of the air war (E5)
 
-# The page (e-diary-wars, 2026-10-16): a column of 548 with the country at war, today's enemies and the finished
-# wars on the game's war participant plates, and the file of the chosen war on the war overview's own frame,
-# narrowed to 1092 (gfx/interface/mod1440/wr_file_bg.dds, made by tools/stretch_background.py).
+# The page, redesign round of 2026-10-28 (scratch/phases/E4/layout.json; the user took every recommendation on
+# 2026-10-29): a column of 548 in the steel look (the campaign as a banded table, the wars of today and the finished
+# wars, one of the game's war participant plates per war) and the file of the chosen war on the war overview's own
+# frame, 1092 wide (gfx/interface/mod1440/wr_file_bg.dds). The window's ground and its frame stay in the card look
+# until the other pages move (decision 5).
+#
+# A war is a group of rows. The record keeps a row per enemy (the save contract); an enemy that fights on the side of
+# the enemy of an open row (has_war_together_with), against whom the country has the same role (has_offensive_war_with),
+# joins that row's war: grp is the number (id) of the war's first row, and id keeps its meaning for the officers'
+# tallies (mod1440_ow_*).
+# Casualties: each row keeps both sides' dead in thousands from casualties_inflicted_by: kus ours by this enemy's hand,
+# kthem its dead by ours. The reading minus the reading of the row's first day (kus0, kthem0), every day, never
+# falling, and once more at the end. `casualties` counted only the wars in progress (X78) and the whole country's loss,
+# which made a finished war's dead 0 (fault 1) and every war's the country's whole loss (fault 3).
+# Heads of government: both sides' at the start (lu0, lt0) and at the end (lu1, lt1; theirs kept while the war runs),
+# with their portraits (pu, pt, text keys) and ideology groups (gu, gt), kept by place (X67) and put right by
+# mod1440_ch_remap; nothing of a finished war is looked up today (fault 2).
 WR_COL_W = 548
-WR_FILE_X = REC_BODY_X + WR_COL_W + 12
-WR_FILE_W = REC_W - 14 - WR_FILE_X          # 1092
-WR_NOW_H = 274
-WR_TOP_H = 262
-WR_PLATE = "GFX_war_participant_entry"      # the game's plate of a war's side: 531x41, green, red, blue
-WR_PLATE_W, WR_ROW = 531, 46
+WR_FILE_X = REC_BODY_X + WR_COL_W + 12          # 574
+WR_FILE_W = REC_W - 14 - WR_FILE_X              # 1092
+WR_PLATE = "GFX_war_participant_entry"          # the game's plate of a war's side: 531x41, green, red, blue
+WR_PLATE_W, WR_PLATE_H, WR_ROW = 531, 41, 48
 # the four dark slots of the plate: (x, width)
 WR_SLOTS = [(268, 50), (320, 73), (396, 72), (471, 49)]
-WR_LINES = 20                   # lines of the War Diary a war's file shows, and marks on its track
-WR_COMMANDERS = 6               # officers a file names
-WR_FACE = 0.8                   # the portraits of the two heads of government: 125x168
+# the three steel cards of the left column: (y, height), each with a head band of 27 (GFX_1440p_WR_<name>, made by
+# tools/stretch_background.py from the steel bar)
+WR_CARDS = {"campaign": (REC_BODY_Y, 220), "today": (342, 188), "done": (536, 670)}
+WR_STEEL_HEAD = 27
+WR_LIST_Y = 32                  # the first plate of a list, inside its card
+WR_NOW_ROWS, WR_OLD_ROWS = 3, 12
+WR_TROW = 24                    # a row of the campaign table and of the file's tables
+WR_LINES = 31                   # lines of the War Diary a war's file shows: 10 on the left, 21 (or 13) on the right
+WR_LEFT_LINES = 10
+WR_RIGHT_SEVERAL = 13           # with the enemies table above them
+WR_MARKS = 20                   # marks on the track: the newest lines
+WR_COMMANDERS = 5               # officers a file names
+WR_FACE = 0.8                   # the portraits of the heads of government: 125x168
+WR_SMALL_FACE = 0.22            # an officer: 34x46
+WR_ENEMY_ROWS, WR_ENEMY_ROW = 5, 32
 # What a row of a war holds. The newer parts stand last: a game saved before them has rows without (see wr_grow).
 # id: a number of the war's own, by which an officer keeps what he took in it; ecas0 the enemy's casualties on its
 # first day, ecas what they have lost since; for a finished war day0 its first day, oc how it ended (1 peace,
-# 2 capitulated, 3 made a subject, 4 annexed, 5 no longer exists) and fr the frame of its plate.
-WR_PARTS = ["enemy", "since", "day0", "cas0", "taken", "lost", "days", "cas", "capd", "old", "surr", "vpt", "vpl", "id", "ecas0", "ecas"]
-WO_PARTS = ["enemy", "since", "until", "days", "cas", "taken", "lost", "outcome", "old", "vpt", "vpl", "id", "day0", "ecas", "oc", "fr"]
+# 2 capitulated, 3 made a subject, 4 annexed, 5 no longer exists, 6 we capitulated, 7 we were made a subject) and fr
+# the frame of its plate. cas, cas0, ecas0 and ecas stay in the save and are no longer shown (E4 round 2).
+# E4 round 2 (WR_NEW_3, WO_NEW_3): grp the war's number, how it began (1 we declared, 2 they declared, 3 joined, 0 not
+# known), kday the day the count of its dead began, kus0/kthem0 the readings of that day, kus/kthem the dead (-1: not
+# kept, a war that ended before this build), lu/pu/gu ours and lt/pt/gt theirs, 0 at the start and 1 at the end.
+WR_NEW_3 = ["grp", "how", "kday", "kus0", "kthem0", "kus", "kthem", "lu0", "pu0", "gu0", "lt0", "pt0", "gt0", "lt1", "pt1", "gt1"]
+WO_NEW_3 = ["grp", "how", "kday", "kus", "kthem", "lu0", "pu0", "gu0", "lu1", "pu1", "gu1", "lt0", "pt0", "gt0", "lt1", "pt1", "gt1"]
+WR_PARTS = ["enemy", "since", "day0", "cas0", "taken", "lost", "days", "cas", "capd", "old", "surr", "vpt", "vpl", "id", "ecas0", "ecas"] + WR_NEW_3
+WO_PARTS = ["enemy", "since", "until", "days", "cas", "taken", "lost", "outcome", "old", "vpt", "vpl", "id", "day0", "ecas", "oc", "fr"] + WO_NEW_3
 WR_NEW = ["vpt", "vpl"]                     # 2026-10-13
 WR_NEW_2 = {"wr": ["id", "ecas0", "ecas"], "wo": ["id", "day0", "ecas", "oc", "fr"]}     # 2026-10-16
 WO_KEEP = 200
-OUTCOMES = [("peace", "Peace"), ("capitulated", "Capitulated"), ("subject", "Made a subject"), ("annexed", "Annexed"), ("gone", "No longer exists")]
-# the game's icon of each outcome: (sprite, frame, scale)
+OUTCOMES = [("peace", "Peace"), ("capitulated", "Capitulated"), ("subject", "Made a subject"), ("annexed", "Annexed"), ("gone", "No longer exists"),
+            ("we_capitulated", "We capitulated"), ("we_subject", "We were made a subject")]
+# the game's icon of each outcome: (sprite, frame, scale), and the plate's frame (1 green, 2 red, 3 blue)
 OUTCOME_ICON = {1: ("GFX_peace_conf_icons", 1, 1.3), 2: ("GFX_surrender_icon", 1, 0.85), 3: ("GFX_autonomy_puppet_icon", 1, 0.72),
-                4: ("GFX_autonomy_annex_icon", 1, 0.72), 5: ("GFX_autonomy_annex_icon", 1, 0.72)}
-WR_FIGURES = [
-    ("cas", "Casualties", "[?casualties|0]", "Your dead of all wars."),
+                4: ("GFX_autonomy_annex_icon", 1, 0.72), 5: ("GFX_autonomy_annex_icon", 1, 0.72), 6: ("GFX_surrender_icon", 2, 0.85),
+                7: ("GFX_autonomy_puppet_icon", 1, 0.72)}
+OUTCOME_SIZE = {"GFX_peace_conf_icons": (18, 18), "GFX_surrender_icon": (35, 29)}       # others 35x35
+DASH = "—"                 # a value the record did not keep
+# The campaign, since the record began: (name, label, value, tooltip), the left column's seven, then the right's
+WR_CAMPAIGN = [
+    ("cas_all", "Casualties, all wars", "[?mod1440_h_cas_sum|1]K", "Your dead of every war since the record began: the running total of National Figures."),
+    ("cas_now", "in wars of today", "[?casualties_k|1]K", "Your dead of the wars you fight today, as the game counts them."),
+    ("inflicted", "Casualties we inflicted", "[?mod1440_wr_kthem_all|1]K", "The enemies' dead by your hand, summed over every war the record kept them for."),
     ("longest", "Longest war", "[?longest_war_length|0] mo.", "Months of your longest war."),
     ("surrender", "Our surrender", "[?surrender_progress|%0]", "How close your country is to capitulating."),
     ("convoys", "Convoys sunk", "[?convoys_destroyed|0]", "Enemy convoys your country has sunk."),
-    ("ws_cas", "Lost: casualties", "[?has_casualties_war_support|%1]", "War support lost to casualties."),
-    ("ws_con", "Lost: convoys", "[?has_convoys_war_support|%1]", "War support lost to sunk convoys."),
-    ("ws_bomb", "Lost: bombing", "[?has_bombing_war_support|%1]", "War support lost to enemy bombing."),
-    ("pride_sunk", "Prides sunk", "[?mod1440_ct^%d|0]" % NUMBER["pride_sunk"], "Prides of an enemy fleet your navy sank."),
+    ("pride_sunk", "Prides of their fleet sunk", "[?mod1440_ct^%d|0]" % NUMBER["pride_sunk"], "Prides of an enemy fleet your navy sank."),
+    ("ws_cas", "War support: casualties", "[?has_casualties_war_support|%1]", "War support lost to casualties."),
+    ("ws_con", "War support: convoys", "[?has_convoys_war_support|%1]", "War support lost to sunk convoys."),
+    ("ws_bomb", "War support: bombing", "[?has_bombing_war_support|%1]", "War support lost to enemy bombing."),
+    ("pride_lost", "Our pride of the fleet lost", "[?mod1440_ct^%d|0]" % NUMBER["pride_lost"], "Times the pride of your fleet was sunk."),
     ("ace_new", "Aces promoted", "[?mod1440_ac_new|0]", "Pilots of yours who became aces."),
     ("ace_lost", "Aces lost", "[?mod1440_ac_lost|0]", "Aces of yours who were killed."),
-    ("ace_down", "Enemy aces down", "[?mod1440_ac_down|0]", "Enemy aces your air force shot down."),
-    ("pride_lost", "Our pride lost", "[?mod1440_ct^%d|0]" % NUMBER["pride_lost"], "Times the pride of your fleet was sunk."),
+    ("ace_down", "Enemy aces shot down", "[?mod1440_ac_down|0]", "Enemy aces your air force shot down."),
 ]
-# the file: where things stand on the frame (the top plate, band A, band B, two panels of 522)
-WF_LP, WF_RP, WF_PW = 22, 554, 522
+# the file: where things stand on the frame (the top plate, band A, band B, two panels of 510 with strips of 502)
+WF_LP, WF_RP, WF_PW = 22, 552, 510
+WF_SX = (26, 556)               # the strips and tables of the two panels
+WF_SW = 502
 WF_TRACK_X, WF_TRACK_W, WF_TRACK_Y = 256, 580, 118
 WF_MARK = 20                    # a mark is a text icon of 20x20
+WF_SIDE_Y = 158                 # Our side, Their side
 WF_PY = 206                     # the portraits
-WF_TY = 384                     # the tiles
-WF_CY = 468                     # the commanders and the diary's lines
-WF_TILE = 160
-WF_LINE = 26
+WF_TY = 208                     # the text beside them, rows of 24
+WF_FY = 386                     # In this war: its strip, then 4 rows
+WF_LY = 516                     # the lower part: commanders, the enemies table, the War Diary
+WF_DIARY_Y = 790                # the War Diary under the commanders
+WF_RIGHT_Y = WF_LY + 26 + WR_ENEMY_ROWS * WR_ENEMY_ROW + 8      # 710: the War Diary under the enemies table
+WF_FACES = {"u": (32, 169), "t": (790, 927)}
+WF_TEXT = {"u": ((306, 216), (169, 353), "left"), "t": ((562, 216), (562, 353), "right")}
+WF_TALLY = [(334, "st", "States"), (396, "vp", "Points"), (458, "cap", "Capitals")]
+INSET = "GFX_1440p_SG_inset_%dx%d"              # the near-black inset of tiled_window_thin_border
+IDEOLOGY_SMALL, IDEOLOGY_LARGE = 0.333, 0.667   # the group icon (66x68) beside a name, and in a portrait's place
+# the parts of a row of the enemies table (mod1440_we_*), and of the wars of the two lists (mod1440_wv_*, mod1440_wp_*)
+WE_PARTS = ["c", "id", "open", "idx", "since", "until", "day0", "end", "oc", "surr", "capd", "kus", "kthem", "st", "sl", "vpt", "vpl", "old", "odd", "pk"]
+WV_PARTS = ["g", "c", "first", "n", "d0", "days", "kus", "kthem", "known", "surr", "pk"]
+WP_PARTS = ["g", "c", "first", "n", "d0", "year", "kus", "kthem", "known", "oc", "fr", "pk"]
+# casualties_inflicted_by asked with numbers from variables (meta_trigger, SCR-054): is the dead of the country
+# mod1440_wr_kv by the hand of mod1440_wr_ko more than mod1440_wr_kn thousand?
+WR_KT = ('meta_trigger = { text = { [V] = { casualties_inflicted_by = { opponent = [O] thousands > [N] } } } '
+         'V = "[?mod1440_wr_kv.GetTag]" O = "[?mod1440_wr_ko.GetTag]" N = "[?mod1440_wr_kn|1]" }')
 
 
 # A list's container needs a background to cut its rows off and to scroll them: the four lists without one (today's
@@ -2305,13 +2364,13 @@ WF_LINE = 26
 LIST_BG = '\tbackground = { name = "Background" quadTextureSprite = "GFX_tiled_window_transparent" }\n'
 
 
-def war_listing(name, grid, x, y, height):
-    """A list of war plates that scrolls: the rows stand 46 apart, the slider beside the plates."""
+def war_listing(name, grid, x, y, height, width=WR_PLATE_W, outer=None, step=WR_ROW):
+    """A list that scrolls: the rows stand by their own height, the slider beside them."""
     inner = ('gridboxtype = {\n\tname = "%s"\n\tposition = { x = 0 y = 0 }\n\tsize = { width = %d height = 100%%%% }\n'
-             '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n' % (grid, WR_PLATE_W))
+             '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n' % (grid, width))
     return ('containerWindowType = {\n\tname = "%s"\n\tposition = { x = %d y = %d }\n\tsize = { width = %d height = %d }\n'
             '\tverticalScrollbar = "right_vertical_slider"\n\tscroll_wheel_factor = %d\n\tsmooth_scrolling = yes\n%s%s}\n'
-            % (name, x, y, WR_COL_W - x - 2, height, WR_ROW * 2, LIST_BG, indent_gui(inner)))
+            % (name, x, y, outer or (WR_COL_W - x - 2), height, step * 2, LIST_BG, indent_gui(inner)))
 
 
 def indent_gui(text):
@@ -2324,133 +2383,163 @@ def icon_frame(name, x, y, sprite, frame, scale=None, tooltip=None):
     return 'iconType = { name = "%s" position = { x = %d y = %d } spriteType = "%s" frame = %d%s }\n' % (name, x, y, sprite, frame, extra)
 
 
+def outcome_icons(prefix, cx, cy, variable, triggers_for):
+    """The game's icon of each way a war can end, centred on (cx, cy), each shown when <variable> holds its number."""
+    out, triggers = "", ""
+    for oc, (sprite, frame, scale) in sorted(OUTCOME_ICON.items()):
+        widget = "%s_%d" % (prefix, oc)
+        w, h = OUTCOME_SIZE.get(sprite, (35, 35))
+        w, h = int(w * scale), int(h * scale)
+        out += icon_frame(widget, cx - w // 2, cy - h // 2, sprite, frame, scale, B.key("wr_out_%s_tt" % OUTCOMES[oc - 1][0], OUTCOMES[oc - 1][1]))
+        triggers += block(widget + "_visible", triggers_for + "check_variable = { %s = %d }\n" % (variable, oc))
+    return out, triggers
+
+
+def steel_card(name, title, inner, right=None):
+    """A steel card of the left column (WR_CARDS): its bitmap, the title in its head band, what it holds."""
+    y, h = WR_CARDS[name]
+    out = M.icon("wr_%s_bg" % name, 0, 0, "GFX_1440p_WR_" + name)
+    out += M.text("wr_%s_title" % name, 12, 4, 260, B.key("wr_%s_title" % name, title), M.FONT_LABEL, height=22)
+    if right:
+        out += M.text("wr_%s_right" % name, 284, 4, 248, B.key("wr_%s_right" % name, right), M.FONT_LABEL, "right", 22)
+    return M.box("wr_" + name, REC_BODY_X, y, WR_COL_W, h, out + inner)
+
+
 def wars(portrait_version):
     body, effects, properties = head("wr", 3)
     triggers = ""
 
-    # ---- the country at war: twelve figures
-    tw = (WR_COL_W - 32 - 3 * 8) // 4
-    inner = ""
-    for n, (name, label, value, tip) in enumerate(WR_FIGURES):
-        piece, extra = tile("wr_f_" + name, 16 + (n % 4) * (tw + 8), 44 + (n // 4) * 70, label, value, tip, width=tw)
-        inner += piece
-    body += card("wr_top", REC_BODY_X, REC_BODY_Y, WR_COL_W, WR_TOP_H, "The country at war", inner)
+    # ---- the campaign: fourteen figures as a banded table, two pairs of label and value a row
+    inner = "".join(M.icon("wr_campaign_band_%d" % n, 8, WR_LIST_Y + n * WR_TROW, STRIPE % (532, WR_TROW)) for n in (1, 3, 5))
+    for n, (name, label, value, tip) in enumerate(WR_CAMPAIGN):
+        col, r = divmod(n, 7)
+        y = WR_LIST_Y + r * WR_TROW
+        lx, lw, vx, vw = ((16, 168, 186, 66), (276, 180, 456, 76))[col]
+        tooltip = B.key("wr_f_%s_tt" % name, tip)
+        inner += M.text("wr_f_%s_l" % name, lx, y + 2, lw, B.key("wr_f_%s_l" % name, label), M.FONT_LABEL, height=22, tooltip=tooltip)
+        inner += M.text("wr_f_" + name, vx, y + 1, vw, B.key("wr_f_" + name, value), M.FONT_VALUE, "right", 22, tooltip=tooltip)
+    body += steel_card("campaign", "The campaign", inner, "since the record began")
 
-    def slot_heads(name, first, labels):
-        return heads(name, 8, 42, WR_PLATE_W, [(12, 240, first, "left", "Click a war for its file.")] + [
-            (sx, sw, label, "centre", tip) for (sx, sw), (label, tip) in zip(WR_SLOTS, labels)])
+    def slot_heads(prefix, labels):
+        return "".join(M.text("%s_%d" % (prefix, n), 8 + sx, 4, sw, B.key("%s_%d" % (prefix, n), label), M.FONT_LABEL, "centre", 22,
+                              tooltip=B.key("%s_%d_tt" % (prefix, n), tip)) for n, ((sx, sw), (label, tip)) in enumerate(zip(WR_SLOTS, labels)))
 
-    # ---- today's enemies
-    y = REC_BODY_Y + WR_TOP_H + 12
-    inner = slot_heads("wr_now_heads", "Click a war for its file", [
-        ("Days", "How long the war has lasted."), ("States", "States taken from this enemy : lost to it."),
-        ("Points", "Victory points taken from this enemy : lost to it."), ("Surr.", "How close the enemy is to capitulating.")])
-    inner += war_listing("wr_now_list", "wr_now_grid", 8, 76, 3 * WR_ROW)
-    inner += M.text("wr_now_none", 24, 86, 480, B.key("wr_now_none", "At peace."), M.FONT_LABEL)
-    inner += M.text("wr_now_note", 16, 76 + 3 * WR_ROW + 8, WR_COL_W - 32, B.key(
-        "wr_now_note", "Taken : lost, from and to this enemy. Surr.: how close it is to giving up."), M.FONT_SMALL, height=20)
-    triggers += block("wr_now_none_visible", "check_variable = { mod1440_wr_enemy^num < 1 }\n")
-    body += card("wr_now", REC_BODY_X, y, WR_COL_W, WR_NOW_H, "At war with", inner)
+    dead_tips = [("Our dead", "Casualties: your dead by the hand of this war's enemies."),
+                 ("Their dead", "Casualties: the enemies' dead by your hand.")]
+    # ---- the wars of today
+    inner = slot_heads("wr_now_heads", [("Days", "How long the war has lasted.")] + dead_tips + [
+        ("Surr.", "How close the war's first enemy that still fights is to capitulating.")])
+    inner += war_listing("wr_now_list", "wr_now_grid", 8, WR_LIST_Y, WR_NOW_ROWS * WR_ROW)
+    inner += M.text("wr_now_none", 16, WR_LIST_Y + 12, 480, B.key("wr_now_none", "At peace."), M.FONT_LABEL)
+    triggers += block("wr_now_none_visible", "check_variable = { mod1440_wv_g^num < 1 }\n")
+    body += steel_card("today", "Wars of today", inner)
 
-    # ---- finished wars
-    y += WR_NOW_H + 12
-    old_h = REC_BODY_Y + REC_BODY_H - y
-    rows = (old_h - 76 - 60) // WR_ROW
-    inner = slot_heads("wr_old_heads", "Newest first", [
-        ("Days", "How long the war lasted."), ("States", "States taken from this enemy : lost to it."),
-        ("Points", "Victory points taken from this enemy : lost to it."), ("End", "How it ended: the tooltip says it in words.")])
-    inner += war_listing("wr_old_list", "wr_old_grid", 8, 76, rows * WR_ROW)
-    inner += M.text("wr_old_none", 24, 86, 480, B.key("wr_old_none", "None since the record began."), M.FONT_LABEL)
-    for k, words in enumerate(("Green: the enemy gave up, was annexed or made a subject. Blue: peace.",
-                               "The icon at the end says which; its tooltip says it in words.")):
-        inner += M.text("wr_old_note_%d" % k, 16, old_h - 52 + k * 20, WR_COL_W - 32, B.key("wr_old_note_%d" % k, words), M.FONT_SMALL, height=20)
-    triggers += block("wr_old_none_visible", "check_variable = { mod1440_wo_enemy^num < 1 }\n")
-    body += card("wr_old", REC_BODY_X, y, WR_COL_W, old_h, "Finished wars", inner)
+    # ---- the finished wars
+    old_h = WR_CARDS["done"][1]
+    inner = slot_heads("wr_old_heads", [("Began", "The year the war began.")] + dead_tips + [
+        ("End", "How it ended for its first enemy: the tooltip says it in words.")])
+    inner += war_listing("wr_old_list", "wr_old_grid", 8, WR_LIST_Y, WR_OLD_ROWS * WR_ROW)
+    inner += M.text("wr_old_none", 16, WR_LIST_Y + 12, 480, B.key("wr_old_none", "None since the record began."), M.FONT_LABEL)
+    inner += M.text("wr_old_note", 12, old_h - 54, WR_COL_W - 24, B.key(
+        "wr_old_note", "Green: they gave up. Blue: peace. Red: we gave up. %s: not kept." % DASH), M.FONT_LABEL, height=22,
+        tooltip=B.key("wr_old_note_tt", "%s: this war ended before the record kept its dead." % DASH))
+    triggers += block("wr_old_none_visible", "check_variable = { mod1440_wp_g^num < 1 }\n")
+    body += steel_card("done", "Finished wars", inner)
 
-    # ---- a row of today's enemies: the list has the enemy as its scope (flag and name), the country's own
-    # arrays are read with ROOT. (Engine Facts X36)
-    hit = "GFX_1440p_SG_hit_%dx41" % WR_PLATE_W
+    # ---- a war of today: its plate, the first enemy's flag and name, "+N" for the others, its figures
+    hit = "GFX_1440p_SG_hit_%dx%d" % (WR_PLATE_W, WR_PLATE_H)
+
+    def war_row(p, pre, first_slot, last_slot):
+        """The widgets of a plate of the list <pre> (wv or wp), whose row widgets are named <p>_row_*."""
+        out = M.icon(p + "_row_pick", 4, 4, PICK % (258, 33))
+        out += M.icon(p + "_row_flag", 8, 8, FLAG_SMALL)
+        props = flown(p + "_row_flag", "?mod1440_%s_c^i" % pre)
+        out += M.text(p + "_row_enemy", 56, 9, 162, B.key(p + "_row_enemy", "§Y[?mod1440_%s_c^i.GetName]§!" % pre), M.FONT_LABEL, height=22, fixed=True)
+        out += M.text(p + "_row_more", 222, 9, 36, B.key(p + "_row_more", "+[?mod1440_%s_n^i|0]" % pre), M.FONT_LABEL, "right", 22,
+                      tooltip=B.key("wr_row_more_tt", "More enemies in this war: its file lists them."))
+        trig = block(p + "_row_more_visible", "check_variable = { mod1440_%s_n^i > 0 }\n" % pre)
+        trig += block(p + "_row_pick_visible", "check_variable = { mod1440_%s_pk^i = 1 }\n" % pre)
+        sx, sw = WR_SLOTS[0]
+        out += M.text(p + "_row_" + first_slot[0], sx + 2, 8, sw - 4, B.key(p + "_row_" + first_slot[0], first_slot[1]), M.FONT_VALUE, "centre", 22)
+        if first_slot[2]:
+            trig += block(p + "_row_%s_visible" % first_slot[0], first_slot[2])
+        known = "check_variable = { mod1440_%s_known^i > 0 }\n" % pre
+        for (sx, sw), part in zip(WR_SLOTS[1:3], ("kus", "kthem")):
+            out += M.text("%s_row_%s" % (p, part), sx + 2, 8, sw - 4, B.key("%s_row_%s" % (p, part), "[?mod1440_%s_%s^i|1]K" % (pre, part)), M.FONT_VALUE, "centre", 22)
+            out += M.text("%s_row_%s_none" % (p, part), sx + 2, 8, sw - 4, B.key("wr_dash", DASH), M.FONT_VALUE, "centre", 22,
+                          tooltip=B.key("wr_dash_tt", "Not kept: this war ended before the record kept its dead."))
+            trig += block("%s_row_%s_visible" % (p, part), known) + block("%s_row_%s_none_visible" % (p, part), "NOT = { %s }\n" % known.strip())
+        return out, props, trig, last_slot
+
     entry = icon_frame("wr_row_plate", 0, 0, WR_PLATE, 2)
-    entry += M.icon("wr_row_pick", 4, 4, PICK % (258, 33))
-    entry += M.icon("wr_row_flag", 8, 8, FLAG_SMALL)
-    properties += flown("wr_row_flag", "THIS")
-    entry += M.text("wr_row_enemy", 56, 10, 200, B.key("wr_row_enemy", "§Y[THIS.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
-    for (sx, sw), (name, value) in zip(WR_SLOTS, (
-            ("days", "[?ROOT.mod1440_wr_days^i|0]"), ("st", "[?ROOT.mod1440_wr_taken^i|0] : [?ROOT.mod1440_wr_lost^i|0]"),
-            ("vp", "[?ROOT.mod1440_wr_vpt^i|0] : [?ROOT.mod1440_wr_vpl^i|0]"), ("surr", "[?ROOT.mod1440_wr_surr^i|0]%"))):
-        entry += M.text("wr_row_" + name, sx + 2, 10, sw - 4, B.key("wr_row_" + name, value), M.FONT_LABEL, "centre", 22)
-    entry += M.button("wr_row", 0, 0, hit, tooltip=B.key("wr_row_tt", "Open the file of this war"))
-    triggers += block("wr_row_pick_visible", "check_variable = { ROOT.mod1440_wr_pk^i = 1 }\n")
-    effects += block("wr_row_click", tmp("wr_pick", "THIS") + block("ROOT", (
-        block("for_each_loop", "array = mod1440_wr_enemy\nvalue = wr_v\nindex = wr_i\n"
-              + iff("check_variable = { wr_v = wr_pick }", setv("mod1440_wr_sel_kind", 1) + setv("mod1440_wr_sel_i", "wr_i")))
-        + "mod1440_wr_card = yes\n")))
+    piece, props, trig, _ = war_row("wr", "wv", ("days", "[?mod1440_wv_days^i|0]", None), None)
+    sx, sw = WR_SLOTS[3]
+    piece += M.text("wr_row_surr", sx + 2, 8, sw - 4, B.key("wr_row_surr", "[?mod1440_wv_surr^i|0]%"), M.FONT_VALUE, "centre", 22)
+    entry += piece + M.button("wr_row", 0, 0, hit, tooltip=B.key("wr_row_tt", "Open the file of this war"))
+    properties += props
+    triggers += trig
+    effects += block("wr_row_click", setv("mod1440_wr_sel_g", "mod1440_wv_g^i") + setv("mod1440_wr_sel_e", 0)
+                     + "mod1440_wr_picks = yes\nmod1440_wr_card = yes\n")
     gui_rows = row("mod1440_records_war_row", WR_PLATE_W, WR_ROW, entry)
 
     # ---- a finished war: the list runs over the frames of the plates (v), the rest is read by the row's index
     entry = M.icon("wo_row_plate", 0, 0, WR_PLATE)
     properties += block("wo_row_plate", "frame = v\n")
-    entry += M.icon("wo_row_pick", 4, 4, PICK % (258, 33))
-    entry += M.icon("wo_row_flag", 8, 8, FLAG_SMALL)
-    properties += flown("wo_row_flag", "?mod1440_wo_enemy^i")
-    entry += M.text("wo_row_enemy", 56, 10, 200, B.key("wo_row_enemy", "§Y[?mod1440_wo_enemy^i.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
-    for (sx, sw), (name, value) in zip(WR_SLOTS[:3], (
-            ("days", "[?mod1440_wo_days^i|0]"), ("st", "[?mod1440_wo_taken^i|0] : [?mod1440_wo_lost^i|0]"),
-            ("vp", "[?mod1440_wo_vpt^i|0] : [?mod1440_wo_vpl^i|0]"))):
-        entry += M.text("wo_row_" + name, sx + 2, 10, sw - 4, B.key("wo_row_" + name, value), M.FONT_LABEL, "centre", 22)
+    piece, props, trig, _ = war_row("wo", "wp", ("year", "[?mod1440_wp_year^i|0]", "check_variable = { mod1440_wp_year^i > 0 }\n"), None)
     sx, sw = WR_SLOTS[3]
-    for oc, (sprite, frame, scale) in sorted(OUTCOME_ICON.items()):
-        widget = "wo_row_end_%d" % oc
-        size = {"GFX_peace_conf_icons": (18, 18), "GFX_surrender_icon": (35, 29)}.get(sprite, (35, 35))
-        w, h = int(size[0] * scale), int(size[1] * scale)
-        entry += icon_frame(widget, sx + (sw - w) // 2, (41 - h) // 2, sprite, frame, scale, B.key("wr_out_%s_tt" % OUTCOMES[oc - 1][0], OUTCOMES[oc - 1][1]))
-        triggers += block(widget + "_visible", "check_variable = { mod1440_wo_oc^i = %d }\n" % oc)
-    entry += M.button("wo_row", 0, 0, hit, tooltip=B.key("wr_row_tt", "Open the file of this war"))
-    triggers += block("wo_row_pick_visible", "check_variable = { mod1440_wr_sel_kind = 2 }\ncheck_variable = { mod1440_wr_sel_i = i }\n")
-    effects += block("wo_row_click", setv("mod1440_wr_sel_kind", 2) + setv("mod1440_wr_sel_i", "i") + "mod1440_wr_card = yes\n")
+    icons, icon_triggers = outcome_icons("wo_row_end", sx + sw // 2, WR_PLATE_H // 2, "mod1440_wp_oc^i", "")
+    entry += piece + icons + M.button("wo_row", 0, 0, hit, tooltip=B.key("wr_row_tt", "Open the file of this war"))
+    properties += props
+    triggers += trig + icon_triggers
+    effects += block("wo_row_click", setv("mod1440_wr_sel_g", "mod1440_wp_g^i") + setv("mod1440_wr_sel_e", 0)
+                     + "mod1440_wr_picks = yes\nmod1440_wr_card = yes\n")
     gui_rows += row("mod1440_records_past_war_row", WR_PLATE_W, WR_ROW, entry)
 
     # ---- the file of the chosen war, on the war overview's frame
     has = is_one("mod1440_wr_c_has") + "\n"
-    now = has + "check_variable = { mod1440_wr_sel_kind = 1 }\n"
-    past = has + "check_variable = { mod1440_wr_sel_kind = 2 }\n"
-    lives = has + is_one("mod1440_wr_c_exists") + "\n"       # the enemy is still a country: it has a leader to show
+    now = has + "check_variable = { mod1440_wr_c_open = 1 }\n"
+    past = has + "check_variable = { mod1440_wr_c_open = 0 }\n"
     known = "check_variable = { mod1440_wr_c_old = 0 }\n"
-    them = "mod1440_wr_c_enemy"
+    one = has + "check_variable = { mod1440_wr_c_count = 1 }\n"
+    several = has + "check_variable = { mod1440_wr_c_count > 1 }\n"
+    first = "mod1440_wr_c_enemy"
     fw = WR_FILE_W
     mid = fw // 2
     shows = []                                              # what shows for any chosen war
     inner = M.icon("wr_file_bg", 0, 0, "GFX_1440p_SG_war_file")
     inner += M.text("wr_c_none", 60, 220, fw - 120, B.key("wr_c_none", "Click a war in a table to open its file."), M.FONT_LABEL, "centre")
     triggers += block("wr_c_none_visible", "NOT = { %s }\n" % has.strip())
-    # the top plate: the war's name, our flag on the left rays and theirs on the right
-    inner += M.text("wr_c_title", mid - 235, 18, 470, B.key("wr_c_title", "The war with [?%s.GetName]" % them), M.FONT_CARD, "centre", 30, fixed=True)
+    # the top plate: the war's name (its first enemy), our flag on the left rays and theirs on the right
+    inner += M.text("wr_c_title", mid - 235, 18, 470, B.key("wr_c_title", "The war with [?%s.GetName]" % first), M.FONT_CARD, "centre", 30, fixed=True)
     inner += flag("wr_c_flag_us", 80, 8) + flag("wr_c_flag_them", fw - 80 - 82, 8)
-    properties += flown("wr_c_flag_us", "ROOT") + flown("wr_c_flag_them", "?" + them)
+    properties += flown("wr_c_flag_us", "ROOT") + flown("wr_c_flag_them", "?" + first)
     shows += ["wr_c_title", "wr_c_flag_us", "wr_c_flag_them"]
-    # band A: the two names, and between them when it began and ended
-    inner += M.text("wr_c_us", 30, 76, 260, B.key("wr_c_us", "[ROOT.GetName]"), M.FONT_VALUE, height=26, fixed=True)
-    inner += M.text("wr_c_them", fw - 30 - 260, 76, 260, B.key("wr_c_them", "[?%s.GetName]" % them), M.FONT_VALUE, "right", 26, fixed=True)
-    shows += ["wr_c_us", "wr_c_them"]
+    # band A: the two names, "+12" for the other enemies, and between them when it began and ended
+    inner += M.text("wr_c_us", 30, 72, 260, B.key("wr_c_us", "[ROOT.GetName]"), M.FONT_CARD, height=30, fixed=True)
+    inner += M.text("wr_c_them", fw - 30 - 260, 72, 260, B.key("wr_c_them", "[?%s.GetName]" % first), M.FONT_CARD, "right", 30, fixed=True)
+    inner += M.text("wr_c_them_n", fw - 30 - 260, 72, 260, B.key("wr_c_them_n", "[?%s.GetName] +[?mod1440_wr_c_n|0]" % first), M.FONT_CARD, "right", 30, fixed=True)
+    shows.append("wr_c_us")
+    triggers += block("wr_c_them_visible", one) + block("wr_c_them_n_visible", several)
     since, until = "[?mod1440_wr_c_since.%s]" % LONG, "[?mod1440_wr_c_until.%s]" % LONG
     for name, words, when in (
-            ("now", "%s  -  today  -  [?mod1440_wr_c_days|0] days" % since, now + known + "check_variable = { mod1440_wr_c_capd < 1 }\n"),
-            ("capd", "%s  -  today  -  [?mod1440_wr_c_days|0] days  -  §Ghas capitulated§!" % since, now + known + M.more_than_zero("mod1440_wr_c_capd")),
+            ("now", "%s  -  today  -  [?mod1440_wr_c_days|0] days" % since, now + known),
             ("now_old", "%s  -  today  -  [?mod1440_wr_c_days|0] days on record" % BEGAN, now + "check_variable = { mod1440_wr_c_old = 1 }\n"),
-            ("past", "%s  -  %s  -  [?mod1440_wr_c_days|0] days  -  §Y[?mod1440_wr_c_outcome.GetTokenLocalizedKey]§!" % (since, until), past + known),
-            ("past_old", "%s  -  %s  -  §Y[?mod1440_wr_c_outcome.GetTokenLocalizedKey]§!" % (BEGAN, until), past + "check_variable = { mod1440_wr_c_old = 1 }\n")):
+            ("past", "%s  -  %s  -  [?mod1440_wr_c_days|0] days" % (since, until), past + known),
+            ("past_old", "%s  -  %s" % (BEGAN, until), past + "check_variable = { mod1440_wr_c_old = 1 }\n")):
         inner += M.text("wr_c_when_" + name, mid - 270, 78, 540, B.key("wr_c_when_" + name, words), M.FONT_LABEL, "centre", 22)
         triggers += block("wr_c_when_%s_visible" % name, when)
-    # band B: the war day by day, a mark for each of the newest lines of the diary about it
-    inner += M.text("wr_c_track_l", 30, WF_TRACK_Y + 3, 120, B.key("wr_c_track_l", "Day by day"), M.FONT_SMALL, height=20)
+    # band B: the war day by day, a mark for each of the newest lines of the diary about it. The game's short date
+    # carries the hour (X35), so the file's dates are written without it.
+    short = "GetDateStringNoHour"
+    inner += M.text("wr_c_track_l", 30, WF_TRACK_Y + 3, 120, B.key("wr_c_track_l", "Day by day"), M.FONT_LABEL, height=22)
     inner += M.icon("wr_c_track_frame", WF_TRACK_X - 6, WF_TRACK_Y - 6, "GFX_warscore_progressbar_frame")
     inner += M.icon("wr_c_track", WF_TRACK_X, WF_TRACK_Y, STRIPE % (WF_TRACK_W, 26))
-    inner += M.text("wr_c_track_from", WF_TRACK_X - 14 - 100, WF_TRACK_Y + 3, 100, B.key("wr_c_track_from", "[?mod1440_wr_c_day0d.GetDateStringShortMonth]"),
-                    M.FONT_SMALL, "right", 20)
-    inner += M.text("wr_c_track_to", WF_TRACK_X + WF_TRACK_W + 14, WF_TRACK_Y + 3, 120, B.key("wr_c_track_to", "[?mod1440_wr_c_endd.GetDateStringShortMonth]"),
-                    M.FONT_SMALL, height=20)
+    inner += M.text("wr_c_track_from", WF_TRACK_X - 14 - 100, WF_TRACK_Y + 3, 100, B.key("wr_c_track_from", "[?mod1440_wr_c_day0d.%s]" % short),
+                    M.FONT_LABEL, "right", 22)
+    inner += M.text("wr_c_track_to", WF_TRACK_X + WF_TRACK_W + 14, WF_TRACK_Y + 3, 120, B.key("wr_c_track_to", "[?mod1440_wr_c_endd.%s]" % short),
+                    M.FONT_LABEL, height=22)
     shows += ["wr_c_track_l", "wr_c_track_frame", "wr_c_track", "wr_c_track_from", "wr_c_track_to"]
-    for k in range(WR_LINES):
+    for k in range(WR_MARKS):
         tip = B.key("wr_c_mark_%d_tt" % k, "[?mod1440_wr_ln_date^%d.%s]: [?mod1440_wr_ln_kind^%d.GetTokenLocalizedKey]" % (k, LONG, k))
         more = has + "check_variable = { mod1440_wr_ln_n > %d }\n" % k
         for suffix, sprite, test in (("w", "GFX_army_experience", "check_variable = { mod1440_wr_ln_fam^%d = 1 }\n" % k),
@@ -2460,123 +2549,277 @@ def wars(portrait_version):
             properties += block(widget, "x = mod1440_wr_mx^%d\n" % k)
             triggers += block(widget + "_visible", more + test)
 
-    # the two panels, each headed by its head of government: portrait, party, ideology, faction, surrender, figures
-    face_w = int(156 * WR_FACE)
-    for side, px, fmt in (("us", WF_LP, "left"), ("them", WF_RP, "right")):
-        ours = side == "us"
-        country = "ROOT" if ours else "?" + them
-        when = has if ours else lives
-        lead = M.text("wr_c_lead_" + side, px + 12 if ours else px + WF_PW - 12 - 300, 164, 300,
-                      B.key("wr_c_lead_" + side, "§Y[%s.GetLeader]§!" % country), M.FONT_VALUE, fmt, 26, fixed=True)
-        inner += lead
-        inner += M.text("wr_c_hog_" + side, px + WF_PW - 8 - 160 if ours else px + 8, 166, 160, B.key("wr_c_hog", "head of government"),
-                        M.FONT_SMALL, "right" if ours else "left", 20)
-        inner += portrait("wr_c_face_" + side, px + 10 if ours else px + WF_PW - 10 - face_w, WF_PY, WR_FACE)
-        properties += shown("wr_c_face_" + side, "mod1440_gv_p" if ours else "mod1440_wr_c_p")
-        tx = px + 150 if ours else px + WF_PW - 150 - 360
-        rows = [("party", "[%s.GetRulingParty]" % country), ("ideology", "[%s.GetRulingIdeology]" % country)]
-        for n, (name, value) in enumerate(rows):
-            inner += M.text("wr_c_%s_%s" % (name, side), tx, WF_PY + 4 + n * 28, 360, B.key("wr_c_%s_%s" % (name, side), value), M.FONT_LABEL, fmt, 22, fixed=True)
-            triggers += block("wr_c_%s_%s_visible" % (name, side), when)
-        fac_on = "is_in_faction = yes\n" if ours else is_one("mod1440_wr_c_efac") + "\n"
-        fac_off = "is_in_faction = no\n" if ours else "NOT = { %s }\n" % is_one("mod1440_wr_c_efac")
-        inner += M.text("wr_c_fac_" + side, tx, WF_PY + 60, 360, B.key("wr_c_fac_" + side, "Faction: §Y[%s.GetFactionName]§!" % country), M.FONT_LABEL, fmt, 22, fixed=True)
-        inner += M.text("wr_c_nofac_" + side, tx, WF_PY + 60, 360, B.key("wr_c_nofac", "Faction: none"), M.FONT_LABEL, fmt, 22)
-        triggers += block("wr_c_fac_%s_visible" % side, when + fac_on) + block("wr_c_nofac_%s_visible" % side, when + fac_off)
-        label, variable = ("Our surrender", "mod1440_wr_c_ours") if ours else ("Their surrender", "mod1440_wr_c_surr")
-        inner += M.text("wr_c_surr_l_" + side, tx, WF_PY + 88, 360, B.key("wr_c_surr_l_" + side, label), M.FONT_SMALL, fmt, 20)
-        bx = tx if ours else tx + 360 - 300
-        inner += M.icon("wr_c_surr_bar_" + side, bx, WF_PY + 120, M.bar_sprite(250))
-        properties += block("wr_c_surr_bar_" + side, "frame = %s\n" % variable)
-        inner += M.text("wr_c_surr_" + side, bx + 300 - 80, WF_PY + 114, 80, B.key("wr_c_surr_" + side, "[?%s|0]%%" % variable), M.FONT_VALUE, "right", 24)
-        surr = has if ours else now
-        triggers += shown_if(["wr_c_surr_l_" + side, "wr_c_surr_bar_" + side, "wr_c_surr_" + side], surr)
-        triggers += shown_if(["wr_c_lead_" + side, "wr_c_hog_" + side], when)
-        if ours:
-            shows.append("wr_c_face_us")
-        else:
-            triggers += block("wr_c_face_them_visible", lives)
-        figures = ([("cas", "Our casualties", "mod1440_wr_c_cas", "Your country's whole loss in that time, whoever caused it."),
-                    ("taken", "States taken", "mod1440_wr_c_taken", "States you took from this enemy."),
-                    ("vpt", "Points taken", "mod1440_wr_c_vpt", "Victory points you took from this enemy.")] if ours else
-                   [("ecas", "Their casualties", "mod1440_wr_c_ecas", "The enemy's whole loss in that time, whoever caused it."),
-                    ("lost", "States lost", "mod1440_wr_c_lost", "States this enemy took from you."),
-                    ("vpl", "Points lost", "mod1440_wr_c_vpl", "Victory points this enemy took from you.")])
-        for n, (name, label, value, tip) in enumerate(figures):
-            piece, extra = tile("wr_c_" + name, px + 10 + n * (WF_TILE + 10), WF_TY, label, "[?%s|0]" % value, tip, has, width=WF_TILE)
-            inner += piece
-            triggers += extra
-    inner += M.text("wr_c_gone", WF_RP + 8, 166, WF_PW - 16, B.key("wr_c_gone", "This country is no more."), M.FONT_SMALL, height=20)
-    triggers += block("wr_c_gone_visible", has + "NOT = { %s }\n" % is_one("mod1440_wr_c_exists"))
+    # the two panels' heads
+    inner += M.text("wr_c_side_us", 32, WF_SIDE_Y, 300, B.key("wr_c_side_us", "Our side"), M.FONT_CARD, height=30)
+    inner += M.text("wr_c_side_them", 562, WF_SIDE_Y, 300, B.key("wr_c_side_them", "Their side"), M.FONT_CARD, height=30)
+    inner += M.text("wr_c_side_n", 852, WF_SIDE_Y + 5, 200, B.key("wr_c_side_n", "[?mod1440_wr_c_count|0] enemies"), M.FONT_LABEL, "right", 22,
+                    tooltip=B.key("wr_c_side_n_tt", "The enemies who fought this war on one side: the table below lists them."))
+    shows += ["wr_c_side_us", "wr_c_side_them"]
+    triggers += block("wr_c_side_n_visible", several)
 
-    # our commanders in this war: who took its states and points, counted per war on each officer
-    inner += M.text("wr_k_title", WF_LP + 12, WF_CY, 480, B.key("wr_k_title", "Our commanders in this war"), M.FONT_CARD, height=30)
-    inner += M.text("wr_k_none", WF_LP + 14, WF_CY + 44, 480, B.key("wr_k_none", "None of your generals has taken a place in this war yet."),
-                    M.FONT_SMALL, height=20)
-    shows.append("wr_k_title")
+    # ---- the heads of government of both sides, at the start and at the end (decision 1): two portraits, or one
+    # when it was the same person; where the game can name no portrait, the country's flag on a dark inset with the
+    # ideology's icon
+    def ideology_row(name, x, y, w, align, group_var, when):
+        out, trig = "", ""
+        for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+            widget = "%s_g%d" % (name, g)
+            if align == "left":
+                out += scaled(widget + "_i", x, y + 1, "GFX_ideology_%s_group" % group, IDEOLOGY_SMALL)
+                out += M.text(widget, x + 28, y, w - 28, "%s_noun" % group, M.FONT_LABEL, height=22, fixed=True)
+            else:
+                out += scaled(widget + "_i", x + w - 22, y + 1, "GFX_ideology_%s_group" % group, IDEOLOGY_SMALL)
+                out += M.text(widget, x, y, w - 28, "%s_noun" % group, M.FONT_LABEL, "right", 22, fixed=True)
+            trig += shown_if([widget, widget + "_i"], when + "check_variable = { %s = %d }\n" % (group_var, g))
+        return out, trig
+
+    def face_box(name, x, s, n, country, when):
+        """A portrait 125x168, or the fallback in its place."""
+        var = "mod1440_wr_c_%sp%s" % (s, n)
+        fb = "check_variable = { mod1440_wr_c_%sfb%s = 1 }\n" % (s, n)
+        out = portrait(name, x, WF_PY, WR_FACE)
+        props = shown(name, var)
+        trig = block(name + "_visible", when + "NOT = { %s }\n" % fb.strip())
+        out += scaled(name + "_fb", x, WF_PY, INSET % (125, 168), 1.0, B.key("wr_c_noface_tt", "No portrait the game can name"))
+        out += flag(name + "_fb_flag", x + 21, WF_PY + 40)
+        props += flown(name + "_fb_flag", country)
+        trig += shown_if([name + "_fb", name + "_fb_flag"], when + fb)
+        for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+            out += scaled("%s_fb_g%d" % (name, g), x + 40, WF_PY + 104, "GFX_ideology_%s_group" % group, IDEOLOGY_LARGE)
+            trig += block("%s_fb_g%d_visible" % (name, g), when + fb + "check_variable = { mod1440_wr_c_%sg%s = %d }\n" % (s, n, g))
+        return out, props, trig
+
+    for s, country in (("u", "ROOT"), ("t", "?mod1440_wr_c_te")):
+        x0, x1 = WF_FACES[s]
+        two_at, twin_at, align = WF_TEXT[s]
+        twin = "check_variable = { mod1440_wr_c_%stw = 1 }\n" % s
+        two = "check_variable = { mod1440_wr_c_%stw = 0 }\n" % s
+        live = "check_variable = { mod1440_wr_c_%s = 1 }\n" % ("open" if s == "u" else "topen")
+        dead = "check_variable = { mod1440_wr_c_%s = 0 }\n" % ("open" if s == "u" else "topen")
+        # the faces: ours, the start at the left and the end beside it; theirs, the end at the right and the start beside it
+        if s == "u":
+            boxes = [("wr_c_face_u0", x0, "0", has), ("wr_c_face_u1", x1, "1", has + two)]
+        else:
+            boxes = [("wr_c_face_t0", x0, "0", has + two), ("wr_c_face_t1", x1, "1", has)]
+        for name, x, n, when in boxes:
+            piece, props, trig = face_box(name, x, s, n, country, when)
+            inner += piece
+            properties += props
+            triggers += trig
+        # the text: the country, then who led it when
+        for mode, (tx, tw), cond in (("two", two_at, two), ("twin", twin_at, twin)):
+            p = "wr_c_%s_%s" % (s, mode)
+            when = has + cond
+            ry = [WF_TY + r * WR_TROW for r in range(7)]
+            name_of = "§Y[ROOT.GetName]§!" if s == "u" else "§Y[?mod1440_wr_c_te.GetName]§!"
+            inner += M.text(p + "_c", tx, ry[0], tw, B.key("wr_c_%s_c" % s, name_of), M.FONT_LABEL, align, 22, fixed=True)
+            triggers += block(p + "_c_visible", when)
+            starts = [("start", "At the start", "")] if mode == "two" else [("live", "At the start and today", live), ("dead", "Throughout the war", dead)]
+            for key, words, extra in starts:
+                inner += M.text("%s_w_%s" % (p, key), tx, ry[1], tw, B.key("wr_c_w_" + key, words), M.FONT_LABEL, align, 22)
+                triggers += block("%s_w_%s_visible" % (p, key), when + extra)
+            ends = [("0", 2)] + ([("1", 5)] if mode == "two" else [])
+            for n, r in ends:
+                nr = "check_variable = { mod1440_wr_c_%snr%s = 1 }\n" % (s, n)
+                inner += M.text("%s_l%s" % (p, n), tx, ry[r], tw, B.key("wr_c_%sl%s" % (s, n), "§Y[?mod1440_wr_c_%sl%s.GetName]§!" % (s, n)),
+                                M.FONT_LABEL, align, 22, fixed=True)
+                inner += M.text("%s_l%s_nr" % (p, n), tx, ry[r], tw, B.key("wr_c_nr", "§gNot recorded§!"), M.FONT_LABEL, align, 22,
+                                tooltip=B.key("wr_c_nr_tt", "This war began before the record kept its heads of government."))
+                triggers += block("%s_l%s_visible" % (p, n), when + "NOT = { %s }\n" % nr.strip()) + block("%s_l%s_nr_visible" % (p, n), when + nr)
+                piece, trig = ideology_row("%s_i%s" % (p, n), tx, ry[r + 1], tw, align, "mod1440_wr_c_%sg%s" % (s, n), when)
+                inner += piece
+                triggers += trig
+            if mode == "two":
+                for key, words, extra in (("today", "Today", live), ("end", "At the end", dead)):
+                    inner += M.text("%s_w_%s" % (p, key), tx, ry[4], tw, B.key("wr_c_w_" + key, words), M.FONT_LABEL, align, 22)
+                    triggers += block("%s_w_%s_visible" % (p, key), when + extra)
+
+    # ---- in this war: four figures on each side, always full
+    def strip(name, x, y, words, tooltip=None):
+        return (M.icon(name, x, y, layout.head_sprite(WF_SW, 26))
+                + M.text(name + "_t", x + 8, y + 2, 400, B.key(name + "_t", words), M.FONT_LABEL, height=22, tooltip=tooltip))
+
+    for s in ("us", "them"):
+        sx = WF_SX[0 if s == "us" else 1]
+        inner += strip("wr_c_fig_%s" % s, sx, WF_FY, "In this war")
+        shows += ["wr_c_fig_%s" % s, "wr_c_fig_%s_t" % s]
+        for r in (1, 3):
+            inner += M.icon("wr_c_fig_%s_band_%d" % (s, r), sx, WF_FY + 26 + r * WR_TROW, STRIPE % (WF_SW, WR_TROW))
+            shows.append("wr_c_fig_%s_band_%d" % (s, r))
+    # the player's words, not the script's (gate B): who caused the dead, when they are counted, what is left out
+    when_counted = ", counted each day while it runs and once more at its end; the dead no enemy caused (attrition, weather) are not in it."
+    dead_tip = {"us": "The dead this war's enemies caused us" + when_counted, "them": "The dead we caused this war's enemies" + when_counted}
+    figures = [
+        ("us", 0, "kus", "Casualties, by their hand", "[?mod1440_wr_c_kus|1]K", has + "check_variable = { mod1440_wr_c_kunk = 0 }\n", dead_tip["us"]),
+        ("us", 1, "taken", "States taken", "[?mod1440_wr_c_taken|0]", has, "States you took from this war's enemies."),
+        ("us", 2, "vpt", "Victory points taken", "[?mod1440_wr_c_vpt|0]", has, "Victory points you took from this war's enemies."),
+        ("us", 3, "capt", "Capitals taken", "[?mod1440_wr_c_capt|0]", has, "The 'Capital taken' lines of this war in the War Diary."),
+        ("them", 0, "kthem", "Casualties, by our hand", "[?mod1440_wr_c_kthem|1]K", has + "check_variable = { mod1440_wr_c_kunk = 0 }\n", dead_tip["them"]),
+        ("them", 1, "lost", "States taken from us", "[?mod1440_wr_c_lost|0]", has, "States this war's enemies took from you."),
+        ("them", 2, "vpl", "Victory points taken from us", "[?mod1440_wr_c_vpl|0]", has, "Victory points this war's enemies took from you."),
+        ("them", 3, "surr", "Surrender", "[?mod1440_wr_c_surr|0]%", one + "check_variable = { mod1440_wr_c_open = 1 }\n",
+         "How close the enemy is to capitulating: the war overview's bar."),
+        ("them", 3, "end", "How it ended", "[?mod1440_wr_c_outcome.GetTokenLocalizedKey]", one + "check_variable = { mod1440_wr_c_open = 0 }\n",
+         "How the war ended, as the War Diary wrote it on its last day."),
+        ("them", 3, "gave", "Enemies who gave up", "[?mod1440_wr_c_gave|0] of [?mod1440_wr_c_count|0]", several,
+         "The enemies of this war who capitulated, were annexed or made a subject, or are no more."),
+    ]
+    for s, r, name, label, value, when, tip in figures:
+        sx = WF_SX[0 if s == "us" else 1]
+        y = WF_FY + 26 + r * WR_TROW
+        tooltip = B.key("wr_c_%s_tt" % name, tip)
+        inner += M.text("wr_c_%s_l" % name, sx + 10, y + 2, 320, B.key("wr_c_%s_l" % name, label), M.FONT_LABEL, height=22, tooltip=tooltip)
+        inner += M.text("wr_c_" + name, sx + 342, y + 1, 150, B.key("wr_c_" + name, value), M.FONT_VALUE, "right", 22, tooltip=tooltip, fixed=True)
+        label_when = when if name in ("surr", "end", "gave") else has
+        triggers += block("wr_c_%s_l_visible" % name, label_when) + block("wr_c_%s_visible" % name, when)
+        if name in ("kus", "kthem"):
+            inner += M.text("wr_c_%s_none" % name, sx + 342, y + 1, 150, B.key("wr_dash", DASH), M.FONT_VALUE, "right", 22,
+                            tooltip=B.key("wr_dash_tt", "Not kept: this war ended before the record kept its dead."))
+            triggers += block("wr_c_%s_none_visible" % name, has + "check_variable = { mod1440_wr_c_kunk = 1 }\n")
+
+    # ---- our commanders in this war: who took its states and points, counted per war on each officer
+    sx = WF_SX[0]
+    inner += strip("wr_k_head", sx, WF_LY, "Our commanders in this war", B.key(
+        "wr_k_head_tt", "The general who had the most divisions in the place when it changed hands; each officer keeps what he took in each war."))
+    shows += ["wr_k_head", "wr_k_head_t"]
+    for x, part, words in WF_TALLY:
+        inner += M.text("wr_k_h_" + part, x, WF_LY + 2, 62, B.key("wr_k_h_" + part, words), M.FONT_LABEL, "centre", 22)
+        shows.append("wr_k_h_" + part)
+    inner += M.text("wr_k_none", sx + 8, WF_LY + 40, 480, B.key("wr_k_none", "None of your generals has taken a place in this war yet."),
+                    M.FONT_LABEL, height=22)
     triggers += block("wr_k_none_visible", has + "check_variable = { mod1440_wr_k_n < 1 }\n")
     for k in range(WR_COMMANDERS):
-        ry = WF_CY + 40 + k * 60
+        ry = WF_LY + 26 + k * 48
         more = has + "check_variable = { mod1440_wr_k_n > %d }\n" % k
         names = []
         if k % 2:
-            inner += M.icon("wr_k_%d_stripe" % k, WF_LP + 8, ry - 4, STRIPE % (WF_PW - 16, 58))
+            inner += M.icon("wr_k_%d_stripe" % k, sx, ry, STRIPE % (WF_SW, 48))
             names.append("wr_k_%d_stripe" % k)
-        inner += portrait("wr_k_%d_face" % k, WF_LP + 14, ry, 0.24)
+        inner += portrait("wr_k_%d_face" % k, sx + 8, ry + 1, WR_SMALL_FACE)
         properties += shown("wr_k_%d_face" % k, "mod1440_wr_k_%d_p" % k)
-        inner += M.text("wr_k_%d" % k, WF_LP + 64, ry + 4, 240, B.key("wr_k_%d" % k, "§Y[?mod1440_wr_k_%d.GetName]§!" % k), M.FONT_LABEL, height=22, fixed=True)
-        inner += M.text("wr_k_%d_what" % k, WF_LP + WF_PW - 14 - 210, ry + 14, 210, B.key(
-            "wr_k_%d_what" % k, "States §Y[?mod1440_wr_k_%d_st|0]§!   Points §Y[?mod1440_wr_k_%d_vp|0]§!   Capitals §Y[?mod1440_wr_k_%d_cap|0]§!" % (k, k, k)),
-            M.FONT_SMALL, "right", 20)
-        names += ["wr_k_%d_face" % k, "wr_k_%d" % k, "wr_k_%d_what" % k]
+        inner += M.text("wr_k_%d" % k, sx + 52, ry + 2, 230, B.key("wr_k_%d" % k, "§Y[?mod1440_wr_k_%d.GetName]§!" % k), M.FONT_LABEL, height=22, fixed=True)
+        names += ["wr_k_%d_face" % k, "wr_k_%d" % k]
+        for x, part, words in WF_TALLY:
+            inner += M.text("wr_k_%d_%s" % (k, part), x, ry + 12, 62, B.key("wr_k_%d_%s" % (k, part), "[?mod1440_wr_k_%d_%s|0]" % (k, part)),
+                            M.FONT_VALUE, "centre", 22)
+            names.append("wr_k_%d_%s" % (k, part))
         for rank, words in ((1, "Field Marshal"), (2, "General"), (3, "Admiral")):
             widget = "wr_k_%d_rank_%d" % (k, rank)
-            inner += M.text(widget, WF_LP + 64, ry + 28, 200, B.key("wr_k_rank_%d" % rank, words), M.FONT_SMALL, height=20)
+            inner += M.text(widget, sx + 52, ry + 24, 230, B.key("wr_k_rank_%d" % rank, words), M.FONT_LABEL, height=22)
             triggers += block(widget + "_visible", more + "check_variable = { mod1440_wr_k_%d_rank = %d }\n" % (k, rank))
         triggers += shown_if(names, more)
-    for k, words in enumerate(("The general who had the most divisions in the place when it changed",
-                               "hands; each officer keeps what he took in each war.")):
-        inner += M.text("wr_k_note_%d" % k, WF_LP + 12, WF_CY + 40 + WR_COMMANDERS * 60 + 6 + k * 20, WF_PW - 24, B.key("wr_k_note_%d" % k, words), M.FONT_SMALL, height=20)
-        shows.append("wr_k_note_%d" % k)
 
-    # in the War Diary: this war's newest lines
-    inner += M.text("wr_ln_title", WF_RP + 12, WF_CY, 480, B.key("wr_ln_title", "In the War Diary"), M.FONT_CARD, height=30)
-    inner += M.text("wr_ln_none", WF_RP + 14, WF_CY + 44, 480, B.key("wr_ln_none", "Nothing yet."), M.FONT_SMALL, height=20)
-    shows.append("wr_ln_title")
+    # ---- the War Diary: the war's newest lines in one run, the left column under the commanders, then the right
+    # column, under the enemies table (several enemies) or in its place (one)
+    def diary_lines(prefix, first, count, x, y, when):
+        out, trig = "", ""
+        for n in range(count):
+            k = first + n
+            ly = y + n * WR_TROW
+            more = when + "check_variable = { mod1440_wr_ln_n > %d }\n" % k
+            names = []
+            w = "%s_%d" % (prefix, k)
+            if n % 2:
+                out += M.icon(w + "_bg", x, ly, STRIPE % (WF_SW, WR_TROW))
+                names.append(w + "_bg")
+            out += M.text(w + "_d", x + 8, ly + 2, 86, B.key("wr_ln_%d_d" % k, "[?mod1440_wr_ln_date^%d.%s]" % (k, short)), M.FONT_LABEL, height=22)
+            out += M.text(w + "_w", x + 90, ly + 1, 26, B.key("wr_ln_icon_w", "£army_experience"), M.FONT_LABEL, height=22)
+            out += M.text(w + "_t", x + 90, ly + 1, 26, B.key("wr_ln_icon_t", "£victory_points"), M.FONT_LABEL, height=22)
+            trig += block(w + "_w_visible", more + "check_variable = { mod1440_wr_ln_fam^%d = 1 }\n" % k)
+            trig += block(w + "_t_visible", more + "NOT = { check_variable = { mod1440_wr_ln_fam^%d = 1 } }\n" % k)
+            out += M.text(w, x + 116, ly + 2, 232, B.key("wr_ln_%d" % k, "[?mod1440_wr_ln_kind^%d.GetTokenLocalizedKey]" % k), M.FONT_LABEL, height=22, fixed=True)
+            # the place is a button that moves the camera
+            out += M.button(w + "_go", x + 354, ly, layout.head_sprite(144, WR_TROW), tooltip=B.key("wd_row_go_tt", "Show this place on the map"))
+            out += plain(w + "_s", x + 362, ly + 2, 128, B.key("wr_ln_%d_s" % k, "§Y[?mod1440_wr_ln_a^%d.GetName]§!" % k), height=22)
+            out += plain(w + "_p", x + 362, ly + 2, 128, B.key("wr_ln_%d_p" % k, "§Y[?mod1440_wr_ln_a^%d.GetTokenLocalizedKey]§!" % k), height=22)
+            trig += block(w + "_go_visible", more + "check_variable = { mod1440_wr_ln_sa^%d > 1 }\n" % k)
+            trig += block(w + "_s_visible", more + "check_variable = { mod1440_wr_ln_sa^%d = 2 }\n" % k)
+            trig += block(w + "_p_visible", more + "check_variable = { mod1440_wr_ln_sa^%d = 3 }\n" % k)
+            # a line about a country and no place (war declared, capitulated): the country, which the war has several of
+            out += M.text(w + "_b", x + 362, ly + 2, 128, B.key("wr_ln_%d_b" % k, "§Y[?mod1440_wr_ln_b^%d.GetName]§!" % k), M.FONT_LABEL, height=22, fixed=True)
+            trig += block(w + "_b_visible", more + "check_variable = { mod1440_wr_ln_sa^%d < 2 }\n" % k)
+            go_effects.append(block(w + "_go_click", tmp("wd_go", "mod1440_wr_ln_a^%d" % k)
+                                    + iff("check_variable = { mod1440_wr_ln_sa^%d = 3 }" % k, tmp("wd_go", "mod1440_wr_ln_p^%d" % k))
+                                    + block("var:wd_go", block("ROOT", "goto_state = PREV\nmod1440_rec_close = yes\n"))))
+            names += [w + "_d", w]
+            trig += shown_if(names, more)
+        return out, trig
+
+    go_effects = []
+    sx0, sx1 = WF_SX
+    inner += strip("wr_ln_head", sx0, WF_DIARY_Y, "In the War Diary", B.key("wr_ln_head_tt", "The war's newest lines; a place is a button that shows it on the map."))
+    inner += M.button("wr_ln_all", sx0 + WF_SW - 136, WF_DIARY_Y + 1, "GFX_1440p_SG_hit_130x24",
+                      tooltip=B.key("wr_ln_all_tt", "The War Diary with every line about the enemy chosen in this file"))
+    inner += plain("wr_ln_all_t", sx0 + WF_SW - 208, WF_DIARY_Y + 2, 200, B.key("wr_ln_all_t", "All its lines"), M.FONT_LABEL, "right", 22)
+    shows += ["wr_ln_head", "wr_ln_head_t", "wr_ln_all", "wr_ln_all_t"]
+    effects += block("wr_ln_all_click", setv("mod1440_wd_filter", WD_COUNTRY_FILTER) + setv("mod1440_wd_country", "mod1440_wr_c_te")
+                     + "clear_array = mod1440_wd_back\n" + setv("mod1440_wd_from", 0) + setv("mod1440_rec_page", 0) + "mod1440_rec_show = yes\n")
+    inner += M.text("wr_ln_none", sx0 + 8, WF_DIARY_Y + 30, 480, B.key("wr_ln_none", "Nothing yet."), M.FONT_LABEL, height=22)
     triggers += block("wr_ln_none_visible", has + "check_variable = { mod1440_wr_ln_n < 1 }\n")
-    for k in range(WR_LINES):
-        ly = WF_CY + 40 + k * WF_LINE
-        more = has + "check_variable = { mod1440_wr_ln_n > %d }\n" % k
-        names = []
-        if k % 2:
-            inner += M.icon("wr_ln_%d_stripe" % k, WF_RP + 8, ly - 3, STRIPE % (WF_PW - 16, WF_LINE))
-            names.append("wr_ln_%d_stripe" % k)
-        inner += M.text("wr_ln_%d_d" % k, WF_RP + 14, ly + 1, 96, B.key("wr_ln_%d_d" % k, "[?mod1440_wr_ln_date^%d.GetDateStringShortMonth]" % k), M.FONT_SMALL, height=20)
-        inner += M.text("wr_ln_%d_w" % k, WF_RP + 100, ly, 26, B.key("wr_ln_icon_w", "£army_experience"), M.FONT_LABEL, height=22)
-        inner += M.text("wr_ln_%d_t" % k, WF_RP + 100, ly, 26, B.key("wr_ln_icon_t", "£victory_points"), M.FONT_LABEL, height=22)
-        triggers += block("wr_ln_%d_w_visible" % k, more + "check_variable = { mod1440_wr_ln_fam^%d = 1 }\n" % k)
-        triggers += block("wr_ln_%d_t_visible" % k, more + "NOT = { check_variable = { mod1440_wr_ln_fam^%d = 1 } }\n" % k)
-        inner += M.text("wr_ln_%d" % k, WF_RP + 126, ly + 2, 200, B.key("wr_ln_%d" % k, "[?mod1440_wr_ln_kind^%d.GetTokenLocalizedKey]" % k), M.FONT_SMALL, height=20, fixed=True)
-        # the place is a button that moves the camera
-        inner += M.button("wr_ln_%d_go" % k, WF_RP + 330, ly - 1, layout.head_sprite(180, 24), tooltip=B.key("wd_row_go_tt", "Show this place on the map"))
-        inner += plain("wr_ln_%d_s" % k, WF_RP + 338, ly + 1, 170, B.key("wr_ln_%d_s" % k, "§Y[?mod1440_wr_ln_a^%d.GetName]§!" % k), height=22)
-        inner += plain("wr_ln_%d_p" % k, WF_RP + 338, ly + 1, 170, B.key("wr_ln_%d_p" % k, "§Y[?mod1440_wr_ln_a^%d.GetTokenLocalizedKey]§!" % k), height=22)
-        triggers += block("wr_ln_%d_go_visible" % k, more + "check_variable = { mod1440_wr_ln_sa^%d > 1 }\n" % k)
-        triggers += block("wr_ln_%d_s_visible" % k, more + "check_variable = { mod1440_wr_ln_sa^%d = 2 }\n" % k)
-        triggers += block("wr_ln_%d_p_visible" % k, more + "check_variable = { mod1440_wr_ln_sa^%d = 3 }\n" % k)
-        effects += block("wr_ln_%d_go_click" % k, tmp("wd_go", "mod1440_wr_ln_a^%d" % k)
-                         + iff("check_variable = { mod1440_wr_ln_sa^%d = 3 }" % k, tmp("wd_go", "mod1440_wr_ln_p^%d" % k))
-                         + block("var:wd_go", block("ROOT", "goto_state = PREV\nmod1440_rec_close = yes\n")))
-        names += ["wr_ln_%d_d" % k, "wr_ln_%d" % k]
-        triggers += shown_if(names, more)
-    inner += M.text("wr_ln_note", WF_RP + 12, WF_CY + 40 + WR_LINES * WF_LINE + 6, WF_PW - 24, B.key(
-        "wr_ln_note", "A place is a button: it shows it on the map. The newest %d lines." % WR_LINES), M.FONT_SMALL, height=20)
-    shows.append("wr_ln_note")
+    piece, trig = diary_lines("wr_ln", 0, WR_LEFT_LINES, sx0, WF_DIARY_Y + 26, has)
+    inner += piece
+    triggers += trig
+    # one enemy: the diary continues at the top of the right column
+    inner += strip("wr_l1_head", sx1, WF_LY, "In the War Diary, continued")
+    triggers += shown_if(["wr_l1_head", "wr_l1_head_t"], one + "check_variable = { mod1440_wr_ln_n > %d }\n" % WR_LEFT_LINES)
+    piece, trig = diary_lines("wr_l1", WR_LEFT_LINES, WR_LINES - WR_LEFT_LINES, sx1, WF_LY + 26, one)
+    inner += piece
+    triggers += trig
+    # several: the enemies table, then the diary under it
+    heads_y = WF_LY + 2
+    inner += M.icon("wr_en_head", sx1, WF_LY, layout.head_sprite(WF_SW, 26))
+    shows_several = ["wr_en_head"]
+    for name, x, w, align, words, tip in (
+            ("enemy", 50, 120, "left", "Enemy", "Click an enemy for its heads of government."),
+            ("joined", 174, 80, "left", "Joined", "The day it entered the war."),
+            ("end", 250, 56, "centre", "End", "How it ended (the icon's tooltip says it), or how close it is to capitulating."),
+            ("theirs", 296, 76, "right", "Their dead", "Casualties: its dead by your hand."),
+            ("ours", 374, 64, "right", "Our dead", "Casualties: your dead by its hand."),
+            ("states", 442, 58, "centre", "States", "States taken from it : lost to it.")):
+        inner += M.text("wr_en_h_" + name, sx1 + x, heads_y, w, B.key("wr_en_h_" + name, words), M.FONT_LABEL, align, 22,
+                        tooltip=B.key("wr_en_h_%s_tt" % name, tip))
+        shows_several.append("wr_en_h_" + name)
+    inner += war_listing("wr_en_list", "wr_en_grid", sx1, WF_LY + 26, WR_ENEMY_ROWS * WR_ENEMY_ROW, WF_SW, WF_SW + 16, WR_ENEMY_ROW)
+    shows_several.append("wr_en_list")
+    inner += strip("wr_l2_head", sx1, WF_RIGHT_Y, "In the War Diary, continued")
+    triggers += shown_if(shows_several, several)
+    triggers += shown_if(["wr_l2_head", "wr_l2_head_t"], several + "check_variable = { mod1440_wr_ln_n > %d }\n" % WR_LEFT_LINES)
+    piece, trig = diary_lines("wr_l2", WR_LEFT_LINES, WR_RIGHT_SEVERAL, sx1, WF_RIGHT_Y + 26, several)
+    inner += piece
+    triggers += trig
+    effects += "".join(go_effects)
     triggers += shown_if(shows, has)
     body += M.box("wr_file", WR_FILE_X, REC_BODY_Y, fw, REC_BODY_H, inner)
 
-    lists = block("wr_now_grid", 'array = mod1440_wr_enemy\nchange_scope = yes\nentry_container = "mod1440_records_war_row"\n')
-    lists += block("wr_old_grid", 'array = mod1440_wo_fr\nentry_container = "mod1440_records_past_war_row"\n')
+    # ---- a row of the enemies table: flag, name, when it joined, how it ended, both sides' dead, states
+    hit = "GFX_1440p_SG_hit_%dx%d" % (WF_SW, WR_ENEMY_ROW)
+    entry = M.icon("wr_en_stripe", 0, 0, STRIPE % (WF_SW, WR_ENEMY_ROW))
+    entry += M.icon("wr_en_pick", 0, 0, PICK % (WF_SW, WR_ENEMY_ROW))
+    triggers += block("wr_en_stripe_visible", "check_variable = { mod1440_we_odd^i = 1 }\ncheck_variable = { mod1440_we_pk^i = 0 }\n")
+    triggers += block("wr_en_pick_visible", "check_variable = { mod1440_we_pk^i = 1 }\n")
+    entry += M.icon("wr_en_flag", 4, 3, FLAG_SMALL)
+    properties += flown("wr_en_flag", "?mod1440_we_c^i")
+    entry += M.text("wr_en_name", 50, 5, 120, B.key("wr_en_name", "§Y[?mod1440_we_c^i.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
+    entry += M.text("wr_en_joined", 174, 5, 80, B.key("wr_en_joined", "[?mod1440_we_since^i.%s]" % short), M.FONT_LABEL, height=22)
+    entry += M.text("wr_en_surr", 250, 5, 56, B.key("wr_en_surr", "[?mod1440_we_surr^i|0]%"), M.FONT_LABEL, "centre", 22)
+    triggers += block("wr_en_surr_visible", "check_variable = { mod1440_we_open^i = 1 }\n")
+    icons, icon_triggers = outcome_icons("wr_en_end", 278, WR_ENEMY_ROW // 2, "mod1440_we_oc^i", "check_variable = { mod1440_we_open^i = 0 }\n")
+    entry += icons
+    triggers += icon_triggers
+    for name, x, w, part in (("theirs", 302, 68, "kthem"), ("ours", 374, 64, "kus")):
+        entry += M.text("wr_en_" + name, x, 4, w, B.key("wr_en_" + name, "[?mod1440_we_%s^i|1]K" % part), M.FONT_VALUE, "right", 22)
+        entry += M.text("wr_en_%s_none" % name, x, 4, w, B.key("wr_dash", DASH), M.FONT_VALUE, "right", 22,
+                        tooltip=B.key("wr_dash_tt", "Not kept: this war ended before the record kept its dead."))
+        triggers += block("wr_en_%s_visible" % name, "check_variable = { mod1440_we_kus^i > -1 }\n")
+        triggers += block("wr_en_%s_none_visible" % name, "check_variable = { mod1440_we_kus^i < 0 }\n")
+    entry += M.text("wr_en_states", 442, 5, 58, B.key("wr_en_states", "[?mod1440_we_st^i|0] : [?mod1440_we_sl^i|0]"), M.FONT_LABEL, "centre", 22)
+    entry += M.button("wr_en_row", 0, 0, hit, tooltip=B.key("wr_en_row_tt", "Show this enemy's heads of government"))
+    effects += block("wr_en_row_click", setv("mod1440_wr_sel_e", "mod1440_we_id^i") + "mod1440_wr_them = yes\n")
+    gui_rows += row("mod1440_records_enemy_row", WF_SW, WR_ENEMY_ROW, entry)
+
+    lists = block("wr_now_grid", 'array = mod1440_wv_g\nentry_container = "mod1440_records_war_row"\n')
+    lists += block("wr_old_grid", 'array = mod1440_wp_fr\nentry_container = "mod1440_records_past_war_row"\n')
+    lists += block("wr_en_grid", 'array = mod1440_we_c\nentry_container = "mod1440_records_enemy_row"\n')
     gui, script = page_gui("wr", 3, body, lists=lists, effects=effects, triggers=triggers, properties=properties)
     gui += gui_rows
     return gui, script, wars_script(portrait_version)
@@ -2584,14 +2827,63 @@ def wars(portrait_version):
 
 def wars_script(portrait_version):
     outcomes = dict((name, token("wr_out_" + name, words)) for name, words in OUTCOMES)
+    unknown = "token:" + UNKNOWN
     find = tmp("wr_j", -1) + block("for_each_loop", "array = mod1440_wr_enemy\nvalue = wr_v\nindex = wr_i\n"
                                    + iff("check_variable = { wr_v = wr_c }", tmp("wr_j", "wr_i")))
-    start = {"enemy": "wr_c", "since": "global.date", "day0": "global.num_days", "cas0": "casualties", "taken": 0, "lost": 0, "days": 0,
-             "cas": 0, "capd": 0, "old": "wr_old", "surr": 0, "vpt": 0, "vpl": 0, "id": "mod1440_wr_next", "ecas0": "wr_e0", "ecas": 0}
-    end = {"enemy": "wr_c", "since": "mod1440_wr_since^wr_j", "until": "global.date", "days": "wr_d", "cas": "wr_k",
+
+    def kread(victim, opponent, *prev):
+        """Script that reads the dead of <victim> by the hand of <opponent> (in thousands, to 0.1) into kr, searching up
+        from the sum of <prev> (yesterday's reading)."""
+        out = setv("mod1440_wr_kv", victim) + setv("mod1440_wr_ko", opponent) + tmp("kr_prev", prev[0] if prev else 0)
+        out += "".join("add_to_temp_variable = { kr_prev = %s }\n" % p for p in prev[1:])
+        return out + "mod1440_wr_kread = yes\n"
+
+    def mark(variable):
+        return tmp("ch_v", variable) + "mod1440_ch_mark = yes\n"
+
+    def role(country, out):
+        """out: 1 when the country in scope has the offensive war against <country> (it declared, or joined the side that did)."""
+        return tmp(out, 0) + iff("has_offensive_war_with = var:%s" % country, tmp(out, 1))
+
+    # ---- a new row: the war it joins, the readings of its first day, the heads of government
+    start = {"enemy": "wr_c", "since": "global.date", "day0": "global.num_days", "cas0": 0, "taken": 0, "lost": 0, "days": 0,
+             "cas": 0, "capd": 0, "old": "wr_old", "surr": 0, "vpt": 0, "vpl": 0, "id": "mod1440_wr_next", "ecas0": 0, "ecas": 0,
+             "grp": "wr_g", "how": "wr_how", "kday": "global.num_days", "kus0": "wr_k0", "kthem0": "wr_t0", "kus": 0, "kthem": 0,
+             "lu0": "wr_lu", "pu0": "wr_pu", "gu0": "wr_gu", "lt0": "wr_lt", "pt0": "wr_pt", "gt0": "wr_gt", "lt1": "wr_lt", "pt1": "wr_pt", "gt1": "wr_gt"}
+    grouping = (tmp("wr_g", "mod1440_wr_next") + role("wr_c", "wr_r") + tmp("wr_b", 0)
+                + block("for_each_loop", "array = mod1440_wr_enemy\nvalue = wr_v\nindex = wr_i\nbreak = wr_b\n" + role("wr_v", "wr_r2")
+                        + iff("check_variable = { wr_r2 = wr_r } var:wr_c = { has_war_together_with = var:wr_v }",
+                              tmp("wr_g", "mod1440_wr_grp^wr_i") + tmp("wr_b", 1))))
+    # the readings of the first day: 0 for a war that ran when the record began (its whole length counts), unless the
+    # pair fought a war before, whose dead the game may still count
+    baseline = (tmp("wr_k0", 0) + tmp("wr_t0", 0) + iff(
+        "var:wr_c = { exists = yes } OR = { check_variable = { wr_old = 0 } is_in_array = { array = mod1440_wo_enemy value = wr_c } }",
+        kread("THIS", "wr_c") + tmp("wr_k0", "kr") + kread("wr_c", "THIS") + tmp("wr_t0", "kr")))
+    leaders = ("mod1440_wr_hog = yes\n" + tmp("wr_lu", "hg_l") + tmp("wr_pu", "hg_p") + tmp("wr_gu", "hg_g")
+               + tmp("wr_lt", 0) + tmp("wr_pt", unknown) + tmp("wr_gt", 0)
+               + block("var:wr_c", iff("exists = yes", "mod1440_wr_hog = yes\n" + tmp("wr_lt", "hg_l") + tmp("wr_pt", "hg_p") + tmp("wr_gt", "hg_g")))
+               + mark("wr_lu") + mark("wr_lt"))
+
+    # ---- a row that ends
+    end = {"enemy": "wr_c", "since": "mod1440_wr_since^wr_j", "until": "global.date", "days": "wr_d", "cas": 0,
            "taken": "mod1440_wr_taken^wr_j", "lost": "mod1440_wr_lost^wr_j", "outcome": "wr_out", "old": "mod1440_wr_old^wr_j",
            "vpt": "mod1440_wr_vpt^wr_j", "vpl": "mod1440_wr_vpl^wr_j", "id": "mod1440_wr_id^wr_j", "day0": "mod1440_wr_day0^wr_j",
-           "ecas": "mod1440_wr_ecas^wr_j", "oc": "wr_oc", "fr": "wr_fr"}
+           "ecas": "mod1440_wr_ecas^wr_j", "oc": "wr_oc", "fr": "wr_fr",
+           "kus": "wr_ku", "kthem": "wr_kt", "lu1": "wr_lu", "pu1": "wr_pu", "gu1": "wr_gu"}
+    for part in WO_NEW_3:
+        end.setdefault(part, "mod1440_wr_%s^wr_j" % part)
+
+    def keep_higher(base, target, kept):
+        """After a reading in kr: the reading minus the row's first one, into <kept> when higher."""
+        return (tmp("kr_v", "kr") + "subtract_from_temp_variable = { kr_v = %s }\n" % base + tmp("kr_o", kept)
+                + iff("check_variable = { kr_v > kr_o }", setv(target, "kr_v") if target else tmp(kept, "kr_v")))
+
+    last_reading = (tmp("wr_ku", "mod1440_wr_kus^wr_j") + tmp("wr_kt", "mod1440_wr_kthem^wr_j")
+                    + iff("var:wr_c = { exists = yes }", (
+                        kread("THIS", "wr_c", "mod1440_wr_kus^wr_j", "mod1440_wr_kus0^wr_j") + keep_higher("mod1440_wr_kus0^wr_j", None, "wr_ku")
+                        + kread("wr_c", "THIS", "mod1440_wr_kthem^wr_j", "mod1440_wr_kthem0^wr_j") + keep_higher("mod1440_wr_kthem0^wr_j", None, "wr_kt"))))
+
+    # ---- what a save of an earlier build lacks (wr_grow)
     # a game saved before a row counted victory points: the rows that are there get a 0 each
     grow = "".join(iff("check_variable = { mod1440_%s_%s^num < mod1440_%s_enemy^num }" % (table, WR_NEW[0], table), block(
         "for_loop_effect", "start = 0\nend = %d\nvalue = gr_n\n" % WO_KEEP + "".join(
@@ -2609,7 +2901,7 @@ def wars_script(portrait_version):
                "day0": "add_to_array = { mod1440_wo_day0 = -1 }\n", "ecas": "add_to_array = { mod1440_wo_ecas = 0 }\n",
                "oc": (tmp("gr_o", "mod1440_wo_outcome^gr_i") + tmp("gr_oc", 1)
                       + "".join(tmp("gr_t", outcomes[name]) + iff("check_variable = { gr_o = gr_t }", tmp("gr_oc", n))
-                                for n, (name, words) in enumerate(OUTCOMES, start=1) if n > 1)
+                                for n, (name, words) in enumerate(OUTCOMES[:5], start=1) if n > 1)
                       + "add_to_array = { mod1440_wo_oc = gr_oc }\n"),
                "fr": (tmp("gr_fr", 1) + iff("check_variable = { mod1440_wo_oc^gr_i = 1 }", tmp("gr_fr", 3))
                       + "add_to_array = { mod1440_wo_fr = gr_fr }\n")},
@@ -2622,20 +2914,264 @@ def wars_script(portrait_version):
                     block("for_loop_effect", "start = 0\nend = %d\nvalue = gr_n\n" % WO_KEEP + iff(
                         "check_variable = { mod1440_%s_%s^num < mod1440_%s_enemy^num }" % (table, first, table), body)))
 
-    def copy(table, parts):
-        return "".join(setv("mod1440_wr_c_" + part, "mod1440_%s_%s^mod1440_wr_sel_i" % (table, part)) for part in parts)
+    # ... and one saved before E4 round 2 (2026-10-29): rows per enemy without a war, casualties or leaders.
+    def ruler_at(date, out):
+        """Our head of government on the date <date> (a date variable), from the Government page's heads since the
+        record began (mod1440_gv_rul, newest first, from the day each came): <out>_l, <out>_p, <out>_g; the oldest
+        head for a date before the record, today's when the page kept none."""
+        return ("mod1440_wr_hog = yes\n" + tmp(out + "_l", "hg_l") + tmp(out + "_p", "hg_p") + tmp(out + "_g", "hg_g")
+                + tmp("gr_s", date) + tmp("gr_hit", 0)
+                + block("for_each_loop", "array = mod1440_gv_rul\nvalue = gr_v\nindex = gr_k\nbreak = gr_hit\n" + tmp("gr_f", "mod1440_gv_rul_from^gr_k")
+                        + iff("NOT = { check_variable = { gr_f > gr_s } }", (
+                            tmp(out + "_l", "gr_v") + tmp(out + "_p", "mod1440_gv_rul_p^gr_k") + tmp(out + "_g", "mod1440_gv_rul_g^gr_k") + tmp("gr_hit", 1))))
+                + iff("check_variable = { gr_hit = 0 } check_variable = { mod1440_gv_rul^num > 0 }", (
+                    tmp("gr_k", "mod1440_gv_rul^num") + "subtract_from_temp_variable = { gr_k = 1 }\n"
+                    + tmp(out + "_l", "mod1440_gv_rul^gr_k") + tmp(out + "_p", "mod1440_gv_rul_p^gr_k") + tmp(out + "_g", "mod1440_gv_rul_g^gr_k")))
+                + iff("check_variable = { %s_p = 0 }" % out, tmp(out + "_p", unknown)))
 
+    # today's rows: the war by the rule of a new row, over the rows migrated before; the dead from today's reading (the
+    # whole war when the pair never fought before); ours at the start from the Government page, theirs not recorded
+    wr_body = (
+        tmp("gr_i", "mod1440_wr_grp^num") + tmp("gr_c", "mod1440_wr_enemy^gr_i")
+        + tmp("gr_g", "mod1440_wr_id^gr_i") + role("gr_c", "gr_r") + tmp("gr_b", 0)
+        + block("for_loop_effect", "start = 0\nend = gr_i\nvalue = gr_k\n" + iff("check_variable = { gr_b = 0 }", (
+            tmp("gr_v", "mod1440_wr_enemy^gr_k") + role("gr_v", "gr_r2")
+            + iff("check_variable = { gr_r2 = gr_r } var:gr_c = { has_war_together_with = var:gr_v }", tmp("gr_g", "mod1440_wr_grp^gr_k") + tmp("gr_b", 1)))))
+        + tmp("gr_k0", 0) + tmp("gr_t0", 0) + tmp("gr_kd", "mod1440_wr_day0^gr_i")
+        + iff("is_in_array = { array = mod1440_wo_enemy value = gr_c } var:gr_c = { exists = yes }", (
+            kread("THIS", "gr_c") + tmp("gr_k0", "kr") + kread("gr_c", "THIS") + tmp("gr_t0", "kr") + tmp("gr_kd", "global.num_days")))
+        + ruler_at("mod1440_wr_since^gr_i", "gr_u")
+        + tmp("gr_lt", 0) + tmp("gr_pt", unknown) + tmp("gr_gt", 0)
+        + block("var:gr_c", iff("exists = yes", "mod1440_wr_hog = yes\n" + tmp("gr_lt", "hg_l") + tmp("gr_pt", "hg_p") + tmp("gr_gt", "hg_g")))
+        + mark("gr_u_l") + mark("gr_lt")
+        + "".join("add_to_array = { mod1440_wr_%s = %s }\n" % (part, value) for part, value in zip(WR_NEW_3, (
+            "gr_g", 0, "gr_kd", "gr_k0", "gr_t0", 0, 0, "gr_u_l", "gr_u_p", "gr_u_g", 0, unknown, 0, "gr_lt", "gr_pt", "gr_gt"))))
+    # finished rows: rows that ended on the same day are one war; the dead not kept (-1), unless the enemy was fought
+    # once, is not at war with the country now and the game still counts its dead (a reading above 0); ours at both
+    # ends from the Government page, theirs not recorded
+    wo_body = (
+        tmp("gr_i", "mod1440_wo_grp^num") + tmp("gr_c", "mod1440_wo_enemy^gr_i") + tmp("gr_u", "mod1440_wo_until^gr_i")
+        + tmp("gr_g", "mod1440_wo_id^gr_i") + tmp("gr_b", 0)
+        + block("for_loop_effect", "start = 0\nend = gr_i\nvalue = gr_k\n" + iff("check_variable = { gr_b = 0 }", (
+            tmp("gr_v", "mod1440_wo_until^gr_k") + iff("check_variable = { gr_v = gr_u }", tmp("gr_g", "mod1440_wo_grp^gr_k") + tmp("gr_b", 1)))))
+        + tmp("gr_ku", -1) + tmp("gr_kt", -1) + tmp("gr_seen", 0)
+        + "".join(block("for_each_loop", "array = mod1440_%s_enemy\nvalue = gr_v\n" % t + iff("check_variable = { gr_v = gr_c }", "add_to_temp_variable = { gr_seen = 1 }\n"))
+                  for t in ("wo", "wr"))
+        + iff("check_variable = { gr_seen = 1 } var:gr_c = { exists = yes } NOT = { has_war_with = var:gr_c }", (
+            kread("THIS", "gr_c") + iff("check_variable = { kr > 0 }", tmp("gr_ku", "kr") + kread("gr_c", "THIS") + tmp("gr_kt", "kr"))))
+        + ruler_at("mod1440_wo_since^gr_i", "gr_a") + ruler_at("mod1440_wo_until^gr_i", "gr_z")
+        + mark("gr_a_l") + mark("gr_z_l")
+        + "".join("add_to_array = { mod1440_wo_%s = %s }\n" % (part, value) for part, value in zip(WO_NEW_3, (
+            "gr_g", 0, -1, "gr_ku", "gr_kt", "gr_a_l", "gr_a_p", "gr_a_g", "gr_z_l", "gr_z_p", "gr_z_g", 0, unknown, 0, 0, unknown, 0))))
+    for table, body in (("wr", wr_body), ("wo", wo_body)):
+        missing = "check_variable = { mod1440_%s_grp^num < mod1440_%s_enemy^num }" % (table, table)
+        grow += iff(missing, block("for_loop_effect", "start = 0\nend = %d\nvalue = gr_n\n" % WO_KEEP + iff(missing, body))
+                    + 'log = "MOD1440 records: the rows of %s were given their wars, casualties and leaders (E4 round 2)"\n' % table)
+    # E4 fix round 1: a row whose enemy is the country itself is dropped, once per save (mod1440_wr_fix1), after every part
+    # is there; the parts stay as they are, a row leaves all of them as at a peace. An officer's tally of its number is
+    # left alone: no war shows it any more.
+    drop = tmp("gr_me", "THIS")
+    for table, parts in (("wr", WR_PARTS), ("wo", WO_PARTS)):
+        drop += tmp("gr_go", 1) + block("while_loop_effect", "limit = { check_variable = { gr_go = 1 } }\n" + (
+            tmp("gr_go", 0) + tmp("gr_x", -1) + tmp("gr_b", 0)
+            + block("for_each_loop", "array = mod1440_%s_enemy\nvalue = gr_v\nindex = gr_k\nbreak = gr_b\n" % table
+                    + iff("check_variable = { gr_v = gr_me }", tmp("gr_x", "gr_k") + tmp("gr_b", 1)))
+            + iff("check_variable = { gr_x > -1 }", (
+                "".join("remove_from_array = { array = mod1440_%s_%s index = gr_x }\n" % (table, part) for part in parts)
+                + tmp("gr_go", 1) + 'log = "MOD1440 records: a row of %s against the country itself was dropped (E4 fix round 1)"\n' % table))))
+    grow += iff("NOT = { check_variable = { mod1440_wr_fix1 = 1 } }", setv("mod1440_wr_fix1", 1) + drop + "mod1440_wr_count_wars = yes\n")
+
+    # ---- the portraits kept on the rows, looked up again from the kept leaders when the numbers of the text keys
+    # have moved or the table of portraits has changed (SCR-076)
+    def relook(table, idx, pairs, theirs):
+        out = ""
+        for l, p in pairs:
+            look = block("var:rl_l", "mod1440_p_leader = yes\n")
+            if theirs:
+                look = block("var:rl_e", iff("exists = yes", look))
+            out += (tmp("rl_l", "mod1440_%s_%s^%s" % (table, l, idx)) + tmp("p_tok", unknown)
+                    + iff("NOT = { check_variable = { rl_l = 0 } }", look) + setv("mod1440_%s_%s^%s" % (table, p, idx), "p_tok"))
+        return out
+
+    faces_again = iff(stale("mod1440_wr_p_ver", portrait_version), "".join(
+        block("for_loop_effect", "start = 0\nend = mod1440_%s_grp^num\nvalue = rl_i\n" % table + tmp("rl_e", "mod1440_%s_enemy^rl_i" % table)
+              + relook(table, "rl_i", ours, False) + relook(table, "rl_i", theirs, True))
+        for table, ours, theirs in (("wr", [("lu0", "pu0")], [("lt0", "pt0"), ("lt1", "pt1")]),
+                                    ("wo", [("lu0", "pu0"), ("lu1", "pu1")], [("lt0", "pt0"), ("lt1", "pt1")])))
+        + stamped("mod1440_wr_p_ver", portrait_version))
+
+    # ---- the two lists, one plate per war
+    def find_in(array, value, out):
+        return tmp(out, -1) + tmp("ls_b", 0) + block("for_each_loop", "array = %s\nvalue = ls_x\nindex = ls_k\nbreak = ls_b\n" % array
+                                                     + iff("check_variable = { ls_x = %s }" % value, tmp(out, "ls_k") + tmp("ls_b", 1)))
+
+    def new_war(pre, parts, values):
+        return "".join("add_to_array = { mod1440_%s_%s = %s }\n" % (pre, part, values.get(part, 0)) for part in parts) + (
+            tmp("ls_j", "mod1440_%s_g^num" % pre) + "subtract_from_temp_variable = { ls_j = 1 }\n")
+
+    def add_up(pre, table, idx, first_extra=""):
+        """Row <idx> of <table> counts for war ls_j of the list <pre>: one more enemy, its dead when kept, the first enemy
+        (the row with the lowest number) and the first day."""
+        return ("add_to_variable = { mod1440_%s_n^ls_j = 1 }\n" % pre
+                + tmp("ls_u", "mod1440_%s_kus^%s" % (table, idx)) + tmp("ls_t", "mod1440_%s_kthem^%s" % (table, idx))
+                + iff("check_variable = { ls_u > -1 }", (
+                    "add_to_variable = { mod1440_%s_kus^ls_j = ls_u }\n" % pre + "add_to_variable = { mod1440_%s_kthem^ls_j = ls_t }\n" % pre
+                    + "add_to_variable = { mod1440_%s_known^ls_j = 1 }\n" % pre + "add_to_temp_variable = { ls_all = ls_t }\n"))
+                + tmp("ls_id", "mod1440_%s_id^%s" % (table, idx)) + tmp("ls_f", "mod1440_%s_first^ls_j" % pre)
+                + iff("check_variable = { ls_id < ls_f }", setv("mod1440_%s_first^ls_j" % pre, "ls_id")
+                      + setv("mod1440_%s_c^ls_j" % pre, "mod1440_%s_enemy^%s" % (table, idx)) + first_extra)
+                + tmp("ls_d", "mod1440_%s_day0^%s" % (table, idx)) + tmp("ls_e", "mod1440_%s_d0^ls_j" % pre)
+                + iff("check_variable = { ls_d > -1 } OR = { check_variable = { ls_e < 0 } check_variable = { ls_d < ls_e } }",
+                      setv("mod1440_%s_d0^ls_j" % pre, "ls_d")))
+
+    wp_first = setv("mod1440_wp_oc^ls_j", "mod1440_wo_oc^ls_i") + setv("mod1440_wp_fr^ls_j", "mod1440_wo_fr^ls_i")
+    lists = (
+        "".join("clear_array = mod1440_wv_%s\n" % part for part in WV_PARTS) + "".join("clear_array = mod1440_wp_%s\n" % part for part in WP_PARTS)
+        + tmp("ls_all", 0)
+        + block("for_each_loop", "array = mod1440_wr_enemy\nvalue = ls_v\nindex = ls_i\n" + (
+            tmp("ls_g", "mod1440_wr_grp^ls_i") + find_in("mod1440_wv_g", "ls_g", "ls_j")
+            + iff("check_variable = { ls_j < 0 }", new_war("wv", WV_PARTS, {
+                "g": "ls_g", "c": "ls_v", "first": "mod1440_wr_id^ls_i", "n": -1, "d0": "mod1440_wr_day0^ls_i", "surr": "mod1440_wr_surr^ls_i"}))
+            + add_up("wv", "wr", "ls_i")))
+        + block("for_loop_effect", "start = 0\nend = mod1440_wo_enemy^num\nvalue = ls_i\n" + (
+            tmp("ls_g", "mod1440_wo_grp^ls_i") + find_in("mod1440_wv_g", "ls_g", "ls_j")
+            + iff("check_variable = { ls_j > -1 }", add_up("wv", "wo", "ls_i"))
+            + els(find_in("mod1440_wp_g", "ls_g", "ls_j")
+                  + iff("check_variable = { ls_j < 0 }", new_war("wp", WP_PARTS, {
+                      "g": "ls_g", "c": "mod1440_wo_enemy^ls_i", "first": "mod1440_wo_id^ls_i", "n": -1, "d0": "mod1440_wo_day0^ls_i",
+                      "oc": "mod1440_wo_oc^ls_i", "fr": "mod1440_wo_fr^ls_i"}))
+                  + add_up("wp", "wo", "ls_i", wp_first))))
+        # the days of a war of today; the year a finished war began (a year is 365 days, day 0 the first of year 0)
+        + block("for_loop_effect", "start = 0\nend = mod1440_wv_g^num\nvalue = ls_j\n" + (
+            tmp("ls_d", "global.num_days") + "subtract_from_temp_variable = { ls_d = mod1440_wv_d0^ls_j }\n" + setv("mod1440_wv_days^ls_j", "ls_d")))
+        + block("for_loop_effect", "start = 0\nend = mod1440_wp_g^num\nvalue = ls_j\n" + (
+            tmp("ls_d", "mod1440_wp_d0^ls_j") + iff("check_variable = { ls_d > -1 }", (
+                "divide_temp_variable = { ls_d = 365 }\nsubtract_from_temp_variable = { ls_d = 0.499 }\nround_temp_variable = ls_d\n"
+                + setv("mod1440_wp_year^ls_j", "ls_d")))))
+        + setv("mod1440_wr_kthem_all", "ls_all")
+        + "mod1440_wr_picks = yes\n")
+    picks = "".join(block("for_loop_effect", "start = 0\nend = mod1440_%s_g^num\nvalue = pk_j\n" % pre + (
+        tmp("pk_g", "mod1440_%s_g^pk_j" % pre) + setv("mod1440_%s_pk^pk_j" % pre, 0)
+        + iff("check_variable = { pk_g = mod1440_wr_sel_g }", setv("mod1440_%s_pk^pk_j" % pre, 1)))) for pre in ("wv", "wp"))
+
+    # ---- the file of the chosen war: its rows in the order they joined, the war's figures, both sides' heads
+    def take_row(table, x):
+        src = {"c": "enemy", "id": "id", "since": "since", "day0": "day0", "kus": "kus", "kthem": "kthem", "st": "taken", "sl": "lost",
+               "vpt": "vpt", "vpl": "vpl", "old": "old"}
+        values = dict((part, "mod1440_%s_%s^%s" % (table, name, x)) for part, name in src.items())
+        if table == "wr":
+            values.update({"open": 1, "until": "global.date", "end": "global.num_days", "oc": 0, "surr": "mod1440_wr_surr^%s" % x,
+                           "capd": "mod1440_wr_capd^%s" % x})
+        else:
+            values.update({"open": 0, "until": "mod1440_wo_until^%s" % x, "end": "cd_end", "oc": "mod1440_wo_oc^%s" % x, "surr": 0, "capd": 0})
+        values.update({"idx": x, "odd": "cd_odd", "pk": 0})
+        pre = "" if table == "wr" else (tmp("cd_end", -1) + tmp("cd_d", "mod1440_wo_day0^%s" % x) + iff(
+            "check_variable = { cd_d > -1 }", tmp("cd_end", "cd_d") + "add_to_temp_variable = { cd_end = mod1440_wo_days^%s }\n" % x))
+        return pre + "".join("add_to_array = { mod1440_we_%s = %s }\n" % (part, values[part]) for part in WE_PARTS)
+
+    gather = (
+        "".join("clear_array = mod1440_we_%s\n" % part for part in WE_PARTS)
+        + "clear_array = mod1440_wr_t_id\nclear_array = mod1440_wr_t_open\nclear_array = mod1440_wr_t_idx\n"
+        + "".join(block("for_loop_effect", "start = 0\nend = mod1440_%s_enemy^num\nvalue = cd_i\n" % table + iff(
+            "check_variable = { mod1440_%s_grp^cd_i = mod1440_wr_sel_g }" % table, (
+                "add_to_array = { mod1440_wr_t_id = mod1440_%s_id^cd_i }\n" % table + "add_to_array = { mod1440_wr_t_open = %d }\n" % opened
+                + "add_to_array = { mod1440_wr_t_idx = cd_i }\n"))) for table, opened in (("wr", 1), ("wo", 0)))
+        + tmp("cd_n", "mod1440_wr_t_id^num") + tmp("cd_odd", 0)
+        + block("for_loop_effect", "start = 0\nend = cd_n\nvalue = cd_k\n" + (
+            block("find_lowest_in_array", "array = mod1440_wr_t_id\nvalue = cd_lo\nindex = cd_at\n")
+            + tmp("cd_o", "mod1440_wr_t_open^cd_at") + tmp("cd_x", "mod1440_wr_t_idx^cd_at") + setv("mod1440_wr_t_id^cd_at", 2000000)
+            + iff("check_variable = { cd_o = 1 }", take_row("wr", "cd_x")) + els(take_row("wo", "cd_x"))
+            + iff("check_variable = { cd_odd = 0 }", tmp("cd_odd", 1)) + els(tmp("cd_odd", 0)))))
+
+    def sum_into(variable, part, test=None):
+        body = "add_to_variable = { %s = mod1440_we_%s^cd_k }\n" % (variable, part)
+        return iff(test, body) if test else body
+
+    figures = (
+        setv("mod1440_wr_c_count", "cd_n") + setv("mod1440_wr_c_n", "cd_n") + "subtract_from_variable = { mod1440_wr_c_n = 1 }\n"
+        + setv("mod1440_wr_c_enemy", "mod1440_we_c^0") + setv("mod1440_wr_c_since", "mod1440_we_since^0") + setv("mod1440_wr_c_old", "mod1440_we_old^0")
+        + setv("mod1440_wr_c_id", "mod1440_we_id^0")
+        + "".join(setv("mod1440_wr_c_" + v, 0) for v in ("open", "kus", "kthem", "taken", "lost", "vpt", "vpl", "gave", "kunk"))
+        + setv("mod1440_wr_c_day0", -1) + setv("mod1440_wr_c_endday", -1) + setv("mod1440_wr_c_until", "mod1440_we_until^0")
+        + tmp("cd_last", 0) + tmp("cd_known", 0)
+        + block("for_loop_effect", "start = 0\nend = cd_n\nvalue = cd_k\n" + (
+            iff("check_variable = { mod1440_we_open^cd_k = 1 }", setv("mod1440_wr_c_open", 1))
+            + tmp("cd_d", "mod1440_we_day0^cd_k") + tmp("cd_e", "mod1440_wr_c_day0")
+            + iff("check_variable = { cd_d > -1 } OR = { check_variable = { cd_e < 0 } check_variable = { cd_d < cd_e } }", setv("mod1440_wr_c_day0", "cd_d"))
+            + tmp("cd_d", "mod1440_we_end^cd_k")
+            + iff("check_variable = { cd_d > mod1440_wr_c_endday }", setv("mod1440_wr_c_endday", "cd_d") + setv("mod1440_wr_c_until", "mod1440_we_until^cd_k")
+                  + tmp("cd_last", "cd_k"))
+            + iff("check_variable = { mod1440_we_kus^cd_k > -1 }", sum_into("mod1440_wr_c_kus", "kus") + sum_into("mod1440_wr_c_kthem", "kthem")
+                  + "add_to_temp_variable = { cd_known = 1 }\n")
+            + sum_into("mod1440_wr_c_taken", "st") + sum_into("mod1440_wr_c_lost", "sl") + sum_into("mod1440_wr_c_vpt", "vpt") + sum_into("mod1440_wr_c_vpl", "vpl")
+            + tmp("cd_oc", "mod1440_we_oc^cd_k")
+            + iff("OR = { AND = { check_variable = { mod1440_we_open^cd_k = 0 } check_variable = { cd_oc > 1 } check_variable = { cd_oc < 6 } } "
+                  "AND = { check_variable = { mod1440_we_open^cd_k = 1 } check_variable = { mod1440_we_capd^cd_k > 0 } } }",
+                  "add_to_variable = { mod1440_wr_c_gave = 1 }\n")))
+        + iff("check_variable = { cd_known = 0 }", setv("mod1440_wr_c_kunk", 1))
+        + iff(is_one("mod1440_wr_c_open"), setv("mod1440_wr_c_endday", "global.num_days") + setv("mod1440_wr_c_until", "global.date"))
+        + setv("mod1440_wr_c_days", "mod1440_wr_c_endday") + iff("check_variable = { mod1440_wr_c_day0 > -1 }", "subtract_from_variable = { mod1440_wr_c_days = mod1440_wr_c_day0 }\n")
+        + els(setv("mod1440_wr_c_days", 0))
+        # a war of one enemy: its surrender (today) or how it ended
+        + setv("mod1440_wr_c_surr", "mod1440_we_surr^0") + setv("mod1440_wr_c_outcome", BLANK)
+        + iff("check_variable = { mod1440_we_open^0 = 0 }", tmp("cd_x", "mod1440_we_idx^0") + setv("mod1440_wr_c_outcome", "mod1440_wo_outcome^cd_x"))
+        # ours: at the war's start from its first row, at its end from the row that ended last, or today's
+        + tmp("cd_x", "mod1440_we_idx^0")
+        + iff("check_variable = { mod1440_we_open^0 = 1 }", "".join(setv("mod1440_wr_c_u%s0" % k, "mod1440_wr_%su0^cd_x" % p) for k, p in (("l", "l"), ("p", "p"), ("g", "g"))))
+        + els("".join(setv("mod1440_wr_c_u%s0" % k, "mod1440_wo_%su0^cd_x" % p) for k, p in (("l", "l"), ("p", "p"), ("g", "g"))))
+        + iff(is_one("mod1440_wr_c_open"), "mod1440_wr_hog = yes\n" + setv("mod1440_wr_c_ul1", "hg_l") + setv("mod1440_wr_c_up1", "hg_p") + setv("mod1440_wr_c_ug1", "hg_g"))
+        + els(tmp("cd_x", "mod1440_we_idx^cd_last") + "".join(setv("mod1440_wr_c_u%s1" % k, "mod1440_wo_%su1^cd_x" % k) for k in "lpg"))
+        + "mod1440_wr_faces_u = yes\n")
+
+    def faces_of(s):
+        """Whether side <s> had the same head at both ends, and which portraits the game cannot name."""
+        out = tmp("fc_unk", unknown)
+        for n in "01":
+            p, l = "mod1440_wr_c_%sp%s" % (s, n), "mod1440_wr_c_%sl%s" % (s, n)
+            out += iff("check_variable = { %s = 0 }" % p, setv(p, unknown))
+            out += setv("mod1440_wr_c_%sfb%s" % (s, n), 0) + iff("check_variable = { %s = fc_unk }" % p, setv("mod1440_wr_c_%sfb%s" % (s, n), 1))
+            out += setv("mod1440_wr_c_%snr%s" % (s, n), 0) + iff("check_variable = { %s = 0 }" % l, setv("mod1440_wr_c_%snr%s" % (s, n), 1))
+        out += setv("mod1440_wr_c_%stw" % s, 0) + tmp("fc_a", "mod1440_wr_c_%sl0" % s) + tmp("fc_b", "mod1440_wr_c_%sl1" % s)
+        # E4 fix round 1: the same person at both ends, or nobody recorded at either (a migrated war): one box
+        out += iff("check_variable = { fc_a = fc_b }", setv("mod1440_wr_c_%stw" % s, 1))
+        return out
+
+    # their side: the enemy chosen in the table (the war's first by default)
+    them = (
+        tmp("th_k", -1) + tmp("th_b", 0)
+        + block("for_each_loop", "array = mod1440_we_id\nvalue = th_v\nindex = th_i\nbreak = th_b\n" + iff(
+            "check_variable = { th_v = mod1440_wr_sel_e }", tmp("th_k", "th_i") + tmp("th_b", 1)))
+        + iff("check_variable = { th_k < 0 } check_variable = { mod1440_we_id^num > 0 }", tmp("th_k", 0) + setv("mod1440_wr_sel_e", "mod1440_we_id^0"))
+        + iff("check_variable = { th_k > -1 }", (
+            block("for_loop_effect", "start = 0\nend = mod1440_we_pk^num\nvalue = th_i\n" + setv("mod1440_we_pk^th_i", 0))
+            + setv("mod1440_we_pk^th_k", 1)
+            + setv("mod1440_wr_c_te", "mod1440_we_c^th_k") + setv("mod1440_wr_c_topen", "mod1440_we_open^th_k") + tmp("th_x", "mod1440_we_idx^th_k")
+            + iff("check_variable = { mod1440_wr_c_topen = 1 }", "".join(setv("mod1440_wr_c_t%s%s" % (k, n), "mod1440_wr_%st%s^th_x" % (k, n)) for k in "lpg" for n in "01"))
+            # theirs at the end: the head kept on the row's last day (lt1), today's while the row is open
+            + els("".join(setv("mod1440_wr_c_t%s%s" % (k, n), "mod1440_wo_%st%s^th_x" % (k, n)) for k in "lpg" for n in "01"))))
+        + faces_of("t"))
+
+    # the lines of the War Diary about this war: a line about one of its enemies written between its first and last day
     def of_this_war(log):
         return ("check_variable = { mod1440_wr_ln_date^num < %d } check_variable = { mod1440_%s_sb^mg_m = 1 } "
-                "check_variable = { mod1440_%s_b^mg_m = mod1440_wr_c_enemy }" % (WR_LINES, log, log))
+                "check_variable = { mod1440_%s_day^mg_m > cd_lo } check_variable = { mod1440_%s_day^mg_m < cd_hi }" % (WR_LINES, log, log, log))
 
-    ln_parts = ("date", "day", "kind", "fam", "a", "sa", "p")
+    ln_parts = ("date", "day", "kind", "fam", "a", "sa", "p", "b")
 
     def war_line(log):
-        return ("".join("add_to_array = { mod1440_wr_ln_%s = mod1440_%s_%s^mg_m }\n" % (part, log, part) for part in ("date", "day", "kind", "fam", "p"))
-                + iff("check_variable = { mod1440_%s_sa^mg_m > 1 }" % log,
-                      "add_to_array = { mod1440_wr_ln_a = mod1440_%s_a^mg_m }\nadd_to_array = { mod1440_wr_ln_sa = mod1440_%s_sa^mg_m }\n" % (log, log))
-                + els("add_to_array = { mod1440_wr_ln_a = 0 }\nadd_to_array = { mod1440_wr_ln_sa = 0 }\n"))
+        return (tmp("cd_b", "mod1440_%s_b^mg_m" % log) + iff("is_in_array = { array = mod1440_we_c value = cd_b }", (
+            "".join("add_to_array = { mod1440_wr_ln_%s = mod1440_%s_%s^mg_m }\n" % (part, log, part) for part in ("date", "day", "kind", "fam", "p", "b"))
+            + iff("check_variable = { mod1440_%s_sa^mg_m > 1 }" % log,
+                  "add_to_array = { mod1440_wr_ln_a = mod1440_%s_a^mg_m }\nadd_to_array = { mod1440_wr_ln_sa = mod1440_%s_sa^mg_m }\n" % (log, log))
+            + els("add_to_array = { mod1440_wr_ln_a = 0 }\nadd_to_array = { mod1440_wr_ln_sa = 0 }\n"))))
+
+    # the capitals taken in this war: its "Capital taken" lines, which stand in the main log
+    capitals = (tmp("cd_cap", 0) + tmp("cd_ck", "token:mod1440_ev_capital_taken")
+                + block("for_loop_effect", "start = 0\nend = mod1440_ev_date^num\nvalue = cd_m\n" + iff(
+                    "check_variable = { mod1440_ev_kind^cd_m = cd_ck } check_variable = { mod1440_ev_sb^cd_m = 1 } "
+                    "check_variable = { mod1440_ev_day^cd_m > cd_lo } check_variable = { mod1440_ev_day^cd_m < cd_hi }",
+                    tmp("cd_b", "mod1440_ev_b^cd_m") + iff("is_in_array = { array = mod1440_we_c value = cd_b }", "add_to_temp_variable = { cd_cap = 1 }\n")))
+                + setv("mod1440_wr_c_capt", "cd_cap"))
 
     # the marks of the track: where each line's day stands between the war's first and last day
     span = WF_TRACK_W - 4 - WF_MARK
@@ -2646,28 +3182,31 @@ def wars_script(portrait_version):
             tmp("mx_last", "mod1440_wr_ln_n") + "subtract_from_temp_variable = { mx_last = 1 }\n"
             + tmp("mx_0", "mod1440_wr_ln_day^mx_last") + tmp("mx_1", "mod1440_wr_ln_day^0")))
         + tmp("mx_span", "mx_1") + "subtract_from_temp_variable = { mx_span = mx_0 }\n" + "clamp_temp_variable = { var = mx_span min = 1 }\n"
-        + block("for_loop_effect", "start = 0\nend = %d\nvalue = mx_k\n" % WR_LINES + (
+        + block("for_loop_effect", "start = 0\nend = %d\nvalue = mx_k\n" % WR_MARKS + (
             tmp("mx_x", 0) + iff("check_variable = { mx_k < mod1440_wr_ln_n }", (
                 tmp("mx_x", "mod1440_wr_ln_day^mx_k") + "subtract_from_temp_variable = { mx_x = mx_0 }\n"
                 + "clamp_temp_variable = { var = mx_x min = 0 max = mx_span }\n"
                 + "multiply_temp_variable = { mx_x = %d }\ndivide_temp_variable = { mx_x = mx_span }\nround_temp_variable = mx_x\n" % span))
             + "add_to_temp_variable = { mx_x = %d }\n" % (WF_TRACK_X + 2) + "add_to_array = { mod1440_wr_mx = mx_x }\n")))
 
-    # our commanders in this war: every officer the record knows who keeps a count for this war, the best six
+    # our commanders in this war: every officer the record knows who keeps a count for one of its rows, the best five
     tally = (
         "".join("clear_array = mod1440_wr_kt_%s\n" % part for part in ("c", "st", "vp", "cap", "score"))
-        + tmp("kt_id", "mod1440_wr_c_id")
+        + "clear_temp_array = kt_ids\n" + block("for_each_loop", "array = mod1440_we_id\nvalue = kt_v\nadd_to_temp_array = { kt_ids = kt_v }\n")
         + block("for_each_scope_loop", "array = mod1440_of_known\n" + (
-            tmp("kt_j", -1) + block("for_each_loop", "array = mod1440_ow_id\nvalue = kt_v\nindex = kt_i\n" + iff("check_variable = { kt_v = kt_id }", tmp("kt_j", "kt_i")))
-            + iff("check_variable = { kt_j > -1 }", "mod1440_of_me = yes\n" + iff("NOT = { check_variable = { of_me = 0 } }", (
+            tmp("kt_st", 0) + tmp("kt_vp", 0) + tmp("kt_cap", 0) + tmp("kt_any", 0)
+            + block("for_each_loop", "array = mod1440_ow_id\nvalue = kt_v\nindex = kt_i\n" + iff("is_in_array = { array = kt_ids value = kt_v }", (
+                "add_to_temp_variable = { kt_st = mod1440_ow_st^kt_i }\nadd_to_temp_variable = { kt_vp = mod1440_ow_vp^kt_i }\n"
+                "add_to_temp_variable = { kt_cap = mod1440_ow_cap^kt_i }\n" + tmp("kt_any", 1))))
+            + iff("check_variable = { kt_any = 1 }", "mod1440_of_me = yes\n" + iff("NOT = { check_variable = { of_me = 0 } }", (
                 "add_to_array = { PREV.mod1440_wr_kt_c = of_me }\n"
-                + "".join("add_to_array = { PREV.mod1440_wr_kt_%s = mod1440_ow_%s^kt_j }\n" % (part, part) for part in ("st", "vp", "cap"))
-                + tmp("kt_s", "mod1440_ow_st^kt_j") + "multiply_temp_variable = { kt_s = 1000 }\n" + "add_to_temp_variable = { kt_s = mod1440_ow_vp^kt_j }\n"
+                + "".join("add_to_array = { PREV.mod1440_wr_kt_%s = kt_%s }\n" % (part, part) for part in ("st", "vp", "cap"))
+                + tmp("kt_s", "kt_st") + "multiply_temp_variable = { kt_s = 1000 }\n" + "add_to_temp_variable = { kt_s = kt_vp }\n"
                 + "add_to_array = { PREV.mod1440_wr_kt_score = kt_s }\n")))))
         + setv("mod1440_wr_k_n", 0))
     for k in range(WR_COMMANDERS):
         slot = "mod1440_wr_k_%d" % k
-        tally += setv(slot, "country_leader") + setv(slot + "_p", "token:" + UNKNOWN) + "".join(setv("%s_%s" % (slot, part), 0) for part in ("st", "vp", "cap", "rank"))
+        tally += setv(slot, "country_leader") + setv(slot + "_p", unknown) + "".join(setv("%s_%s" % (slot, part), 0) for part in ("st", "vp", "cap", "rank"))
         tally += iff("check_variable = { mod1440_wr_kt_score^num > %d }" % k, (
             block("find_highest_in_array", "array = mod1440_wr_kt_score\nvalue = kt_hi\nindex = kt_at\n")
             + setv(slot, "mod1440_wr_kt_c^kt_at") + "".join(setv("%s_%s" % (slot, part), "mod1440_wr_kt_%s^kt_at" % part) for part in ("st", "vp", "cap"))
@@ -2677,43 +3216,117 @@ def wars_script(portrait_version):
                 + setv("PREV.%s_p" % slot, "mod1440_p") + setv("PREV.%s_rank" % slot, 2)
                 + iff("is_field_marshal = yes", setv("PREV.%s_rank" % slot, 1)) + iff("is_navy_leader = yes", setv("PREV.%s_rank" % slot, 3))))))
 
-    # which row is chosen, for the lighter band of today's enemies (their list has the enemy as its scope)
-    picked = ("clear_array = mod1440_wr_pk\n"
-              + block("for_each_loop", "array = mod1440_wr_enemy\nvalue = wr_v\nindex = wr_i\n" + tmp("wr_p", 0)
-                      + iff("check_variable = { mod1440_wr_sel_kind = 1 } check_variable = { mod1440_wr_sel_i = wr_i }", tmp("wr_p", 1))
-                      + "add_to_array = { mod1440_wr_pk = wr_p }\n"))
+    card = (
+        "mod1440_wr_grow = yes\nmod1440_ev_grow = yes\n" + faces_again + setv("mod1440_wr_c_has", 0)
+        # with no war chosen the hidden flags and names still ask for a country: the own one
+        + "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "THIS")) for v in ("mod1440_wr_c_enemy", "mod1440_wr_c_te"))
+        + gather
+        + iff("check_variable = { cd_n > 0 }", (
+            setv("mod1440_wr_c_has", 1) + figures + "mod1440_wr_them = yes\n"
+            + tmp("cd_lo", "mod1440_wr_c_day0") + "subtract_from_temp_variable = { cd_lo = 1 }\n"
+            + iff("check_variable = { mod1440_wr_c_day0 < 0 }", tmp("cd_lo", -10))
+            + tmp("cd_hi", "mod1440_wr_c_endday") + "add_to_temp_variable = { cd_hi = 1 }\n"
+            + "".join("clear_array = mod1440_wr_ln_%s\n" % part for part in ln_parts)
+            + merged(of_this_war, war_line)
+            + setv("mod1440_wr_ln_n", "mod1440_wr_ln_date^num")
+            + capitals
+            # the dates at the two ends of the track
+            + setv("mod1440_wr_c_day0d", "mod1440_wr_c_since") + setv("mod1440_wr_c_endd", "mod1440_wr_c_until")
+            + marks + tally))
+        # a hidden line's text still asks for its element (fix round 1 of E1): the lines are always there
+        + pad([("mod1440_wr_ln_date", 0), ("mod1440_wr_ln_day", 0), ("mod1440_wr_ln_kind", BLANK), ("mod1440_wr_ln_fam", 0),
+               ("mod1440_wr_ln_a", 0), ("mod1440_wr_ln_sa", 0), ("mod1440_wr_ln_p", 0), ("mod1440_wr_ln_b", "THIS")], WR_LINES))
+
+    # ---- the daily round of today's rows
+    keep_row = (lambda part, base: keep_higher("mod1440_wr_%s^wr_i" % base, "mod1440_wr_%s^wr_i" % part, "mod1440_wr_%s^wr_i" % part))
+    daily_row = (
+        tmp("wr_d", "global.num_days") + "subtract_from_temp_variable = { wr_d = mod1440_wr_day0^wr_i }\n" + setv("mod1440_wr_days^wr_i", "wr_d")
+        + tmp("wr_s", 0) + block("var:wr_v", tmp("wr_s", "surrender_progress")) + "multiply_temp_variable = { wr_s = 100 }\n"
+        + setv("mod1440_wr_surr^wr_i", "wr_s")
+        + iff("check_variable = { mod1440_wr_capd^wr_i = 0 } var:wr_v = { has_capitulated = yes }",
+              setv("mod1440_wr_capd^wr_i", 1) + line("capitulated", b="wr_v"))
+        + iff("var:wr_v = { exists = yes }", (
+            kread("THIS", "wr_v", "mod1440_wr_kus^wr_i", "mod1440_wr_kus0^wr_i") + keep_row("kus", "kus0")
+            + kread("wr_v", "THIS", "mod1440_wr_kthem^wr_i", "mod1440_wr_kthem0^wr_i") + keep_row("kthem", "kthem0")
+            # their head of government: kept again when another one rules
+            + tmp("wr_cl", 0) + block("var:wr_v", tmp("wr_cl", "country_leader")) + tmp("wr_ol", "mod1440_wr_lt1^wr_i")
+            + iff("NOT = { check_variable = { wr_cl = wr_ol } }", (
+                block("var:wr_v", "mod1440_wr_hog = yes\n") + setv("mod1440_wr_lt1^wr_i", "hg_l") + setv("mod1440_wr_pt1^wr_i", "hg_p")
+                + setv("mod1440_wr_gt1^wr_i", "hg_g") + mark("hg_l"))))))
+
+    # the search of mod1440_wr_kread: up from yesterday's reading in steps that double, then halving down to 0.1
+    kt = WR_KT
+    kread_body = (
+        setv("mod1440_wr_kn", "kr_prev") + tmp("kr_lo", 0) + tmp("kr_hi", "kr_prev")
+        + iff("NOT = { %s }" % kt, iff("check_variable = { kr_prev > 0 }", setv("mod1440_wr_kn", 0) + iff("NOT = { %s }" % kt, tmp("kr_hi", 0))))
+        + els(tmp("kr_lo", "kr_prev") + tmp("kr_st", 0.1) + tmp("kr_up", 1)
+              + block("while_loop_effect", "limit = { check_variable = { kr_up = 1 } check_variable = { kr_st < 1000000 } }\n" + (
+                  tmp("kr_t", "kr_lo") + "add_to_temp_variable = { kr_t = kr_st }\n" + setv("mod1440_wr_kn", "kr_t")
+                  + iff(kt, tmp("kr_lo", "kr_t") + "multiply_temp_variable = { kr_st = 2 }\n")
+                  + els(tmp("kr_hi", "kr_t") + tmp("kr_up", 0)))))
+        + tmp("kr_d", "kr_hi") + "subtract_from_temp_variable = { kr_d = kr_lo }\n"
+        + block("while_loop_effect", "limit = { check_variable = { kr_d > 0.15 } }\n" + (
+            tmp("kr_t", "kr_lo") + "add_to_temp_variable = { kr_t = kr_hi }\n" + "multiply_temp_variable = { kr_t = 5 }\n"
+            + "round_temp_variable = kr_t\n" + "divide_temp_variable = { kr_t = 10 }\n" + setv("mod1440_wr_kn", "kr_t")
+            + iff(kt, tmp("kr_lo", "kr_t")) + els(tmp("kr_hi", "kr_t"))
+            + tmp("kr_d", "kr_hi") + "subtract_from_temp_variable = { kr_d = kr_lo }\n"))
+        + tmp("kr", "kr_lo"))
+
+    hog = (tmp("hg_l", "country_leader")
+           + iff("OR = { %s NOT = { check_variable = { mod1440_ld_p_of = country_leader } } }" % stale("mod1440_ld_p_ver", portrait_version), (
+               tmp("p_ld", "country_leader") + tmp("p_tok", unknown) + block("var:p_ld", "mod1440_p_leader = yes\n")
+               + setv("mod1440_ld_p", "p_tok") + stamped("mod1440_ld_p_ver", portrait_version) + setv("mod1440_ld_p_of", "country_leader")))
+           + tmp("hg_p", "mod1440_ld_p") + iff("check_variable = { hg_p = 0 }", tmp("hg_p", unknown))
+           + tmp("hg_g", 0) + "".join(iff("has_government = %s" % g, tmp("hg_g", n)) for n, (word, g) in enumerate(IDEOLOGIES, start=1)))
 
     return (
-        "# Wars: a row for the enemy in wr_c, from today (wr_old = 1: the war ran when the record began).\n"
-        + block("mod1440_wr_open", "mod1440_wr_grow = yes\n" + iff(
-            "NOT = { is_in_array = { array = mod1440_wr_enemy value = wr_c } }",
-            "add_to_variable = { mod1440_wr_next = 1 }\n" + tmp("wr_e0", 0) + block("var:wr_c", tmp("wr_e0", "casualties"))
-            + "".join("add_to_array = { mod1440_wr_%s = %s }\n" % (part, start[part]) for part in WR_PARTS)))
+        "# Wars: a row for the enemy in wr_c, from today (wr_old = 1: the war ran when the record began; wr_how: 1 we\n"
+        "# declared, 2 they declared, 3 it joined, 0 not known). It joins the war of an open row whose enemy fights on its\n"
+        "# side, against whom the country has the same role; it keeps the readings of the first day and both heads of\n"
+        "# government.\n"
+        # E4 fix round 1: never the country itself (wr_me), whatever a hook or a comparison hands over
+        + block("mod1440_wr_open", "mod1440_wr_grow = yes\n" + tmp("wr_me", "THIS") + iff(
+            "check_variable = { wr_c = wr_me }", 'log = "MOD1440 records: no war row for [This.GetTag] against itself"\n')
+            + iff("NOT = { is_in_array = { array = mod1440_wr_enemy value = wr_c } } NOT = { check_variable = { wr_c = wr_me } }",
+                  "add_to_variable = { mod1440_wr_next = 1 }\n" + grouping + baseline + leaders
+                  + "".join("add_to_array = { mod1440_wr_%s = %s }\n" % (part, start[part]) for part in WR_PARTS))
+            + "mod1440_wr_count_wars = yes\n")
         + block("mod1440_wr_grow", grow)
-        + "\n# Wars: the war with wr_c is over: its row moves to the finished wars with the end date, its length, what it\n"
-        "# cost and how it ended. The file that was open stays on the same war.\n"
+        + "\n# Wars: how many wars the country fights today (its open rows by their war), for the tab (E4 fix round 1).\n"
+        + block("mod1440_wr_count_wars", "clear_temp_array = wn_g\n" + block(
+            "for_each_loop", "array = mod1440_wr_grp\nvalue = wn_v\n" + iff(
+                "NOT = { is_in_array = { array = wn_g value = wn_v } }", "add_to_temp_array = { wn_g = wn_v }\n"))
+            + setv("mod1440_wr_wars", "wn_g^num"))
+        + "\n# Wars: in the scope of a country, its head of government (hg_l, his place), his portrait as a text key (hg_p,\n"
+        "# looked up when another one rules or the table changed, kept on the country) and his ideology group (hg_g: 1\n"
+        "# fascism, 2 democratic, 3 communism, 4 neutrality, 0 another).\n"
+        + block("mod1440_wr_hog", hog)
+        + "\n# Wars: the dead of the country mod1440_wr_kv by the hand of mod1440_wr_ko, in thousands to 0.1, into kr; kr_prev is\n"
+        "# yesterday's reading. casualties_inflicted_by answers yes or no, so the number is searched (meta_trigger, SCR-054).\n"
+        + block("mod1440_wr_kread", kread_body)
+        + "\n# Wars: the war with wr_c is over: its row moves to the finished wars with the end date, its length, its dead\n"
+        "# frozen (one more reading, the higher of it and yesterday's), how it ended and our head of government of the day.\n"
         + block("mod1440_wr_close", "mod1440_wr_grow = yes\n" + find + iff("check_variable = { wr_j > -1 }", (
             tmp("wr_out", outcomes["peace"]) + tmp("wr_oc", 1)
             + iff("check_variable = { mod1440_wr_capd^wr_j = 1 }", tmp("wr_out", outcomes["capitulated"]) + tmp("wr_oc", 2))
             + iff("is_in_array = { array = subjects value = wr_c }", tmp("wr_out", outcomes["subject"]) + tmp("wr_oc", 3))
             + iff("var:wr_c = { exists = no }", tmp("wr_out", outcomes["gone"]) + tmp("wr_oc", 5))
             + iff("check_variable = { mod1440_wr_capd^wr_j = 2 }", tmp("wr_out", outcomes["annexed"]) + tmp("wr_oc", 4))
-            + tmp("wr_fr", 1) + iff("check_variable = { wr_oc = 1 }", tmp("wr_fr", 3))
+            + iff("has_capitulated = yes", tmp("wr_out", outcomes["we_capitulated"]) + tmp("wr_oc", 6))
+            + iff("var:wr_c = { exists = yes } is_subject_of = var:wr_c", tmp("wr_out", outcomes["we_subject"]) + tmp("wr_oc", 7))
+            + tmp("wr_fr", 1) + iff("check_variable = { wr_oc = 1 }", tmp("wr_fr", 3)) + iff("check_variable = { wr_oc > 5 }", tmp("wr_fr", 2))
             + tmp("wr_d", "global.num_days") + "subtract_from_temp_variable = { wr_d = mod1440_wr_day0^wr_j }\n"
-            + tmp("wr_k", "casualties") + "subtract_from_temp_variable = { wr_k = mod1440_wr_cas0^wr_j }\n"
+            + last_reading
+            + "mod1440_wr_hog = yes\n" + tmp("wr_lu", "hg_l") + tmp("wr_pu", "hg_p") + tmp("wr_gu", "hg_g") + mark("wr_lu")
             + "".join("add_to_array = { array = mod1440_wo_%s value = %s index = 0 }\n" % (part, end[part]) for part in WO_PARTS)
             + "".join("remove_from_array = { array = mod1440_wr_%s index = wr_j }\n" % part for part in WR_PARTS)
-            # the chosen row: a finished war moved down by one; this war is now the first of the finished; a war below it moved up
-            + iff("check_variable = { mod1440_wr_sel_kind = 2 }", "add_to_variable = { mod1440_wr_sel_i = 1 }\n")
-            + iff("check_variable = { mod1440_wr_sel_kind = 1 }", (
-                iff("check_variable = { mod1440_wr_sel_i = wr_j }", setv("mod1440_wr_sel_kind", 2) + setv("mod1440_wr_sel_i", 0))
-                + iff("check_variable = { mod1440_wr_sel_i > wr_j }", "subtract_from_variable = { mod1440_wr_sel_i = 1 }\n", "else_if")), "else_if")
+            + "mod1440_wr_count_wars = yes\n"
             + iff("check_variable = { mod1440_wo_enemy^num > %d }" % WO_KEEP, (
                 tmp("wr_last", "mod1440_wo_enemy^num") + "subtract_from_temp_variable = { wr_last = 1 }\n"
                 + "".join("remove_from_array = { array = mod1440_wo_%s index = wr_last }\n" % part for part in WO_PARTS))))))
         + "\n# Wars: one more state taken from (wr_f = 1) or lost to (wr_f = 2) the enemy in wr_c, or one more victory\n"
         "# point taken (3) or lost (4). What was taken counts also for the general on the spot (of_best, of_who), in\n"
-        "# this war: arrays on the officer (mod1440_ow_*), one element per war by the war's number; tr_cap 1 a capital.\n"
+        "# this war: arrays on the officer (mod1440_ow_*), one element per row by the row's number; tr_cap 1 a capital.\n"
         + block("mod1440_wr_count", "mod1440_wr_grow = yes\n" + find + iff("check_variable = { wr_j > -1 }", "".join(
             iff("check_variable = { wr_f = %d }" % n, "add_to_variable = { mod1440_wr_%s^wr_j = 1 }\n" % part)
             for n, part in enumerate(("taken", "lost", "vpt", "vpl"), start=1))
@@ -2727,56 +3340,38 @@ def wars_script(portrait_version):
                           + iff("check_variable = { tr_cap = 1 }", "add_to_variable = { mod1440_ow_cap^ow_j = 1 }\n"))
                     + iff("check_variable = { wr_f = 3 }", "add_to_variable = { mod1440_ow_vp^ow_j = 1 }\n")))))))
         + block("mod1440_wr_annexed", find + iff("check_variable = { wr_j > -1 }", setv("mod1440_wr_capd^wr_j", 2)))
-        + "\n# Wars: the numbers of today's rows, each enemy's surrender progress for its bar and its casualties since the\n"
-        "# war began, and a line in the War Diary when an enemy or the country itself has capitulated.\n"
+        + "\n# Wars: the numbers of today's rows: days, each enemy's surrender progress, both sides' dead (never falling), the\n"
+        "# enemy's head of government when another one rules; a line in the War Diary when an enemy or the country itself\n"
+        "# has capitulated. The portraits kept on the rows are looked up again when the text keys' numbers moved.\n"
         + block("mod1440_wr_daily", (
-            "mod1440_wr_grow = yes\n"
-            + block("for_each_loop", (
-                "array = mod1440_wr_enemy\nvalue = wr_v\nindex = wr_i\n"
-                + tmp("wr_d", "global.num_days") + "subtract_from_temp_variable = { wr_d = mod1440_wr_day0^wr_i }\n" + setv("mod1440_wr_days^wr_i", "wr_d")
-                + tmp("wr_k", "casualties") + "subtract_from_temp_variable = { wr_k = mod1440_wr_cas0^wr_i }\n" + setv("mod1440_wr_cas^wr_i", "wr_k")
-                + tmp("wr_s", 0) + tmp("wr_e", "mod1440_wr_ecas0^wr_i")
-                + block("var:wr_v", tmp("wr_s", "surrender_progress") + tmp("wr_e", "casualties")) + "multiply_temp_variable = { wr_s = 100 }\n"
-                + "subtract_from_temp_variable = { wr_e = mod1440_wr_ecas0^wr_i }\n" + setv("mod1440_wr_ecas^wr_i", "wr_e")
-                + setv("mod1440_wr_surr^wr_i", "wr_s")
-                + iff("check_variable = { mod1440_wr_capd^wr_i = 0 } var:wr_v = { has_capitulated = yes }",
-                      setv("mod1440_wr_capd^wr_i", 1) + line("capitulated", b="wr_v"))))
+            "mod1440_wr_grow = yes\n" + faces_again
+            + block("for_each_loop", "array = mod1440_wr_enemy\nvalue = wr_v\nindex = wr_i\n" + daily_row)
+            + "mod1440_wr_count_wars = yes\n"
             + iff("has_capitulated = yes NOT = { %s }" % is_one("mod1440_ev_capd"), setv("mod1440_ev_capd", 1) + line("we_capitulated"))
             + iff("has_capitulated = no", setv("mod1440_ev_capd", 0))))
-        + "\n# Wars: what the page needs when it is on show. With nothing chosen yet, the file opens on the first war\n"
-        "# there is.\n"
+        + "\n# Wars: the two lists of the page, one plate per war (mod1440_wv_* of today, mod1440_wp_* finished, newest first):\n"
+        "# its first enemy, how many more, its days or the year it began, both sides' dead summed over its rows. A walk over\n"
+        "# the rows when the page shows (rule 5).\n"
+        + block("mod1440_wr_lists", lists)
+        + block("mod1440_wr_picks", picks)
+        + "\n# Wars: what the page needs when it is on show. With no war chosen, or one that is no more, the file opens on the\n"
+        "# first war there is.\n"
         + block("mod1440_wr_show", (
-            iff("check_variable = { mod1440_wr_sel_kind < 1 }", (
-                iff("check_variable = { mod1440_wr_enemy^num > 0 }", setv("mod1440_wr_sel_kind", 1) + setv("mod1440_wr_sel_i", 0))
-                + iff("check_variable = { mod1440_wo_enemy^num > 0 }", setv("mod1440_wr_sel_kind", 2) + setv("mod1440_wr_sel_i", 0), "else_if")))
+            "mod1440_wr_grow = yes\nmod1440_wr_lists = yes\n"
+            + find_in("mod1440_wv_g", "mod1440_wr_sel_g", "sh_a") + find_in("mod1440_wp_g", "mod1440_wr_sel_g", "sh_b")
+            + iff("check_variable = { sh_a < 0 } check_variable = { sh_b < 0 }", (
+                setv("mod1440_wr_sel_e", 0)
+                + iff("check_variable = { mod1440_wv_g^num > 0 }", setv("mod1440_wr_sel_g", "mod1440_wv_g^0"))
+                + iff("check_variable = { mod1440_wp_g^num > 0 }", setv("mod1440_wr_sel_g", "mod1440_wp_g^0"), "else_if")
+                + "mod1440_wr_picks = yes\n"))
             + "mod1440_wr_card = yes\n"))
-        + "\n# Wars: copies the chosen war to the variables its file reads, looks up the two portraits, gathers the lines\n"
-        "# the War Diary has about this enemy, newest first, places their marks on the track and counts the commanders.\n"
-        + block("mod1440_wr_card", (
-            "mod1440_wr_grow = yes\nmod1440_ev_grow = yes\n" + setv("mod1440_wr_c_has", 0)
-            # with no war chosen the hidden flag and names still ask for a country: the own one
-            + iff("check_variable = { mod1440_wr_c_enemy = 0 }", setv("mod1440_wr_c_enemy", "THIS"))
-            + iff("check_variable = { mod1440_wr_sel_kind = 1 } check_variable = { mod1440_wr_sel_i < mod1440_wr_enemy^num }", (
-                setv("mod1440_wr_c_has", 1) + copy("wr", ("enemy", "since", "old", "days", "cas", "taken", "lost", "vpt", "vpl", "surr", "capd", "id", "day0", "ecas"))
-                + setv("mod1440_wr_c_endday", "global.num_days") + setv("mod1440_wr_c_until", "global.date")))
-            + iff("check_variable = { mod1440_wr_sel_kind = 2 } check_variable = { mod1440_wr_sel_i < mod1440_wo_enemy^num }", (
-                setv("mod1440_wr_c_has", 1) + copy("wo", ("enemy", "since", "old", "days", "cas", "taken", "lost", "vpt", "vpl", "until", "outcome", "id", "day0", "ecas"))
-                + setv("mod1440_wr_c_surr", 0) + setv("mod1440_wr_c_capd", 0)
-                + setv("mod1440_wr_c_endday", "mod1440_wr_c_day0") + "add_to_variable = { mod1440_wr_c_endday = mod1440_wr_c_days }\n"), "else_if")
-            + picked
-            + iff(is_one("mod1440_wr_c_has"), (
-                setv("mod1440_wr_c_ours", "surrender_progress") + "multiply_variable = { mod1440_wr_c_ours = 100 }\n"
-                + setv("mod1440_wr_c_exists", 0) + iff("var:mod1440_wr_c_enemy = { exists = yes }", setv("mod1440_wr_c_exists", 1))
-                + setv("mod1440_wr_c_efac", 0) + iff("var:mod1440_wr_c_enemy = { is_in_faction = yes }", setv("mod1440_wr_c_efac", 1))
-                + leader_portrait("mod1440_wr_c_enemy", "mod1440_wr_c_p", portrait_version)
-                + "".join("clear_array = mod1440_wr_ln_%s\n" % part for part in ln_parts)
-                + merged(of_this_war, war_line)
-                + setv("mod1440_wr_ln_n", "mod1440_wr_ln_date^num")
-                + pad([("mod1440_wr_ln_date", 0), ("mod1440_wr_ln_day", 0), ("mod1440_wr_ln_kind", BLANK), ("mod1440_wr_ln_fam", 0),
-                       ("mod1440_wr_ln_a", 0), ("mod1440_wr_ln_sa", 0), ("mod1440_wr_ln_p", 0)], WR_LINES)
-                # the dates at the two ends of the track: a day number back to a date, by the date of a line or of today
-                + setv("mod1440_wr_c_day0d", "mod1440_wr_c_since") + setv("mod1440_wr_c_endd", "mod1440_wr_c_until")
-                + marks + tally)))))
+        + "\n# Wars: the file of the chosen war (mod1440_wr_sel_g): its rows in the order they joined (mod1440_we_*, the enemies\n"
+        "# table), the war's figures, our heads of government, the War Diary's lines about its enemies within its dates,\n"
+        "# the marks of the track and the commanders' tally over its rows.\n"
+        + block("mod1440_wr_card", card)
+        + block("mod1440_wr_faces_u", faces_of("u"))
+        + "\n# Wars: their side of the file: the heads of government of the enemy chosen in the table (mod1440_wr_sel_e).\n"
+        + block("mod1440_wr_them", them))
 
 
 # ---------------------------------------------------------------- victory points
@@ -3040,7 +3635,8 @@ HONOUR_DLC = 'has_dlc = "By Blood Alone"'
 
 
 def open_war(country, old=0):
-    return tmp("wr_c", country) + tmp("wr_old", old) + "mod1440_wr_open = yes\n"
+    # E4 round 2: how the war began, kept on its row (3: the daily comparison found it, so it joined a war; 0 not known)
+    return tmp("wr_c", country) + tmp("wr_old", old) + tmp("wr_how", 0 if old else 3) + "mod1440_wr_open = yes\n"
 
 
 def frame(portrait_version):
@@ -3168,7 +3764,9 @@ def frame(portrait_version):
 
     # an icon asks for its sprite also before anybody is chosen: until then it is told the unknown leader; a text
     # that names a state through a variable gets the capital until it names another
-    faces = "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "token:" + UNKNOWN)) for v in ("mod1440_of_c_p", "mod1440_wr_c_p", "mod1440_gv_p"))
+    faces = "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "token:" + UNKNOWN)) for v in ("mod1440_of_c_p", "mod1440_wr_c_p", "mod1440_gv_p")
+                    # E4 round 2: the kept heads of government of a war's file and its commanders
+                    + tuple("mod1440_wr_c_%sp%s" % (s, n) for s in "ut" for n in "01") + tuple("mod1440_wr_k_%d_p" % k for k in range(WR_COMMANDERS)))
     faces += "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "capital")) for v in ("mod1440_wd_state", "mod1440_hn_last_s"))
     # ... and one that names a country, the country itself (the head of a country's lines, E1 review)
     faces += iff("check_variable = { mod1440_wd_country = 0 }", setv("mod1440_wd_country", "THIS"))
@@ -3253,9 +3851,10 @@ def frame(portrait_version):
                     + "subtract_from_variable = { mod1440_sr_held = mod1440_sr_day }\n")
             + iff(is_one("mod1440_rec_open"), "mod1440_rec_show = yes\n")))
         + "\n# The Records: a war has begun between the country in scope and wr_c (a hook says who attacked).\n"
-        + block("mod1440_ev_war_on", line("war_on", b="wr_c") + tmp("wr_old", 0) + "mod1440_wr_open = yes\n"
+        # E4 round 2: wr_how, who declared (1 we, 2 they), kept on the war's row
+        + block("mod1440_ev_war_on", line("war_on", b="wr_c") + tmp("wr_old", 0) + tmp("wr_how", 1) + "mod1440_wr_open = yes\n"
                 + iff("NOT = { is_in_array = { array = mod1440_ev_enemies value = wr_c } }", "add_to_array = { mod1440_ev_enemies = wr_c }\n"))
-        + block("mod1440_ev_war_by", line("war_by", b="wr_c") + tmp("wr_old", 0) + "mod1440_wr_open = yes\n"
+        + block("mod1440_ev_war_by", line("war_by", b="wr_c") + tmp("wr_old", 0) + tmp("wr_how", 2) + "mod1440_wr_open = yes\n"
                 + iff("NOT = { is_in_array = { array = mod1440_ev_enemies value = wr_c } }", "add_to_array = { mod1440_ev_enemies = wr_c }\n"))
         + "\n# The Records: the general of the country in scope with the most divisions in the state tr_s: of_who, and\n"
         "# of_best how many divisions that is (0: nobody stands there).\n"
@@ -3373,7 +3972,7 @@ def frame(portrait_version):
 # What a text of these pages shows at its widest, by what stands between its brackets.
 SAMPLES = [
     # the frame, the diary, the wars and the state card of 2026-10-16
-    (r"mod1440_rec_days", "1374"), (r"mod1440_rec_new", "3"), (r"mod1440_wr_enemy\^num", "2"), (r"mod1440_of_known\^num", "26"),
+    (r"mod1440_rec_days", "1374"), (r"mod1440_rec_new", "3"), (r"mod1440_wr_enemy\^num|mod1440_wr_wars", "2"), (r"mod1440_of_known\^num", "26"),
     (r"mod1440_ev_date\^num|mod1440_tr_date\^num", "1000"), (r"mod1440_kp_date\^num", "300"), (r"mod1440_wd_first", "1"),
     (r"mod1440_wd_last", "200"), (r"mod1440_wd_total", "1000"), (r"mod1440_wd_hn", "2"), (r"mod1440_wd_g_\w+_t", "128"),
     (r"mod1440_wd_g_\w+_x", "12"), (r"GetDateStringShortMonth", "27 Sep, 1939"), (r"mod1440_wr_k_\d_(st|vp|cap)", "12"),
@@ -3381,7 +3980,7 @@ SAMPLES = [
     (r"ROOT\.mod1440_wr_surr", "100"), (r"mod1440_wo_enemy\^i\.GetName|mod1440_wd_b\^i\.GetName", "The Czechoslovak Republic"),
     (r"mod1440_sr_held", "1460"), (r"mod1440_sr_lines", "128"), (r"mod1440_sr_cited|mod1440_sr_cites", "36"),
     (r"mod1440_hn_last_s", "Niederschlesien"), (r"mod1440_wr_c_ecas|mod1440_wr_c_cas", "1250000"), (r"mod1440_wr_c_ours", "100"),
-    (r"mod1440_sr_by\.GetName", "Konstantin von Neurath"), (r"mod1440_wr_c_title|wr_c_enemy\.GetName", "Czechoslovakia"),
+    (r"mod1440_sr_by\.GetName", "Konstantin von Neurath"), (r"mod1440_wr_ln_b\^", "Czechoslovakia"), (r"mod1440_wr_c_title|wr_c_enemy\.GetName", "Czechoslovakia"),
     # e-officers-gov: the officer's file, the seats of the Government page
     (r"mod1440_of_c_tr\^|mod1440_of_tr\^", "Brilliant Strategist"), (r"mod1440_of_c_tr_(other|over)|mod1440_of_tr_plus", "2"),
     (r"mod1440_of_c_(atk|def|c3|c4|traits|max)\b", "9"), (r"mod1440_of_c_bat", "2400"), (r"mod1440_of_c_plan", "100%"),
@@ -3685,6 +4284,341 @@ DIARY_CHECKLIST = [
 ]
 
 
+# --- E4 round 2 --- the Wars scene (tools/scenes/wars.json): a German campaign of 14 May 1942 like the design's
+# figures. The file of a war is drawn in three states: the war of today with Poland and twelve other enemies (the
+# United Kingdom chosen), the finished war with Yugoslavia alone, and the finished war with Czechoslovakia and two
+# others (Yugoslavia chosen). war_file_hide() follows the visible triggers of wars() for a state.
+WS_TODAY = [("Poland", 12, "986", "1204.6K", "2351.0K", "21%"), ("Soviet Union", 1, "326", "2210.4K", "4870.2K", "38%")]
+# (name, others, began, ours, theirs, outcome, plate frame); None: not kept
+WS_DONE = [("Switzerland", 0, "1941", "61.2K", "88.0K", 4, 1), ("Sweden", 0, "1940", "34.5K", "51.9K", 3, 1), ("Lithuania", 0, "1939", "2.1K", "3.4K", 1, 3),
+           ("Czechoslovakia", 2, "1938", "186.4K", "404.9K", 4, 1), ("Luxembourg", 0, "1938", "0.0K", "0.4K", 4, 1), ("Austria", 0, "1938", "1.2K", "4.6K", 2, 1),
+           ("Italy", 0, "1937", "96.3K", "41.0K", 6, 2), ("Denmark", 0, "1936", None, None, 1, 3)]
+WS_CAMPAIGN = {"cas_all": "3601.4K", "cas_now": "3415.0K", "inflicted": "7626.1K", "longest": "32 mo.", "surrender": "4%", "convoys": "412",
+               "pride_sunk": "2", "ws_cas": "8.4%", "ws_con": "1.2%", "ws_bomb": "3.1%", "pride_lost": "1", "ace_new": "14", "ace_lost": "3", "ace_down": "6"}
+# a line of the War Diary in a file: (date, family, words, sa, place)
+WS_LINES_POLAND = [
+    ("1942.5.12", 2, "State taken from", 2, "Kent"), ("1942.5.9", 2, "Victory point taken from", 3, "Dover"),
+    ("1942.5.4", 2, "State taken from", 2, "Sussex"), ("1942.4.27", 2, "Victory point taken from", 3, "Cyrenaica"),
+    ("1942.4.18", 2, "State taken from", 2, "Peloponnese"), ("1942.4.11", 2, "State taken from", 2, "Crete"),
+    ("1942.4.6", 2, "Victory point taken from", 3, "Tobruk"), ("1942.3.30", 2, "State taken from", 2, "Fezzan"),
+    ("1942.3.21", 2, "Victory point taken from", 3, "Benghazi"), ("1942.3.14", 2, "State taken from", 2, "Malta"),
+    ("1942.3.2", 2, "State taken from", 2, "Valletta"), ("1942.2.19", 2, "Victory point taken from", 3, "Gibraltar"),
+    ("1942.2.8", 2, "State taken from", 2, "Cyprus"), ("1942.1.30", 2, "Victory point taken from", 3, "Nicosia"),
+    ("1942.1.21", 2, "State taken from", 2, "Iraq"), ("1942.1.9", 2, "State taken from", 2, "Mosul"),
+    ("1941.12.28", 2, "Victory point taken from", 3, "Kuwait"), ("1941.12.15", 2, "State taken from", 2, "Aden"),
+    ("1941.12.2", 2, "Victory point taken from", 3, "Sinai"), ("1941.11.20", 2, "State taken from", 2, "Suez"),
+    ("1941.5.2", 1, "Capitulated:", 0, "Yugoslavia"), ("1940.6.22", 1, "Capitulated:", 0, "France"), ("1939.10.6", 1, "Capitulated:", 0, "Poland")]
+WS_LINES_YUGOSLAVIA = [
+    ("1939.2.12", 2, "State taken from", 2, "Skopje"), ("1939.2.10", 2, "Victory point taken from", 3, "Vardar"),
+    ("1939.2.7", 2, "State taken from", 2, "Kosovo"), ("1939.2.3", 2, "Victory point taken from", 3, "Pristina"),
+    ("1939.1.30", 2, "State taken from", 2, "Montenegro"), ("1939.1.26", 2, "State taken from", 2, "Cetinje"),
+    ("1939.1.21", 2, "Victory point taken from", 3, "Dalmatia"), ("1939.1.17", 2, "State taken from", 2, "Split"),
+    ("1939.1.12", 2, "Victory point taken from", 3, "Herzegovina"), ("1939.1.8", 2, "State taken from", 2, "Mostar"),
+    ("1939.1.3", 2, "State taken from", 2, "Sarajevo"), ("1938.12.29", 2, "Victory point taken from", 3, "Bosnia"),
+    ("1938.12.23", 2, "State taken from", 2, "Banja Luka"), ("1938.12.18", 2, "Victory point taken from", 3, "Croatia"),
+    ("1938.12.12", 2, "State taken from", 2, "Zagreb"), ("1938.12.7", 2, "State taken from", 2, "Slavonia"),
+    ("1938.12.2", 2, "Victory point taken from", 3, "Osijek"), ("1938.11.26", 2, "State taken from", 2, "Nis"),
+    ("1938.11.20", 2, "Victory point taken from", 3, "Morava"), ("1938.11.14", 2, "State taken from", 2, "Kragujevac"),
+    ("1938.11.8", 2, "State taken from", 2, "Sumadija"), ("1938.11.2", 2, "Victory point taken from", 3, "Beograd"),
+    ("1938.10.27", 2, "State taken from", 2, "Zemun"), ("1938.10.21", 2, "Victory point taken from", 3, "Banat"),
+    ("1938.10.15", 2, "State taken from", 2, "Novi Sad"), ("1938.10.10", 2, "State taken from", 2, "Vojvodina"),
+    ("1938.10.6", 2, "Victory point taken from", 3, "Subotica"), ("1938.10.5", 2, "State taken from", 2, "Slovenia"),
+    ("1938.10.4", 2, "Victory point taken from", 3, "Ljubljana"), ("1938.10.4", 2, "State taken from", 2, "Maribor"),
+    ("1938.10.4", 1, "War declared on", 0, "Yugoslavia")]
+WS_LINES_CZECHOSLOVAKIA = [
+    ("1939.2.11", 2, "State taken from", 2, "Vojvodina"), ("1939.2.8", 2, "Victory point taken from", 3, "Novi Sad"),
+    ("1939.2.2", 2, "State taken from", 2, "Banat"), ("1939.1.28", 2, "Victory point taken from", 3, "Zemun"),
+    ("1939.1.21", 2, "State taken from", 2, "Beograd"), ("1939.1.14", 2, "State taken from", 2, "Sumadija"),
+    ("1939.1.9", 2, "Victory point taken from", 3, "Kragujevac"), ("1939.1.2", 2, "State taken from", 2, "Bosnia"),
+    ("1938.12.27", 2, "Victory point taken from", 3, "Sarajevo"), ("1938.12.19", 2, "State taken from", 2, "Morava"),
+    ("1938.12.12", 2, "State taken from", 2, "Nis"), ("1938.12.2", 2, "Victory point taken from", 3, "Bukovina"),
+    ("1938.11.26", 2, "State taken from", 2, "Slovakia"), ("1938.11.18", 2, "Victory point taken from", 3, "Bratislava"),
+    ("1938.11.9", 2, "State taken from", 2, "Moravia"), ("1938.11.1", 2, "State taken from", 2, "Brno"),
+    ("1938.10.26", 2, "Victory point taken from", 3, "Bohemia"), ("1938.10.20", 2, "State taken from", 2, "Plzen"),
+    ("1938.10.18", 1, "Capitulated:", 0, "Czechoslovakia"), ("1938.10.4", 1, "War declared by", 0, "Yugoslavia"),
+    ("1938.10.3", 1, "War declared by", 0, "Romania"), ("1938.10.1", 1, "War declared on", 0, "Czechoslovakia")]
+WS_COMMANDERS = {
+    "page": [("Erich von Manstein", 1, 21, 30, 1), ("Heinz Guderian", 2, 14, 19, 0), ("Gerd von Rundstedt", 1, 11, 15, 1),
+             ("Ewald von Kleist", 2, 9, 12, 0), ("Walter Model", 2, 5, 6, 0)],
+    "file": [("Erich von Manstein", 1, 4, 6, 1), ("Ewald von Kleist", 2, 3, 4, 0), ("Heinz Guderian", 2, 2, 3, 0),
+             ("Fedor von Bock", 1, 1, 2, 0), ("Walter Model", 2, 1, 1, 0)],
+    "three": [("Erich von Manstein", 1, 5, 8, 1), ("Heinz Guderian", 2, 4, 6, 1), ("Gerd von Rundstedt", 1, 2, 3, 0), ("Ewald von Kleist", 2, 1, 1, 0)],
+}
+# the enemies table: (name, joined, end: outcome number or a surrender text, theirs, ours, states)
+WS_ENEMIES = {
+    "page": [("Poland", "1939.9.1", 2, "411.8K", "96.4K", "21 : 0"), ("United Kingdom", "1939.9.3", "21%", "602.3K", "388.1K", "6 : 3"),
+             ("France", "1939.9.3", 2, "689.0K", "301.7K", "19 : 0"), ("British Raj", "1939.9.3", "4%", "88.2K", "60.4K", "0 : 0"),
+             ("Australia", "1939.9.3", "2%", "41.6K", "32.0K", "0 : 0")],
+    "three": [("Czechoslovakia", "1938.10.1", 4, "311.9K", "142.6K", "9 : 0"), ("Romania", "1938.10.3", 1, "40.7K", "28.1K", "0 : 1"),
+              ("Yugoslavia", "1938.10.4", 3, "52.3K", "15.7K", "3 : 0")],
+}
+WS_PICKED = {"page": 1, "three": 2}
+
+
+def war_file_hide(st):
+    """The widgets of the file that script hides in state <st>: open, count, utw/ttw (one head at both ends), topen
+    (the chosen enemy still fights), fb and g (by face u0 u1 t0 t1: no portrait, ideology group), nr, kunk, lines
+    [(family, sa)], commanders [rank]."""
+    hide = ["wr_c_none", "wr_now_none", "wr_old_none"]
+    one = st["count"] == 1
+    lines, ranks = st["lines"], st["commanders"]
+    hide += ["wr_k_none"] if ranks else []
+    hide += ["wr_ln_none"] if lines else []
+    hide.append("wr_c_them_n" if one else "wr_c_them")
+    hide += ["wr_c_side_n"] if one else []
+    when = "now" if st["open"] else "past"
+    hide += ["wr_c_when_" + w for w in ("now", "now_old", "past", "past_old") if w != when]
+    for k in range(WR_MARKS):
+        fam = lines[k][0] if k < len(lines) else None
+        hide += ["wr_c_mark_%d_%s" % (k, suffix) for suffix in "wt" if fam is None or (suffix == "w") != (fam == 1)]
+    groups = range(1, len(IDEOLOGIES) + 1)
+    for s in "ut":
+        twin = st[s + "tw"]
+        live = st["open"] if s == "u" else st["topen"]
+        boxes = [("u0", True), ("u1", not twin)] if s == "u" else [("t0", not twin), ("t1", True)]
+        for face, shown_box in boxes:
+            name = "wr_c_face_" + face
+            fallback = [name + "_fb", name + "_fb_flag"] + ["%s_fb_g%d" % (name, g) for g in groups]
+            if not shown_box:
+                hide += [name] + fallback
+            elif st["fb"].get(face):
+                hide += [name] + ["%s_fb_g%d" % (name, g) for g in groups if g != st["g"][face]]
+            else:
+                hide += fallback
+        for mode in ("two", "twin"):
+            p = "wr_c_%s_%s" % (s, mode)
+            ends = ("0", "1") if mode == "two" else ("0",)
+            words = ["_w_start", "_w_today", "_w_end"] if mode == "two" else ["_w_live", "_w_dead"]
+            every = [p + "_c"] + [p + w for w in words]
+            for n in ends:
+                every += ["%s_l%s" % (p, n), "%s_l%s_nr" % (p, n)] + ["%s_i%s_g%d%s" % (p, n, g, i) for g in groups for i in ("", "_i")]
+            if (mode == "twin") != bool(twin):
+                hide += every
+                continue
+            hide += [p + w for w in words if (w in ("_w_today", "_w_live") and not live) or (w in ("_w_end", "_w_dead") and live)]
+            for n in ends:
+                hide.append("%s_l%s%s" % (p, n, "" if st["nr"].get(s + n) else "_nr"))
+                hide += ["%s_i%s_g%d%s" % (p, n, g, i) for g in groups for i in ("", "_i") if g != st["g"][s + n]]
+    hide += ["wr_c_kus", "wr_c_kthem"] if st["kunk"] else ["wr_c_kus_none", "wr_c_kthem_none"]
+    row4 = ("surr" if st["open"] else "end") if one else "gave"
+    hide += ["wr_c_%s%s" % (x, part) for x in ("surr", "end", "gave") if x != row4 for part in ("", "_l")]
+    for k in range(WR_COMMANDERS):
+        names = (["wr_k_%d_stripe" % k] if k % 2 else []) + ["wr_k_%d_face" % k, "wr_k_%d" % k] + ["wr_k_%d_%s" % (k, p) for x, p, w in WF_TALLY]
+        rank_names = ["wr_k_%d_rank_%d" % (k, r) for r in (1, 2, 3)]
+        hide += names + rank_names if k >= len(ranks) else [w for r, w in enumerate(rank_names, start=1) if r != ranks[k]]
+
+    def column(prefix, first, count, active):
+        out = []
+        for n in range(count):
+            k = first + n
+            w = "%s_%d" % (prefix, k)
+            every = ([w + "_bg"] if n % 2 else []) + [w + "_d", w + "_w", w + "_t", w, w + "_go", w + "_s", w + "_p", w + "_b"]
+            if not active or k >= len(lines):
+                out += every
+                continue
+            fam, sa = lines[k]
+            out.append(w + ("_t" if fam == 1 else "_w"))
+            out += [w + "_go", w + "_s", w + "_p"] if sa < 2 else [w + ("_p" if sa == 2 else "_s"), w + "_b"]
+        return out
+
+    hide += column("wr_ln", 0, WR_LEFT_LINES, True)
+    hide += column("wr_l1", WR_LEFT_LINES, WR_LINES - WR_LEFT_LINES, one)
+    hide += column("wr_l2", WR_LEFT_LINES, WR_RIGHT_SEVERAL, not one)
+    if not (one and len(lines) > WR_LEFT_LINES):
+        hide += ["wr_l1_head", "wr_l1_head_t"]
+    if one or len(lines) <= WR_LEFT_LINES:
+        hide += ["wr_l2_head", "wr_l2_head_t"]
+    if one:
+        hide += ["wr_en_head", "wr_en_list"] + ["wr_en_h_" + n for n in ("enemy", "joined", "end", "theirs", "ours", "states")]
+    return hide
+
+
+def war_file_samples(st, lines, commanders, words):
+    """The texts of the file in state <st>: <words> by widget, then the lines and the commanders."""
+    out = dict(words)
+    one = st["count"] == 1
+    for k, (date, fam, kind, sa, place) in enumerate(lines):
+        prefix = "wr_ln" if k < WR_LEFT_LINES else ("wr_l1" if one else "wr_l2")
+        w = "%s_%d" % (prefix, k)
+        out[w + "_d"] = date
+        out[w] = kind
+        if place:
+            out[w + {0: "_b", 1: "_b", 2: "_s", 3: "_p"}[sa]] = "§Y%s§!" % place
+    for k, (name, rank, st_, vp, cap) in enumerate(commanders):
+        out["wr_k_%d" % k] = "§Y%s§!" % name
+        out.update({"wr_k_%d_st" % k: str(st_), "wr_k_%d_vp" % k: str(vp), "wr_k_%d_cap" % k: str(cap)})
+    return out
+
+
+def war_marks(count):
+    """The marks of the track spread over it as script places them (x by property), the newest at the right."""
+    n = min(count, WR_MARKS)
+    span = WF_TRACK_W - 4 - WF_MARK
+    return dict(("wr_c_mark_%d_%s" % (k, suffix), [WF_TRACK_X + 2 + int(span * (n - 1 - k) / max(1, n - 1.0)), WF_TRACK_Y + 3])
+                for k in range(n) for suffix in "wt")
+
+
+def war_list_scene():
+    """The two lists: rows, only and samples of their row windows, and the plates' frames."""
+    now_rows = {"wr_row_enemy": ["§Y%s§!" % r[0] for r in WS_TODAY], "wr_row_more": ["+%d" % r[1] for r in WS_TODAY if r[1]],
+                "wr_row_days": [r[2] for r in WS_TODAY], "wr_row_kus": [r[3] for r in WS_TODAY], "wr_row_kthem": [r[4] for r in WS_TODAY],
+                "wr_row_surr": [r[5] for r in WS_TODAY]}
+    now_only = {"wr_row_pick": [0], "wr_row_more": [n for n, r in enumerate(WS_TODAY) if r[1]], "wr_row_kus_none": [], "wr_row_kthem_none": []}
+    kept = [n for n, r in enumerate(WS_DONE) if r[3] is not None]
+    done_rows = {"wo_row_enemy": ["§Y%s§!" % r[0] for r in WS_DONE], "wo_row_more": ["+%d" % r[1] for r in WS_DONE if r[1]],
+                 "wo_row_year": [r[2] for r in WS_DONE], "wo_row_kus": [WS_DONE[n][3] for n in kept], "wo_row_kthem": [WS_DONE[n][4] for n in kept]}
+    done_only = {"wo_row_pick": [], "wo_row_more": [n for n, r in enumerate(WS_DONE) if r[1]],
+                 "wo_row_kus": kept, "wo_row_kthem": kept,
+                 "wo_row_kus_none": [n for n, r in enumerate(WS_DONE) if r[3] is None],
+                 "wo_row_kthem_none": [n for n, r in enumerate(WS_DONE) if r[3] is None]}
+    done_only.update(("wo_row_end_%d" % oc, [n for n, r in enumerate(WS_DONE) if r[5] == oc]) for oc in OUTCOME_ICON)
+    return now_rows, now_only, done_rows, done_only, [r[6] for r in WS_DONE]
+
+
+def enemy_rows_scene(which):
+    rows = WS_ENEMIES[which]
+    picked = WS_PICKED[which]
+    only = {"wr_en_pick": [picked], "wr_en_stripe": [n for n in range(len(rows)) if n % 2 and n != picked],
+            "wr_en_surr": [n for n, r in enumerate(rows) if isinstance(r[2], str)],
+            "wr_en_theirs_none": [], "wr_en_ours_none": []}
+    only.update(("wr_en_end_%d" % oc, [n for n, r in enumerate(rows) if r[2] == oc]) for oc in OUTCOME_ICON)
+    samples = {"wr_en_name": ["§Y%s§!" % r[0] for r in rows], "wr_en_joined": [r[1] for r in rows],
+               "wr_en_surr": [r[2] for r in rows if isinstance(r[2], str)], "wr_en_theirs": [r[3] for r in rows],
+               "wr_en_ours": [r[4] for r in rows], "wr_en_states": [r[5] for r in rows]}
+    return only, samples
+
+
+def wars_scene(place, crop, shot, back, setup):
+    groups = {"fascism": 1, "democratic": 2, "communism": 3, "neutrality": 4}
+    page = {"open": True, "count": 13, "utw": True, "ttw": False, "topen": True, "fb": {}, "nr": {}, "kunk": False,
+            "g": {"u0": 1, "u1": 1, "t0": 2, "t1": 2}, "lines": [(l[1], l[3]) for l in WS_LINES_POLAND],
+            "commanders": [c[1] for c in WS_COMMANDERS["page"]]}
+    yug = {"open": False, "count": 1, "utw": True, "ttw": False, "topen": False, "fb": {"t1": 1}, "nr": {}, "kunk": False,
+           "g": {"u0": 1, "u1": 1, "t0": 4, "t1": 4}, "lines": [(l[1], l[3]) for l in WS_LINES_YUGOSLAVIA],
+           "commanders": [c[1] for c in WS_COMMANDERS["file"]]}
+    three = dict(yug, count=3, lines=[(l[1], l[3]) for l in WS_LINES_CZECHOSLOVAKIA], commanders=[c[1] for c in WS_COMMANDERS["three"]])
+    # E4 fix round 1: a finished war of a save migrated from the build before: their heads not recorded, the dead not kept
+    unrecorded = dict(yug, ttw=True, fb={"t1": 1}, nr={"t0": 1}, kunk=True, g={"u0": 1, "u1": 1, "t0": 0, "t1": 0})
+    campaign = dict(("wr_f_" + name, value) for name, value in WS_CAMPAIGN.items())
+    page_words = dict(campaign, **{
+        "wr_c_title": "The war with Poland", "wr_c_us": "German Reich", "wr_c_them_n": "Poland +12",
+        "wr_c_when_now": "1 September, 1939  -  today  -  986 days", "wr_c_track_from": "1939.9.1", "wr_c_track_to": "1942.5.14",
+        "wr_c_side_n": "13 enemies", "wr_c_u_twin_c": "§YGerman Reich§!", "wr_c_u_twin_l0": "§YAdolf Hitler§!",
+        "wr_c_t_two_c": "§YUnited Kingdom§!", "wr_c_t_two_l0": "§YNeville Chamberlain§!", "wr_c_t_two_l1": "§YWinston Churchill§!",
+        "wr_c_kus": "1204.6K", "wr_c_taken": "63", "wr_c_vpt": "88", "wr_c_capt": "7",
+        "wr_c_kthem": "2351.0K", "wr_c_lost": "3", "wr_c_vpl": "5", "wr_c_gave": "7 of 13"})
+    yug_words = dict(campaign, **{
+        "wr_c_title": "The war with Yugoslavia", "wr_c_us": "German Reich", "wr_c_them": "Yugoslavia",
+        "wr_c_when_past": "4 October, 1938  -  12 February, 1939  -  131 days", "wr_c_track_from": "1938.10.4", "wr_c_track_to": "1939.2.12",
+        "wr_c_u_twin_c": "§YGerman Reich§!", "wr_c_u_twin_l0": "§YAdolf Hitler§!",
+        "wr_c_t_two_c": "§YYugoslavia§!", "wr_c_t_two_l0": "§YPrince Paul§!", "wr_c_t_two_l1": "§YDragisa Cvetkovic§!",
+        "wr_c_kus": "118.3K", "wr_c_taken": "11", "wr_c_vpt": "16", "wr_c_capt": "1",
+        "wr_c_kthem": "352.6K", "wr_c_lost": "0", "wr_c_vpl": "1", "wr_c_end": "Made a subject"})
+    three_words = dict(yug_words, **{
+        "wr_c_title": "The war with Czechoslovakia", "wr_c_them_n": "Czechoslovakia +2", "wr_c_side_n": "3 enemies",
+        "wr_c_when_past": "1 October, 1938  -  12 February, 1939  -  134 days", "wr_c_track_from": "1938.10.1",
+        "wr_c_kus": "186.4K", "wr_c_taken": "12", "wr_c_vpt": "18", "wr_c_capt": "1",
+        "wr_c_kthem": "404.9K", "wr_c_lost": "1", "wr_c_vpl": "2", "wr_c_gave": "2 of 3"})
+    unrecorded_words = dict(yug_words, **{
+        "wr_c_title": "The war with Austria", "wr_c_them": "Austria", "wr_c_when_past": "4 October, 1938  -  12 February, 1939  -  131 days",
+        "wr_c_t_twin_c": "§YAustria§!", "wr_c_end": "Capitulated"})
+    now_rows, now_only, done_rows, done_only, frames = war_list_scene()
+    page_only, page_enemies = enemy_rows_scene("page")
+    three_only, three_enemies = enemy_rows_scene("three")
+    window = "mod1440_records_wr"
+    lists = {"wr_now_grid": len(WS_TODAY), "wr_old_grid": len(WS_DONE)}
+    list_rows = {"wr_now_grid": "mod1440_records_war_row", "wr_old_grid": "mod1440_records_past_war_row", "wr_en_grid": "mod1440_records_enemy_row"}
+    states = [
+        {"name": "file", "rows": dict(lists, wr_en_grid=0), "hide": {window: war_file_hide(yug)}, "place": {window: war_marks(len(yug["lines"]))},
+         "samples": {window: war_file_samples(yug, WS_LINES_YUGOSLAVIA, WS_COMMANDERS["file"], yug_words)},
+         "_note": "The finished war with Yugoslavia alone (1938-39): Hitler throughout, Prince Paul at the start and a leader with no portrait the game "
+                  "can name at the end (the flag box); How it ended in the figures; no enemies table, the War Diary runs on into the right column."},
+        {"name": "three", "rows": dict(lists, wr_en_grid=len(WS_ENEMIES["three"])), "hide": {window: war_file_hide(three)},
+         "place": {window: war_marks(len(three["lines"]))},
+         "only": {"mod1440_records_enemy_row": three_only},
+         "samples": {window: war_file_samples(three, WS_LINES_CZECHOSLOVAKIA, WS_COMMANDERS["three"], three_words),
+                     "mod1440_records_enemy_row": three_enemies},
+         "_note": "The finished war with Czechoslovakia and two other enemies, Yugoslavia chosen in the enemies table."},
+        {"name": "unrecorded", "rows": dict(lists, wr_en_grid=0), "hide": {window: war_file_hide(unrecorded)},
+         "place": {window: war_marks(len(unrecorded["lines"]))},
+         "samples": {window: war_file_samples(unrecorded, WS_LINES_YUGOSLAVIA, WS_COMMANDERS["file"], unrecorded_words)},
+         "_note": "E4 fix round 1: a finished war of a migrated save: neither of their heads recorded, so one flag box, 'Throughout the war', "
+                  "'Not recorded'; the dead not kept (the dash)."},
+    ]
+    return {
+        "phase": "E4", "file": "mod1440_records.gui", "screenshot": shot,
+        "windows": [dict(place, name=window, rows=dict(lists, wr_en_grid=len(WS_ENEMIES["page"])), listRows=list_rows,
+                         hide=war_file_hide(page), place=war_marks(len(page["lines"])),
+                         _note="A German campaign of 14 May 1942: the war of today with Poland and twelve other enemies, the United Kingdom chosen in "
+                               "the enemies table. Flags and portraits are the renderer's placeholders (script names them); the marks of the track "
+                               "stand where script puts them (x by property)."),
+                    {"name": "mod1440_records_war_row", "skip": True, "only": now_only},
+                    {"name": "mod1440_records_past_war_row", "skip": True, "only": done_only, "frames": {"wo_row_plate": frames}},
+                    {"name": "mod1440_records_enemy_row", "skip": True, "only": page_only}],
+        "samples": {window: war_file_samples(page, WS_LINES_POLAND, WS_COMMANDERS["page"], page_words),
+                    "mod1440_records_war_row": now_rows, "mod1440_records_past_war_row": done_rows, "mod1440_records_enemy_row": page_enemies},
+        "states": states,
+        "setup": setup,
+        "teardown": [{"clickWidget": "mod1440_records_wr/wr_tab_0", "wait": 0.8}] + back,
+        "expect": ["mod1440_records_wr/wr_close"],
+        "crop": crop,
+        "manual": ["A war that runs for weeks with fighting: the dead of both sides against the war overview's casualties",
+                   "A real alliance war (the Allies): several enemies joining over days, one of them capitulating while the war goes on",
+                   "An existing save of the build before E4 round 2 with finished and running wars: the migration (rows grouped, dead not kept, "
+                   "leaders from the Government page)",
+                   "Commanders who took states and points in a war: they need fighting, or mod1440_chk_state2 with a general in the state"],
+        "checklist": WARS_CHECKLIST,
+    }
+
+
+WARS_CHECKLIST = [
+    "The page in the steel look: three steel cards in the left column (The campaign 548x220, Wars of today 548x188, Finished wars 548x670), "
+    "6 apart, each with a head band of 27 holding its title and the column heads (Days / Our dead / Their dead / Surr.; Began / Our dead / Their dead / End); "
+    "the window's ground, title strip and tabs unchanged; the Wars tab's tooltip 'One row per war, its enemies joined'",
+    "The campaign table: 14 figures in two columns, bands on rows 2, 4, 6. Compare 'Casualties, all wars' with National Figures' 'Casualties, all "
+    "wars'; 'in wars of today' with the war overview's casualties of your side; Our surrender with the war overview's bar; 'Casualties we inflicted' "
+    "with the sum of Their dead over both lists",
+    "Declare war on Poland (effect mod1440_chk_war), run 3 days: one red plate under Wars of today with Poland's flag and name, Days 3, Our dead and "
+    "Their dead in K with one decimal, Surr. as the war overview's capitulation bar of Poland; 'At peace.' gone",
+    "Grouping (has_war_together_with): effect mod1440_chk_ally_join (the United Kingdom and France join Poland's side), run 1 day: still ONE plate, "
+    "'Poland +2'; effect mod1440_chk_wr_log: game.log 'MOD1440 wr: row' gives POL, ENG and FRA the same grp and role 1. Then mod1440_chk_war2 "
+    "(Czechoslovakia, a war of its own): a second plate, its own grp",
+    "The file of the war: 'The war with Poland', both flags, 'German Reich' and 'Poland +2' in hoi_24header, '1 January, 1936 - today - N days'; "
+    "the track and its marks; Their side '3 enemies'; the enemies table, 3 rows (flag, name, Joined, surrender %, Their dead, Our dead, States), Poland "
+    "on the lighter band; click the United Kingdom: its row lights and Their side shows its head of government (Chamberlain)",
+    "Casualties (casualties_inflicted_by, faults 1 and 3): after some days of fighting, mod1440_chk_wr_log: each row's kus/kthem and 'now' "
+    "readings in thousands; compare a one-enemy war's Our dead and Their dead with the war overview's casualties of each participant (the "
+    "difference: the dead no enemy caused) and write both numbers down; the plate, the file's 'Casualties, by their hand / by our hand' and the "
+    "enemies table's columns agree with the sums",
+    "meta_trigger with numbers from variables: after Reloading Database and a daily round, error.log has no line about meta_trigger, "
+    "casualties_inflicted_by, a '[N]' or '[O]' placeholder or a parse error; mod1440_chk_kread_time: the time of 100 full readings between two game.log lines",
+    "The peace (mod1440_chk_peace: white peace with Poland), run 1 day: Poland's row leaves the war of today if the war goes on, or the war moves to "
+    "Finished wars on a blue plate with the peace icon; Our dead and Their dead keep the values of the day before, NOT 0 (fault 1); "
+    "mod1440_chk_wr_log after the peace: the 'now' reading tells whether casualties_inflicted_by keeps its value after a peace or falls to 0 (write it down)",
+    "A second war with Poland after the peace (mod1440_chk_war again, 2 days): a plate of its own; its dead count from its first day (the reading of "
+    "that day is its base, kus0 in the log); the first war's file keeps its numbers, and its War Diary lines stop at its last day (designer's fault 3)",
+    "Kept heads of government (fault 2): during a war, mod1440_chk_leader_change (Poland's head of government retired), run 1 day: Poland's row "
+    "keeps the head of the first day (lt0) and the new one (lt1) in mod1440_chk_wr_log; its file shows 'At the start' and 'Today', two portraits. "
+    "After the peace, mod1440_chk_leader_change_us (ours retired): the finished war still shows our head of that time, 'Throughout the war', one portrait",
+    "An annexed enemy (mod1440_chk_war2, mod1440_chk_annex, 1 day): a green plate with the annex icon; its file still shows Czechoslovakia's head "
+    "of government at the start and the end with his portrait (no 'This country is no more')",
+    "The flag box: a head of government the game has no portrait for shows the country's flag (82x52) on the dark inset with the ideology icon "
+    "under it, tooltip 'No portrait the game can name'",
+    "A finished war of one enemy: no enemies table; the War Diary runs from the left column (10 lines) into the right one (up to 21 lines, "
+    "'In the War Diary, continued'); 'How it ended' in the fourth figure row with the outcome's words",
+    "'All its lines' in the War Diary strip: the War Diary opens filtered to the chosen enemy ('<country>: lines 1 - N of N')",
+    "A place in the file's War Diary is a button: the camera moves to it and the Records close",
+    "Migration of an existing save: effect mod1440_chk_old4 (the rows as the build before left them), open the Records: game.log 'the rows of wr "
+    "... wo were given their wars, casualties and leaders'; mod1440_chk_sizes4 logs every new part as long as the rows; the old finished wars show "
+    "the dash in both dead slots (tooltip 'Not kept'), an enemy fought once and not at war now may show the game's value instead; rows that ended "
+    "on the same day are one plate; our heads of government come from the Government page, theirs 'Not recorded' at the start",
+    "The lists scroll with the wheel: Finished wars past 12 plates, the enemies table past 5 rows",
+    "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type' (GFX_1440p_WR_*, "
+    "GFX_1440p_SG_inset_125x168), no unknown trigger or effect has_war_together_with, has_offensive_war_with, casualties_inflicted_by, is_subject_of",
+]
+# --- end E4 round 2 ---
+
+
 def scenes():
     from unit_medals_table import MEDALS
     others = sorted(set(m[1] for m in MEDALS) - {"ger"})
@@ -3701,15 +4635,6 @@ def scenes():
 
     officer_hide = officer_scene_hide()
 
-    # ---- Wars: the file of a war of today with an enemy outside any faction; marks spread over the track
-    marks = dict(("wr_c_mark_%d_%s" % (k, "w" if k in (0, 19) else "t"), [WF_TRACK_X + 2 + int((WF_TRACK_W - 4 - WF_MARK) * (19 - k) / 19.0), WF_TRACK_Y + 3])
-                 for k in range(WR_LINES))
-    war_hide = (["wr_now_none", "wr_old_none", "wr_c_none", "wr_c_gone", "wr_c_when_capd", "wr_c_when_now_old", "wr_c_when_past", "wr_c_when_past_old",
-                 "wr_c_fac_them", "wr_c_nofac_us", "wr_k_none", "wr_ln_none"]
-                + ["wr_c_mark_%d_%s" % (k, "t" if k in (0, 19) else "w") for k in range(WR_LINES)]
-                + ["wr_ln_%d_%s" % (k, "t" if k in (0, 19) else "w") for k in range(WR_LINES)]
-                + ["wr_ln_%d_p" % k for k in range(WR_LINES)] + ["wr_ln_%d_go" % k for k in (0, 19)] + ["wr_ln_%d_s" % k for k in (0, 19)]
-                + ["wr_k_%d_rank_%d" % (k, r) for k in range(WR_COMMANDERS) for r in (1, 2, 3) if r != (1 if k == 0 else 2)])
     return {
         "war_diary": diary_scene(place, crop, shot, back),
         "officers": {
@@ -3760,31 +4685,7 @@ def scenes():
                 "Heads of government: Hitler, \"before the record began - today\"",
                 "error.log: no line about is_character, has_character or a sprite of an advisor"],
         },
-        "wars": {
-            "phase": "E4", "file": "mod1440_records.gui", "screenshot": shot,
-            "windows": [dict(place, name="mod1440_records_wr", rows={"wr_now_grid": 3, "wr_old_grid": 4},
-                             listRows={"wr_now_grid": "mod1440_records_war_row", "wr_old_grid": "mod1440_records_past_war_row"},
-                             hide=war_hide, place=marks,
-                             _note="The file shows a war of today with an enemy in no faction; script hides the twins. The marks of the track "
-                                   "stand where script puts them (x by property): placed here over the track."),
-                        {"name": "mod1440_records_war_row", "skip": True, "hide": ["wr_row_pick"]},
-                        {"name": "mod1440_records_past_war_row", "skip": True, "hide": ["wo_row_pick"] + ["wo_row_end_%d" % n for n in (1, 2, 3, 5)]}],
-            "setup": tab(3),
-            "teardown": [{"clickWidget": "mod1440_records_wr/wr_tab_0", "wait": 0.8}] + back,
-            "expect": ["mod1440_records_wr/wr_close"],
-            "crop": crop,
-            "manual": ["A war that ends; casualties above zero; an enemy that is annexed (the file says the country is no more)",
-                       "Commanders who took states and points in a war: they need fighting, or mod1440_chk_state2 with a general in the state"],
-            "checklist": ["Declare war on Poland (mod1440_chk_war): a red plate with Poland's flag and name under At war with, '0' days, '0 : 0'",
-                          "The file opens on it: the war overview frame, 'The war with Poland', both flags on the rays, both names, "
-                          "'1 January, 1936 - today - 0 days'",
-                          "Both heads of government with portrait, party, ideology; 'Faction: Axis'-style line or 'Faction: none'; both surrender bars",
-                          "Take Danzig (mod1440_chk_state2) with a general there: a mark on the track, a line under In the War Diary, "
-                          "his face under Our commanders in this war with 'States 1'",
-                          "White peace (mod1440_chk_peace): the plate moves to Finished wars in blue with the peace icon; the file stays on it",
-                          "Annex Czechoslovakia after a war (mod1440_chk_war2, mod1440_chk_annex): a green plate with the annex icon; its tooltip 'Annexed'",
-                          "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type'"],
-        },
+        "wars": wars_scene(place, crop, shot, back, tab(3)),     # E4 round 2
     }
 
 

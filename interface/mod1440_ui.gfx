@@ -1816,4 +1816,91 @@ spriteTypes = {
 		tilingCenter = no
 	}
 	# --- end d10-population ---
+	# --- E4 round 2 --- the Wars page of the Records, redesign of 2026-10-28 (scratch/phases/E4/layout.json): the three
+	# steel cards of the left column (bitmaps cut from the steel bar by tools/stretch_background.py), the strips, bands
+	# and hit areas of the war's file at the ruleset's pitches (24, 32, 48), the dark inset in a portrait's place
+	spriteType = {
+		name = "GFX_1440p_WR_campaign"
+		textureFile = "gfx/interface/mod1440/wr_campaign.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_WR_today"
+		textureFile = "gfx/interface/mod1440/wr_today.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_WR_done"
+		textureFile = "gfx/interface/mod1440/wr_done.dds"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_502x26"
+		size = { x = 502 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_144x24"
+		size = { x = 144 y = 24 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_532x24"
+		size = { x = 532 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_502x24"
+		size = { x = 502 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_502x32"
+		size = { x = 502 y = 32 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_502x48"
+		size = { x = 502 y = 48 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_502x32"
+		size = { x = 502 y = 32 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_502x32"
+		size = { x = 502 y = 32 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_130x24"
+		size = { x = 130 y = 24 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_125x168"
+		size = { x = 125 y = 168 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	# --- end E4 round 2 ---
 }

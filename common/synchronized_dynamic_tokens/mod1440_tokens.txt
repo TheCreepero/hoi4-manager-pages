@@ -24,6 +24,7 @@ AFG_uzbek_scholar
 AFG_womens_rights_activist_2
 AFP_radio_demagogue
 ALB_head_of_the_comitee_of_kosovo
+ARG_anti_unionist_pure_anarchist
 ARG_bolivar_agent
 ARG_communist_insurrectionist
 ARG_feminist_revolutionary
@@ -117,6 +118,7 @@ CHI_shanghai_financier
 CHI_spymaster
 CHI_the_third_force_trait
 CHI_vice_premier_trait
+CHI_watched_officer
 CHL_minister_of_transport
 CHL_orden_el_sol_del_peru
 COG_trade_unionist
@@ -151,6 +153,7 @@ ETH_military_medal_gugsa
 ETH_military_medal_haile_selassie
 ETH_military_medal_haymanot
 ETH_military_medal_jofir
+ETH_minister_of_the_interior_abate
 ETH_order_of_st_george
 ETH_order_of_the_grand_star
 ETH_silver_medal
@@ -4461,6 +4464,7 @@ GFX_rt56_idea_AFG_advisor_homeira_seljuqi
 HUN_apostolic_king_of_hungary_fascist_trait
 HUN_archbishop_of_esztergom
 HUN_christian_academic
+HUN_democracy_advocate
 HUN_filmmaker
 HUN_goulash_communist
 HUN_her_serene_highness
@@ -4857,6 +4861,8 @@ RAJ_GOE_costly_reformer
 RAJ_GOE_cultural_icon
 RAJ_GOE_divisive_monarch
 RAJ_GOE_economic_realist
+RAJ_GOE_iron_man_of_india
+RAJ_GOE_minister_of_publicity_and_propaganda
 RAJ_GOE_wealthy_philantrophist
 RAJ_conservationalist
 RAJ_founder_of_the_csp
@@ -4960,6 +4966,7 @@ TIB_promising_prospector
 TIB_royal_chamberlain
 TIB_unpopular_statesman
 The_Marshals_Brother
+URG_minister_of_defense
 XSM_dubious_loyalty
 YUN_dubious_loyalty
 aboriginal_journalist
@@ -5227,6 +5234,7 @@ communist_orator
 communist_red_star
 communist_revolutionary
 communist_service_medal
+communist_sympathizer
 communist_theorist
 compassionate_commoner
 compassionate_gentleman
@@ -5869,6 +5877,7 @@ mod1440_vp_10797
 mod1440_vp_108
 mod1440_vp_10802
 mod1440_vp_10803
+mod1440_vp_10810
 mod1440_vp_10811
 mod1440_vp_10826
 mod1440_vp_1083
@@ -6192,6 +6201,7 @@ mod1440_vp_12251
 mod1440_vp_12261
 mod1440_vp_12262
 mod1440_vp_12268
+mod1440_vp_12269
 mod1440_vp_12276
 mod1440_vp_12284
 mod1440_vp_12295
@@ -7784,6 +7794,8 @@ mod1440_wr_out_capitulated
 mod1440_wr_out_gone
 mod1440_wr_out_peace
 mod1440_wr_out_subject
+mod1440_wr_out_we_capitulated
+mod1440_wr_out_we_subject
 model_cajander
 modern_tank_aa_chassis
 modern_tank_artillery_chassis

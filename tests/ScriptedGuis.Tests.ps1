@@ -63,7 +63,10 @@ BeforeAll {
         'clear_temp_array', 'resize_array', 'find_highest_in_array', 'find_lowest_in_array',
         'free_building_slots', 'is_in_array', 'has_country_leader', 'date',
         # --- e-diary-wars and e-officers-gov (2026-10-16): the marks of a war's track; the count of an officer's traits
-        'clamp_temp_variable'
+        'clamp_temp_variable',
+        # --- E4 round 2 --- (2026-10-29) a trigger built from text: its block holds the text of one trigger and the
+        # values of its placeholders, read-only (the Wars page asks casualties_inflicted_by with numbers from variables)
+        'meta_trigger'
     )
     # Commands that write to the game itself, each with the page that needs it (wiki/Roleplay-Pages.md, the
     # changed rule). add_history_entry: a line in a division's own history, phase E6. Nothing else.
@@ -96,7 +99,11 @@ BeforeAll {
         'has_trait', 'is_general_captured', 'is_leading_army_group',
         # --- D2 round 2 --- (2026-10-17) Army Readiness: the commanders of single armies (Fighting, Without a
         # commander), and the countries whose states can hold the player's divisions (Location); all read-only
-        'is_leading_army', 'is_in_faction_with', 'has_war_with'
+        'is_leading_army', 'is_in_faction_with', 'has_war_with',
+        # --- E4 round 2 --- (2026-10-29) Wars: which enemies fight one war (on one side, the same role against them),
+        # how a war ended for the country itself, a country's ideology for its head of government; all read-only.
+        # casualties_inflicted_by is asked inside meta_trigger only.
+        'has_war_together_with', 'has_offensive_war_with', 'is_subject_of', 'casualties_inflicted_by'
     )
 
     # Adds to $Into every command of a block that is neither allowed nor an effect of the mod's own.

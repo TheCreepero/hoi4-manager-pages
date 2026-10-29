@@ -3324,13 +3324,16 @@ scripted_gui = {
 
 		dynamic_lists = {
 			wr_now_grid = {
-				array = mod1440_wr_enemy
-				change_scope = yes
+				array = mod1440_wv_g
 				entry_container = "mod1440_records_war_row"
 			}
 			wr_old_grid = {
-				array = mod1440_wo_fr
+				array = mod1440_wp_fr
 				entry_container = "mod1440_records_past_war_row"
+			}
+			wr_en_grid = {
+				array = mod1440_we_c
+				entry_container = "mod1440_records_enemy_row"
 			}
 		}
 
@@ -3339,13 +3342,13 @@ scripted_gui = {
 				image = "[ROOT.GetFlag]"
 			}
 			wr_row_flag = {
-				image = "[THIS.GetFlag]"
+				image = "[?mod1440_wv_c^i.GetFlag]"
 			}
 			wo_row_plate = {
 				frame = v
 			}
 			wo_row_flag = {
-				image = "[?mod1440_wo_enemy^i.GetFlag]"
+				image = "[?mod1440_wp_c^i.GetFlag]"
 			}
 			wr_c_flag_us = {
 				image = "[ROOT.GetFlag]"
@@ -3473,17 +3476,29 @@ scripted_gui = {
 			wr_c_mark_19_t = {
 				x = mod1440_wr_mx^19
 			}
-			wr_c_face_us = {
-				image = "[?mod1440_gv_p.GetTokenKey]"
+			wr_c_face_u0 = {
+				image = "[?mod1440_wr_c_up0.GetTokenKey]"
 			}
-			wr_c_surr_bar_us = {
-				frame = mod1440_wr_c_ours
+			wr_c_face_u0_fb_flag = {
+				image = "[ROOT.GetFlag]"
 			}
-			wr_c_face_them = {
-				image = "[?mod1440_wr_c_p.GetTokenKey]"
+			wr_c_face_u1 = {
+				image = "[?mod1440_wr_c_up1.GetTokenKey]"
 			}
-			wr_c_surr_bar_them = {
-				frame = mod1440_wr_c_surr
+			wr_c_face_u1_fb_flag = {
+				image = "[ROOT.GetFlag]"
+			}
+			wr_c_face_t0 = {
+				image = "[?mod1440_wr_c_tp0.GetTokenKey]"
+			}
+			wr_c_face_t0_fb_flag = {
+				image = "[?mod1440_wr_c_te.GetFlag]"
+			}
+			wr_c_face_t1 = {
+				image = "[?mod1440_wr_c_tp1.GetTokenKey]"
+			}
+			wr_c_face_t1_fb_flag = {
+				image = "[?mod1440_wr_c_te.GetFlag]"
 			}
 			wr_k_0_face = {
 				image = "[?mod1440_wr_k_0_p.GetTokenKey]"
@@ -3500,8 +3515,8 @@ scripted_gui = {
 			wr_k_4_face = {
 				image = "[?mod1440_wr_k_4_p.GetTokenKey]"
 			}
-			wr_k_5_face = {
-				image = "[?mod1440_wr_k_5_p.GetTokenKey]"
+			wr_en_flag = {
+				image = "[?mod1440_we_c^i.GetFlag]"
 			}
 		}
 
@@ -3526,25 +3541,24 @@ scripted_gui = {
 				mod1440_rec_close = yes
 			}
 			wr_row_click = {
-				set_temp_variable = { wr_pick = THIS }
-				ROOT = {
-					for_each_loop = {
-						array = mod1440_wr_enemy
-						value = wr_v
-						index = wr_i
-						if = {
-							limit = { check_variable = { wr_v = wr_pick } }
-							set_variable = { mod1440_wr_sel_kind = 1 }
-							set_variable = { mod1440_wr_sel_i = wr_i }
-						}
-					}
-					mod1440_wr_card = yes
-				}
+				set_variable = { mod1440_wr_sel_g = mod1440_wv_g^i }
+				set_variable = { mod1440_wr_sel_e = 0 }
+				mod1440_wr_picks = yes
+				mod1440_wr_card = yes
 			}
 			wo_row_click = {
-				set_variable = { mod1440_wr_sel_kind = 2 }
-				set_variable = { mod1440_wr_sel_i = i }
+				set_variable = { mod1440_wr_sel_g = mod1440_wp_g^i }
+				set_variable = { mod1440_wr_sel_e = 0 }
+				mod1440_wr_picks = yes
 				mod1440_wr_card = yes
+			}
+			wr_ln_all_click = {
+				set_variable = { mod1440_wd_filter = 8 }
+				set_variable = { mod1440_wd_country = mod1440_wr_c_te }
+				clear_array = mod1440_wd_back
+				set_variable = { mod1440_wd_from = 0 }
+				set_variable = { mod1440_rec_page = 0 }
+				mod1440_rec_show = yes
 			}
 			wr_ln_0_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^0 }
@@ -3676,7 +3690,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_10_go_click = {
+			wr_l1_10_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^10 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^10 = 3 } }
@@ -3689,7 +3703,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_11_go_click = {
+			wr_l1_11_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^11 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^11 = 3 } }
@@ -3702,7 +3716,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_12_go_click = {
+			wr_l1_12_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^12 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^12 = 3 } }
@@ -3715,7 +3729,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_13_go_click = {
+			wr_l1_13_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^13 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^13 = 3 } }
@@ -3728,7 +3742,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_14_go_click = {
+			wr_l1_14_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^14 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^14 = 3 } }
@@ -3741,7 +3755,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_15_go_click = {
+			wr_l1_15_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^15 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^15 = 3 } }
@@ -3754,7 +3768,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_16_go_click = {
+			wr_l1_16_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^16 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^16 = 3 } }
@@ -3767,7 +3781,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_17_go_click = {
+			wr_l1_17_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^17 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^17 = 3 } }
@@ -3780,7 +3794,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_18_go_click = {
+			wr_l1_18_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^18 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^18 = 3 } }
@@ -3793,7 +3807,7 @@ scripted_gui = {
 					}
 				}
 			}
-			wr_ln_19_go_click = {
+			wr_l1_19_go_click = {
 				set_temp_variable = { wd_go = mod1440_wr_ln_a^19 }
 				if = {
 					limit = { check_variable = { mod1440_wr_ln_sa^19 = 3 } }
@@ -3806,65 +3820,420 @@ scripted_gui = {
 					}
 				}
 			}
+			wr_l1_20_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^20 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^20 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^20 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_21_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^21 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^21 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^21 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_22_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^22 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^22 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^22 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_23_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^23 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^23 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^23 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_24_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^24 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^24 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^24 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_25_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^25 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^25 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^25 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_26_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^26 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^26 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^26 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_27_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^27 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^27 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^27 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_28_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^28 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^28 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^28 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_29_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^29 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^29 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^29 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l1_30_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^30 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^30 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^30 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_10_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^10 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^10 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^10 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_11_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^11 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^11 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^11 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_12_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^12 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^12 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^12 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_13_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^13 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^13 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^13 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_14_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^14 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^14 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^14 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_15_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^15 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^15 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^15 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_16_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^16 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^16 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^16 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_17_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^17 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^17 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^17 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_18_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^18 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^18 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^18 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_19_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^19 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^19 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^19 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_20_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^20 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^20 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^20 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_21_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^21 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^21 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^21 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_l2_22_go_click = {
+				set_temp_variable = { wd_go = mod1440_wr_ln_a^22 }
+				if = {
+					limit = { check_variable = { mod1440_wr_ln_sa^22 = 3 } }
+					set_temp_variable = { wd_go = mod1440_wr_ln_p^22 }
+				}
+				var:wd_go = {
+					ROOT = {
+						goto_state = PREV
+						mod1440_rec_close = yes
+					}
+				}
+			}
+			wr_en_row_click = {
+				set_variable = { mod1440_wr_sel_e = mod1440_we_id^i }
+				mod1440_wr_them = yes
+			}
 		}
 
 		triggers = {
 			wr_now_none_visible = {
-				check_variable = { mod1440_wr_enemy^num < 1 }
+				check_variable = { mod1440_wv_g^num < 1 }
 			}
 			wr_old_none_visible = {
-				check_variable = { mod1440_wo_enemy^num < 1 }
+				check_variable = { mod1440_wp_g^num < 1 }
+			}
+			wr_row_more_visible = {
+				check_variable = { mod1440_wv_n^i > 0 }
 			}
 			wr_row_pick_visible = {
-				check_variable = { ROOT.mod1440_wr_pk^i = 1 }
+				check_variable = { mod1440_wv_pk^i = 1 }
 			}
-			wo_row_end_1_visible = {
-				check_variable = { mod1440_wo_oc^i = 1 }
+			wr_row_kus_visible = {
+				check_variable = { mod1440_wv_known^i > 0 }
 			}
-			wo_row_end_2_visible = {
-				check_variable = { mod1440_wo_oc^i = 2 }
+			wr_row_kus_none_visible = {
+				NOT = { check_variable = { mod1440_wv_known^i > 0 } }
 			}
-			wo_row_end_3_visible = {
-				check_variable = { mod1440_wo_oc^i = 3 }
+			wr_row_kthem_visible = {
+				check_variable = { mod1440_wv_known^i > 0 }
 			}
-			wo_row_end_4_visible = {
-				check_variable = { mod1440_wo_oc^i = 4 }
+			wr_row_kthem_none_visible = {
+				NOT = { check_variable = { mod1440_wv_known^i > 0 } }
 			}
-			wo_row_end_5_visible = {
-				check_variable = { mod1440_wo_oc^i = 5 }
+			wo_row_more_visible = {
+				check_variable = { mod1440_wp_n^i > 0 }
 			}
 			wo_row_pick_visible = {
-				check_variable = { mod1440_wr_sel_kind = 2 }
-				check_variable = { mod1440_wr_sel_i = i }
+				check_variable = { mod1440_wp_pk^i = 1 }
+			}
+			wo_row_year_visible = {
+				check_variable = { mod1440_wp_year^i > 0 }
+			}
+			wo_row_kus_visible = {
+				check_variable = { mod1440_wp_known^i > 0 }
+			}
+			wo_row_kus_none_visible = {
+				NOT = { check_variable = { mod1440_wp_known^i > 0 } }
+			}
+			wo_row_kthem_visible = {
+				check_variable = { mod1440_wp_known^i > 0 }
+			}
+			wo_row_kthem_none_visible = {
+				NOT = { check_variable = { mod1440_wp_known^i > 0 } }
+			}
+			wo_row_end_1_visible = {
+				check_variable = { mod1440_wp_oc^i = 1 }
+			}
+			wo_row_end_2_visible = {
+				check_variable = { mod1440_wp_oc^i = 2 }
+			}
+			wo_row_end_3_visible = {
+				check_variable = { mod1440_wp_oc^i = 3 }
+			}
+			wo_row_end_4_visible = {
+				check_variable = { mod1440_wp_oc^i = 4 }
+			}
+			wo_row_end_5_visible = {
+				check_variable = { mod1440_wp_oc^i = 5 }
+			}
+			wo_row_end_6_visible = {
+				check_variable = { mod1440_wp_oc^i = 6 }
+			}
+			wo_row_end_7_visible = {
+				check_variable = { mod1440_wp_oc^i = 7 }
 			}
 			wr_c_none_visible = {
 				NOT = { check_variable = { mod1440_wr_c_has = 1 } }
 			}
+			wr_c_them_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+			}
+			wr_c_them_n_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
 			wr_c_when_now_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 1 }
+				check_variable = { mod1440_wr_c_open = 1 }
 				check_variable = { mod1440_wr_c_old = 0 }
-				check_variable = { mod1440_wr_c_capd < 1 }
-			}
-			wr_c_when_capd_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 1 }
-				check_variable = { mod1440_wr_c_old = 0 }
-				check_variable = { mod1440_wr_c_capd > 0 }
 			}
 			wr_c_when_now_old_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 1 }
+				check_variable = { mod1440_wr_c_open = 1 }
 				check_variable = { mod1440_wr_c_old = 1 }
 			}
 			wr_c_when_past_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 2 }
+				check_variable = { mod1440_wr_c_open = 0 }
 				check_variable = { mod1440_wr_c_old = 0 }
 			}
 			wr_c_when_past_old_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 2 }
+				check_variable = { mod1440_wr_c_open = 0 }
 				check_variable = { mod1440_wr_c_old = 1 }
 			}
 			wr_c_mark_0_w_visible = {
@@ -4067,54 +4436,531 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 19 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^19 = 1 } }
 			}
-			wr_c_party_us_visible = {
+			wr_c_side_n_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_c_face_u0_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				NOT = { check_variable = { mod1440_wr_c_ufb0 = 1 } }
+			}
+			wr_c_face_u0_fb_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ufb0 = 1 }
+			}
+			wr_c_face_u0_fb_flag_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ufb0 = 1 }
+			}
+			wr_c_face_u0_fb_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ufb0 = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 1 }
+			}
+			wr_c_face_u0_fb_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ufb0 = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 2 }
+			}
+			wr_c_face_u0_fb_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ufb0 = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 3 }
+			}
+			wr_c_face_u0_fb_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ufb0 = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 4 }
+			}
+			wr_c_face_u1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				NOT = { check_variable = { mod1440_wr_c_ufb1 = 1 } }
+			}
+			wr_c_face_u1_fb_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ufb1 = 1 }
+			}
+			wr_c_face_u1_fb_flag_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ufb1 = 1 }
+			}
+			wr_c_face_u1_fb_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ufb1 = 1 }
+				check_variable = { mod1440_wr_c_ug1 = 1 }
+			}
+			wr_c_face_u1_fb_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ufb1 = 1 }
+				check_variable = { mod1440_wr_c_ug1 = 2 }
+			}
+			wr_c_face_u1_fb_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ufb1 = 1 }
+				check_variable = { mod1440_wr_c_ug1 = 3 }
+			}
+			wr_c_face_u1_fb_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ufb1 = 1 }
+				check_variable = { mod1440_wr_c_ug1 = 4 }
+			}
+			wr_c_u_two_c_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+			}
+			wr_c_u_two_w_start_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+			}
+			wr_c_u_two_l0_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				NOT = { check_variable = { mod1440_wr_c_unr0 = 1 } }
+			}
+			wr_c_u_two_l0_nr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_unr0 = 1 }
+			}
+			wr_c_u_two_i0_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 1 }
+			}
+			wr_c_u_two_i0_g1_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 1 }
+			}
+			wr_c_u_two_i0_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 2 }
+			}
+			wr_c_u_two_i0_g2_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 2 }
+			}
+			wr_c_u_two_i0_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 3 }
+			}
+			wr_c_u_two_i0_g3_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 3 }
+			}
+			wr_c_u_two_i0_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 4 }
+			}
+			wr_c_u_two_i0_g4_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug0 = 4 }
+			}
+			wr_c_u_two_l1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				NOT = { check_variable = { mod1440_wr_c_unr1 = 1 } }
+			}
+			wr_c_u_two_l1_nr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_unr1 = 1 }
+			}
+			wr_c_u_two_i1_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 1 }
+			}
+			wr_c_u_two_i1_g1_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 1 }
+			}
+			wr_c_u_two_i1_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 2 }
+			}
+			wr_c_u_two_i1_g2_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 2 }
+			}
+			wr_c_u_two_i1_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 3 }
+			}
+			wr_c_u_two_i1_g3_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 3 }
+			}
+			wr_c_u_two_i1_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 4 }
+			}
+			wr_c_u_two_i1_g4_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_ug1 = 4 }
+			}
+			wr_c_u_two_w_today_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_open = 1 }
+			}
+			wr_c_u_two_w_end_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 0 }
+				check_variable = { mod1440_wr_c_open = 0 }
+			}
+			wr_c_u_twin_c_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+			}
+			wr_c_u_twin_w_live_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_open = 1 }
+			}
+			wr_c_u_twin_w_dead_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_open = 0 }
+			}
+			wr_c_u_twin_l0_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				NOT = { check_variable = { mod1440_wr_c_unr0 = 1 } }
+			}
+			wr_c_u_twin_l0_nr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_unr0 = 1 }
+			}
+			wr_c_u_twin_i0_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 1 }
+			}
+			wr_c_u_twin_i0_g1_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 1 }
+			}
+			wr_c_u_twin_i0_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 2 }
+			}
+			wr_c_u_twin_i0_g2_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 2 }
+			}
+			wr_c_u_twin_i0_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 3 }
+			}
+			wr_c_u_twin_i0_g3_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 3 }
+			}
+			wr_c_u_twin_i0_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 4 }
+			}
+			wr_c_u_twin_i0_g4_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_utw = 1 }
+				check_variable = { mod1440_wr_c_ug0 = 4 }
+			}
+			wr_c_face_t0_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				NOT = { check_variable = { mod1440_wr_c_tfb0 = 1 } }
+			}
+			wr_c_face_t0_fb_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tfb0 = 1 }
+			}
+			wr_c_face_t0_fb_flag_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tfb0 = 1 }
+			}
+			wr_c_face_t0_fb_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tfb0 = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 1 }
+			}
+			wr_c_face_t0_fb_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tfb0 = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 2 }
+			}
+			wr_c_face_t0_fb_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tfb0 = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 3 }
+			}
+			wr_c_face_t0_fb_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tfb0 = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 4 }
+			}
+			wr_c_face_t1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				NOT = { check_variable = { mod1440_wr_c_tfb1 = 1 } }
+			}
+			wr_c_face_t1_fb_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_tfb1 = 1 }
+			}
+			wr_c_face_t1_fb_flag_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_tfb1 = 1 }
+			}
+			wr_c_face_t1_fb_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_tfb1 = 1 }
+				check_variable = { mod1440_wr_c_tg1 = 1 }
+			}
+			wr_c_face_t1_fb_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_tfb1 = 1 }
+				check_variable = { mod1440_wr_c_tg1 = 2 }
+			}
+			wr_c_face_t1_fb_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_tfb1 = 1 }
+				check_variable = { mod1440_wr_c_tg1 = 3 }
+			}
+			wr_c_face_t1_fb_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_tfb1 = 1 }
+				check_variable = { mod1440_wr_c_tg1 = 4 }
+			}
+			wr_c_t_two_c_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+			}
+			wr_c_t_two_w_start_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+			}
+			wr_c_t_two_l0_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				NOT = { check_variable = { mod1440_wr_c_tnr0 = 1 } }
+			}
+			wr_c_t_two_l0_nr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tnr0 = 1 }
+			}
+			wr_c_t_two_i0_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 1 }
+			}
+			wr_c_t_two_i0_g1_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 1 }
+			}
+			wr_c_t_two_i0_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 2 }
+			}
+			wr_c_t_two_i0_g2_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 2 }
+			}
+			wr_c_t_two_i0_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 3 }
+			}
+			wr_c_t_two_i0_g3_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 3 }
+			}
+			wr_c_t_two_i0_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 4 }
+			}
+			wr_c_t_two_i0_g4_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg0 = 4 }
+			}
+			wr_c_t_two_l1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				NOT = { check_variable = { mod1440_wr_c_tnr1 = 1 } }
+			}
+			wr_c_t_two_l1_nr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tnr1 = 1 }
+			}
+			wr_c_t_two_i1_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 1 }
+			}
+			wr_c_t_two_i1_g1_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 1 }
+			}
+			wr_c_t_two_i1_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 2 }
+			}
+			wr_c_t_two_i1_g2_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 2 }
+			}
+			wr_c_t_two_i1_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 3 }
+			}
+			wr_c_t_two_i1_g3_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 3 }
+			}
+			wr_c_t_two_i1_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 4 }
+			}
+			wr_c_t_two_i1_g4_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_tg1 = 4 }
+			}
+			wr_c_t_two_w_today_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_topen = 1 }
+			}
+			wr_c_t_two_w_end_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 0 }
+				check_variable = { mod1440_wr_c_topen = 0 }
+			}
+			wr_c_t_twin_c_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+			}
+			wr_c_t_twin_w_live_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_topen = 1 }
+			}
+			wr_c_t_twin_w_dead_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_topen = 0 }
+			}
+			wr_c_t_twin_l0_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				NOT = { check_variable = { mod1440_wr_c_tnr0 = 1 } }
+			}
+			wr_c_t_twin_l0_nr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tnr0 = 1 }
+			}
+			wr_c_t_twin_i0_g1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 1 }
+			}
+			wr_c_t_twin_i0_g1_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 1 }
+			}
+			wr_c_t_twin_i0_g2_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 2 }
+			}
+			wr_c_t_twin_i0_g2_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 2 }
+			}
+			wr_c_t_twin_i0_g3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 3 }
+			}
+			wr_c_t_twin_i0_g3_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 3 }
+			}
+			wr_c_t_twin_i0_g4_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 4 }
+			}
+			wr_c_t_twin_i0_g4_i_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_ttw = 1 }
+				check_variable = { mod1440_wr_c_tg0 = 4 }
+			}
+			wr_c_kus_l_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_ideology_us_visible = {
+			wr_c_kus_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_kunk = 0 }
 			}
-			wr_c_fac_us_visible = {
+			wr_c_kus_none_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				is_in_faction = yes
-			}
-			wr_c_nofac_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				is_in_faction = no
-			}
-			wr_c_surr_l_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_surr_bar_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_surr_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_lead_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_hog_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_cas_bg_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_cas_l_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_cas_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_taken_bg_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_kunk = 1 }
 			}
 			wr_c_taken_l_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
 			wr_c_taken_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_vpt_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
 			wr_c_vpt_l_visible = {
@@ -4123,67 +4969,27 @@ scripted_gui = {
 			wr_c_vpt_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_party_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-			}
-			wr_c_ideology_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-			}
-			wr_c_fac_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-				check_variable = { mod1440_wr_c_efac = 1 }
-			}
-			wr_c_nofac_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-				NOT = { check_variable = { mod1440_wr_c_efac = 1 } }
-			}
-			wr_c_surr_l_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 1 }
-			}
-			wr_c_surr_bar_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 1 }
-			}
-			wr_c_surr_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_sel_kind = 1 }
-			}
-			wr_c_lead_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-			}
-			wr_c_hog_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-			}
-			wr_c_face_them_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_c_exists = 1 }
-			}
-			wr_c_ecas_bg_visible = {
+			wr_c_capt_l_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_ecas_l_visible = {
+			wr_c_capt_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_ecas_visible = {
+			wr_c_kthem_l_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_lost_bg_visible = {
+			wr_c_kthem_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_kunk = 0 }
+			}
+			wr_c_kthem_none_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_kunk = 1 }
 			}
 			wr_c_lost_l_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
 			wr_c_lost_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_vpl_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
 			wr_c_vpl_l_visible = {
@@ -4192,9 +4998,33 @@ scripted_gui = {
 			wr_c_vpl_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_gone_visible = {
+			wr_c_surr_l_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				NOT = { check_variable = { mod1440_wr_c_exists = 1 } }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_c_open = 1 }
+			}
+			wr_c_surr_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_c_open = 1 }
+			}
+			wr_c_end_l_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_c_open = 0 }
+			}
+			wr_c_end_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_c_open = 0 }
+			}
+			wr_c_gave_l_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_c_gave_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
 			}
 			wr_k_none_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -4223,7 +5053,15 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 0 }
 			}
-			wr_k_0_what_visible = {
+			wr_k_0_st_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 0 }
+			}
+			wr_k_0_vp_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 0 }
+			}
+			wr_k_0_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 0 }
 			}
@@ -4254,7 +5092,15 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 1 }
 			}
-			wr_k_1_what_visible = {
+			wr_k_1_st_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 1 }
+			}
+			wr_k_1_vp_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 1 }
+			}
+			wr_k_1_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 1 }
 			}
@@ -4281,7 +5127,15 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 2 }
 			}
-			wr_k_2_what_visible = {
+			wr_k_2_st_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 2 }
+			}
+			wr_k_2_vp_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 2 }
+			}
+			wr_k_2_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 2 }
 			}
@@ -4312,7 +5166,15 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 3 }
 			}
-			wr_k_3_what_visible = {
+			wr_k_3_st_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 3 }
+			}
+			wr_k_3_vp_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 3 }
+			}
+			wr_k_3_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 3 }
 			}
@@ -4339,40 +5201,17 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 4 }
 			}
-			wr_k_4_what_visible = {
+			wr_k_4_st_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 4 }
 			}
-			wr_k_5_rank_1_visible = {
+			wr_k_4_vp_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
-				check_variable = { mod1440_wr_k_5_rank = 1 }
+				check_variable = { mod1440_wr_k_n > 4 }
 			}
-			wr_k_5_rank_2_visible = {
+			wr_k_4_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
-				check_variable = { mod1440_wr_k_5_rank = 2 }
-			}
-			wr_k_5_rank_3_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
-				check_variable = { mod1440_wr_k_5_rank = 3 }
-			}
-			wr_k_5_stripe_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
-			}
-			wr_k_5_face_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
-			}
-			wr_k_5_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
-			}
-			wr_k_5_what_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 5 }
+				check_variable = { mod1440_wr_k_n > 4 }
 			}
 			wr_ln_none_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -4402,6 +5241,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 0 }
 				check_variable = { mod1440_wr_ln_sa^0 = 3 }
+			}
+			wr_ln_0_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 0 }
+				check_variable = { mod1440_wr_ln_sa^0 < 2 }
 			}
 			wr_ln_0_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -4436,7 +5280,12 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 1 }
 				check_variable = { mod1440_wr_ln_sa^1 = 3 }
 			}
-			wr_ln_1_stripe_visible = {
+			wr_ln_1_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 1 }
+				check_variable = { mod1440_wr_ln_sa^1 < 2 }
+			}
+			wr_ln_1_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 1 }
 			}
@@ -4473,6 +5322,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 2 }
 				check_variable = { mod1440_wr_ln_sa^2 = 3 }
 			}
+			wr_ln_2_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 2 }
+				check_variable = { mod1440_wr_ln_sa^2 < 2 }
+			}
 			wr_ln_2_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 2 }
@@ -4506,7 +5360,12 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 3 }
 				check_variable = { mod1440_wr_ln_sa^3 = 3 }
 			}
-			wr_ln_3_stripe_visible = {
+			wr_ln_3_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 3 }
+				check_variable = { mod1440_wr_ln_sa^3 < 2 }
+			}
+			wr_ln_3_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 3 }
 			}
@@ -4543,6 +5402,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 4 }
 				check_variable = { mod1440_wr_ln_sa^4 = 3 }
 			}
+			wr_ln_4_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 4 }
+				check_variable = { mod1440_wr_ln_sa^4 < 2 }
+			}
 			wr_ln_4_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 4 }
@@ -4576,7 +5440,12 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 5 }
 				check_variable = { mod1440_wr_ln_sa^5 = 3 }
 			}
-			wr_ln_5_stripe_visible = {
+			wr_ln_5_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 5 }
+				check_variable = { mod1440_wr_ln_sa^5 < 2 }
+			}
+			wr_ln_5_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 5 }
 			}
@@ -4613,6 +5482,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 6 }
 				check_variable = { mod1440_wr_ln_sa^6 = 3 }
 			}
+			wr_ln_6_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 6 }
+				check_variable = { mod1440_wr_ln_sa^6 < 2 }
+			}
 			wr_ln_6_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 6 }
@@ -4646,7 +5520,12 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 7 }
 				check_variable = { mod1440_wr_ln_sa^7 = 3 }
 			}
-			wr_ln_7_stripe_visible = {
+			wr_ln_7_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 7 }
+				check_variable = { mod1440_wr_ln_sa^7 < 2 }
+			}
+			wr_ln_7_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 7 }
 			}
@@ -4683,6 +5562,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 8 }
 				check_variable = { mod1440_wr_ln_sa^8 = 3 }
 			}
+			wr_ln_8_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 8 }
+				check_variable = { mod1440_wr_ln_sa^8 < 2 }
+			}
 			wr_ln_8_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 8 }
@@ -4716,7 +5600,12 @@ scripted_gui = {
 				check_variable = { mod1440_wr_ln_n > 9 }
 				check_variable = { mod1440_wr_ln_sa^9 = 3 }
 			}
-			wr_ln_9_stripe_visible = {
+			wr_ln_9_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_ln_n > 9 }
+				check_variable = { mod1440_wr_ln_sa^9 < 2 }
+			}
+			wr_ln_9_bg_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 9 }
 			}
@@ -4728,355 +5617,1701 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_ln_n > 9 }
 			}
-			wr_ln_10_w_visible = {
+			wr_l1_head_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+			}
+			wr_l1_head_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+			}
+			wr_l1_10_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 				check_variable = { mod1440_wr_ln_fam^10 = 1 }
 			}
-			wr_ln_10_t_visible = {
+			wr_l1_10_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^10 = 1 } }
 			}
-			wr_ln_10_go_visible = {
+			wr_l1_10_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 				check_variable = { mod1440_wr_ln_sa^10 > 1 }
 			}
-			wr_ln_10_s_visible = {
+			wr_l1_10_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 				check_variable = { mod1440_wr_ln_sa^10 = 2 }
 			}
-			wr_ln_10_p_visible = {
+			wr_l1_10_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 				check_variable = { mod1440_wr_ln_sa^10 = 3 }
 			}
-			wr_ln_10_d_visible = {
+			wr_l1_10_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				check_variable = { mod1440_wr_ln_sa^10 < 2 }
+			}
+			wr_l1_10_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 			}
-			wr_ln_10_visible = {
+			wr_l1_10_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 10 }
 			}
-			wr_ln_11_w_visible = {
+			wr_l1_11_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 				check_variable = { mod1440_wr_ln_fam^11 = 1 }
 			}
-			wr_ln_11_t_visible = {
+			wr_l1_11_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^11 = 1 } }
 			}
-			wr_ln_11_go_visible = {
+			wr_l1_11_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 				check_variable = { mod1440_wr_ln_sa^11 > 1 }
 			}
-			wr_ln_11_s_visible = {
+			wr_l1_11_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 				check_variable = { mod1440_wr_ln_sa^11 = 2 }
 			}
-			wr_ln_11_p_visible = {
+			wr_l1_11_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 				check_variable = { mod1440_wr_ln_sa^11 = 3 }
 			}
-			wr_ln_11_stripe_visible = {
+			wr_l1_11_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				check_variable = { mod1440_wr_ln_sa^11 < 2 }
+			}
+			wr_l1_11_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 			}
-			wr_ln_11_d_visible = {
+			wr_l1_11_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 			}
-			wr_ln_11_visible = {
+			wr_l1_11_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 11 }
 			}
-			wr_ln_12_w_visible = {
+			wr_l1_12_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 				check_variable = { mod1440_wr_ln_fam^12 = 1 }
 			}
-			wr_ln_12_t_visible = {
+			wr_l1_12_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^12 = 1 } }
 			}
-			wr_ln_12_go_visible = {
+			wr_l1_12_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 				check_variable = { mod1440_wr_ln_sa^12 > 1 }
 			}
-			wr_ln_12_s_visible = {
+			wr_l1_12_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 				check_variable = { mod1440_wr_ln_sa^12 = 2 }
 			}
-			wr_ln_12_p_visible = {
+			wr_l1_12_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 				check_variable = { mod1440_wr_ln_sa^12 = 3 }
 			}
-			wr_ln_12_d_visible = {
+			wr_l1_12_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				check_variable = { mod1440_wr_ln_sa^12 < 2 }
+			}
+			wr_l1_12_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 			}
-			wr_ln_12_visible = {
+			wr_l1_12_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 12 }
 			}
-			wr_ln_13_w_visible = {
+			wr_l1_13_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 				check_variable = { mod1440_wr_ln_fam^13 = 1 }
 			}
-			wr_ln_13_t_visible = {
+			wr_l1_13_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^13 = 1 } }
 			}
-			wr_ln_13_go_visible = {
+			wr_l1_13_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 				check_variable = { mod1440_wr_ln_sa^13 > 1 }
 			}
-			wr_ln_13_s_visible = {
+			wr_l1_13_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 				check_variable = { mod1440_wr_ln_sa^13 = 2 }
 			}
-			wr_ln_13_p_visible = {
+			wr_l1_13_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 				check_variable = { mod1440_wr_ln_sa^13 = 3 }
 			}
-			wr_ln_13_stripe_visible = {
+			wr_l1_13_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				check_variable = { mod1440_wr_ln_sa^13 < 2 }
+			}
+			wr_l1_13_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 			}
-			wr_ln_13_d_visible = {
+			wr_l1_13_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 			}
-			wr_ln_13_visible = {
+			wr_l1_13_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 13 }
 			}
-			wr_ln_14_w_visible = {
+			wr_l1_14_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 				check_variable = { mod1440_wr_ln_fam^14 = 1 }
 			}
-			wr_ln_14_t_visible = {
+			wr_l1_14_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^14 = 1 } }
 			}
-			wr_ln_14_go_visible = {
+			wr_l1_14_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 				check_variable = { mod1440_wr_ln_sa^14 > 1 }
 			}
-			wr_ln_14_s_visible = {
+			wr_l1_14_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 				check_variable = { mod1440_wr_ln_sa^14 = 2 }
 			}
-			wr_ln_14_p_visible = {
+			wr_l1_14_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 				check_variable = { mod1440_wr_ln_sa^14 = 3 }
 			}
-			wr_ln_14_d_visible = {
+			wr_l1_14_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				check_variable = { mod1440_wr_ln_sa^14 < 2 }
+			}
+			wr_l1_14_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 			}
-			wr_ln_14_visible = {
+			wr_l1_14_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 14 }
 			}
-			wr_ln_15_w_visible = {
+			wr_l1_15_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 				check_variable = { mod1440_wr_ln_fam^15 = 1 }
 			}
-			wr_ln_15_t_visible = {
+			wr_l1_15_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^15 = 1 } }
 			}
-			wr_ln_15_go_visible = {
+			wr_l1_15_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 				check_variable = { mod1440_wr_ln_sa^15 > 1 }
 			}
-			wr_ln_15_s_visible = {
+			wr_l1_15_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 				check_variable = { mod1440_wr_ln_sa^15 = 2 }
 			}
-			wr_ln_15_p_visible = {
+			wr_l1_15_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 				check_variable = { mod1440_wr_ln_sa^15 = 3 }
 			}
-			wr_ln_15_stripe_visible = {
+			wr_l1_15_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				check_variable = { mod1440_wr_ln_sa^15 < 2 }
+			}
+			wr_l1_15_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 			}
-			wr_ln_15_d_visible = {
+			wr_l1_15_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 			}
-			wr_ln_15_visible = {
+			wr_l1_15_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 15 }
 			}
-			wr_ln_16_w_visible = {
+			wr_l1_16_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 				check_variable = { mod1440_wr_ln_fam^16 = 1 }
 			}
-			wr_ln_16_t_visible = {
+			wr_l1_16_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^16 = 1 } }
 			}
-			wr_ln_16_go_visible = {
+			wr_l1_16_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 				check_variable = { mod1440_wr_ln_sa^16 > 1 }
 			}
-			wr_ln_16_s_visible = {
+			wr_l1_16_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 				check_variable = { mod1440_wr_ln_sa^16 = 2 }
 			}
-			wr_ln_16_p_visible = {
+			wr_l1_16_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 				check_variable = { mod1440_wr_ln_sa^16 = 3 }
 			}
-			wr_ln_16_d_visible = {
+			wr_l1_16_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				check_variable = { mod1440_wr_ln_sa^16 < 2 }
+			}
+			wr_l1_16_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 			}
-			wr_ln_16_visible = {
+			wr_l1_16_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 16 }
 			}
-			wr_ln_17_w_visible = {
+			wr_l1_17_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 				check_variable = { mod1440_wr_ln_fam^17 = 1 }
 			}
-			wr_ln_17_t_visible = {
+			wr_l1_17_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^17 = 1 } }
 			}
-			wr_ln_17_go_visible = {
+			wr_l1_17_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 				check_variable = { mod1440_wr_ln_sa^17 > 1 }
 			}
-			wr_ln_17_s_visible = {
+			wr_l1_17_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 				check_variable = { mod1440_wr_ln_sa^17 = 2 }
 			}
-			wr_ln_17_p_visible = {
+			wr_l1_17_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 				check_variable = { mod1440_wr_ln_sa^17 = 3 }
 			}
-			wr_ln_17_stripe_visible = {
+			wr_l1_17_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				check_variable = { mod1440_wr_ln_sa^17 < 2 }
+			}
+			wr_l1_17_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 			}
-			wr_ln_17_d_visible = {
+			wr_l1_17_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 			}
-			wr_ln_17_visible = {
+			wr_l1_17_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 17 }
 			}
-			wr_ln_18_w_visible = {
+			wr_l1_18_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 				check_variable = { mod1440_wr_ln_fam^18 = 1 }
 			}
-			wr_ln_18_t_visible = {
+			wr_l1_18_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^18 = 1 } }
 			}
-			wr_ln_18_go_visible = {
+			wr_l1_18_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 				check_variable = { mod1440_wr_ln_sa^18 > 1 }
 			}
-			wr_ln_18_s_visible = {
+			wr_l1_18_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 				check_variable = { mod1440_wr_ln_sa^18 = 2 }
 			}
-			wr_ln_18_p_visible = {
+			wr_l1_18_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 				check_variable = { mod1440_wr_ln_sa^18 = 3 }
 			}
-			wr_ln_18_d_visible = {
+			wr_l1_18_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				check_variable = { mod1440_wr_ln_sa^18 < 2 }
+			}
+			wr_l1_18_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 			}
-			wr_ln_18_visible = {
+			wr_l1_18_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 18 }
 			}
-			wr_ln_19_w_visible = {
+			wr_l1_19_w_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 				check_variable = { mod1440_wr_ln_fam^19 = 1 }
 			}
-			wr_ln_19_t_visible = {
+			wr_l1_19_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 				NOT = { check_variable = { mod1440_wr_ln_fam^19 = 1 } }
 			}
-			wr_ln_19_go_visible = {
+			wr_l1_19_go_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 				check_variable = { mod1440_wr_ln_sa^19 > 1 }
 			}
-			wr_ln_19_s_visible = {
+			wr_l1_19_s_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 				check_variable = { mod1440_wr_ln_sa^19 = 2 }
 			}
-			wr_ln_19_p_visible = {
+			wr_l1_19_p_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 				check_variable = { mod1440_wr_ln_sa^19 = 3 }
 			}
-			wr_ln_19_stripe_visible = {
+			wr_l1_19_b_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				check_variable = { mod1440_wr_ln_sa^19 < 2 }
+			}
+			wr_l1_19_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 			}
-			wr_ln_19_d_visible = {
+			wr_l1_19_d_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
 			}
-			wr_ln_19_visible = {
+			wr_l1_19_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
 				check_variable = { mod1440_wr_ln_n > 19 }
+			}
+			wr_l1_20_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_fam^20 = 1 }
+			}
+			wr_l1_20_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^20 = 1 } }
+			}
+			wr_l1_20_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 > 1 }
+			}
+			wr_l1_20_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 = 2 }
+			}
+			wr_l1_20_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 = 3 }
+			}
+			wr_l1_20_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 < 2 }
+			}
+			wr_l1_20_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+			}
+			wr_l1_20_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+			}
+			wr_l1_21_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_fam^21 = 1 }
+			}
+			wr_l1_21_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^21 = 1 } }
+			}
+			wr_l1_21_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 > 1 }
+			}
+			wr_l1_21_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 = 2 }
+			}
+			wr_l1_21_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 = 3 }
+			}
+			wr_l1_21_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 < 2 }
+			}
+			wr_l1_21_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+			}
+			wr_l1_21_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+			}
+			wr_l1_21_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+			}
+			wr_l1_22_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_fam^22 = 1 }
+			}
+			wr_l1_22_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^22 = 1 } }
+			}
+			wr_l1_22_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 > 1 }
+			}
+			wr_l1_22_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 = 2 }
+			}
+			wr_l1_22_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 = 3 }
+			}
+			wr_l1_22_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 < 2 }
+			}
+			wr_l1_22_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+			}
+			wr_l1_22_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+			}
+			wr_l1_23_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+				check_variable = { mod1440_wr_ln_fam^23 = 1 }
+			}
+			wr_l1_23_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^23 = 1 } }
+			}
+			wr_l1_23_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+				check_variable = { mod1440_wr_ln_sa^23 > 1 }
+			}
+			wr_l1_23_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+				check_variable = { mod1440_wr_ln_sa^23 = 2 }
+			}
+			wr_l1_23_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+				check_variable = { mod1440_wr_ln_sa^23 = 3 }
+			}
+			wr_l1_23_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+				check_variable = { mod1440_wr_ln_sa^23 < 2 }
+			}
+			wr_l1_23_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+			}
+			wr_l1_23_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+			}
+			wr_l1_23_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 23 }
+			}
+			wr_l1_24_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+				check_variable = { mod1440_wr_ln_fam^24 = 1 }
+			}
+			wr_l1_24_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^24 = 1 } }
+			}
+			wr_l1_24_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+				check_variable = { mod1440_wr_ln_sa^24 > 1 }
+			}
+			wr_l1_24_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+				check_variable = { mod1440_wr_ln_sa^24 = 2 }
+			}
+			wr_l1_24_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+				check_variable = { mod1440_wr_ln_sa^24 = 3 }
+			}
+			wr_l1_24_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+				check_variable = { mod1440_wr_ln_sa^24 < 2 }
+			}
+			wr_l1_24_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+			}
+			wr_l1_24_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 24 }
+			}
+			wr_l1_25_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+				check_variable = { mod1440_wr_ln_fam^25 = 1 }
+			}
+			wr_l1_25_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^25 = 1 } }
+			}
+			wr_l1_25_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+				check_variable = { mod1440_wr_ln_sa^25 > 1 }
+			}
+			wr_l1_25_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+				check_variable = { mod1440_wr_ln_sa^25 = 2 }
+			}
+			wr_l1_25_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+				check_variable = { mod1440_wr_ln_sa^25 = 3 }
+			}
+			wr_l1_25_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+				check_variable = { mod1440_wr_ln_sa^25 < 2 }
+			}
+			wr_l1_25_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+			}
+			wr_l1_25_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+			}
+			wr_l1_25_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 25 }
+			}
+			wr_l1_26_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+				check_variable = { mod1440_wr_ln_fam^26 = 1 }
+			}
+			wr_l1_26_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^26 = 1 } }
+			}
+			wr_l1_26_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+				check_variable = { mod1440_wr_ln_sa^26 > 1 }
+			}
+			wr_l1_26_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+				check_variable = { mod1440_wr_ln_sa^26 = 2 }
+			}
+			wr_l1_26_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+				check_variable = { mod1440_wr_ln_sa^26 = 3 }
+			}
+			wr_l1_26_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+				check_variable = { mod1440_wr_ln_sa^26 < 2 }
+			}
+			wr_l1_26_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+			}
+			wr_l1_26_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 26 }
+			}
+			wr_l1_27_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+				check_variable = { mod1440_wr_ln_fam^27 = 1 }
+			}
+			wr_l1_27_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^27 = 1 } }
+			}
+			wr_l1_27_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+				check_variable = { mod1440_wr_ln_sa^27 > 1 }
+			}
+			wr_l1_27_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+				check_variable = { mod1440_wr_ln_sa^27 = 2 }
+			}
+			wr_l1_27_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+				check_variable = { mod1440_wr_ln_sa^27 = 3 }
+			}
+			wr_l1_27_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+				check_variable = { mod1440_wr_ln_sa^27 < 2 }
+			}
+			wr_l1_27_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+			}
+			wr_l1_27_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+			}
+			wr_l1_27_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 27 }
+			}
+			wr_l1_28_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+				check_variable = { mod1440_wr_ln_fam^28 = 1 }
+			}
+			wr_l1_28_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^28 = 1 } }
+			}
+			wr_l1_28_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+				check_variable = { mod1440_wr_ln_sa^28 > 1 }
+			}
+			wr_l1_28_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+				check_variable = { mod1440_wr_ln_sa^28 = 2 }
+			}
+			wr_l1_28_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+				check_variable = { mod1440_wr_ln_sa^28 = 3 }
+			}
+			wr_l1_28_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+				check_variable = { mod1440_wr_ln_sa^28 < 2 }
+			}
+			wr_l1_28_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+			}
+			wr_l1_28_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 28 }
+			}
+			wr_l1_29_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+				check_variable = { mod1440_wr_ln_fam^29 = 1 }
+			}
+			wr_l1_29_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^29 = 1 } }
+			}
+			wr_l1_29_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+				check_variable = { mod1440_wr_ln_sa^29 > 1 }
+			}
+			wr_l1_29_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+				check_variable = { mod1440_wr_ln_sa^29 = 2 }
+			}
+			wr_l1_29_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+				check_variable = { mod1440_wr_ln_sa^29 = 3 }
+			}
+			wr_l1_29_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+				check_variable = { mod1440_wr_ln_sa^29 < 2 }
+			}
+			wr_l1_29_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+			}
+			wr_l1_29_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+			}
+			wr_l1_29_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 29 }
+			}
+			wr_l1_30_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+				check_variable = { mod1440_wr_ln_fam^30 = 1 }
+			}
+			wr_l1_30_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^30 = 1 } }
+			}
+			wr_l1_30_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+				check_variable = { mod1440_wr_ln_sa^30 > 1 }
+			}
+			wr_l1_30_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+				check_variable = { mod1440_wr_ln_sa^30 = 2 }
+			}
+			wr_l1_30_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+				check_variable = { mod1440_wr_ln_sa^30 = 3 }
+			}
+			wr_l1_30_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+				check_variable = { mod1440_wr_ln_sa^30 < 2 }
+			}
+			wr_l1_30_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+			}
+			wr_l1_30_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count = 1 }
+				check_variable = { mod1440_wr_ln_n > 30 }
+			}
+			wr_en_head_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_h_enemy_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_h_joined_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_h_end_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_h_theirs_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_h_ours_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_h_states_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_en_list_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+			}
+			wr_l2_head_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+			}
+			wr_l2_head_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+			}
+			wr_l2_10_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				check_variable = { mod1440_wr_ln_fam^10 = 1 }
+			}
+			wr_l2_10_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^10 = 1 } }
+			}
+			wr_l2_10_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				check_variable = { mod1440_wr_ln_sa^10 > 1 }
+			}
+			wr_l2_10_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				check_variable = { mod1440_wr_ln_sa^10 = 2 }
+			}
+			wr_l2_10_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				check_variable = { mod1440_wr_ln_sa^10 = 3 }
+			}
+			wr_l2_10_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+				check_variable = { mod1440_wr_ln_sa^10 < 2 }
+			}
+			wr_l2_10_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+			}
+			wr_l2_10_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 10 }
+			}
+			wr_l2_11_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				check_variable = { mod1440_wr_ln_fam^11 = 1 }
+			}
+			wr_l2_11_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^11 = 1 } }
+			}
+			wr_l2_11_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				check_variable = { mod1440_wr_ln_sa^11 > 1 }
+			}
+			wr_l2_11_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				check_variable = { mod1440_wr_ln_sa^11 = 2 }
+			}
+			wr_l2_11_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				check_variable = { mod1440_wr_ln_sa^11 = 3 }
+			}
+			wr_l2_11_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+				check_variable = { mod1440_wr_ln_sa^11 < 2 }
+			}
+			wr_l2_11_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+			}
+			wr_l2_11_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+			}
+			wr_l2_11_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 11 }
+			}
+			wr_l2_12_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				check_variable = { mod1440_wr_ln_fam^12 = 1 }
+			}
+			wr_l2_12_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^12 = 1 } }
+			}
+			wr_l2_12_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				check_variable = { mod1440_wr_ln_sa^12 > 1 }
+			}
+			wr_l2_12_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				check_variable = { mod1440_wr_ln_sa^12 = 2 }
+			}
+			wr_l2_12_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				check_variable = { mod1440_wr_ln_sa^12 = 3 }
+			}
+			wr_l2_12_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+				check_variable = { mod1440_wr_ln_sa^12 < 2 }
+			}
+			wr_l2_12_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+			}
+			wr_l2_12_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 12 }
+			}
+			wr_l2_13_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				check_variable = { mod1440_wr_ln_fam^13 = 1 }
+			}
+			wr_l2_13_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^13 = 1 } }
+			}
+			wr_l2_13_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				check_variable = { mod1440_wr_ln_sa^13 > 1 }
+			}
+			wr_l2_13_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				check_variable = { mod1440_wr_ln_sa^13 = 2 }
+			}
+			wr_l2_13_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				check_variable = { mod1440_wr_ln_sa^13 = 3 }
+			}
+			wr_l2_13_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+				check_variable = { mod1440_wr_ln_sa^13 < 2 }
+			}
+			wr_l2_13_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+			}
+			wr_l2_13_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+			}
+			wr_l2_13_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 13 }
+			}
+			wr_l2_14_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				check_variable = { mod1440_wr_ln_fam^14 = 1 }
+			}
+			wr_l2_14_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^14 = 1 } }
+			}
+			wr_l2_14_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				check_variable = { mod1440_wr_ln_sa^14 > 1 }
+			}
+			wr_l2_14_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				check_variable = { mod1440_wr_ln_sa^14 = 2 }
+			}
+			wr_l2_14_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				check_variable = { mod1440_wr_ln_sa^14 = 3 }
+			}
+			wr_l2_14_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+				check_variable = { mod1440_wr_ln_sa^14 < 2 }
+			}
+			wr_l2_14_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+			}
+			wr_l2_14_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 14 }
+			}
+			wr_l2_15_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				check_variable = { mod1440_wr_ln_fam^15 = 1 }
+			}
+			wr_l2_15_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^15 = 1 } }
+			}
+			wr_l2_15_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				check_variable = { mod1440_wr_ln_sa^15 > 1 }
+			}
+			wr_l2_15_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				check_variable = { mod1440_wr_ln_sa^15 = 2 }
+			}
+			wr_l2_15_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				check_variable = { mod1440_wr_ln_sa^15 = 3 }
+			}
+			wr_l2_15_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+				check_variable = { mod1440_wr_ln_sa^15 < 2 }
+			}
+			wr_l2_15_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+			}
+			wr_l2_15_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+			}
+			wr_l2_15_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 15 }
+			}
+			wr_l2_16_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				check_variable = { mod1440_wr_ln_fam^16 = 1 }
+			}
+			wr_l2_16_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^16 = 1 } }
+			}
+			wr_l2_16_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				check_variable = { mod1440_wr_ln_sa^16 > 1 }
+			}
+			wr_l2_16_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				check_variable = { mod1440_wr_ln_sa^16 = 2 }
+			}
+			wr_l2_16_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				check_variable = { mod1440_wr_ln_sa^16 = 3 }
+			}
+			wr_l2_16_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+				check_variable = { mod1440_wr_ln_sa^16 < 2 }
+			}
+			wr_l2_16_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+			}
+			wr_l2_16_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 16 }
+			}
+			wr_l2_17_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				check_variable = { mod1440_wr_ln_fam^17 = 1 }
+			}
+			wr_l2_17_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^17 = 1 } }
+			}
+			wr_l2_17_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				check_variable = { mod1440_wr_ln_sa^17 > 1 }
+			}
+			wr_l2_17_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				check_variable = { mod1440_wr_ln_sa^17 = 2 }
+			}
+			wr_l2_17_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				check_variable = { mod1440_wr_ln_sa^17 = 3 }
+			}
+			wr_l2_17_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+				check_variable = { mod1440_wr_ln_sa^17 < 2 }
+			}
+			wr_l2_17_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+			}
+			wr_l2_17_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+			}
+			wr_l2_17_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 17 }
+			}
+			wr_l2_18_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				check_variable = { mod1440_wr_ln_fam^18 = 1 }
+			}
+			wr_l2_18_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^18 = 1 } }
+			}
+			wr_l2_18_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				check_variable = { mod1440_wr_ln_sa^18 > 1 }
+			}
+			wr_l2_18_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				check_variable = { mod1440_wr_ln_sa^18 = 2 }
+			}
+			wr_l2_18_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				check_variable = { mod1440_wr_ln_sa^18 = 3 }
+			}
+			wr_l2_18_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+				check_variable = { mod1440_wr_ln_sa^18 < 2 }
+			}
+			wr_l2_18_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+			}
+			wr_l2_18_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 18 }
+			}
+			wr_l2_19_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				check_variable = { mod1440_wr_ln_fam^19 = 1 }
+			}
+			wr_l2_19_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^19 = 1 } }
+			}
+			wr_l2_19_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				check_variable = { mod1440_wr_ln_sa^19 > 1 }
+			}
+			wr_l2_19_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				check_variable = { mod1440_wr_ln_sa^19 = 2 }
+			}
+			wr_l2_19_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				check_variable = { mod1440_wr_ln_sa^19 = 3 }
+			}
+			wr_l2_19_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+				check_variable = { mod1440_wr_ln_sa^19 < 2 }
+			}
+			wr_l2_19_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+			}
+			wr_l2_19_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+			}
+			wr_l2_19_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 19 }
+			}
+			wr_l2_20_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_fam^20 = 1 }
+			}
+			wr_l2_20_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^20 = 1 } }
+			}
+			wr_l2_20_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 > 1 }
+			}
+			wr_l2_20_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 = 2 }
+			}
+			wr_l2_20_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 = 3 }
+			}
+			wr_l2_20_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+				check_variable = { mod1440_wr_ln_sa^20 < 2 }
+			}
+			wr_l2_20_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+			}
+			wr_l2_20_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 20 }
+			}
+			wr_l2_21_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_fam^21 = 1 }
+			}
+			wr_l2_21_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^21 = 1 } }
+			}
+			wr_l2_21_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 > 1 }
+			}
+			wr_l2_21_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 = 2 }
+			}
+			wr_l2_21_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 = 3 }
+			}
+			wr_l2_21_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+				check_variable = { mod1440_wr_ln_sa^21 < 2 }
+			}
+			wr_l2_21_bg_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+			}
+			wr_l2_21_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+			}
+			wr_l2_21_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 21 }
+			}
+			wr_l2_22_w_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_fam^22 = 1 }
+			}
+			wr_l2_22_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				NOT = { check_variable = { mod1440_wr_ln_fam^22 = 1 } }
+			}
+			wr_l2_22_go_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 > 1 }
+			}
+			wr_l2_22_s_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 = 2 }
+			}
+			wr_l2_22_p_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 = 3 }
+			}
+			wr_l2_22_b_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+				check_variable = { mod1440_wr_ln_sa^22 < 2 }
+			}
+			wr_l2_22_d_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
+			}
+			wr_l2_22_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_c_count > 1 }
+				check_variable = { mod1440_wr_ln_n > 22 }
 			}
 			wr_c_title_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -5088,9 +7323,6 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
 			wr_c_us_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-			}
-			wr_c_them_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
 			wr_c_track_l_visible = {
@@ -5108,23 +7340,112 @@ scripted_gui = {
 			wr_c_track_to_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_c_face_us_visible = {
+			wr_c_side_us_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_k_title_visible = {
+			wr_c_side_them_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_k_note_0_visible = {
+			wr_c_fig_us_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_k_note_1_visible = {
+			wr_c_fig_us_t_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_ln_title_visible = {
+			wr_c_fig_us_band_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 			}
-			wr_ln_note_visible = {
+			wr_c_fig_us_band_3_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_c_fig_them_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_c_fig_them_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_c_fig_them_band_1_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_c_fig_them_band_3_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_k_head_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_k_head_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_k_h_st_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_k_h_vp_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_k_h_cap_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_ln_head_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_ln_head_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_ln_all_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_ln_all_t_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+			}
+			wr_en_stripe_visible = {
+				check_variable = { mod1440_we_odd^i = 1 }
+				check_variable = { mod1440_we_pk^i = 0 }
+			}
+			wr_en_pick_visible = {
+				check_variable = { mod1440_we_pk^i = 1 }
+			}
+			wr_en_surr_visible = {
+				check_variable = { mod1440_we_open^i = 1 }
+			}
+			wr_en_end_1_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 1 }
+			}
+			wr_en_end_2_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 2 }
+			}
+			wr_en_end_3_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 3 }
+			}
+			wr_en_end_4_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 4 }
+			}
+			wr_en_end_5_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 5 }
+			}
+			wr_en_end_6_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 6 }
+			}
+			wr_en_end_7_visible = {
+				check_variable = { mod1440_we_open^i = 0 }
+				check_variable = { mod1440_we_oc^i = 7 }
+			}
+			wr_en_theirs_visible = {
+				check_variable = { mod1440_we_kus^i > -1 }
+			}
+			wr_en_theirs_none_visible = {
+				check_variable = { mod1440_we_kus^i < 0 }
+			}
+			wr_en_ours_visible = {
+				check_variable = { mod1440_we_kus^i > -1 }
+			}
+			wr_en_ours_none_visible = {
+				check_variable = { mod1440_we_kus^i < 0 }
 			}
 		}
 

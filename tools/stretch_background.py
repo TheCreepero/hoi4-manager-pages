@@ -1814,6 +1814,12 @@ JOBS = [
     {"source": "gfx/interface/intel_ledger/tab_small.dds", "output": "rec_tab_on.dds", "compose": lambda source: frame_of(source, 2, 1)},
     {"source": "gfx/interface/sort_button_140x29.dds", "output": "rec_sort_off.dds", "compose": lambda source: frame_of(source, 2, 0)},
     # --- end e-diary-wars ---
+    # --- E4 round 2 --- the three steel cards of the Wars page's left column (scratch/phases/E4/layout.json, the
+    # first page of this mod in the steel look): 548 wide, a head band of 27, cut from the steel bar
+    {"source": STEEL_BAR, "output": "wr_campaign.dds", "compose": lambda source: steel_piece(source, "steel", 548, 220, 27, 1.9, 15)},
+    {"source": STEEL_BAR, "output": "wr_today.dds", "compose": lambda source: steel_piece(source, "steel", 548, 188, 27, 1.9, 15)},
+    {"source": STEEL_BAR, "output": "wr_done.dds", "compose": lambda source: steel_piece(source, "steel", 548, 670, 27, 1.9, 15)},
+    # --- end E4 round 2 ---
     # --- d2-readiness ---
     {
         # The picture of mechanized equipment on Army Readiness (GFX_1440p_archetype_mechanized_equipment_medium):

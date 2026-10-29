@@ -960,6 +960,136 @@ mod1440_chk_pop_twice = {
 """).replace("    ", "\t")
 # --- end D10 ---
 
+# --- E4 round 2 ---
+# The Wars page after its redesign (2026-10-29), as Germany on 1 January 1936: a war of several enemies on one side, both
+# sides' dead from casualties_inflicted_by, a change of head of government during and after a war, and a save of the
+# build before (its rows without wars, dead and leaders). The new parts of a row are tools/build_records.py's.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_records import WR_NEW_3, WO_NEW_3, WR_PARTS  # noqa: E402
+
+
+def wars_row_log(table, extra):
+    """A line of game.log for every row of a table of the wars: its war, how it began, its dead, its heads."""
+    return ("\tfor_loop_effect = {\n\t\tstart = 0\n\t\tend = mod1440_%s_enemy^num\n\t\tvalue = c_i\n" % table
+            + "\t\tset_temp_variable = { c_v = mod1440_%s_enemy^c_i }\n" % table + extra
+            + '\t\tlog = "MOD1440 wr: %s [?c_v.GetTag] id [?mod1440_%s_id^c_i] grp [?mod1440_%s_grp^c_i] how [?mod1440_%s_how^c_i] '
+              'role [?mod1440_chk_role] kus [?mod1440_%s_kus^c_i] kthem [?mod1440_%s_kthem^c_i] now ours [?mod1440_chk_k1] theirs [?mod1440_chk_k2] '
+              'kday [?mod1440_%s_kday^c_i] lu0 [?mod1440_%s_lu0^c_i.GetName] lt0 [?mod1440_%s_lt0^c_i.GetName] lt1 [?mod1440_%s_lt1^c_i.GetName] '
+              'gt1 [?mod1440_%s_gt1^c_i]"\n' % ((table,) * 11)
+            + "\t}\n")
+
+
+READ_NOW = """\t\tset_variable = { mod1440_chk_k1 = -1 }
+\t\tset_variable = { mod1440_chk_k2 = -1 }
+\t\tset_variable = { mod1440_chk_role = 0 }
+\t\tif = { limit = { has_offensive_war_with = var:c_v } set_variable = { mod1440_chk_role = 1 } }
+\t\tif = {
+\t\t\tlimit = { var:c_v = { exists = yes } }
+\t\t\tset_variable = { mod1440_wr_kv = ROOT }
+\t\t\tset_variable = { mod1440_wr_ko = c_v }
+\t\t\tset_temp_variable = { kr_prev = 0 }
+\t\t\tmod1440_wr_kread = yes
+\t\t\tset_variable = { mod1440_chk_k1 = kr }
+\t\t\tset_variable = { mod1440_wr_kv = c_v }
+\t\t\tset_variable = { mod1440_wr_ko = ROOT }
+\t\t\tset_temp_variable = { kr_prev = 0 }
+\t\t\tmod1440_wr_kread = yes
+\t\t\tset_variable = { mod1440_chk_k2 = kr }
+\t\t}
+"""
+
+HISTORY += """
+# ---- Wars, E4 round 2
+
+# The United Kingdom and France join Poland's side of the war Germany declared (mod1440_chk_war first): one war of three
+# enemies on the page (has_war_together_with, has_offensive_war_with).
+mod1440_chk_ally_join = {
+\tENG = { add_to_war = { targeted_alliance = POL enemy = GER hostility_reason = asked_to_join } }
+\tFRA = { add_to_war = { targeted_alliance = POL enemy = GER hostility_reason = asked_to_join } }
+}
+
+# Every row of the wars: its war (grp), how it began, our role (1: our offensive war), the dead kept and read now from
+# zero (casualties_inflicted_by both ways, in thousands), the day the count began, the heads of government kept.
+mod1440_chk_wr_log = {
+\tlog = "MOD1440 wr: rows of today [?mod1440_wr_enemy^num], finished [?mod1440_wo_enemy^num], casualties_k [?casualties_k], all wars [?mod1440_h_cas_sum], inflicted [?mod1440_wr_kthem_all]"
+""" + wars_row_log("wr", READ_NOW) + wars_row_log("wo", READ_NOW) + """}
+
+# 100 full readings of the first enemy's dead (from zero each time), between two lines of game.log.
+mod1440_chk_kread_time = {
+\tlog = "MOD1440 wr: kread start"
+\tfor_loop_effect = {
+\t\tstart = 0
+\t\tend = 100
+\t\tvalue = c_n
+\t\tset_variable = { mod1440_wr_kv = ROOT }
+\t\tset_variable = { mod1440_wr_ko = mod1440_wr_enemy^0 }
+\t\tset_temp_variable = { kr_prev = 0 }
+\t\tmod1440_wr_kread = yes
+\t}
+\tlog = "MOD1440 wr: kread 100 readings done, last [?mod1440_wr_kn]"
+}
+
+# Poland's head of government retired during the war: the next day its row keeps the one of the first day (lt0) and the
+# new one (lt1).
+mod1440_chk_leader_change = {
+\tPOL = { retire_country_leader = yes }
+}
+
+# Our head of government retired (after a war ended): a finished war keeps ours of its last day.
+mod1440_chk_leader_change_us = {
+\tretire_country_leader = yes
+}
+
+# As a save of the build before E4 round 2: the rows without their wars, dead and leaders. Then the Records opened (or a
+# day run): mod1440_wr_grow gives them back.
+mod1440_chk_old4 = {
+""" + "".join("\tclear_array = mod1440_wr_%s\n" % part for part in WR_NEW_3) + "".join("\tclear_array = mod1440_wo_%s\n" % part for part in WO_NEW_3) + """\tmod1440_chk_sizes4 = yes
+}
+
+# E4 fix round 1: a row against the country itself. First the guard: mod1440_wr_open refuses it ("no war row for GER
+# against itself" in game.log, the count unchanged). Then a row written past the guard, as a save might hold one, and the
+# once-per-save repair of mod1440_wr_grow drops it ("a row of wr against the country itself was dropped").
+mod1440_chk_self_row = {
+\tlog = "MOD1440 check: self row, before: wr [?mod1440_wr_enemy^num] wars [?mod1440_wr_wars]"
+\tset_temp_variable = { wr_c = THIS }
+\tset_temp_variable = { wr_old = 0 }
+\tset_temp_variable = { wr_how = 1 }
+\tmod1440_wr_open = yes
+\tlog = "MOD1440 check: self row, after the guard: wr [?mod1440_wr_enemy^num] wars [?mod1440_wr_wars]"
+""" + "".join("\tadd_to_array = { mod1440_wr_%s = %s }\n" % (part, "THIS" if part == "enemy" else ("global.num_days" if part in ("day0", "kday") else ("global.date" if part == "since" else 0)))
+              for part in WR_PARTS) + """\tlog = "MOD1440 check: self row, written past the guard: wr [?mod1440_wr_enemy^num]"
+\tclear_variable = mod1440_wr_fix1
+\tmod1440_wr_grow = yes
+\tlog = "MOD1440 check: self row, after the repair: wr [?mod1440_wr_enemy^num] wars [?mod1440_wr_wars]"
+}
+
+# E4 fix round 1: the user's save showed an enemy with the player's own name and flag that joined a war and was annexed
+# on its last day: most likely the other side of a civil war (a country of its own that keeps the name and flag). A
+# civil war in Germany, then mod1440_chk_civil_log the next day: the rebels' tag, name, original tag and whether they
+# are a dynamic country, beside the player's.
+mod1440_chk_civil_war = {
+\tstart_civil_war = { ideology = communism size = 0.3 }
+}
+
+mod1440_chk_civil_log = {
+\tlog = "MOD1440 check: civil, the player [This.GetTag] [This.GetName]"
+\tfor_each_loop = {
+\t\tarray = mod1440_wr_enemy
+\t\tvalue = c_v
+\t\tset_variable = { mod1440_chk_dyn = 0 }
+\t\tif = { limit = { var:c_v = { is_dynamic_country = yes } } set_variable = { mod1440_chk_dyn = 1 } }
+\t\tlog = "MOD1440 check: civil, enemy [?c_v.GetTag] [?c_v.GetName] dynamic [?mod1440_chk_dyn]"
+\t}
+}
+
+# How long every new part is beside the rows.
+mod1440_chk_sizes4 = {
+\tlog = "MOD1440 check: sizes4 wr [?mod1440_wr_enemy^num]: """ + " ".join("%s [?mod1440_wr_%s^num]" % (p, p) for p in WR_NEW_3) + """"
+\tlog = "MOD1440 check: sizes4 wo [?mod1440_wo_enemy^num]: """ + " ".join("%s [?mod1440_wo_%s^num]" % (p, p) for p in WO_NEW_3) + """"
+}
+"""
+# --- end E4 round 2 ---
+
 if __name__ == "__main__":
     if "--restore" in sys.argv:
         if os.path.isfile(PATH):
