@@ -1,0 +1,21 @@
+[
+  {"click": [1456, 782], "wait": 1.2, "_note": "Special Project Completed: Ok. Road to 56 and Vanilla Navy Rework hand out eight or more at the start (tools/playsets/reordered-pack-usa.json, 2026-10-13; E7 launch 2: two more were left open). Twelve clicks; one that finds no window lands on the map, which the clean state after these steps puts right"},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.2},
+  {"click": [1456, 782], "wait": 1.5},
+  {"click": [1386, 652], "wait": 2.0, "_note": "the event of +2 Research Slots: Awesome! (assumed from the standalone's tech tree; a click on the map where it is missing)"},
+  {"click": [1220, 1102], "wait": 2.0, "_note": "FLTE Ver 0.2 / UTTNH Foxr Edition with its buttons: Continue (E7 launch 1, scratch/phases/E7/checks/evidence-1-rt56-window-left-open.png, the button at 1100..1330 x 1084..1120). Lies below the window without buttons: a click on the map when that one shows"},
+  {"click": [1626, 912], "wait": 2.0, "_note": "FLTE Ver 0.2 / UTTNH Foxr Edition without buttons (E7 launch 2, about 879..1681 x 480..960): its lower right arrow corner closes it (evidence-2-item1-flte.png). On the picture of the window with buttons when that one shows, which does nothing"},
+  {"click": [1386, 836], "wait": 2.0, "_note": "Welcome to the Road!: Continue (E7 launch 2: 1388,836, under the FLTE window)"},
+  {"click": [1626, 912], "wait": 1.5, "_note": "the FLTE window once more, in case it came up after Welcome"},
+  {"click": [1386, 836], "wait": 1.5, "_note": "Welcome once more, in case it came up after the FLTE window"},
+  {"click": [1220, 1102], "wait": 1.5, "_note": "and the FLTE window with buttons once more, as launch 1 found it under Welcome"}
+]

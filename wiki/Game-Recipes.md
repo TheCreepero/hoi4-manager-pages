@@ -156,6 +156,7 @@ Start-HoiNewGame
 
 - The launcher's files are in `Documents\Paradox Interactive\Hearts of Iron IV\mod`; the `name` line of each says which mod it is. This mod goes last.
 - From there on `Invoke-GameSteps.ps1` works as always, and `-Stop` puts the user's playset back.
+- In one command (phase E7): `.\tools\Invoke-GameCheck.ps1 <scene> -Mods mod/<file>.mod -AfterLoad <steps> -TimeoutSec 900` loads the named launcher files before this mod (the DevLink check still applies), closes what they open at the start, runs the scene and puts the playset back. `tools/playsets/rt56.json` closes what Road to 56 (`mod/rt56-vnr-utt-standalone-v16.mod`) is expected to open, taken from the user's playset of 2026-10-13; a click whose window is missing lands on the map before the reset.
 - Another country: the console command `tag USA`. The scripted pages follow, and their first daily round for that country runs at the next midnight.
 - An event of the other mod: `event <id>` in the console, then a click on its option.
 

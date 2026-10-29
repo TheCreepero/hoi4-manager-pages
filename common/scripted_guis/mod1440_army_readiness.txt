@@ -202,7 +202,7 @@ scripted_gui = {
 				x = mod1440_ar_al_arrow_x
 			}
 			ar_row_face = {
-				image = "[?mod1440_p.GetTokenKey]"
+				image = "portrait"
 			}
 			ar_row_plan_bar = {
 				frame = mod1440_al_plan
@@ -570,12 +570,6 @@ scripted_gui = {
 			}
 			ar_row_pick_visible = {
 				check_variable = { mod1440_al_pick = 1 }
-			}
-			ar_row_face_visible = {
-				check_variable = { mod1440_p_ver > 0 }
-			}
-			ar_row_unknown_visible = {
-				NOT = { check_variable = { mod1440_p_ver > 0 } }
 			}
 			ar_row_army_visible = {
 				check_variable = { ROOT.mod1440_ar_names = 1 }

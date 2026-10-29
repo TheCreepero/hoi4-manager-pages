@@ -45,6 +45,11 @@
     The page beside the HOI4 1440p UI Mod (the reworked vanilla screens), this mod last: how the two look together.
 
 .EXAMPLE
+    .\tools\Invoke-GameCheck.ps1 probe_portraits -Mods mod/rt56-vnr-utt-standalone-v16.mod -AfterLoad tools\playsets\rt56.json -TimeoutSec 900
+    The scene with other mods of the launcher loaded before this one (their files under Documents\...\mod), this
+    mod last. -AfterLoad closes what those mods open when a game starts (wiki/Game-Recipes.md).
+
+.EXAMPLE
     .\tools\Invoke-GameCheck.ps1 air_selection -NoRestart
     Uses the game as it is running now: reset, recipe, capture and crop only. For a second look at files
     that did not change since the game started.
@@ -59,6 +64,8 @@ param(
     [switch]$WithScreens,
     [switch]$SaveReference,
     [switch]$F11,
+    [string[]]$Mods,
+    [string]$AfterLoad,
     [int]$TimeoutSec = 300
 )
 
@@ -86,16 +93,30 @@ try {
             Start-Sleep -Seconds 3
         }
         if ($Vanilla) { Set-HoiPlayset -Vanilla | Out-Null }
-        elseif ($WithScreens) {
-            # the HOI4 1440p UI Mod (the reworked vanilla screens) beside this one, this mod last; its launcher
-            # file exists once build.ps1 -DevLink has run in that repository
-            $screensMod = 'mod/hoi4-1440p-ui-mod.mod'
-            if (-not (Test-Path -LiteralPath (Join-Path (Get-HoiPaths).UserDir $screensMod))) { throw "-WithScreens: the launcher has no $screensMod. Run build.ps1 -DevLink in the hoi4-1440p-ui-mod repository first." }
-            Set-HoiPlayset -Mods @($screensMod, $script:HarnessModFile) | Out-Null
+        elseif ($WithScreens -or $Mods) {
+            # -Mods: launcher files of other mods (mod/<name>.mod), loaded before this one
+            $others = @($Mods | ForEach-Object { $_ -split '[,\s]+' } | Where-Object { $_ })
+            foreach ($other in $others) {
+                if (-not (Test-Path -LiteralPath (Join-Path (Get-HoiPaths).UserDir $other))) { throw "-Mods: the launcher has no $other." }
+            }
+            if ($WithScreens) {
+                # the HOI4 1440p UI Mod (the reworked vanilla screens) beside this one, this mod last; its launcher
+                # file exists once build.ps1 -DevLink has run in that repository
+                $screensMod = 'mod/hoi4-1440p-ui-mod.mod'
+                if (-not (Test-Path -LiteralPath (Join-Path (Get-HoiPaths).UserDir $screensMod))) { throw "-WithScreens: the launcher has no $screensMod. Run build.ps1 -DevLink in the hoi4-1440p-ui-mod repository first." }
+                $others += $screensMod
+            }
+            Set-HoiPlayset -Mods (@($others) + @($script:HarnessModFile)) | Out-Null
         }
         else { Set-HoiPlayset -OnlyThisMod | Out-Null }
+        $closing = $null
+        if ($AfterLoad) {
+            # steps as JSON or a file of them, as tools\Invoke-GameSteps.ps1 -AfterLoad takes them
+            if (Test-Path -LiteralPath $AfterLoad) { $AfterLoad = [System.IO.File]::ReadAllText((Resolve-Path -LiteralPath $AfterLoad), [System.Text.Encoding]::UTF8) }
+            $closing = @($AfterLoad | ConvertFrom-Json | ForEach-Object { $_ })
+        }
         Start-Hoi4 -TimeoutSec $TimeoutSec | Out-Null
-        Start-HoiNewGame
+        Start-HoiNewGame -TimeoutSec ([Math]::Max(180, $TimeoutSec)) -AfterLoad $closing
         Write-Host ("  [INFO] in the game after {0:0} s" -f $watch.Elapsed.TotalSeconds) -ForegroundColor Gray
     } elseif (-not (Get-Hoi4Process)) {
         throw 'The game is not running. Leave out -NoRestart to start it.'

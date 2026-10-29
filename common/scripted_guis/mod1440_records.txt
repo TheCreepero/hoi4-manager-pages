@@ -16,6 +16,16 @@ scripted_gui = {
 				array = mod1440_wd_fam
 				entry_container = "mod1440_records_diary_row"
 			}
+			wd_row_gface_grid = {
+				array = mod1440_wd_ga
+				change_scope = yes
+				entry_container = "mod1440_records_wd_row_gface_row"
+			}
+			wd_row_gcface_grid = {
+				array = mod1440_wd_gc
+				change_scope = yes
+				entry_container = "mod1440_records_wd_row_gcface_row"
+			}
 		}
 
 		properties = {
@@ -54,6 +64,12 @@ scripted_gui = {
 			}
 			wd_row_cface = {
 				image = "[?mod1440_wd_cp^i.GetTokenKey]"
+			}
+			wd_row_gface = {
+				image = "portrait"
+			}
+			wd_row_gcface = {
+				image = "portrait"
 			}
 			wd_g_st_bar = {
 				frame = mod1440_wd_g_st_bar
@@ -351,10 +367,6 @@ scripted_gui = {
 			wd_row_point_visible = {
 				check_variable = { mod1440_wd_sa^i = 3 }
 			}
-			wd_row_face_visible = {
-				check_variable = { mod1440_wd_sa^i = 1 }
-				check_variable = { v = 4 }
-			}
 			wd_row_who_visible = {
 				check_variable = { mod1440_wd_sa^i = 1 }
 				check_variable = { v = 4 }
@@ -362,6 +374,11 @@ scripted_gui = {
 			wd_row_file_visible = {
 				check_variable = { mod1440_wd_sa^i = 1 }
 				check_variable = { v = 4 }
+			}
+			wd_row_face_visible = {
+				check_variable = { mod1440_wd_sa^i = 1 }
+				check_variable = { v = 4 }
+				check_variable = { mod1440_wd_ua^i = 0 }
 			}
 			wd_row_name_visible = {
 				check_variable = { mod1440_wd_sa^i = 1 }
@@ -391,14 +408,21 @@ scripted_gui = {
 				check_variable = { mod1440_wd_sb^i > 0 }
 				check_variable = { mod1440_wd_sa^i = 0 }
 			}
-			wd_row_cface_visible = {
-				check_variable = { mod1440_wd_sc^i = 1 }
-			}
 			wd_row_cfile_visible = {
 				check_variable = { mod1440_wd_sc^i = 1 }
 			}
 			wd_row_c_visible = {
 				check_variable = { mod1440_wd_sc^i = 1 }
+			}
+			wd_row_cface_visible = {
+				check_variable = { mod1440_wd_sc^i = 1 }
+				check_variable = { mod1440_wd_uc^i = 0 }
+			}
+			wd_row_gface_visible = {
+				check_variable = { mod1440_of_ul = 1 }
+			}
+			wd_row_gcface_visible = {
+				check_variable = { mod1440_of_ul = 1 }
 			}
 			wd_row_mark_visible = {
 				check_variable = { mod1440_wd_k^i = 0 }
@@ -600,6 +624,11 @@ scripted_gui = {
 				change_scope = yes
 				entry_container = "mod1440_records_officer_row"
 			}
+			of_c_gface_grid = {
+				array = mod1440_of_c_ul
+				change_scope = yes
+				entry_container = "mod1440_records_of_c_gface_row"
+			}
 		}
 
 		properties = {
@@ -625,6 +654,9 @@ scripted_gui = {
 				frame = mod1440_of_frame_5
 			}
 			of_row_face = {
+				image = "portrait"
+			}
+			of_row_face_table = {
 				image = "[?mod1440_p.GetTokenKey]"
 			}
 			of_row_tr_0 = {
@@ -665,6 +697,9 @@ scripted_gui = {
 			}
 			of_c_face = {
 				image = "[?mod1440_of_c_p.GetTokenKey]"
+			}
+			of_c_gface = {
+				image = "portrait"
 			}
 			of_c_tr_0 = {
 				image = "GFX_trait_[?mod1440_of_c_tr^0.GetTokenKey]"
@@ -1095,14 +1130,15 @@ scripted_gui = {
 			of_f_award_bg_visible = {
 				check_variable = { mod1440_of_awarding = 1 }
 			}
-			of_c_face_visible = {
-				check_variable = { mod1440_of_has_sel = 1 }
-			}
 			of_c_name_visible = {
 				check_variable = { mod1440_of_has_sel = 1 }
 			}
 			of_c_none_visible = {
 				NOT = { check_variable = { mod1440_of_has_sel = 1 } }
+			}
+			of_c_face_visible = {
+				check_variable = { mod1440_of_has_sel = 1 }
+				check_variable = { mod1440_of_c_ul^num < 1 }
 			}
 			of_c_rank_1_visible = {
 				check_variable = { mod1440_of_has_sel = 1 }
@@ -2530,6 +2566,12 @@ scripted_gui = {
 				check_variable = { mod1440_of_ln_date^num > 10 }
 				check_variable = { mod1440_of_ln_sa^10 = 3 }
 			}
+			of_row_face_visible = {
+				check_variable = { mod1440_of_ul = 1 }
+			}
+			of_row_face_table_visible = {
+				NOT = { check_variable = { mod1440_of_ul = 1 } }
+			}
 			of_row_stripe_visible = {
 				check_variable = { mod1440_of_odd = 1 }
 			}
@@ -2652,6 +2694,41 @@ scripted_gui = {
 		}
 
 		dynamic_lists = {
+			gv_of_0_gface_grid = {
+				array = mod1440_gv_of_0_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
+			gv_of_1_gface_grid = {
+				array = mod1440_gv_of_1_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
+			gv_of_2_gface_grid = {
+				array = mod1440_gv_of_2_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
+			gv_of_3_gface_grid = {
+				array = mod1440_gv_of_3_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
+			gv_hc_0_gface_grid = {
+				array = mod1440_gv_hc_0_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
+			gv_hc_1_gface_grid = {
+				array = mod1440_gv_hc_1_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
+			gv_hc_2_gface_grid = {
+				array = mod1440_gv_hc_2_ul
+				change_scope = yes
+				entry_container = "mod1440_records_gv_gface_row"
+			}
 			gv_fac_grid = {
 				array = mod1440_gv_fac
 				change_scope = yes
@@ -2772,6 +2849,9 @@ scripted_gui = {
 			}
 			gv_hc_2_big = {
 				image = "[?mod1440_gv_hc_d_p^2.GetTokenKey]"
+			}
+			gv_gface = {
+				image = "portrait"
 			}
 			gv_fac_row_flag = {
 				image = "[THIS.GetFlag]"
@@ -3110,10 +3190,12 @@ scripted_gui = {
 			gv_of_0_face_visible = {
 				check_variable = { mod1440_gv_of_0_has = 1 }
 				check_variable = { mod1440_gv_of_0_b = 0 }
+				check_variable = { mod1440_gv_of_0_ul^num < 1 }
 			}
 			gv_of_0_big_visible = {
 				check_variable = { mod1440_gv_of_0_has = 1 }
 				check_variable = { mod1440_gv_of_0_b = 1 }
+				check_variable = { mod1440_gv_of_0_ul^num < 1 }
 			}
 			gv_of_0_name_visible = {
 				check_variable = { mod1440_gv_of_0_has = 1 }
@@ -3138,10 +3220,12 @@ scripted_gui = {
 			gv_of_1_face_visible = {
 				check_variable = { mod1440_gv_of_1_has = 1 }
 				check_variable = { mod1440_gv_of_1_b = 0 }
+				check_variable = { mod1440_gv_of_1_ul^num < 1 }
 			}
 			gv_of_1_big_visible = {
 				check_variable = { mod1440_gv_of_1_has = 1 }
 				check_variable = { mod1440_gv_of_1_b = 1 }
+				check_variable = { mod1440_gv_of_1_ul^num < 1 }
 			}
 			gv_of_1_name_visible = {
 				check_variable = { mod1440_gv_of_1_has = 1 }
@@ -3166,10 +3250,12 @@ scripted_gui = {
 			gv_of_2_face_visible = {
 				check_variable = { mod1440_gv_of_2_has = 1 }
 				check_variable = { mod1440_gv_of_2_b = 0 }
+				check_variable = { mod1440_gv_of_2_ul^num < 1 }
 			}
 			gv_of_2_big_visible = {
 				check_variable = { mod1440_gv_of_2_has = 1 }
 				check_variable = { mod1440_gv_of_2_b = 1 }
+				check_variable = { mod1440_gv_of_2_ul^num < 1 }
 			}
 			gv_of_2_name_visible = {
 				check_variable = { mod1440_gv_of_2_has = 1 }
@@ -3194,10 +3280,12 @@ scripted_gui = {
 			gv_of_3_face_visible = {
 				check_variable = { mod1440_gv_of_3_has = 1 }
 				check_variable = { mod1440_gv_of_3_b = 0 }
+				check_variable = { mod1440_gv_of_3_ul^num < 1 }
 			}
 			gv_of_3_big_visible = {
 				check_variable = { mod1440_gv_of_3_has = 1 }
 				check_variable = { mod1440_gv_of_3_b = 1 }
+				check_variable = { mod1440_gv_of_3_ul^num < 1 }
 			}
 			gv_of_3_name_visible = {
 				check_variable = { mod1440_gv_of_3_has = 1 }
@@ -3222,10 +3310,12 @@ scripted_gui = {
 			gv_hc_0_face_visible = {
 				check_variable = { mod1440_gv_hc^num > 0 }
 				check_variable = { mod1440_gv_hc_d_b^0 = 0 }
+				check_variable = { mod1440_gv_hc_0_ul^num < 1 }
 			}
 			gv_hc_0_big_visible = {
 				check_variable = { mod1440_gv_hc^num > 0 }
 				check_variable = { mod1440_gv_hc_d_b^0 = 1 }
+				check_variable = { mod1440_gv_hc_0_ul^num < 1 }
 			}
 			gv_hc_0_name_visible = {
 				check_variable = { mod1440_gv_hc^num > 0 }
@@ -3247,10 +3337,12 @@ scripted_gui = {
 			gv_hc_1_face_visible = {
 				check_variable = { mod1440_gv_hc^num > 1 }
 				check_variable = { mod1440_gv_hc_d_b^1 = 0 }
+				check_variable = { mod1440_gv_hc_1_ul^num < 1 }
 			}
 			gv_hc_1_big_visible = {
 				check_variable = { mod1440_gv_hc^num > 1 }
 				check_variable = { mod1440_gv_hc_d_b^1 = 1 }
+				check_variable = { mod1440_gv_hc_1_ul^num < 1 }
 			}
 			gv_hc_1_name_visible = {
 				check_variable = { mod1440_gv_hc^num > 1 }
@@ -3269,10 +3361,12 @@ scripted_gui = {
 			gv_hc_2_face_visible = {
 				check_variable = { mod1440_gv_hc^num > 2 }
 				check_variable = { mod1440_gv_hc_d_b^2 = 0 }
+				check_variable = { mod1440_gv_hc_2_ul^num < 1 }
 			}
 			gv_hc_2_big_visible = {
 				check_variable = { mod1440_gv_hc^num > 2 }
 				check_variable = { mod1440_gv_hc_d_b^2 = 1 }
+				check_variable = { mod1440_gv_hc_2_ul^num < 1 }
 			}
 			gv_hc_2_name_visible = {
 				check_variable = { mod1440_gv_hc^num > 2 }
@@ -3334,6 +3428,31 @@ scripted_gui = {
 			wr_en_grid = {
 				array = mod1440_we_c
 				entry_container = "mod1440_records_enemy_row"
+			}
+			wr_k_0_gface_grid = {
+				array = mod1440_wr_k_0_ul
+				change_scope = yes
+				entry_container = "mod1440_records_wr_k_gface_row"
+			}
+			wr_k_1_gface_grid = {
+				array = mod1440_wr_k_1_ul
+				change_scope = yes
+				entry_container = "mod1440_records_wr_k_gface_row"
+			}
+			wr_k_2_gface_grid = {
+				array = mod1440_wr_k_2_ul
+				change_scope = yes
+				entry_container = "mod1440_records_wr_k_gface_row"
+			}
+			wr_k_3_gface_grid = {
+				array = mod1440_wr_k_3_ul
+				change_scope = yes
+				entry_container = "mod1440_records_wr_k_gface_row"
+			}
+			wr_k_4_gface_grid = {
+				array = mod1440_wr_k_4_ul
+				change_scope = yes
+				entry_container = "mod1440_records_wr_k_gface_row"
 			}
 		}
 
@@ -3499,6 +3618,9 @@ scripted_gui = {
 			}
 			wr_c_face_t1_fb_flag = {
 				image = "[?mod1440_wr_c_te.GetFlag]"
+			}
+			wr_k_gface = {
+				image = "portrait"
 			}
 			wr_k_0_face = {
 				image = "[?mod1440_wr_k_0_p.GetTokenKey]"
@@ -5030,6 +5152,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n < 1 }
 			}
+			wr_k_0_face_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 0 }
+				check_variable = { mod1440_wr_k_0_ul^num < 1 }
+			}
 			wr_k_0_rank_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 0 }
@@ -5044,10 +5171,6 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 0 }
 				check_variable = { mod1440_wr_k_0_rank = 3 }
-			}
-			wr_k_0_face_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 0 }
 			}
 			wr_k_0_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -5064,6 +5187,11 @@ scripted_gui = {
 			wr_k_0_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 0 }
+			}
+			wr_k_1_face_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 1 }
+				check_variable = { mod1440_wr_k_1_ul^num < 1 }
 			}
 			wr_k_1_rank_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -5084,10 +5212,6 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 1 }
 			}
-			wr_k_1_face_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 1 }
-			}
 			wr_k_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 1 }
@@ -5104,6 +5228,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 1 }
 			}
+			wr_k_2_face_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 2 }
+				check_variable = { mod1440_wr_k_2_ul^num < 1 }
+			}
 			wr_k_2_rank_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 2 }
@@ -5118,10 +5247,6 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 2 }
 				check_variable = { mod1440_wr_k_2_rank = 3 }
-			}
-			wr_k_2_face_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 2 }
 			}
 			wr_k_2_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -5138,6 +5263,11 @@ scripted_gui = {
 			wr_k_2_cap_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 2 }
+			}
+			wr_k_3_face_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 3 }
+				check_variable = { mod1440_wr_k_3_ul^num < 1 }
 			}
 			wr_k_3_rank_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -5158,10 +5288,6 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 3 }
 			}
-			wr_k_3_face_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 3 }
-			}
 			wr_k_3_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 3 }
@@ -5178,6 +5304,11 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 3 }
 			}
+			wr_k_4_face_visible = {
+				check_variable = { mod1440_wr_c_has = 1 }
+				check_variable = { mod1440_wr_k_n > 4 }
+				check_variable = { mod1440_wr_k_4_ul^num < 1 }
+			}
 			wr_k_4_rank_1_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 4 }
@@ -5192,10 +5323,6 @@ scripted_gui = {
 				check_variable = { mod1440_wr_c_has = 1 }
 				check_variable = { mod1440_wr_k_n > 4 }
 				check_variable = { mod1440_wr_k_4_rank = 3 }
-			}
-			wr_k_4_face_visible = {
-				check_variable = { mod1440_wr_c_has = 1 }
-				check_variable = { mod1440_wr_k_n > 4 }
 			}
 			wr_k_4_visible = {
 				check_variable = { mod1440_wr_c_has = 1 }
@@ -7631,9 +7758,26 @@ scripted_gui = {
 			check_variable = { mod1440_sr_has_by = 1 }
 		}
 
+		dynamic_lists = {
+			sc_by_gface_grid = {
+				array = mod1440_sr_by_ul
+				change_scope = yes
+				entry_container = "mod1440_records_sc_by_gface_row"
+			}
+		}
+
 		properties = {
 			sc_by_face = {
 				image = "[?mod1440_sr_by_p.GetTokenKey]"
+			}
+			sc_by_gface = {
+				image = "portrait"
+			}
+		}
+
+		triggers = {
+			sc_by_gface_visible = {
+				check_variable = { mod1440_of_ul = 1 }
 			}
 		}
 

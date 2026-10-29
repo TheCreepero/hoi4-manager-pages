@@ -230,7 +230,6 @@ guiTypes = {
 		iconType = { name = "ar_row_stripe" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_stripe_889x50" }
 		iconType = { name = "ar_row_pick" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_pick_889x50" }
 		iconType = { name = "ar_row_face" position = { x = 4 y = 2 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
-		iconType = { name = "ar_row_unknown" position = { x = 4 y = 2 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
 		instantTextboxType = { name = "ar_row_name" position = { x = 46 y = 5 } font = "hoi_18mbs" text = "MOD1440_AR_ROW_NAME" maxWidth = 210 maxHeight = 22 format = left alwaystransparent = yes fixedsize = yes }
 		iconType = { name = "ar_row_skill_bg" position = { x = 262 y = 4 } spriteType = "GFX_1440p_SG_tile_30x24" }
 		instantTextboxType = { name = "ar_row_skill" position = { x = 262 y = 6 } font = "hoi_18mbs" text = "MOD1440_AR_ROW_SKILL" maxWidth = 30 maxHeight = 22 format = centre alwaystransparent = yes }

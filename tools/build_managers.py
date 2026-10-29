@@ -618,9 +618,10 @@ def army_readiness():
     entry = icon("ar_row_stripe", 0, 0, STRIPE % (AR_ROW_W, AR_AL_ROW))
     entry += icon("ar_row_pick", 0, 0, PICK % (AR_ROW_W, AR_AL_ROW))
     row_triggers = block("ar_row_stripe_visible", is_one("mod1440_al_odd") + "\nNOT = { %s }\n" % picked.strip()) + block("ar_row_pick_visible", picked)
-    entry += scaled("ar_row_face", 4, 2, "GFX_portrait_unknown", 0.22) + scaled("ar_row_unknown", 4, 2, "GFX_portrait_unknown", 0.22)
-    properties += block("ar_row_face", 'image = "[?mod1440_p.GetTokenKey]"\n')
-    row_triggers += block("ar_row_face_visible", more_than_zero("mod1440_p_ver")) + block("ar_row_unknown_visible", "NOT = { %s }\n" % more_than_zero("mod1440_p_ver").strip())
+    # E7: the row's scope is the commander, a unit leader: the game draws his face [SGUI-053]. The table of portraits
+    # and the unknown leader shown until it had looked him up (ar_row_unknown) are gone.
+    entry += scaled("ar_row_face", 4, 2, "GFX_portrait_unknown", 0.22)
+    properties += block("ar_row_face", build_records.GAME_FACE)
     # line 1: his name and skill; line 2: the army's name (empty on an unpatched game) and his four levels
     entry += ar_text("ar_row_name", 46, 5, 210, B.key("ar_row_name", "§Y[THIS.GetName]§!"), FONT_LABEL, height=22, fixed=True)
     entry += icon("ar_row_skill_bg", 262, 4, "GFX_1440p_SG_tile_30x24")
@@ -793,7 +794,6 @@ def ar_sort(by, up, asc, arrow_x, columns, count, value_of, keys, pick):
 def ar_count():
     """The scripted effects of the counting: mod1440_ar_count, the equipment list, the sorts, the chosen army, and
     the effects of each table of kinds."""
-    from_portraits = portrait_version()
     tables = ""
     for m, (states, rows) in enumerate(AR_TABLES):
         kinds, army, worst = "", "", ""
@@ -957,9 +957,7 @@ def ar_count():
                + "".join("subtract_from_variable = { mod1440_al_oth = %s }\n" % v for v in ("num_infantry", "num_armored", "num_motorized", "num_mechanized"))
                + "clamp_variable = { var = mod1440_al_oth min = 0 max = 10000 }\n"
                + location
-               # the portrait, once per table of portraits and again when the numbers of text keys have moved
-               # (build_records.kept_tokens()), for a player's country only: the lookup is long
-               + iff("check_variable = { ar_player = 1 } " + build_records.portrait_stale(from_portraits), "mod1440_p_officer = yes\n")
+               # E7: no portrait is looked up here any more: the row draws the game's own (ar_row_face)
                + iff("check_variable = { of_me = ar_sel }", tmp("ar_found", 1))
                + "add_to_array = { PREV.mod1440_ar_l_game = of_me }\n"
                + "".join("add_to_array = { PREV.mod1440_ar_lk_%s = %s }\n" % (k, v) for k, v in AR_AL_KEYS.items()))
@@ -1110,7 +1108,7 @@ def ar_scene():
     head_hide = ["ar_full", "ar_eq_field_low", "ar_fuel_low"] + zeros
     body_hide = ["ar_eq_none", "ar_al_none", "ar_al_caption_one", "ar_eq_caption_army", "ar_eq_all", "ar_eh_field_army", "ar_eq_arrow_up", "ar_al_arrow_up"]
     eq_hide = ["ar_er_low", "ar_er_stock_shared"] + pictures_eq
-    row_hide = (["ar_row_pick", "ar_row_army", "ar_row_unknown",
+    row_hide = (["ar_row_pick", "ar_row_army",
                  "ar_row_loc_none", "ar_row_eq_lowbar"] + pictures_row)
     names_hide = [h for h in row_hide if h != "ar_row_army"]
     # with Army names on: the army's name under each commander, none under a field marshal of an army group
@@ -1136,7 +1134,7 @@ def ar_scene():
             {"name": "mod1440_army_readiness_eqrow", "skip": True, "hide": eq_hide, "only": {"ar_er_stripe": [1, 3, 5, 7]},
              "_note": "A row per kind in use. The renderer draws one sprite and one fill for every row: in the game each row has the picture of its kind at its scale, and a bar of its share (orange below 75%)."},
             {"name": "mod1440_army_readiness_row", "skip": True, "hide": row_hide, "only": {"ar_row_stripe": [1, 3, 5, 7, 9]},
-             "_note": "A row per commander with troops, Army names off (its default; the state names shows them). Twins script shows per row stand in the samples, with an empty text where the other one shows. The portrait is the game's unknown leader: script names each one's sprite."},
+             "_note": "A row per commander with troops, Army names off (its default; the state names shows them). Twins script shows per row stand in the samples, with an empty text where the other one shows. The portrait is the renderer's unknown leader: in the game each row draws its commander's own face (E7, image = portrait)."},
             {"name": "mod1440_army_readiness_handle", "at": [HANDLE_X - 6, HANDLE_Y + 78], "drawIn": ["closed"],
              "_note": "Docked to Recruit & Deploy (the tab's corner at -6,78), shown only while the page is closed: the state closed."},
         ],
@@ -1227,13 +1225,14 @@ AR_CHECKLIST = AR_CHECKLIST_D8 + [
     "A general without a number (mod1440_chk_by_effect, then given an army; or a general of Add German Generals AI REWORK): listed with his values, chosen by a click, his equipment shown",
     "error.log: no line naming mod1440, no Could not find sprite type, no invalid scope line, also with the playset's 55 kinds",
 ]
-
-
-def portrait_version():
-    """The version of the table of portraits, which the Officers page uses too (tools/build_records.py): an
-    officer whose portrait was looked up in another table is looked up again."""
-    build_records.M, build_records.B = sys.modules[__name__], B
-    return build_records.portraits()[1]
+# --- E7 --- the commanders' faces through the game (image = portrait, SGUI-053)
+AR_CHECKLIST += [
+    "E7 with Road to 56: each commander's row shows his own face, the same as on his army's badge and in his leader window: Keitel or Halder "
+    "if given an army (texture files, the unknown leader before E7), the others as the game's commander picker; no row with the unknown leader "
+    "unless the game shows him so",
+    "E7: error.log has no line naming 'portrait', mod1440_p_officer or the on_startup line 'mod1440_pop_round: Invalid Scope'",
+]
+# --- end E7 ---
 
 
 # ---------------------------------------------------------------- States (D3), docked to Construction
@@ -4806,10 +4805,13 @@ def build():
     # The hooks. A new game: count and write down once for every country, so that whichever country the
     # player takes has its numbers from the first day. After that only a player's country costs time.
     B.files["common/on_actions/mod1440_on_actions.txt"] = HEADER_TXT + block("on_actions", (
-        # D10: the state population round once, outside every_country: it covers every state of the map itself
+        # D10: the state population round once: it covers every state of the map itself. E7: called in each country's
+        # scope, as on_monthly does; outside every scope the game refused it ("mod1440_pop_round: Invalid Scope ...
+        # provided: None", E7 launch 1). Its stamp (global.mod1440_pop_day) lets the first country make the round and
+        # the others pass.
         block("on_startup", block("effect", block("every_country", "mod1440_ar_count = yes\n" + monthly
-                                                 + block("if", "limit = { is_ai = no }\nmod1440_ev_init = yes\nmod1440_tb_default = yes\n"))
-                                  + "mod1440_pop_round = yes\n"))
+                                                 + block("if", "limit = { is_ai = no }\nmod1440_ev_init = yes\nmod1440_tb_default = yes\n")
+                                                 + "mod1440_pop_round = yes\n")))
         + block("on_daily", block("effect", block("if", "limit = { is_ai = no }\nmod1440_ar_count = yes\n" + states_daily
                                                   + figures_daily + history_daily + "mod1440_rec_daily = yes\n" + tb_daily())))
         # D10: the population round after History's record; it is guarded, so it runs once a month in all

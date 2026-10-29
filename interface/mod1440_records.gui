@@ -71,6 +71,22 @@ guiTypes = {
 					add_horizontal = no
 					format = "UPPER_LEFT"
 				}
+				gridboxtype = {
+					name = "wd_row_gface_grid"
+					position = { x = 400 y = 1 }
+					size = { width = 23 height = 100%% }
+					slotsize = { width = 1 height = 1 }
+					add_horizontal = no
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "wd_row_gcface_grid"
+					position = { x = 954 y = 1 }
+					size = { width = 23 height = 100%% }
+					slotsize = { width = 1 height = 1 }
+					add_horizontal = no
+					format = "UPPER_LEFT"
+				}
 			}
 			instantTextboxType = { name = "wd_none" position = { x = 40 y = 104 } font = "hoi_18mbs" text = "MOD1440_WD_NONE" maxWidth = 900 maxHeight = 24 format = left }
 		}
@@ -254,6 +270,16 @@ guiTypes = {
 		buttonType = { name = "wd_row_marked" position = { x = 1170 y = 6 } quadTextureSprite = "GFX_checkbox_gold_32" frame = 2 scale = 0.7 clicksound = click_default pdx_tooltip = "MOD1440_WD_ROW_MARK_TT" }
 	}
 	containerWindowType = {
+		name = "mod1440_records_wd_row_gface_row"
+		size = { width = 23 height = 34 }
+		iconType = { name = "wd_row_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.15 alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_wd_row_gcface_row"
+		size = { width = 23 height = 34 }
+		iconType = { name = "wd_row_gcface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.15 alwaystransparent = yes }
+	}
+	containerWindowType = {
 		name = "mod1440_records_of"
 		position = { x = 440 y = 100 }
 		size = { width = 1680 height = 1220 }
@@ -332,6 +358,14 @@ guiTypes = {
 			iconType = { name = "of_f_diary_bg" position = { x = 0 y = 800 } spriteType = "GFX_1440p_SG_card_662x290" }
 			iconType = { name = "of_f_award_bg" position = { x = 0 y = 568 } spriteType = "GFX_1440p_SG_card_662x522" }
 			iconType = { name = "of_c_face" position = { x = 14 y = 14 } spriteType = "GFX_portrait_unknown" scale = 1.0 }
+			gridboxtype = {
+				name = "of_c_gface_grid"
+				position = { x = 14 y = 14 }
+				size = { width = 156 height = 210 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "of_c_name" position = { x = 186 y = 10 } font = "hoi_36header" text = "MOD1440_OF_C_NAME" maxWidth = 462 maxHeight = 40 format = left fixedsize = yes }
 			instantTextboxType = { name = "of_c_none" position = { x = 16 y = 18 } font = "hoi_18mbs" text = "MOD1440_OF_C_NONE" maxWidth = 630 maxHeight = 24 format = left }
 			instantTextboxType = { name = "of_c_rank_1" position = { x = 188 y = 56 } font = "hoi_18mbs" text = "MOD1440_OF_C_RANK_1" maxWidth = 150 maxHeight = 22 format = left }
@@ -637,6 +671,7 @@ guiTypes = {
 		iconType = { name = "of_row_stripe" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_stripe_948x48" }
 		iconType = { name = "of_row_pick" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_pick_948x48" }
 		iconType = { name = "of_row_face" position = { x = 3 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+		iconType = { name = "of_row_face_table" position = { x = 3 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
 		buttonType = { name = "of_row" position = { x = 0 y = 0 } quadTextureSprite = "GFX_1440p_SG_hit_300x48" clicksound = click_default pdx_tooltip = "MOD1440_OF_ROW_TT" }
 		instantTextboxType = { name = "of_row_name" position = { x = 46 y = 4 } font = "hoi_18mbs" text = "MOD1440_OF_ROW_NAME" maxWidth = 250 maxHeight = 22 format = left alwaystransparent = yes }
 		instantTextboxType = { name = "of_row_name_sel" position = { x = 46 y = 4 } font = "hoi_18mbs" text = "MOD1440_OF_ROW_NAME_SEL" maxWidth = 250 maxHeight = 22 format = left alwaystransparent = yes }
@@ -674,6 +709,11 @@ guiTypes = {
 		iconType = { name = "of_row_md_0" position = { x = 864 y = 3 } spriteType = "GFX_1440p_medal_ger" scale = 0.5 }
 		iconType = { name = "of_row_md_1" position = { x = 892 y = 3 } spriteType = "GFX_1440p_medal_ger" scale = 0.5 }
 		iconType = { name = "of_row_md_2" position = { x = 920 y = 3 } spriteType = "GFX_1440p_medal_ger" scale = 0.5 }
+	}
+	containerWindowType = {
+		name = "mod1440_records_of_c_gface_row"
+		size = { width = 156 height = 210 }
+		iconType = { name = "of_c_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 1.0 }
 	}
 	containerWindowType = {
 		name = "mod1440_records_gv"
@@ -881,6 +921,14 @@ guiTypes = {
 			instantTextboxType = { name = "gv_of_0_l" position = { x = 92 y = 42 } font = "hoi_16mbs" text = "MOD1440_GV_OF_0_L" maxWidth = 300 maxHeight = 20 format = left }
 			iconType = { name = "gv_of_0_face" position = { x = 14 y = 62 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_of_0_big" position = { x = 22 y = 62 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_of_0_gface_grid"
+				position = { x = 22 y = 62 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_of_0_name" position = { x = 92 y = 66 } font = "hoi_18mbs" text = "MOD1440_GV_OF_0_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_0_role" position = { x = 92 y = 90 } font = "hoi_16mbs" text = "MOD1440_GV_OF_0_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_0_since" position = { x = 336 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_OF_0_SINCE" maxWidth = 190 maxHeight = 22 format = right }
@@ -891,6 +939,14 @@ guiTypes = {
 			instantTextboxType = { name = "gv_of_1_l" position = { x = 92 y = 134 } font = "hoi_16mbs" text = "MOD1440_GV_OF_1_L" maxWidth = 300 maxHeight = 20 format = left }
 			iconType = { name = "gv_of_1_face" position = { x = 14 y = 154 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_of_1_big" position = { x = 22 y = 154 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_of_1_gface_grid"
+				position = { x = 22 y = 154 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_of_1_name" position = { x = 92 y = 158 } font = "hoi_18mbs" text = "MOD1440_GV_OF_1_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_1_role" position = { x = 92 y = 182 } font = "hoi_16mbs" text = "MOD1440_GV_OF_1_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_1_since" position = { x = 336 y = 160 } font = "hoi_16mbs" text = "MOD1440_GV_OF_1_SINCE" maxWidth = 190 maxHeight = 22 format = right }
@@ -900,6 +956,14 @@ guiTypes = {
 			instantTextboxType = { name = "gv_of_2_l" position = { x = 92 y = 226 } font = "hoi_16mbs" text = "MOD1440_GV_OF_2_L" maxWidth = 300 maxHeight = 20 format = left }
 			iconType = { name = "gv_of_2_face" position = { x = 14 y = 246 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_of_2_big" position = { x = 22 y = 246 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_of_2_gface_grid"
+				position = { x = 22 y = 246 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_of_2_name" position = { x = 92 y = 250 } font = "hoi_18mbs" text = "MOD1440_GV_OF_2_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_2_role" position = { x = 92 y = 274 } font = "hoi_16mbs" text = "MOD1440_GV_OF_2_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_2_since" position = { x = 336 y = 252 } font = "hoi_16mbs" text = "MOD1440_GV_OF_2_SINCE" maxWidth = 190 maxHeight = 22 format = right }
@@ -910,6 +974,14 @@ guiTypes = {
 			instantTextboxType = { name = "gv_of_3_l" position = { x = 92 y = 318 } font = "hoi_16mbs" text = "MOD1440_GV_OF_3_L" maxWidth = 300 maxHeight = 20 format = left }
 			iconType = { name = "gv_of_3_face" position = { x = 14 y = 338 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_of_3_big" position = { x = 22 y = 338 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_of_3_gface_grid"
+				position = { x = 22 y = 338 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_of_3_name" position = { x = 92 y = 342 } font = "hoi_18mbs" text = "MOD1440_GV_OF_3_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_3_role" position = { x = 92 y = 366 } font = "hoi_16mbs" text = "MOD1440_GV_OF_3_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_of_3_since" position = { x = 336 y = 344 } font = "hoi_16mbs" text = "MOD1440_GV_OF_3_SINCE" maxWidth = 190 maxHeight = 22 format = right }
@@ -919,6 +991,14 @@ guiTypes = {
 			instantTextboxType = { name = "gv_members_t" position = { x = 14 y = 416 } font = "hoi_24header" text = "MOD1440_GV_MEMBERS_T" maxWidth = 300 maxHeight = 30 format = left }
 			iconType = { name = "gv_hc_0_face" position = { x = 14 y = 456 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_hc_0_big" position = { x = 22 y = 456 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_hc_0_gface_grid"
+				position = { x = 22 y = 456 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_hc_0_name" position = { x = 92 y = 460 } font = "hoi_18mbs" text = "MOD1440_GV_HC_0_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_hc_0_role" position = { x = 92 y = 484 } font = "hoi_16mbs" text = "MOD1440_GV_HC_0_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_hc_0_since" position = { x = 336 y = 462 } font = "hoi_16mbs" text = "MOD1440_GV_HC_0_SINCE" maxWidth = 190 maxHeight = 22 format = right }
@@ -926,12 +1006,28 @@ guiTypes = {
 			iconType = { name = "gv_hc_1_bg" position = { x = 8 y = 528 } spriteType = "GFX_1440p_SG_stripe_526x74" }
 			iconType = { name = "gv_hc_1_face" position = { x = 14 y = 532 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_hc_1_big" position = { x = 22 y = 532 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_hc_1_gface_grid"
+				position = { x = 22 y = 532 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_hc_1_name" position = { x = 92 y = 536 } font = "hoi_18mbs" text = "MOD1440_GV_HC_1_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_hc_1_role" position = { x = 92 y = 560 } font = "hoi_16mbs" text = "MOD1440_GV_HC_1_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_hc_1_since" position = { x = 336 y = 538 } font = "hoi_16mbs" text = "MOD1440_GV_HC_1_SINCE" maxWidth = 190 maxHeight = 22 format = right }
 			instantTextboxType = { name = "gv_hc_1_since_old" position = { x = 336 y = 538 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
 			iconType = { name = "gv_hc_2_face" position = { x = 14 y = 608 } spriteType = "GFX_idea_unknown" }
 			iconType = { name = "gv_hc_2_big" position = { x = 22 y = 608 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			gridboxtype = {
+				name = "gv_hc_2_gface_grid"
+				position = { x = 22 y = 608 }
+				size = { width = 48 height = 65 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "gv_hc_2_name" position = { x = 92 y = 612 } font = "hoi_18mbs" text = "MOD1440_GV_HC_2_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_hc_2_role" position = { x = 92 y = 636 } font = "hoi_16mbs" text = "MOD1440_GV_HC_2_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "gv_hc_2_since" position = { x = 336 y = 614 } font = "hoi_16mbs" text = "MOD1440_GV_HC_2_SINCE" maxWidth = 190 maxHeight = 22 format = right }
@@ -1013,6 +1109,11 @@ guiTypes = {
 			instantTextboxType = { name = "gv_f_heads_l" position = { x = 368 y = 125 } font = "hoi_16mbs" text = "MOD1440_GV_F_HEADS_L" maxWidth = 154 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_GV_F_HEADS_TT" }
 			instantTextboxType = { name = "gv_f_heads" position = { x = 368 y = 148 } font = "hoi_20b" text = "MOD1440_GV_F_HEADS" maxWidth = 154 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_GV_F_HEADS_TT" }
 		}
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_gface_row"
+		size = { width = 48 height = 65 }
+		iconType = { name = "gv_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
 	}
 	containerWindowType = {
 		name = "mod1440_records_fac_row"
@@ -1356,6 +1457,14 @@ guiTypes = {
 			instantTextboxType = { name = "wr_k_h_cap" position = { x = 458 y = 518 } font = "hoi_18mbs" text = "MOD1440_WR_K_H_CAP" maxWidth = 62 maxHeight = 22 format = centre }
 			instantTextboxType = { name = "wr_k_none" position = { x = 34 y = 556 } font = "hoi_18mbs" text = "MOD1440_WR_K_NONE" maxWidth = 480 maxHeight = 22 format = left }
 			iconType = { name = "wr_k_0_face" position = { x = 34 y = 543 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			gridboxtype = {
+				name = "wr_k_0_gface_grid"
+				position = { x = 34 y = 543 }
+				size = { width = 34 height = 46 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "wr_k_0" position = { x = 78 y = 544 } font = "hoi_18mbs" text = "MOD1440_WR_K_0" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "wr_k_0_st" position = { x = 334 y = 554 } font = "hoi_20b" text = "MOD1440_WR_K_0_ST" maxWidth = 62 maxHeight = 22 format = centre }
 			instantTextboxType = { name = "wr_k_0_vp" position = { x = 396 y = 554 } font = "hoi_20b" text = "MOD1440_WR_K_0_VP" maxWidth = 62 maxHeight = 22 format = centre }
@@ -1365,6 +1474,14 @@ guiTypes = {
 			instantTextboxType = { name = "wr_k_0_rank_3" position = { x = 78 y = 566 } font = "hoi_18mbs" text = "MOD1440_WR_K_RANK_3" maxWidth = 230 maxHeight = 22 format = left }
 			iconType = { name = "wr_k_1_stripe" position = { x = 26 y = 590 } spriteType = "GFX_1440p_SG_stripe_502x48" }
 			iconType = { name = "wr_k_1_face" position = { x = 34 y = 591 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			gridboxtype = {
+				name = "wr_k_1_gface_grid"
+				position = { x = 34 y = 591 }
+				size = { width = 34 height = 46 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "wr_k_1" position = { x = 78 y = 592 } font = "hoi_18mbs" text = "MOD1440_WR_K_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "wr_k_1_st" position = { x = 334 y = 602 } font = "hoi_20b" text = "MOD1440_WR_K_1_ST" maxWidth = 62 maxHeight = 22 format = centre }
 			instantTextboxType = { name = "wr_k_1_vp" position = { x = 396 y = 602 } font = "hoi_20b" text = "MOD1440_WR_K_1_VP" maxWidth = 62 maxHeight = 22 format = centre }
@@ -1373,6 +1490,14 @@ guiTypes = {
 			instantTextboxType = { name = "wr_k_1_rank_2" position = { x = 78 y = 614 } font = "hoi_18mbs" text = "MOD1440_WR_K_RANK_2" maxWidth = 230 maxHeight = 22 format = left }
 			instantTextboxType = { name = "wr_k_1_rank_3" position = { x = 78 y = 614 } font = "hoi_18mbs" text = "MOD1440_WR_K_RANK_3" maxWidth = 230 maxHeight = 22 format = left }
 			iconType = { name = "wr_k_2_face" position = { x = 34 y = 639 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			gridboxtype = {
+				name = "wr_k_2_gface_grid"
+				position = { x = 34 y = 639 }
+				size = { width = 34 height = 46 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "wr_k_2" position = { x = 78 y = 640 } font = "hoi_18mbs" text = "MOD1440_WR_K_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "wr_k_2_st" position = { x = 334 y = 650 } font = "hoi_20b" text = "MOD1440_WR_K_2_ST" maxWidth = 62 maxHeight = 22 format = centre }
 			instantTextboxType = { name = "wr_k_2_vp" position = { x = 396 y = 650 } font = "hoi_20b" text = "MOD1440_WR_K_2_VP" maxWidth = 62 maxHeight = 22 format = centre }
@@ -1382,6 +1507,14 @@ guiTypes = {
 			instantTextboxType = { name = "wr_k_2_rank_3" position = { x = 78 y = 662 } font = "hoi_18mbs" text = "MOD1440_WR_K_RANK_3" maxWidth = 230 maxHeight = 22 format = left }
 			iconType = { name = "wr_k_3_stripe" position = { x = 26 y = 686 } spriteType = "GFX_1440p_SG_stripe_502x48" }
 			iconType = { name = "wr_k_3_face" position = { x = 34 y = 687 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			gridboxtype = {
+				name = "wr_k_3_gface_grid"
+				position = { x = 34 y = 687 }
+				size = { width = 34 height = 46 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "wr_k_3" position = { x = 78 y = 688 } font = "hoi_18mbs" text = "MOD1440_WR_K_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "wr_k_3_st" position = { x = 334 y = 698 } font = "hoi_20b" text = "MOD1440_WR_K_3_ST" maxWidth = 62 maxHeight = 22 format = centre }
 			instantTextboxType = { name = "wr_k_3_vp" position = { x = 396 y = 698 } font = "hoi_20b" text = "MOD1440_WR_K_3_VP" maxWidth = 62 maxHeight = 22 format = centre }
@@ -1390,6 +1523,14 @@ guiTypes = {
 			instantTextboxType = { name = "wr_k_3_rank_2" position = { x = 78 y = 710 } font = "hoi_18mbs" text = "MOD1440_WR_K_RANK_2" maxWidth = 230 maxHeight = 22 format = left }
 			instantTextboxType = { name = "wr_k_3_rank_3" position = { x = 78 y = 710 } font = "hoi_18mbs" text = "MOD1440_WR_K_RANK_3" maxWidth = 230 maxHeight = 22 format = left }
 			iconType = { name = "wr_k_4_face" position = { x = 34 y = 735 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			gridboxtype = {
+				name = "wr_k_4_gface_grid"
+				position = { x = 34 y = 735 }
+				size = { width = 34 height = 46 }
+				slotsize = { width = 1 height = 1 }
+				add_horizontal = no
+				format = "UPPER_LEFT"
+			}
 			instantTextboxType = { name = "wr_k_4" position = { x = 78 y = 736 } font = "hoi_18mbs" text = "MOD1440_WR_K_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
 			instantTextboxType = { name = "wr_k_4_st" position = { x = 334 y = 746 } font = "hoi_20b" text = "MOD1440_WR_K_4_ST" maxWidth = 62 maxHeight = 22 format = centre }
 			instantTextboxType = { name = "wr_k_4_vp" position = { x = 396 y = 746 } font = "hoi_20b" text = "MOD1440_WR_K_4_VP" maxWidth = 62 maxHeight = 22 format = centre }
@@ -1867,6 +2008,11 @@ guiTypes = {
 		buttonType = { name = "wr_en_row" position = { x = 0 y = 0 } quadTextureSprite = "GFX_1440p_SG_hit_502x32" clicksound = click_default pdx_tooltip = "MOD1440_WR_EN_ROW_TT" }
 	}
 	containerWindowType = {
+		name = "mod1440_records_wr_k_gface_row"
+		size = { width = 34 height = 46 }
+		iconType = { name = "wr_k_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+	}
+	containerWindowType = {
 		name = "mod1440_records_handle"
 		position = { x = 2002 y = 3 }
 		size = { width = 150 height = 28 }
@@ -1901,7 +2047,20 @@ guiTypes = {
 		position = { x = 476 y = 74 }
 		size = { width = 528 height = 32 }
 		iconType = { name = "sc_by_face" position = { x = 8 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
+		gridboxtype = {
+			name = "sc_by_gface_grid"
+			position = { x = 8 y = 0 }
+			size = { width = 23 height = 31 }
+			slotsize = { width = 1 height = 1 }
+			add_horizontal = no
+			format = "UPPER_LEFT"
+		}
 		instantTextboxType = { name = "sc_by" position = { x = 48 y = 6 } font = "hoi_18mbs" text = "MOD1440_SC_BY" maxWidth = 464 maxHeight = 22 format = left fixedsize = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_sc_by_gface_row"
+		size = { width = 23 height = 31 }
+		iconType = { name = "sc_by_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.15 }
 	}
 	containerWindowType = {
 		name = "mod1440_state_card_handle"

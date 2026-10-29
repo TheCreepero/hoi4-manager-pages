@@ -15,11 +15,25 @@
       "name": "mod1440_records_gv",
       "rows": {
         "gv_fac_grid": 1,
-        "gv_sub_grid": 1
+        "gv_sub_grid": 1,
+        "gv_of_0_gface_grid": 1,
+        "gv_of_1_gface_grid": 0,
+        "gv_of_2_gface_grid": 0,
+        "gv_of_3_gface_grid": 0,
+        "gv_hc_0_gface_grid": 1,
+        "gv_hc_1_gface_grid": 0,
+        "gv_hc_2_gface_grid": 0
       },
       "listRows": {
         "gv_fac_grid": "mod1440_records_fac_row",
-        "gv_sub_grid": "mod1440_records_sub_row"
+        "gv_sub_grid": "mod1440_records_sub_row",
+        "gv_of_0_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_of_1_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_of_2_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_of_3_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_hc_0_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_hc_1_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_hc_2_gface_grid": "mod1440_records_gv_gface_row"
       },
       "hide": [
         "gv_leader_since",
@@ -106,6 +120,8 @@
         "gv_hc_2_since",
         "gv_hc_2_since_old",
         "gv_hc_2_bg",
+        "gv_of_0_face",
+        "gv_hc_0_face",
         "gv_adv_none_0",
         "gv_adv_none_1",
         "gv_adv_none_3",
@@ -140,6 +156,10 @@
     },
     {
       "name": "mod1440_records_sub_row",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_gface_row",
       "skip": true
     }
   ],
@@ -290,7 +310,9 @@
     "High command: Fritsch as chief of the army with his portrait and \"Oberkommando des Heeres\"; the vacant offices with the unknown portrait",
     "Faction members and subjects as flag tiles, four to a row (puppet Denmark: effect mod1440_chk_puppet)",
     "Heads of government: Hitler, \"before the record began - today\"",
-    "error.log: no line about is_character, has_character or a sprite of an advisor"
+    "error.log: no line about is_character, has_character or a sprite of an advisor",
+    "E7 with Road to 56, after mod1440_chk_hire and one day: the chief of the army and a member of the high command who are generals (Fritsch if the DLC lets him be hired, Rundstedt) show their army portrait at 48x65 in the place of the advisor's small one, the same face as in the game's commander picker; mod1440_chk_e7_log: 'chiefs 1 ...' and 'members 1 ...'",
+    "E7: a political advisor (Neurath, Todt) and a theorist keep the advisor's small portrait; the head of government and the heads of the record keep their portraits (or the flag box); no unknown man anywhere on the page"
   ],
   "teardown": [
     {

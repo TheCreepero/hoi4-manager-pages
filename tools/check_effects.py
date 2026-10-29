@@ -2,7 +2,10 @@
 
     python -I tools/check_effects.py            write common/scripted_effects/mod1440_check.txt; a running game
                                                 reads it within seconds ("Reloading Database" in error.log)
-    python -I tools/check_effects.py --restore  remove it again. The test suite fails while it is there.
+    python -I tools/check_effects.py --probe    the same, and the throwaway portrait probe of phase E7 (its window,
+                                                script, texts and scene tools/scenes/probe_portraits.json)
+    python -I tools/check_effects.py --restore  remove all of it again. The test suite fails while any is there:
+    python -I tools/check_effects.py --check    exits 1 while a file of this tool is present.
 
 Each effect is run from the console with nothing selected: effect mod1440_chk_<name>. They change the game of
 the check, which is never saved. What an effect finds out goes to game.log as a line "MOD1440 ...".
@@ -162,6 +165,22 @@ mod1440_chk_hire = {
 	activate_advisor = todt
 	activate_advisor = werner_von_fritsch_army_chief
 	activate_advisor = gerd_von_rundstedt
+	# E7 fix round 1: with Road to 56 (1.19.4) only Rundstedt was hired (check 2): the roles of Neurath, Todt and Fritsch
+	# are gated by focuses and flags (available, visible). Who is still not hired gets a role of the check's own, hired at
+	# once (add_advisor_role, activate = yes), in the same slot.
+	if = {
+		limit = { has_character = GER_konstantin_von_neurath NOT = { any_character = { is_character = GER_konstantin_von_neurath is_hired_as_advisor = yes } } }
+		add_advisor_role = { character = GER_konstantin_von_neurath advisor = { slot = political_advisor idea_token = mod1440_chk_neurath cost = 0 } activate = yes }
+	}
+	if = {
+		limit = { has_character = GER_fritz_todt NOT = { any_character = { is_character = GER_fritz_todt is_hired_as_advisor = yes } } }
+		add_advisor_role = { character = GER_fritz_todt advisor = { slot = political_advisor idea_token = mod1440_chk_todt cost = 0 } activate = yes }
+	}
+	if = {
+		limit = { has_character = GER_werner_von_fritsch NOT = { any_character = { is_character = GER_werner_von_fritsch is_army_chief = yes } } }
+		add_advisor_role = { character = GER_werner_von_fritsch advisor = { slot = army_chief idea_token = mod1440_chk_fritsch_army_chief cost = 0 } activate = yes }
+	}
+	log = "MOD1440 e7 hire: army chief [?army_chief.GetName], political advisors [?political_advisor^num], high command [?high_command^num]"
 }
 
 # ---- the rounds the game runs by itself
@@ -1090,14 +1109,388 @@ mod1440_chk_sizes4 = {
 """
 # --- end E4 round 2 ---
 
+# --- E7 probe ---
+# Phase E7 (2026-10-29), step 1: does properties = { <icon> = { image = "portrait" } } draw the scope's unit leader
+# portrait through the game's own portrait code (register SGUI-053, read in hoi4.exe 1.19.3, not yet seen in the game)?
+# A throwaway window, mod1440_probe_portraits, written with --probe beside the check effects and removed with --restore.
+# Nothing of it is in the output of tools/build_managers.py; the test suite fails while it is there (--check).
+#
+# Each cell: left the icon with image = "portrait" (own sprite GFX_portrait_unknown, like the pages), right the sprite
+# the mod's table names (mod1440_p, tools/portraits_table.py), under them the row's name. The control row Z has the
+# unknown woman as its own sprite: her outline there means the property left the icon alone, the man's outline means the
+# portrait code drew its fallback, nothing means the text was taken as a sprite name nobody declares [SPR-017].
+
+PROBE_WINDOW = "mod1440_probe_portraits"
+PROBE_AT = (40, 80)
+PROBE_SIZE = (2480, 1160)
+PROBE_SCALE = 0.35                    # 55x74: a face is recognisable, and 17 cells fit a line
+PROBE_SMALL = 0.22                    # the Officers list's portrait (34x46)
+CELL = (140, 100)
+CELL_SMALL = (200, 52)
+CELL_FULL = (340, 240)
+PROBE_FILES = {
+    "gui": "interface/%s.gui" % PROBE_WINDOW,
+    "script": "common/scripted_guis/%s.txt" % PROBE_WINDOW,
+    "loc": "localisation/english/mod1440_probe_l_english.yml",
+    "scene": "tools/scenes/probe_portraits.json",
+}
+# (list, label, array, entry container, x, y, columns, lines, label width, label text)
+PROBE_LISTS = [
+    ("a", "mod1440_pr_a", "mod1440_probe_cell", 16, 56, 17, 2, 2300,
+     "A  every_army_leader, kept as the mod keeps him (mod1440_of_me): [?mod1440_pr_a^num] leaders"),
+    ("b", "mod1440_of_rows", "mod1440_probe_cell", 16, 292, 17, 3, 2300,
+     "B  the Officers page's own array mod1440_of_rows: [?mod1440_of_rows^num] rows"),
+    ("d", "mod1440_pr_d", "mod1440_probe_cell", 16, 628, 6, 2, 820, "D  every_navy_leader: [?mod1440_pr_d^num]"),
+    ("c", "mod1440_pr_c", "mod1440_probe_cell", 880, 628, 1, 1, 140, "C  one row"),
+    ("e", "mod1440_pr_e", "mod1440_probe_cell", 1040, 628, 1, 2, 140, "E  made up"),
+    ("f", "mod1440_pr_f", "mod1440_probe_cell", 1200, 628, 1, 1, 140, "F  head of gov."),
+    ("h", "mod1440_pr_h", "mod1440_probe_cell", 1360, 628, 3, 2, 420, "H  command by effect: [?mod1440_pr_h^num]"),
+    ("z", "mod1440_pr_z", "mod1440_probe_cell_ctl", 1800, 628, 3, 1, 420, "Z  control: own sprite the woman"),
+    ("g2", "mod1440_pr_g2", "mod1440_probe_cell_full", 16, 864, 3, 1, 1000, "G  full size: C, E and the first of H"),
+    ("g1", "mod1440_pr_g1", "mod1440_probe_cell_small", 1060, 864, 5, 2, 1000, "G  at 0.22 as in the Officers list: the first ten of A"),
+]
+PROBE_ARRAYS = ["mod1440_pr_" + name for name in ("a", "c", "d", "e", "f", "h", "z", "g1", "g2")]
+PROBE_LOG = [("A", "mod1440_pr_a"), ("B", "mod1440_of_rows"), ("C", "mod1440_pr_c"), ("D", "mod1440_pr_d"),
+             ("E", "mod1440_pr_e"), ("F", "mod1440_pr_f"), ("H", "mod1440_pr_h"), ("Z", "mod1440_pr_z"),
+             ("G1", "mod1440_pr_g1"), ("G2", "mod1440_pr_g2")]
+# H: characters of Germany with no command at the start, given one by effect, so unit leaders without a number kept by
+# their place (Engine Facts X66, X67). Himmler: Road to 56 gives his army portrait as a texture file, the game a sprite;
+# Bormann: a sprite; Canaris: no large army portrait (Road to 56: a civilian one as a file, which a general does not use).
+PROBE_BY_EFFECT = ["GER_heinrich_himmler", "GER_martin_bormann", "GER_wilhelm_canaris"]
+# C: one officer alone, Road to 56's Keitel (his army portrait is gfx/leaders/GER/r56_portrait_GER_Wilhelm_Keitel.dds)
+PROBE_SINGLE = "GER_wilhelm_keitel"
+SKILLS = "skill = 1 attack_skill = 1 defense_skill = 1 planning_skill = 1 logistics_skill = 1"
+
+
+def probe_effects():
+    """The check effects of the probe: fill its arrays, open and close it, log every row."""
+    def logs(letter, array):
+        return ("    for_each_loop = {\n        array = %s\n        value = pr_v\n        index = pr_i\n"
+                "        var:pr_v = { log = \"MOD1440 probe %s [?pr_i]: [?pr_v.GetName], kept as [?pr_v], table [?mod1440_p.GetTokenKey]\" }\n"
+                "    }\n" % (array, letter))
+    text = """
+# ---- E7 probe (2026-10-29): portraits by image = "portrait" [SGUI-053], window mod1440_probe_portraits (--probe).
+# As Germany on 1 January 1936 with Road to 56 loaded (RT56 - VNR - UTT Standalone v16). In the game's own files the
+# rows are the same people with the game's sprites.
+
+# Fills the probe's arrays, opens its window and logs every row ("MOD1440 probe" in game.log). A second run makes no
+# second general and gives no second command.
+mod1440_chk_probe = {
+    if = {
+        limit = { NOT = { check_variable = { mod1440_pr_made = 1 } } }
+        set_variable = { mod1440_pr_made = 1 }
+        # E: a general the game makes up: no portraits block, so the portrait code picks one from the pools [CHR-011]
+        every_army_leader = { set_variable = { mod1440_pr_old = 1 } }
+        create_corps_commander = {
+            name = "Probe General"
+            %s
+        }
+        every_army_leader = {
+            limit = { NOT = { check_variable = { mod1440_pr_old = 1 } } }
+            set_variable = { mod1440_pr_gen = 1 }
+        }
+        # H: a command by effect: unit leaders without a number, kept by their place (X66, X67)
+%s    }
+    # the mod's own round: places for leaders without a number, the Officers page's list (B), the table's sprites
+    mod1440_of_list = yes
+%s    # A, E, H: every general as the mod keeps him, his number or his place
+    every_army_leader = {
+        mod1440_p_officer = yes
+        mod1440_of_me = yes
+        if = {
+            limit = { NOT = { check_variable = { of_me = 0 } } }
+            add_to_array = { PREV.mod1440_pr_a = of_me }
+            if = { limit = { check_variable = { mod1440_pr_gen = 1 } } add_to_array = { PREV.mod1440_pr_e = of_me } }
+            if = { limit = { check_variable = { of_me > 0 } } add_to_array = { PREV.mod1440_pr_h = of_me } }
+        }
+    }
+    # D: every admiral
+    every_navy_leader = {
+        mod1440_p_officer = yes
+        mod1440_of_me = yes
+        if = {
+            limit = { NOT = { check_variable = { of_me = 0 } } }
+            add_to_array = { PREV.mod1440_pr_d = of_me }
+        }
+    }
+    # C: one officer alone (the slot of an officer's file, a commander of a war): Keitel, else the first of A
+    every_army_leader = {
+        limit = { PREV = { has_character = %s } is_character = %s }
+        mod1440_of_me = yes
+        add_to_array = { PREV.mod1440_pr_c = of_me }
+    }
+    if = {
+        limit = { check_variable = { mod1440_pr_c^num = 0 } check_variable = { mod1440_pr_a^num > 0 } }
+        add_to_array = { mod1440_pr_c = mod1440_pr_a^0 }
+    }
+    # F: the head of government, a character with no command: expected to draw nothing [SGUI-053]
+    set_temp_variable = { pr_ld = country_leader }
+    var:pr_ld = {
+        mod1440_p_leader = yes
+        set_variable = { mod1440_p = p_tok }
+    }
+    add_to_array = { mod1440_pr_f = pr_ld }
+    # Z: the control, on icons whose own sprite is the unknown woman: the first of A, E, F
+    if = { limit = { check_variable = { mod1440_pr_a^num > 0 } } add_to_array = { mod1440_pr_z = mod1440_pr_a^0 } }
+    if = { limit = { check_variable = { mod1440_pr_e^num > 0 } } add_to_array = { mod1440_pr_z = mod1440_pr_e^0 } }
+    add_to_array = { mod1440_pr_z = pr_ld }
+    # G: at full size C, E and the first of H; at 0.22 the first ten of A
+    if = { limit = { check_variable = { mod1440_pr_c^num > 0 } } add_to_array = { mod1440_pr_g2 = mod1440_pr_c^0 } }
+    if = { limit = { check_variable = { mod1440_pr_e^num > 0 } } add_to_array = { mod1440_pr_g2 = mod1440_pr_e^0 } }
+    if = { limit = { check_variable = { mod1440_pr_h^num > 0 } } add_to_array = { mod1440_pr_g2 = mod1440_pr_h^0 } }
+    for_each_loop = {
+        array = mod1440_pr_a
+        value = pr_v
+        index = pr_i
+        if = { limit = { check_variable = { pr_i < 10 } } add_to_array = { mod1440_pr_g1 = pr_v } }
+    }
+    set_variable = { mod1440_pr_open = 1 }
+    add_to_variable = { mod1440_pr_dirty = 1 }
+    mod1440_chk_probe_log = yes
+}
+
+# Every row of the probe in game.log: the list, its place in it, the name, what the array holds, the table's sprite.
+mod1440_chk_probe_log = {
+    log = "MOD1440 probe: [ROOT.GetTag], %s"
+%s}
+
+# The window drawn again (its dirty variable changed), for a second capture.
+mod1440_chk_probe_redraw = {
+    add_to_variable = { mod1440_pr_dirty = 1 }
+}
+
+mod1440_chk_probe_close = {
+    set_variable = { mod1440_pr_open = 0 }
+}
+""" % (SKILLS,
+       "".join("        if = { limit = { has_character = %s } add_corps_commander_role = { character = %s %s } }\n" % (c, c, SKILLS)
+               for c in PROBE_BY_EFFECT),
+       "".join("    clear_array = %s\n" % a for a in PROBE_ARRAYS),
+       PROBE_SINGLE, PROBE_SINGLE,
+       " ".join("%s [?%s^num]" % (letter, array) for letter, array in PROBE_LOG),
+       "".join(logs(letter, array) for letter, array in PROBE_LOG))
+    return text.replace("    ", "\t")
+
+
+def probe_gui():
+    """The probe's window and its four kinds of cell."""
+    def icon(name, x, y, sprite, scale=None):
+        return '\t\ticonType = { name = "%s" position = { x = %d y = %d } spriteType = "%s"%s }\n' % (
+            name, x, y, sprite, " scale = %s" % scale if scale else "")
+
+    def text(name, x, y, w, h, key, font="hoi_16mbs"):
+        return ('\t\tinstantTextboxType = { name = "%s" position = { x = %d y = %d } font = "%s" text = "%s" maxWidth = %d '
+                'maxHeight = %d format = left fixedsize = yes }\n' % (name, x, y, font, key, w, h))
+
+    def cell(name, size, body):
+        return ('\tcontainerWindowType = {\n\t\tname = "%s"\n\t\tposition = { x = 0 y = 0 }\n\t\tsize = { width = %d height = %d }\n%s\t}\n'
+                % (name, size[0], size[1], body))
+
+    face_w = int(round(156 * PROBE_SCALE))
+    window = text("pr_title", 16, 14, 2300, 30, "MOD1440_PR_TITLE", "hoi_24header")
+    window += ('\t\tbuttonType = { name = "pr_close" position = { x = %d y = 12 } quadTextureSprite = "GFX_closebutton" '
+               'clicksound = click_default shortcut = "ESCAPE" }\n' % (PROBE_SIZE[0] - 60))
+    sizes = {"mod1440_probe_cell": CELL, "mod1440_probe_cell_ctl": CELL, "mod1440_probe_cell_small": CELL_SMALL,
+             "mod1440_probe_cell_full": CELL_FULL}
+    for name, array, entry, x, y, cols, lines, label_w, label in PROBE_LISTS:
+        slot = sizes[entry]
+        window += text("pr_%s_l" % name, x, y, label_w, 24, "MOD1440_PR_%s" % name.upper(), "hoi_18mbs")
+        window += ('\t\tgridboxtype = {\n\t\t\tname = "pr_%s_grid"\n\t\t\tposition = { x = %d y = %d }\n'
+                   '\t\t\tsize = { width = %d height = %d }\n\t\t\tslotsize = { width = %d height = %d }\n'
+                   '\t\t\tadd_horizontal = yes\n\t\t\tmax_slots_horizontal = %d\n\t\t\tformat = "UPPER_LEFT"\n\t\t}\n'
+                   % (name, x, y + 26, cols * slot[0], lines * slot[1], slot[0], slot[1], cols))
+    window += text("pr_legend", 1060, 1000, 1400, 120, "MOD1440_PR_LEGEND")
+    out = ("# CHECK ONLY: written by tools/check_effects.py --probe (phase E7), removed with --restore.\nguiTypes = {\n"
+           '\tcontainerWindowType = {\n\t\tname = "%s"\n\t\tposition = { x = %d y = %d }\n\t\tsize = { width = %d height = %d }\n'
+           '\t\tbackground = { name = "Background" quadTextureSprite = "GFX_tiled_window_1b_thin_border" }\n%s\t}\n'
+           % (PROBE_WINDOW, PROBE_AT[0], PROBE_AT[1], PROBE_SIZE[0], PROBE_SIZE[1], window))
+    table_x = 4 + face_w + 7
+    out += cell("mod1440_probe_cell", CELL, icon("pr_face", 4, 2, "GFX_portrait_unknown", PROBE_SCALE)
+                + icon("pr_table", table_x, 2, "GFX_portrait_unknown", PROBE_SCALE) + text("pr_name", 2, 78, 136, 20, "MOD1440_PR_NAME"))
+    out += cell("mod1440_probe_cell_ctl", CELL, icon("pr_face_ctl", 4, 2, "GFX_portrait_unknown_female", PROBE_SCALE)
+                + icon("pr_table", table_x, 2, "GFX_portrait_unknown", PROBE_SCALE) + text("pr_name", 2, 78, 136, 20, "MOD1440_PR_NAME"))
+    out += cell("mod1440_probe_cell_small", CELL_SMALL, icon("pr_face_s", 3, 3, "GFX_portrait_unknown", PROBE_SMALL)
+                + text("pr_name_s", 42, 15, 154, 20, "MOD1440_PR_NAME"))
+    out += cell("mod1440_probe_cell_full", CELL_FULL, icon("pr_face_f", 4, 2, "GFX_portrait_unknown")
+                + icon("pr_table_f", 168, 2, "GFX_portrait_unknown") + text("pr_name_f", 4, 216, 330, 22, "MOD1440_PR_NAME", "hoi_18mbs"))
+    return out + "}\n"
+
+
+def probe_script():
+    lists = "".join('\t\t\tpr_%s_grid = {\n\t\t\t\tarray = %s\n\t\t\t\tchange_scope = yes\n\t\t\t\tentry_container = "%s"\n\t\t\t}\n'
+                    % (name, array, entry) for name, array, entry, *_ in PROBE_LISTS)
+    portrait = "".join('\t\t\t%s = {\n\t\t\t\timage = "portrait"\n\t\t\t}\n' % w for w in ("pr_face", "pr_face_ctl", "pr_face_s", "pr_face_f"))
+    table = "".join('\t\t\t%s = {\n\t\t\t\timage = "[?mod1440_p.GetTokenKey]"\n\t\t\t}\n' % w for w in ("pr_table", "pr_table_f"))
+    return ("# CHECK ONLY: written by tools/check_effects.py --probe (phase E7), removed with --restore.\nscripted_gui = {\n"
+            "\t%s = {\n\t\tcontext_type = player_context\n\t\twindow_name = \"%s\"\n\n"
+            "\t\tvisible = {\n\t\t\tcheck_variable = { mod1440_pr_open = 1 }\n\t\t}\n\n\t\tdirty = mod1440_pr_dirty\n\n"
+            "\t\teffects = {\n\t\t\tpr_close_click = {\n\t\t\t\tset_variable = { mod1440_pr_open = 0 }\n\t\t\t}\n\t\t}\n\n"
+            "\t\tdynamic_lists = {\n%s\t\t}\n\n\t\tproperties = {\n%s%s\t\t}\n\n"
+            "\t\tai_enabled = {\n\t\t\talways = no\n\t\t}\n\t}\n}\n" % (PROBE_WINDOW, PROBE_WINDOW, lists, portrait, table))
+
+
+def probe_loc():
+    texts = {
+        "MOD1440_PR_TITLE": "E7 probe: image = portrait (left in each cell) beside the sprite of the mod's table (right). Throwaway: tools/check_effects.py --restore",
+        "MOD1440_PR_NAME": "[THIS.GetName]",
+        "MOD1440_PR_LEGEND": ("Left: an icon whose own sprite is the unknown leader, with image = portrait in the row's scope. Right: mod1440_p, "
+                              "the sprite the mod's table names. Z has the unknown woman as its own sprite: her outline means the property "
+                              "left the icon alone, the man's outline the portrait code's fallback, an empty slot a sprite name nobody declares."),
+    }
+    for name, _array, _entry, _x, _y, _cols, _lines, _w, label in PROBE_LISTS:
+        texts["MOD1440_PR_%s" % name.upper()] = label
+    return "﻿l_english:\n" + "".join(' %s:0 "%s"\n' % (k, v) for k, v in sorted(texts.items()))
+
+
+def probe_scene():
+    import json
+    rows = {"pr_a_grid": 26, "pr_b_grid": 34, "pr_d_grid": 8, "pr_c_grid": 1, "pr_e_grid": 1, "pr_f_grid": 1, "pr_h_grid": 3,
+            "pr_z_grid": 3, "pr_g2_grid": 3, "pr_g1_grid": 10}
+    labels = {"pr_%s_l" % name: label.replace("[?mod1440_pr_a^num]", "26").replace("[?mod1440_of_rows^num]", "34")
+              .replace("[?mod1440_pr_d^num]", "8").replace("[?mod1440_pr_h^num]", "3")
+              for name, _a, _e, _x, _y, _c, _l, _w, label in PROBE_LISTS}
+    checklist = [
+        "Every cell: left the image = portrait icon, right the table's sprite (mod1440_p), the name under them; game.log has one 'MOD1440 probe <list> <n>: <name>' line per cell, and the window's names match those lines",
+        "A (every_army_leader): each general shows his own face on the left. Road to 56 gives these generals texture files: Wilhelm Keitel, Franz Halder (r56_portrait_GER_*.dds), and the rest of the German generals as Portrait_Germany_*.dds files; a face on the left where the right shows the unknown leader or another picture is the finding. Compare three faces with the game's own general window (army view, the general's portrait)",
+        "B (the Officers page's own mod1440_of_rows): the same faces as A for the same officers, the admirals among them; proves the mod's kept references work as a row scope",
+        "C (an array of one): Wilhelm Keitel with his Road to 56 portrait (a texture file); the single-slot case",
+        "D (every_navy_leader): each admiral his own face (Road to 56: Otto Ciliax as r56_portrait_GER_Otto_Ciliax.dds; Raeder, Donitz, Saalwachter, Lutjens, Boehm, Marschall as Portrait_Germany_*.dds); compare one with the game's fleet view",
+        "E (create_corps_commander, 'Probe General'): a face from the portrait pools on the left, not the unknown leader; the right shows the unknown leader (the table cannot know him). Compare with his portrait in the game's army view, which must be the same face",
+        "F (head of government, Adolf Hitler, no command): the left is EMPTY (or the unknown leader: write down which); the right shows the table's sprite. error.log: no new line naming 'portrait', 'sprite type' or the probe",
+        "H (command by effect: Heinrich Himmler, Martin Bormann, Wilhelm Canaris, no number, kept by place): Himmler and Bormann their own army faces (Himmler as Road to 56's file), Canaris a pool face (he has no large army portrait), not his civilian portrait",
+        "Z (control, own sprite the unknown woman): the first of A and E show faces as in A and E; F shows whatever F shows. Wherever a cell shows the woman's outline, the property did nothing there",
+        "G full size (C, E, H1): the same faces at 156x210, sharp; G at 0.22 (the first ten of A): the same faces as A at the Officers list's size (34x46). Scale applies to the drawn portrait",
+        "The capture 'redraw' (after effect mod1440_chk_probe_redraw): the same faces in every cell",
+        "error.log: no line naming mod1440_probe, MOD1440_PR, 'portrait' or a GFX_ sprite that the window names; game.log: the 'MOD1440 probe: GER, A .. B .. ' count line and one line per row",
+        "The clock still reads 1 January 1936 (no time ran); autosave.hoi4 hash unchanged",
+    ]
+    scene = {
+        "_comment": "Written by tools/check_effects.py --probe (phase E7, throwaway), removed with --restore. Keys: wiki/Game-Recipes.md.",
+        "screen": "probe_portraits",
+        "phase": "E7",
+        "file": "%s.gui" % PROBE_WINDOW,
+        "screenshot": "reference/vanilla/theatre_bar.jpg",
+        "modOnly": True,
+        "windows": [{
+            "at": list(PROBE_AT), "freeWindow": True, "name": PROBE_WINDOW, "rows": rows,
+            "listRows": {"pr_%s_grid" % name: entry for name, _a, entry, *_ in PROBE_LISTS},
+            "_note": "A portrait is the unknown leader in the renderer; in the game the left icon of each cell is the probe."}],
+        "samples": {
+            PROBE_WINDOW: labels,
+            "mod1440_probe_cell": {"pr_name": "Gerd von Rundstedt"},
+            "mod1440_probe_cell_ctl": {"pr_name": "Adolf Hitler"},
+            "mod1440_probe_cell_small": {"pr_name_s": "Walther von Brauchitsch"},
+            "mod1440_probe_cell_full": {"pr_name_f": "Wilhelm Keitel"},
+        },
+        "setup": [{"console": "effect mod1440_chk_probe", "wait": 4.0}],
+        "captures": [{"name": "redraw", "steps": [{"console": "effect mod1440_chk_probe_redraw", "wait": 2.0}]}],
+        "expect": ["%s/pr_close" % PROBE_WINDOW],
+        "crop": [PROBE_AT[0] - 10, PROBE_AT[1] - 10, PROBE_AT[0] + PROBE_SIZE[0] + 10, PROBE_AT[1] + PROBE_SIZE[1] + 10],
+        "checklist": checklist,
+        "teardown": [{"console": "effect mod1440_chk_probe_close", "wait": 1.0}],
+    }
+    return json.dumps(scene, indent=2, ensure_ascii=False) + "\n"
+
+
+def probe_contents():
+    return {PROBE_FILES["gui"]: probe_gui(), PROBE_FILES["script"]: probe_script(), PROBE_FILES["loc"]: probe_loc(),
+            PROBE_FILES["scene"]: probe_scene()}
+
+
+HISTORY += probe_effects()
+# --- end E7 probe ---
+
+# --- E7 ---
+HISTORY += ("""
+# ---- E7 (2026-10-29), step 2: the game's own faces on the pages (image = "portrait", SGUI-053). As Germany on
+# 1 January 1936, Road to 56 loaded.
+
+# Himmler, Bormann and Canaris get a command by effect: unit leaders without a number, kept by their place (X66). After
+# a day (or a click on a filter of the Officers page) they are rows of the Officers page with their own faces: Road to
+# 56 gives Himmler's army portrait as a texture file, Canaris only his civilian large one.
+mod1440_chk_e7_generals = {
+%s}
+
+# The officer chosen on the Officers page leaves the service (retire): from the next day his row (filter Former) and
+# his file show the table's portrait, no longer the game's.
+mod1440_chk_e7_retire = {
+\tif = {
+\t\tlimit = { check_variable = { mod1440_of_has_sel = 1 } }
+\t\tvar:mod1440_of_sel = {
+\t\t\tretire = yes
+\t\t\t# not known before E7's check: does a retired leader still answer is_unit_leader = yes? (if so the pages would
+\t\t\t# draw the unknown man for him: SGUI-053)
+\t\t\tif = { limit = { is_unit_leader = yes } log = "MOD1440 e7 retired [This.GetName]: is_unit_leader yes" }
+\t\t\telse = { log = "MOD1440 e7 retired [This.GetName]: is_unit_leader no" }
+\t\t}
+\t}
+}
+
+# E7 fix round 1: a state taken from Poland with a German general on the spot (check 2: with Road to 56 Danzig belongs to
+# the Free City, so mod1440_chk_state2 gave 'Received from' and no general). Needs the war (mod1440_chk_war) and a
+# commander for the army in Brandenburg (Army 1 with Keitel, as the Army Readiness item does). The divisions that stand
+# in Brandenburg (state 64) are moved by teleport_armies to Poznan (state 86, Poland's in the game and in Road to 56),
+# then Germany takes control of Poznan: the War Diary's 'State taken Poznan' names the general with the most divisions
+# there, the war's file counts it for him, and Poznan's state card says 'by the troops of' him.
+mod1440_chk_e7_take = {
+\t64 = { teleport_armies = { to_state = 86 limit = { tag = GER } } }
+\tset_temp_variable = { e7_n = 0 }
+\t86 = { every_state_division = { limit = { OWNER = { tag = GER } } add_to_temp_variable = { e7_n = 1 } } }
+\tset_state_controller = 86
+\tlog = "MOD1440 e7 take: [?e7_n] German divisions in Poznan before Germany takes it"
+}
+
+# The same once more, if the first left no general on the line (the divisions arrived after the change of hands):
+# Poland takes Poznan back and Germany takes it again, with the divisions now there.
+mod1440_chk_e7_take_again = {
+\tPOL = { set_state_controller = 86 }
+\tset_state_controller = 86
+}
+
+# What the pages hold of the game's faces, into game.log ("MOD1440 e7"): the officer's file, the commanders of the war
+# on show, the chiefs and members of the high command, the rows of the War Diary's page.
+mod1440_chk_e7_log = {
+\tlog = "MOD1440 e7: file [?mod1440_of_c_ul^num] [?mod1440_of_sel.GetName]; war k [?mod1440_wr_k_0_ul^num] [?mod1440_wr_k_1_ul^num] [?mod1440_wr_k_2_ul^num] [?mod1440_wr_k_3_ul^num] [?mod1440_wr_k_4_ul^num]; chiefs [?mod1440_gv_of_0_ul^num] [?mod1440_gv_of_1_ul^num] [?mod1440_gv_of_2_ul^num] [?mod1440_gv_of_3_ul^num]; members [?mod1440_gv_hc_0_ul^num] [?mod1440_gv_hc_1_ul^num] [?mod1440_gv_hc_2_ul^num]; diary rows [?mod1440_wd_fam^num] faces [?mod1440_wd_ga^num] [?mod1440_wd_gc^num]"
+\tfor_each_loop = {
+\t\tarray = mod1440_wd_ga
+\t\tvalue = e7_v
+\t\tindex = e7_i
+\t\tif = {
+\t\t\tlimit = { check_variable = { mod1440_wd_ua^e7_i = 1 } }
+\t\t\tlog = "MOD1440 e7 diary [?e7_i]: [?e7_v.GetName], kept as [?e7_v]"
+\t\t}
+\t}
+}
+""" % "".join("\tif = { limit = { has_character = %s } add_corps_commander_role = { character = %s %s } }\n" % (c, c, SKILLS)
+              for c in PROBE_BY_EFFECT))
+# --- end E7 ---
+
+
+def throwaway_files():
+    """Every file this tool writes: the check effects and the probe's files."""
+    return [PATH] + [os.path.join(ROOT, rel) for rel in PROBE_FILES.values()]
+
+
 if __name__ == "__main__":
+    if "--check" in sys.argv:
+        present = [p for p in throwaway_files() if os.path.isfile(p)]
+        for p in present:
+            print("present (remove with python -I tools/check_effects.py --restore):", os.path.relpath(p, ROOT))
+        sys.exit(1 if present else 0)
     if "--restore" in sys.argv:
-        if os.path.isfile(PATH):
-            os.remove(PATH)
-            print("removed", PATH)
+        for p in throwaway_files():
+            if os.path.isfile(p):
+                os.remove(p)
+                print("removed", p)
     else:
         io.open(PATH, "w", encoding="utf-8", newline="\n").write(EFFECTS + HISTORY)
         print("wrote", PATH)
+        if "--probe" in sys.argv:
+            for rel, content in probe_contents().items():
+                path = os.path.join(ROOT, rel)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                io.open(path, "w", encoding="utf-8", newline="\n").write(content)
+                print("wrote", rel)
         # a running game reads the script again when a file under common/scripted_guis has a new time stamp
         folder = os.path.join(ROOT, "common", "scripted_guis")
         now = time.time()

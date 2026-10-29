@@ -16,12 +16,22 @@
       "rows": {
         "wr_now_grid": 2,
         "wr_old_grid": 8,
-        "wr_en_grid": 5
+        "wr_en_grid": 5,
+        "wr_k_0_gface_grid": 1,
+        "wr_k_1_gface_grid": 1,
+        "wr_k_2_gface_grid": 1,
+        "wr_k_3_gface_grid": 1,
+        "wr_k_4_gface_grid": 1
       },
       "listRows": {
         "wr_now_grid": "mod1440_records_war_row",
         "wr_old_grid": "mod1440_records_past_war_row",
-        "wr_en_grid": "mod1440_records_enemy_row"
+        "wr_en_grid": "mod1440_records_enemy_row",
+        "wr_k_0_gface_grid": "mod1440_records_wr_k_gface_row",
+        "wr_k_1_gface_grid": "mod1440_records_wr_k_gface_row",
+        "wr_k_2_gface_grid": "mod1440_records_wr_k_gface_row",
+        "wr_k_3_gface_grid": "mod1440_records_wr_k_gface_row",
+        "wr_k_4_gface_grid": "mod1440_records_wr_k_gface_row"
       },
       "hide": [
         "wr_c_none",
@@ -144,14 +154,19 @@
         "wr_c_surr_l",
         "wr_c_end",
         "wr_c_end_l",
+        "wr_k_0_face",
         "wr_k_0_rank_2",
         "wr_k_0_rank_3",
+        "wr_k_1_face",
         "wr_k_1_rank_1",
         "wr_k_1_rank_3",
+        "wr_k_2_face",
         "wr_k_2_rank_2",
         "wr_k_2_rank_3",
+        "wr_k_3_face",
         "wr_k_3_rank_1",
         "wr_k_3_rank_3",
+        "wr_k_4_face",
         "wr_k_4_rank_1",
         "wr_k_4_rank_3",
         "wr_ln_0_w",
@@ -680,6 +695,10 @@
         "wr_en_end_6": [],
         "wr_en_end_7": []
       }
+    },
+    {
+      "name": "mod1440_records_wr_k_gface_row",
+      "skip": true
     }
   ],
   "samples": {
@@ -1115,6 +1134,8 @@
     "Commanders who took states and points in a war: they need fighting, or mod1440_chk_state2 with a general in the state"
   ],
   "checklist": [
+    "E7 with Road to 56: in the file of the war with Poland after mod1440_chk_e7_take (and a day), the faces under 'Our commanders in this war' are each general's own, the same as in his army's leader view (34x46); mod1440_chk_e7_log: 'war k 1 ...'",
+    "E7: a file with fewer than five commanders shows no face on the empty lines; a war with none shows only 'None of your generals ...'",
     "The page in the steel look: three steel cards in the left column (The campaign 548x220, Wars of today 548x188, Finished wars 548x670), 6 apart, each with a head band of 27 holding its title and the column heads (Days / Our dead / Their dead / Surr.; Began / Our dead / Their dead / End); the window's ground, title strip and tabs unchanged; the Wars tab's tooltip 'One row per war, its enemies joined'",
     "The campaign table: 14 figures in two columns, bands on rows 2, 4, 6. Compare 'Casualties, all wars' with National Figures' 'Casualties, all wars'; 'in wars of today' with the war overview's casualties of your side; Our surrender with the war overview's bar; 'Casualties we inflicted' with the sum of Their dead over both lists",
     "Declare war on Poland (effect mod1440_chk_war), run 3 days: one red plate under Wars of today with Poland's flag and name, Days 3, Our dead and Their dead in K with one decimal, Surr. as the war overview's capitulation bar of Poland; 'At peace.' gone",
@@ -1150,7 +1171,12 @@
       "rows": {
         "wr_now_grid": 2,
         "wr_old_grid": 8,
-        "wr_en_grid": 0
+        "wr_en_grid": 0,
+        "wr_k_0_gface_grid": 1,
+        "wr_k_1_gface_grid": 1,
+        "wr_k_2_gface_grid": 1,
+        "wr_k_3_gface_grid": 1,
+        "wr_k_4_gface_grid": 1
       },
       "hide": {
         "mod1440_records_wr": [
@@ -1273,14 +1299,19 @@
           "wr_c_surr_l",
           "wr_c_gave",
           "wr_c_gave_l",
+          "wr_k_0_face",
           "wr_k_0_rank_2",
           "wr_k_0_rank_3",
+          "wr_k_1_face",
           "wr_k_1_rank_1",
           "wr_k_1_rank_3",
+          "wr_k_2_face",
           "wr_k_2_rank_1",
           "wr_k_2_rank_3",
+          "wr_k_3_face",
           "wr_k_3_rank_2",
           "wr_k_3_rank_3",
+          "wr_k_4_face",
           "wr_k_4_rank_1",
           "wr_k_4_rank_3",
           "wr_ln_0_w",
@@ -1820,7 +1851,12 @@
       "rows": {
         "wr_now_grid": 2,
         "wr_old_grid": 8,
-        "wr_en_grid": 3
+        "wr_en_grid": 3,
+        "wr_k_0_gface_grid": 1,
+        "wr_k_1_gface_grid": 1,
+        "wr_k_2_gface_grid": 1,
+        "wr_k_3_gface_grid": 1,
+        "wr_k_4_gface_grid": 0
       },
       "hide": {
         "mod1440_records_wr": [
@@ -1942,12 +1978,16 @@
           "wr_c_surr_l",
           "wr_c_end",
           "wr_c_end_l",
+          "wr_k_0_face",
           "wr_k_0_rank_2",
           "wr_k_0_rank_3",
+          "wr_k_1_face",
           "wr_k_1_rank_1",
           "wr_k_1_rank_3",
+          "wr_k_2_face",
           "wr_k_2_rank_2",
           "wr_k_2_rank_3",
+          "wr_k_3_face",
           "wr_k_3_rank_1",
           "wr_k_3_rank_3",
           "wr_k_4_face",
@@ -2565,7 +2605,12 @@
       "rows": {
         "wr_now_grid": 2,
         "wr_old_grid": 8,
-        "wr_en_grid": 0
+        "wr_en_grid": 0,
+        "wr_k_0_gface_grid": 1,
+        "wr_k_1_gface_grid": 1,
+        "wr_k_2_gface_grid": 1,
+        "wr_k_3_gface_grid": 1,
+        "wr_k_4_gface_grid": 1
       },
       "hide": {
         "mod1440_records_wr": [
@@ -2696,14 +2741,19 @@
           "wr_c_surr_l",
           "wr_c_gave",
           "wr_c_gave_l",
+          "wr_k_0_face",
           "wr_k_0_rank_2",
           "wr_k_0_rank_3",
+          "wr_k_1_face",
           "wr_k_1_rank_1",
           "wr_k_1_rank_3",
+          "wr_k_2_face",
           "wr_k_2_rank_1",
           "wr_k_2_rank_3",
+          "wr_k_3_face",
           "wr_k_3_rank_2",
           "wr_k_3_rank_3",
+          "wr_k_4_face",
           "wr_k_4_rank_1",
           "wr_k_4_rank_3",
           "wr_ln_0_w",

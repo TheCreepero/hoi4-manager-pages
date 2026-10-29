@@ -177,6 +177,60 @@ def shown(name, variable):
     return block(name, 'image = "[?%s.GetTokenKey]"\n' % variable)
 
 
+# E7 (2026-10-29): the game's own portrait of a unit leader. "portrait" as an icon's image, in a list row whose scope
+# is a general, an admiral or an operative, draws his large portrait with the game's own code: sprites, texture files
+# (Road to 56), generated faces and portraits changed by effect alike [SGUI-053, seen in 1.19.4]. Only a unit leader:
+# a person without the role draws the unknown man, so a head of government, an advisor who is no general and an
+# officer who no longer serves keep the table above (portraits(), the flag fallback of the Wars page).
+# A single portrait becomes a list of one row over an array that holds the leader as the mod keeps him (of_me) and is
+# filled where the slot is filled, on a click or in the daily round: empty while the slot shows the table instead.
+GAME_FACE = 'image = "portrait"\n'
+
+
+def face_size(scale):
+    """The size of a large portrait (156x210) at <scale>, as the game draws it."""
+    return int(156 * scale), int(210 * scale)
+
+
+def game_face(name, scale, through_clicks=False):
+    """The row of one game portrait: the container mod1440_records_<name>_row with the icon <name> at 0,0. Its own
+    sprite is the unknown leader, whose size and scale the drawn portrait takes. through_clicks: the icon lets a click
+    through to a button under it."""
+    w, h = face_size(scale)
+    icon = through(name, 0, 0, UNKNOWN, scale) if through_clicks else scaled(name, 0, 0, UNKNOWN, scale)
+    return row("mod1440_records_%s_row" % name, w, h, icon)
+
+
+def face_grid(grid, x, y, scale, height=None):
+    """The grid of a game portrait's list at x, y: one row of a portrait's size, or rows down <height> (100%)."""
+    w, h = face_size(scale)
+    tall = "100%%" if height == "full" else str(height or h)
+    return ('gridboxtype = {\n\tname = "%s"\n\tposition = { x = %d y = %d }\n\tsize = { width = %d height = %s }\n'
+            '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n' % (grid, x, y, w, tall))
+
+
+def face_list(grid, array, name):
+    """The dynamic list of a game portrait: one row per element of <array>, its scope the leader."""
+    return block(grid, 'array = %s\nchange_scope = yes\nentry_container = "mod1440_records_%s_row"\n' % (array, name))
+
+
+# E7 gate B (2026-10-29): whether an officer is a unit leader is asked where his scope is entered and kept on him as
+# mod1440_of_ul (1 yes, 0 no): in the daily round over every known officer (mod1440_of_gone), when the Officers page
+# lists (keep) and when the War Diary's page is made (face()). A list row reads it; a row whose element is the country
+# or a character with no scope reads 0. Not mod1440_of_seen_day: the daily round sets that at 24:00 of the day before
+# (X53), so during a day every officer looked as if he had left until the Officers page listed again.
+UL_MARK = "set_variable = { mod1440_of_ul = 0 }\nif = {\n\tlimit = { is_unit_leader = yes }\n\tset_variable = { mod1440_of_ul = 1 }\n}\n"
+SERVES = "check_variable = { mod1440_of_ul = 1 }"
+
+
+def unit_leader_into(holder, array, flag):
+    """Script for the country in scope: <array> holds the character in the variable <holder> when he is a unit leader,
+    and is empty otherwise; the temporary <flag> says which (1 when he is)."""
+    return ("clear_array = %s\n" % array + tmp(flag, 0) + tmp(flag + "_c", holder)
+            + block("var:%s_c" % flag, iff("is_unit_leader = yes", tmp(flag, 1)))
+            + iff("check_variable = { %s = 1 }" % flag, "add_to_array = { %s = %s }\n" % (array, holder)))
+
+
 def flag(name, x, y):
     """The icon of a flag; flown(name, country) says whose."""
     return M.icon(name, x, y, FLAG)
@@ -564,7 +618,8 @@ HONOURS = [
 # none, 1 as it is, 2 in thousands, 3 in millions), k the mark, src the log the line is in (1 main, 2 territory, 3 the
 # chronicle) and si its place there, ap and cp the portraits, st the band of the day
 WD_VIEW = ["date", "kind", "fam", "a", "b", "sa", "sb", "c", "sc", "p", "n"]
-WD_MORE = ["dd", "fo", "nw", "nu", "k", "src", "si", "ap", "cp", "st"]
+WD_MORE = ["dd", "fo", "nw", "nu", "k", "src", "si", "ap", "cp", "st",
+           "ga", "ua", "gc", "uc"]      # E7: the rows of the lists of faces (the officer or the country) and whether he serves
 LOG_SOURCE = {"ev": 1, "tr": 2, "kp": 3}
 # the newest marked lines in the pane: what each needs
 WD_CHRON = ["date", "kind", "fam", "a", "b", "sa", "sb"]
@@ -640,7 +695,13 @@ def war_diary(portrait_version):
     triggers += block("wd_count_state_visible", state_filter + "\n") + block("wd_count_country_visible", country_filter + "\n")
     triggers += block("wd_heads_4_visible", "NOT = { %s }\nNOT = { %s }\n" % (state_filter, country_filter))
     triggers += block("wd_heads_3_visible", "NOT = { %s }\n" % country_filter)
-    inner += listing("wd_list", "wd_grid", WD_LIST_X, WD_LIST_Y, WD_ROW_W + 30, REC_BODY_H - WD_LIST_Y - 8, WD_ROW)
+    # E7: the officers' faces are two lists of their own in the same scrolling container, over the column of the
+    # line's officer (a) and of the officer on the spot (c), one row per line: a line's row holds its officer while he
+    # serves (the game draws his face, SGUI-053) and the country otherwise (nothing is drawn). A list row has one scope,
+    # and a line's row is the country's; so the faces cannot be in the line's own row. Their icons let clicks through.
+    faces = (face_grid("wd_row_gface_grid", WD_A_X + 2, 1, WD_FACE, "full") + face_grid("wd_row_gcface_grid", WD_C_X, 1, WD_FACE, "full"))
+    listed = listing("wd_list", "wd_grid", WD_LIST_X, WD_LIST_Y, WD_ROW_W + 30, REC_BODY_H - WD_LIST_Y - 8, WD_ROW)
+    inner += listed[:-2] + M.indent(faces) + "}\n"
     inner += M.text("wd_none", 40, WD_LIST_Y + 20, 900, B.key("wd_none", "Nothing of this kind is written down yet."), M.FONT_LABEL)
     triggers += block("wd_none_visible", "check_variable = { mod1440_wd_fam^num < 1 }\n")
     body += M.box("wd_card", REC_BODY_X, REC_BODY_Y, WD_W, REC_BODY_H, inner, M.CARD_BG)
@@ -668,6 +729,8 @@ def war_diary(portrait_version):
     entry += fixed(plain("wd_row_a", WD_A_X + 10, 8, WD_PLATE_W - 20, B.key("wd_row_a", "§Y[?mod1440_wd_a^i.GetName]§!"), height=22))
     entry += fixed(plain("wd_row_point", WD_A_X + 10, 8, WD_PLATE_W - 20, B.key("wd_row_point", "§Y[?mod1440_wd_a^i.GetTokenLocalizedKey]§!"), height=22))
     entry += plain("wd_row_fold", WD_A_X, 9, WD_PLATE_W - 10, B.key("wd_row_fold", "+[?mod1440_wd_fo^i|0] states"), M.FONT_SMALL, "right", 20)
+    # the table's portrait, for an officer who no longer serves (E7: the game's face of one who serves is the list
+    # wd_row_gface_grid over this spot, and this one is hidden then)
     entry += portrait("wd_row_face", WD_A_X + 2, 1, WD_FACE)
     properties += shown("wd_row_face", "mod1440_wd_ap^i")
     entry += M.button("wd_row_file", WD_A_X, 3, WD_HIT_A, tooltip=B.key("wd_row_file_tt", "Open his file on the Officers page"))
@@ -680,7 +743,8 @@ def war_diary(portrait_version):
     triggers += block("wd_row_fold_visible", "check_variable = { mod1440_wd_fo^i > 0 }\n")
     triggers += block("wd_row_a_visible", "check_variable = { mod1440_wd_sa^i = 2 }\n")
     triggers += block("wd_row_point_visible", "check_variable = { mod1440_wd_sa^i = 3 }\n")
-    triggers += shown_if(["wd_row_face", "wd_row_who", "wd_row_file"], officer_line)
+    triggers += shown_if(["wd_row_who", "wd_row_file"], officer_line)
+    triggers += block("wd_row_face_visible", officer_line + "check_variable = { mod1440_wd_ua^i = 0 }\n")
     triggers += block("wd_row_name_visible", "check_variable = { mod1440_wd_sa^i = 1 }\nNOT = { check_variable = { v = 4 } }\n")
     # the country: in its column, or where the eye looks next for a line about a country alone; its flag and name are
     # a button that shows its lines only (filter 8)
@@ -697,7 +761,13 @@ def war_diary(portrait_version):
     properties += shown("wd_row_cface", "mod1440_wd_cp^i")
     entry += M.button("wd_row_cfile", WD_C_X, 3, WD_HIT_C, tooltip=B.key("wd_row_file_tt", "Open his file on the Officers page"))
     entry += fixed(plain("wd_row_c", WD_C_X + 32, 8, WD_C_W, B.key("wd_row_c", "§Y[?mod1440_wd_c^i.GetName]§!"), height=22))
-    triggers += shown_if(["wd_row_cface", "wd_row_cfile", "wd_row_c"], "check_variable = { mod1440_wd_sc^i = 1 }\n")
+    triggers += shown_if(["wd_row_cfile", "wd_row_c"], "check_variable = { mod1440_wd_sc^i = 1 }\n")
+    triggers += block("wd_row_cface_visible", "check_variable = { mod1440_wd_sc^i = 1 }\ncheck_variable = { mod1440_wd_uc^i = 0 }\n")
+    # E7: the rows of the two lists of faces; a row whose scope is the country (no officer, or one who is no unit leader)
+    # reads mod1440_of_ul as 0 and shows nothing
+    for name in ("wd_row_gface", "wd_row_gcface"):
+        properties += block(name, GAME_FACE)
+        triggers += block(name + "_visible", SERVES + "\n")
     effects += block("wd_row_file_click", open_file("mod1440_wd_a^i")) + block("wd_row_cfile_click", open_file("mod1440_wd_c^i"))
     # the mark: an empty box and a ticked one, the same click
     tip = B.key("wd_row_mark_tt", "Mark this line: it goes into the chronicle (the Marked filter) and stays there whatever the age of the log. "
@@ -833,17 +903,26 @@ def war_diary(portrait_version):
     body += card("wd_kept", WD_PANE_X, REC_BODY_Y + REC_BODY_H - WD_KEPT_H, pw, WD_KEPT_H, "Kept", pane)
 
     gui, script = page_gui("wd", 0, body, dirty="mod1440_rec_dirty",
-                           lists=block("wd_grid", 'array = mod1440_wd_fam\nentry_container = "mod1440_records_diary_row"\n'),
+                           lists=block("wd_grid", 'array = mod1440_wd_fam\nentry_container = "mod1440_records_diary_row"\n')
+                           + face_list("wd_row_gface_grid", "mod1440_wd_ga", "wd_row_gface") + face_list("wd_row_gcface_grid", "mod1440_wd_gc", "wd_row_gcface"),
                            effects=effects, triggers=triggers, properties=properties)
     gui += row("mod1440_records_diary_row", WD_ROW_W, WD_ROW, entry)
+    # E7: a row of a list of faces is as high as a line, the face at its top
+    for name in ("wd_row_gface", "wd_row_gcface"):
+        w, h = face_size(WD_FACE)
+        gui += row("mod1440_records_%s_row" % name, w, WD_ROW, through(name, 0, 0, UNKNOWN, WD_FACE))
 
     # ---- script: the page of the list
     unknown = "token:" + UNKNOWN
 
-    def face(source, target):
-        """The portrait of the officer in <source> into the temporary variable <target>, looked up once."""
-        return (tmp(target, unknown) + tmp("wd_ch", source) + block("var:wd_ch", (
-            iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n") + tmp(target, "mod1440_p"))))
+    def face(source, target, game, served):
+        """The officer in <source>: while he is a unit leader (asked here, kept as mod1440_of_ul), the row of the game's
+        face holds him (<game>, <served> 1) and the table is not asked (E7); otherwise his table portrait into the
+        temporary variable <target>, looked up once."""
+        return (tmp(target, unknown) + tmp("wd_ch", source) + tmp("wd_sv", 0) + block("var:wd_ch", (
+            UL_MARK + iff(SERVES, tmp("wd_sv", 1))
+            + els(officer_table(portrait_version) + tmp(target, "mod1440_p"))))
+            + iff("check_variable = { wd_sv = 1 }", tmp(game, "wd_ch") + tmp(served, 1)))
 
     folded = "OR = { %s }" % " ".join("check_variable = { %%s = wd_f%d }" % k for k in range(len(FOLDED_KINDS)))
 
@@ -871,9 +950,11 @@ def war_diary(portrait_version):
                                       + "divide_temp_variable = { wd_nv = 1000 }\n" + setv("mod1440_wd_n^%s" % "wd_nl", "wd_nv")))))
             + "add_to_array = { mod1440_wd_nu = wd_nu }\n"
             + "add_to_array = { mod1440_wd_k = %s }\nadd_to_array = { mod1440_wd_src = %d }\nadd_to_array = { mod1440_wd_si = %s }\n" % (part("k"), LOG_SOURCE[log], index)
-            + tmp("wd_ap", unknown) + iff("check_variable = { %s = 1 } check_variable = { %s = 4 }" % (part("sa"), part("fam")), face(part("a"), "wd_ap"))
-            + tmp("wd_cp", unknown) + iff("check_variable = { %s = 1 }" % part("sc"), face(part("c"), "wd_cp"))
+            + tmp("wd_ga", "THIS") + tmp("wd_ua", 0) + tmp("wd_gc", "THIS") + tmp("wd_uc", 0)
+            + tmp("wd_ap", unknown) + iff("check_variable = { %s = 1 } check_variable = { %s = 4 }" % (part("sa"), part("fam")), face(part("a"), "wd_ap", "wd_ga", "wd_ua"))
+            + tmp("wd_cp", unknown) + iff("check_variable = { %s = 1 }" % part("sc"), face(part("c"), "wd_cp", "wd_gc", "wd_uc"))
             + "add_to_array = { mod1440_wd_ap = wd_ap }\nadd_to_array = { mod1440_wd_cp = wd_cp }\n"
+            + "".join("add_to_array = { mod1440_wd_%s = wd_%s }\n" % (n, n) for n in ("ga", "ua", "gc", "uc"))
             + "add_to_temp_variable = { wd_shown = 1 }\n")
         # the place of the row just added, for the casualty number in millions (above) and the start of a run (below)
         line_row = tmp("wd_nl", last) + line_row
@@ -885,7 +966,9 @@ def war_diary(portrait_version):
                      + tmp("wd_rr", "wd_nl"))
         fold = ("add_to_temp_variable = { wd_rn = 1 }\n" + tmp("wd_rs", "wd_seen") + "add_to_temp_variable = { wd_shown = 1 }\n"
                 # the third line: the second line's row goes, and the first row says two more states; then one more each
-                + iff("check_variable = { wd_rn = %d }" % FOLD_MIN, remove_last + setv("mod1440_wd_fo^wd_rr", FOLD_MIN - 1) + setv("mod1440_wd_sc^wd_rr", 0))
+                + iff("check_variable = { wd_rn = %d }" % FOLD_MIN, remove_last + setv("mod1440_wd_fo^wd_rr", FOLD_MIN - 1) + setv("mod1440_wd_sc^wd_rr", 0)
+                      # E7: and so does his face: the row of the list of faces takes the country
+                      + setv("mod1440_wd_gc^wd_rr", "THIS") + setv("mod1440_wd_uc^wd_rr", 0))
                 + els("add_to_variable = { mod1440_wd_fo^wd_rr = 1 }\n"))
         return ("add_to_temp_variable = { wd_seen = 1 }\n" + tmp("wd_prev", "wd_seen") + "subtract_from_temp_variable = { wd_prev = 1 }\n"
                 + iff("check_variable = { wd_seen > mod1440_wd_from }", (
@@ -1181,8 +1264,13 @@ def officers(portrait_version):
     middle = (OF_ROW - 30) // 2 + 4         # the line of a number in the middle of the row
     entry = M.icon("of_row_stripe", 0, 0, STRIPE % (OF_ROW_W, OF_ROW))
     entry += M.icon("of_row_pick", 0, 0, PICK % (OF_ROW_W, OF_ROW))
+    # E7: the row's scope is the officer: while he is a unit leader (mod1440_of_ul, UL_MARK) the game draws his face; one
+    # who has left the service shows the table's portrait (a character without a unit leader role would draw the unknown man)
     entry += portrait("of_row_face", 3, 1, OF_FACE)
-    properties += shown("of_row_face", "mod1440_p")
+    properties += block("of_row_face", GAME_FACE)
+    entry += portrait("of_row_face_table", 3, 1, OF_FACE)
+    properties += shown("of_row_face_table", "mod1440_p")
+    row_triggers += block("of_row_face_visible", SERVES + "\n") + block("of_row_face_table_visible", "NOT = { %s }\n" % SERVES)
     # the whole of the portrait and the name is the button, and nothing of it is drawn
     entry += M.button("of_row", 0, 0, OF_HIT, tooltip=B.key("of_row_tt", "Show this officer's record"))
     entry += plain("of_row_name", OF_FACE_W + 6, 4, OF_NAME - 10, B.key("of_row_name", "[THIS.GetName]"), height=22)
@@ -1304,11 +1392,16 @@ def officers(portrait_version):
 
     # who he is: portrait, name, rank and status, the levels, his command
     top = tops["head"]
+    # E7: a unit leader's face is a list of one row (mod1440_of_c_ul, filled by mod1440_of_card); the table's portrait
+    # shows for one who is no unit leader any more
     inner += portrait("of_c_face", 14, top + 14)
     properties += shown("of_c_face", "mod1440_of_c_p")
+    inner += face_grid("of_c_gface_grid", 14, top + 14, 1.0)
+    properties += block("of_c_gface", GAME_FACE)
     inner += M.text("of_c_name", OF_SIDE, top + 10, W - OF_SIDE - 14, B.key("of_c_name", "[?mod1440_of_sel.GetName]"), M.FONT_TITLE, height=40, fixed=True)
     inner += M.text("of_c_none", 16, top + 18, W - 32, B.key("of_c_none", "Click an officer in the table to open his file."), M.FONT_LABEL)
-    triggers += shown_if(["of_c_face", "of_c_name"], has) + block("of_c_none_visible", "NOT = { %s }\n" % has.strip())
+    triggers += shown_if(["of_c_name"], has) + block("of_c_none_visible", "NOT = { %s }\n" % has.strip())
+    triggers += block("of_c_face_visible", has + "check_variable = { mod1440_of_c_ul^num < 1 }\n")
     status = lambda n: "check_variable = { mod1440_of_c_status = %d }\n" % n
     for name, x, width, font, options in (
             ("rank", OF_SIDE + 2, 150, M.FONT_LABEL, [("_1", "§YField Marshal§!", "check_variable = { mod1440_of_c_rank = 1 }\n"),
@@ -1457,15 +1550,19 @@ def officers(portrait_version):
     body += M.box("of_card", OF_CARD_X, OF_CARD_Y, OF_CARD_W, REC_BODY_H, inner)
 
     gui, script = page_gui("of", 1, body, dirty="mod1440_rec_dirty",
-                           lists=block("of_grid", 'array = mod1440_of_rows\nchange_scope = yes\nentry_container = "mod1440_records_officer_row"\n'),
+                           lists=block("of_grid", 'array = mod1440_of_rows\nchange_scope = yes\nentry_container = "mod1440_records_officer_row"\n')
+                           + face_list("of_c_gface_grid", "mod1440_of_c_ul", "of_c_gface"),
                            effects=effects, triggers=triggers + row_triggers, properties=properties)
     gui += row("mod1440_records_officer_row", OF_ROW_W, OF_ROW, entry)
+    gui += game_face("of_c_gface", 1.0)
 
     # ---- script
     # THIS is nothing a variable can hold for an officer whose command came by an effect: of_me is (places())
     has_me = "NOT = { check_variable = { of_me = 0 } }"
     stale_traits = "OR = { %s NOT = { check_variable = { mod1440_of_tr_n = num_traits } } }" % stale("mod1440_of_tr_v", trait_version)
-    mark = setv("mod1440_of_seen_day", "global.num_days") + "add_to_temp_variable = { of_serving = 1 }\nmod1440_of_me = yes\n" + iff(
+    # (E7 gate B: and whether he is a unit leader, mod1440_of_ul, which the game's faces read; E7 fix round 1: and his
+    # table portrait, cached once per table and epoch as before E7, for the day he leaves the service)
+    mark = setv("mod1440_of_seen_day", "global.num_days") + UL_MARK + officer_table(portrait_version) + "add_to_temp_variable = { of_serving = 1 }\nmod1440_of_me = yes\n" + iff(
         "NOT = { %s } %s" % (is_one("mod1440_of_known"), has_me), (
             setv("mod1440_of_known", 1) + "add_to_array = { PREV.mod1440_of_known = of_me }\n"
             # No hook tells of a command given by an effect. An officer first met after the country's list was made
@@ -1475,13 +1572,13 @@ def officers(portrait_version):
                 + "add_to_temp_variable = { of_new = 1 }\n"
                 + iff("check_variable = { of_new < %d }" % (COMM_LINES + 1),
                       fill("commissioned", a="of_me") + block("PREV", "mod1440_ev_add = yes\n"))))))
-    # his portrait is looked up once, and again when the game's list of characters has changed
-    mark += iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n")
     # his traits: made again only when he has gained or lost one, or the table has changed
     mark += iff(stale_traits, "mod1440_of_traits = yes\n")
     mark += iff(stale("mod1440_of_md"), "mod1440_of_medals_again = yes\n")
     # an officer who serves no longer is not seen by the daily run: his portrait and traits are looked at when the list is made
-    keep = iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n") + tmp("of_keep", 1)
+    # (E7: the table's portrait for him alone; the face of one who serves is the game's)
+    # (E7 fix round 1: the table's portrait of one who has left is the one cached while he served, officer_table())
+    keep = UL_MARK + officer_table(portrait_version) + tmp("of_keep", 1)
     keep += iff(stale("mod1440_of_tr_v", trait_version), "mod1440_of_traits = yes\n")
     # his medals: their names and strips are text keys too, made again from the numbers of the medals (fix round 1)
     keep += iff(stale("mod1440_of_md"), "mod1440_of_medals_again = yes\n")
@@ -1556,7 +1653,7 @@ def officers(portrait_version):
            + iff(captured, iff("NOT = { %s }" % is_one("mod1440_of_held"), setv("mod1440_of_held", 1) + "mod1440_of_me = yes\n" + iff(has_me, write("officer_captured"))))
            + els(setv("mod1440_of_held", 0)))
     gone_script = iff("NOT = { %s }" % is_one("mod1440_of_gone_v"), first_run) + els(
-        block("for_each_scope_loop", "array = mod1440_of_known\n" + iff(FORMER, not_met) + els(met)))
+        block("for_each_scope_loop", "array = mod1440_of_known\n" + UL_MARK + iff(FORMER, not_met) + els(met)))
     script_effects = (
         places()
         + trait_script
@@ -1615,18 +1712,21 @@ def officers(portrait_version):
             + frames + "mod1440_md_list = yes\nmod1440_of_card = yes\n"))
         + "\n# Officers: copies the chosen officer's values, traits, record, decorations and diary lines to the country,\n"
         "# where his file reads them. His own values are read in his scope (X33).\n"
-        + block("mod1440_of_card", iff(is_one("mod1440_of_has_sel"), (
+        + block("mod1440_of_card", "clear_array = mod1440_of_c_ul\n" + iff(is_one("mod1440_of_has_sel"), (
             "mod1440_ev_grow = yes\n" + "".join("clear_array = mod1440_of_c_%s\n" % part for part in DEC_ARRAYS[1:] + ["dec_strip", "tr"])
+            + tmp("of_ul", 0)
             + block("var:mod1440_of_sel", (
                 copy_levels + copy_traits
                 + setv("PREV.mod1440_of_c_won", "mod1440_of_won") + setv("PREV.mod1440_of_c_lost", "mod1440_of_lost")
                 + setv("PREV.mod1440_of_c_states", "mod1440_of_states")
                 + setv("PREV.mod1440_of_c_vps", "mod1440_of_vps") + setv("PREV.mod1440_of_c_vpl", "mod1440_of_vpl")
-                + iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n")
-                + setv("PREV.mod1440_of_c_p", "mod1440_p")
+                # E7: a unit leader's face is the game's (mod1440_of_c_ul); the table for one who is no longer
+                + iff("is_unit_leader = yes", tmp("of_ul", 1))
+                + els(officer_table(portrait_version) + setv("PREV.mod1440_of_c_p", "mod1440_p"))
                 + date_copy("since") + date_copy("prom") + date_copy("lvl")
                 + "".join(block("for_each_loop", "array = mod1440_of_%s\nvalue = of_v\nadd_to_array = { PREV.mod1440_of_c_%s = of_v }\n" % (part, part))
                           for part in DEC_ARRAYS[1:])))
+            + iff("check_variable = { of_ul = 1 }", "add_to_array = { mod1440_of_c_ul = mod1440_of_sel }\n")
             + "clamp_variable = { var = mod1440_of_c_tr_other min = 0 }\nclamp_variable = { var = mod1440_of_c_tr_over min = 0 }\n"
             + setv("mod1440_of_c_dec_n", "mod1440_of_c_dec_key^num")
             + medal_tokens(sets, "mod1440_of_c_dec_set", "mod1440_of_c_dec_strip", RACK)
@@ -1799,7 +1899,7 @@ def places():
             + "clear_array = mod1440_of_known\n"
             + block("for_each_loop", "array = rm_keep\nvalue = rm_v\nadd_to_array = { mod1440_of_known = rm_v }\n")
             + iff(is_one("mod1440_of_has_sel"), in_variable("mod1440_of_sel")
-                  + iff("check_variable = { mod1440_of_sel = 0 }", setv("mod1440_of_has_sel", 0)))
+                  + iff("check_variable = { mod1440_of_sel = 0 }", setv("mod1440_of_has_sel", 0) + "clear_array = mod1440_of_c_ul\n"))
             # --- D2 round 2 --- the army chosen on Army Readiness (tools/build_managers.py), kept as its commander
             + iff(is_one("mod1440_ar_has_sel"), in_variable("mod1440_ar_sel")
                   + iff("check_variable = { mod1440_ar_sel = 0 }", setv("mod1440_ar_has_sel", 0)))
@@ -1953,18 +2053,27 @@ def government(portrait_version):
         return out, (block(name + "_visible", when + "check_variable = { %s = 0 }\n" % old)
                      + block(name + "_old_visible", when + "check_variable = { %s = 1 }\n" % old))
 
-    def person(name, x, y, holder, role, began, sprite, big, has, vacant=None):
+    def person(name, x, y, holder, role, began, sprite, big, has, vacant=None, game=False):
         """A seat: the advisor's own small portrait (a large one smaller where the game declares no small one),
         name, role and since when; or the unknown portrait and "vacant". holder etc. are variables, has a
-        trigger. Returns the widgets and their triggers."""
+        trigger. Returns the widgets and their triggers. game (E7): a seat that a general or an admiral can hold;
+        while he is a unit leader the game draws his face in the place of the large one (the list <name>_gface_grid
+        over the array mod1440_<name>_ul, which the daily round fills), and the table's portraits are hidden."""
+        nonlocal lists
         out = M.icon(name + "_face", x + 14, y + 2, SMALL_UNKNOWN)
         out += scaled(name + "_big", x + 22, y + 2, UNKNOWN, GV_SMALL_LARGE)
         extra = block(name + "_face", 'image = "[?%s.GetTokenKey]"\n' % sprite) + block(name + "_big", 'image = "[?%s.GetTokenKey]"\n' % sprite)
+        table = ""
+        if game:
+            out += face_grid(name + "_gface_grid", x + 22, y + 2, GV_SMALL_LARGE)
+            lists += face_list(name + "_gface_grid", "mod1440_%s_ul" % name, "gv_gface")
+            table = "check_variable = { mod1440_%s_ul^num < 1 }\n" % name
         out += M.text(name + "_name", x + 92, y + 6, GV_COL - 92 - 210, B.key(name + "_name", "§Y[?%s.GetName]§!" % holder), M.FONT_LABEL, height=22, fixed=True)
         out += M.text(name + "_role", x + 92, y + 30, GV_COL - 92 - 24, B.key(name + "_role", "[?%s.GetTokenLocalizedKey]" % role), M.FONT_SMALL, height=22, fixed=True)
         piece, more = since(name + "_since", GV_COL - 16 - 190, y + 8, began[0], began[1], 190, "right", "since ", has)
         out += piece
-        trig = (block(name + "_face_visible", has + "check_variable = { %s = 0 }\n" % big) + block(name + "_big_visible", has + "check_variable = { %s = 1 }\n" % big)
+        trig = (block(name + "_face_visible", has + "check_variable = { %s = 0 }\n" % big + table)
+                + block(name + "_big_visible", has + "check_variable = { %s = 1 }\n" % big + table)
                 + block(name + "_name_visible", has) + block(name + "_role_visible", has) + more)
         if vacant:
             out += scaled(name + "_none", x + 22, y + 2, UNKNOWN, GV_SMALL_LARGE)
@@ -2060,7 +2169,7 @@ def government(portrait_version):
     place(0, "heads", "Heads of government", inner, rest(0))
 
     # ---- column 2: who serves. Fixed seats read by written index: an advisor has no scope in a list row (X42)
-    def seats(prefix, count, step, top):
+    def seats(prefix, count, step, top, game=False):
         """count seats of the slot arrays mod1440_gv_<prefix>... Returns the widgets."""
         nonlocal triggers, properties
         out = ""
@@ -2072,7 +2181,7 @@ def government(portrait_version):
                 triggers += block("gv_%s_%d_bg_visible" % (prefix, k), has)
             parts = dict((part, "mod1440_gv_%s_d%s^%d" % (prefix, part, k)) for part in SLOT_PARTS)
             piece, prop, trig = person("gv_%s_%d" % (prefix, k), 0, y, parts[""], parts["_r"], (parts["_since"], parts["_old"]),
-                                       parts["_p"], parts["_b"], has)
+                                       parts["_p"], parts["_b"], has, game=game)
             out += piece
             properties += prop
             triggers += trig
@@ -2095,16 +2204,19 @@ def government(portrait_version):
             inner += M.icon("gv_of_%d_bg" % k, 8, y - 2, STRIPE % (GV_IN, 90))
         inner += M.text("gv_of_%d_l" % k, 92, y, 300, B.key("gv_of_%d_l" % k, "§g%s§!" % label), M.FONT_SMALL, height=20)
         piece, prop, trig = person("gv_of_%d" % k, 0, y + 18, holder, holder + "_r", (holder + "_since", holder + "_old"), holder + "_p", holder + "_b",
-                                   has, "NOT = { %s }\n" % has.strip())
+                                   has, "NOT = { %s }\n" % has.strip(), game=True)
         inner += piece
         properties += prop
         triggers += trig
     top = 42 + len(OFFICES) * 92 + 6
     inner += M.text("gv_members_t", 14, top, 300, B.key("gv_members_t", "Members"), M.FONT_CARD, height=30)
-    inner += seats("hc", MEMBER_SLOTS, 76, top + 38)
+    inner += seats("hc", MEMBER_SLOTS, 76, top + 38, game=True)
     inner += M.text("gv_hc_none", 18, top + 46, 500, B.key("gv_hc_none", "§gNobody is appointed.§!"), M.FONT_SMALL, height=22)
     triggers += block("gv_hc_none_visible", "check_variable = { mod1440_gv_hc^num < 1 }\n")
     place(1, "hc", "High command", inner, rest(1))
+    # E7: the row of the game's face of a chief or a member who is a unit leader, at the size of the large portrait
+    properties += block("gv_gface", GAME_FACE)
+    extra_gui += game_face("gv_gface", GV_SMALL_LARGE)
 
     # ---- column 3: the realm. The faction and the subjects as flag tiles, four to a row
     def countries(name, array, top, height):
@@ -2243,6 +2355,11 @@ def government(portrait_version):
             + office_array("political_advisor", "mod1440_gv_adv", "political_advisor") + office_array("high_command", "mod1440_gv_hc", "high_command")
             + "add_to_temp_variable = { gv_hc_n = mod1440_gv_hc^num }\n" + setv("mod1440_gv_hc_n", "gv_hc_n")
             + shown_seats("adv", CABINET_SLOTS) + shown_seats("hc", MEMBER_SLOTS) + heads_shown
+            # E7: the chiefs and the members of the high command who are unit leaders: the game draws their faces
+            + "".join("clear_array = mod1440_gv_of_%d_ul\n" % k + iff(is_one("mod1440_gv_of_%d_has" % k), unit_leader_into(
+                "mod1440_gv_of_%d" % k, "mod1440_gv_of_%d_ul" % k, "gv_ul")) for k in range(len(OFFICES)))
+            + "".join("clear_array = mod1440_gv_hc_%d_ul\n" % k + iff("check_variable = { mod1440_gv_hc^num > %d }" % k, unit_leader_into(
+                "mod1440_gv_hc_d^%d" % k, "mod1440_gv_hc_%d_ul" % k, "gv_ul")) for k in range(MEMBER_SLOTS))
             + laws + support + pad([("mod1440_ct", 0)], len(KINDS) + 8) + sums + setv("mod1440_gv_begun", 1)
             + stamped("mod1440_gv_adv_ver", adv_version)
             + "mod1440_gv_marks = yes\n")))
@@ -2688,6 +2805,8 @@ def wars(portrait_version):
     inner += M.text("wr_k_none", sx + 8, WF_LY + 40, 480, B.key("wr_k_none", "None of your generals has taken a place in this war yet."),
                     M.FONT_LABEL, height=22)
     triggers += block("wr_k_none_visible", has + "check_variable = { mod1440_wr_k_n < 1 }\n")
+    game_faces = ""
+    properties += block("wr_k_gface", GAME_FACE)
     for k in range(WR_COMMANDERS):
         ry = WF_LY + 26 + k * 48
         more = has + "check_variable = { mod1440_wr_k_n > %d }\n" % k
@@ -2695,10 +2814,15 @@ def wars(portrait_version):
         if k % 2:
             inner += M.icon("wr_k_%d_stripe" % k, sx, ry, STRIPE % (WF_SW, 48))
             names.append("wr_k_%d_stripe" % k)
+        # E7: the table's portrait for one who is no unit leader any more; the game's face of one who is, in a list of
+        # one row over mod1440_wr_k_<k>_ul (filled with the tally)
         inner += portrait("wr_k_%d_face" % k, sx + 8, ry + 1, WR_SMALL_FACE)
         properties += shown("wr_k_%d_face" % k, "mod1440_wr_k_%d_p" % k)
+        triggers += block("wr_k_%d_face_visible" % k, more + "check_variable = { mod1440_wr_k_%d_ul^num < 1 }\n" % k)
+        inner += face_grid("wr_k_%d_gface_grid" % k, sx + 8, ry + 1, WR_SMALL_FACE)
+        game_faces += face_list("wr_k_%d_gface_grid" % k, "mod1440_wr_k_%d_ul" % k, "wr_k_gface")
         inner += M.text("wr_k_%d" % k, sx + 52, ry + 2, 230, B.key("wr_k_%d" % k, "§Y[?mod1440_wr_k_%d.GetName]§!" % k), M.FONT_LABEL, height=22, fixed=True)
-        names += ["wr_k_%d_face" % k, "wr_k_%d" % k]
+        names += ["wr_k_%d" % k]
         for x, part, words in WF_TALLY:
             inner += M.text("wr_k_%d_%s" % (k, part), x, ry + 12, 62, B.key("wr_k_%d_%s" % (k, part), "[?mod1440_wr_k_%d_%s|0]" % (k, part)),
                             M.FONT_VALUE, "centre", 22)
@@ -2820,8 +2944,9 @@ def wars(portrait_version):
     lists = block("wr_now_grid", 'array = mod1440_wv_g\nentry_container = "mod1440_records_war_row"\n')
     lists += block("wr_old_grid", 'array = mod1440_wp_fr\nentry_container = "mod1440_records_past_war_row"\n')
     lists += block("wr_en_grid", 'array = mod1440_we_c\nentry_container = "mod1440_records_enemy_row"\n')
+    lists += game_faces
     gui, script = page_gui("wr", 3, body, lists=lists, effects=effects, triggers=triggers, properties=properties)
-    gui += gui_rows
+    gui += gui_rows + game_face("wr_k_gface", WR_SMALL_FACE)
     return gui, script, wars_script(portrait_version)
 
 
@@ -3211,13 +3336,19 @@ def wars_script(portrait_version):
             block("find_highest_in_array", "array = mod1440_wr_kt_score\nvalue = kt_hi\nindex = kt_at\n")
             + setv(slot, "mod1440_wr_kt_c^kt_at") + "".join(setv("%s_%s" % (slot, part), "mod1440_wr_kt_%s^kt_at" % part) for part in ("st", "vp", "cap"))
             + setv("mod1440_wr_kt_score^kt_at", -1) + "add_to_variable = { mod1440_wr_k_n = 1 }\n"
+            + tmp("kt_ul", 0)
             + block("var:" + slot, (
-                iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n")
-                + setv("PREV.%s_p" % slot, "mod1440_p") + setv("PREV.%s_rank" % slot, 2)
-                + iff("is_field_marshal = yes", setv("PREV.%s_rank" % slot, 1)) + iff("is_navy_leader = yes", setv("PREV.%s_rank" % slot, 3))))))
+                # E7: a unit leader's face is the game's; the table for one who is no longer
+                iff("is_unit_leader = yes", tmp("kt_ul", 1))
+                + els(officer_table(portrait_version) + setv("PREV.%s_p" % slot, "mod1440_p"))
+                + setv("PREV.%s_rank" % slot, 2)
+                + iff("is_field_marshal = yes", setv("PREV.%s_rank" % slot, 1)) + iff("is_navy_leader = yes", setv("PREV.%s_rank" % slot, 3))))
+            + iff("check_variable = { kt_ul = 1 }", "add_to_array = { %s_ul = %s }\n" % (slot, slot))))
 
     card = (
         "mod1440_wr_grow = yes\nmod1440_ev_grow = yes\n" + faces_again + setv("mod1440_wr_c_has", 0)
+        # E7: no commander's face until the tally names him
+        + "".join("clear_array = mod1440_wr_k_%d_ul\n" % k for k in range(WR_COMMANDERS))
         # with no war chosen the hidden flags and names still ask for a country: the own one
         + "".join(iff("check_variable = { %s = 0 }" % v, setv(v, "THIS")) for v in ("mod1440_wr_c_enemy", "mod1440_wr_c_te"))
         + gather
@@ -3604,7 +3735,7 @@ def kept_tokens_script(portrait_version):
             # the portrait on the card of a state taken (frame()): kept on the state, looked up again now
             + block("every_state", "limit = { check_variable = { mod1440_sr_has_by = 1 } }\n" + tmp("tk_who", "mod1440_sr_by")
                     + tmp("tk_p", "token:" + UNKNOWN) + block("PREV", block("var:tk_who", (
-                        iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n") + tmp("tk_p", "mod1440_p"))))
+                        officer_table(portrait_version) + tmp("tk_p", "mod1440_p"))))
                     + setv("mod1440_sr_by_p", "tk_p"))
             + 'log = "MOD1440 records: the numbers of the kept text keys had moved; the logs of [This.GetTag] were written again"\n')))
     return out
@@ -3627,6 +3758,16 @@ def stamped(stamp, version=None):
 def portrait_stale(version):
     """The officer in scope needs mod1440_p_officer (the stamp mod1440_p_ver)."""
     return stale("mod1440_p_ver", version)
+
+
+def officer_table(version):
+    """Script in an officer's scope: his table portrait (mod1440_p), looked up once per table and epoch. E7 fix round 1:
+    the chain (is_character on every name) is asked only of a unit leader. A retired officer's kept scope is no valid
+    character, and each test logged 'is_character: Scope is not a valid character' (E7 check 2, Oswald Lutz); he keeps
+    the portrait cached while he served (the daily round, mark), or the unknown leader once that is stale."""
+    old = portrait_stale(version)
+    return (iff("is_unit_leader = yes %s" % old, "mod1440_p_officer = yes\n")
+            + iff(old, setv("mod1440_p", "token:" + UNKNOWN) + stamped("mod1440_p_ver", version)))
 
 
 # ---------------------------------------------------------------- the frame: button, state card, hooks, daily run
@@ -3698,9 +3839,13 @@ def frame(portrait_version):
     gui += M.box("mod1440_state_card", 470, 0, card_w, card_h, inner, M.CARD_BG)
     # the general whose troops took it, in a window of its own: one that is not drawn never asks for a character
     # (a text that names one through an empty variable logs an error, Engine Facts X73)
-    by = portrait("sc_by_face", 8, 0, WD_FACE) + M.text("sc_by", 48, 6, card_w - 76, B.key("sc_by", "by the troops of §Y[?mod1440_sr_by.GetName]§!"),
-                                                        M.FONT_LABEL, height=22, fixed=True)
+    # E7: over the table's portrait the game's face, a list of one row over the state's mod1440_sr_by_ul, which holds him
+    # while he is a unit leader (asked at the capture and again in the daily round over the player's states taken). The
+    # card is drawn long after the capture and nothing is worked out when it shows, so the table's portrait stays under it.
+    by = portrait("sc_by_face", 8, 0, WD_FACE) + face_grid("sc_by_gface_grid", 8, 0, WD_FACE)
+    by += M.text("sc_by", 48, 6, card_w - 76, B.key("sc_by", "by the troops of §Y[?mod1440_sr_by.GetName]§!"), M.FONT_LABEL, height=22, fixed=True)
     gui += M.box("mod1440_state_card_by", 470 + 6, 74, card_w - 12, 32, by)
+    gui += game_face("sc_by_gface", WD_FACE)
     # the handle while the card is hidden: right of Landlord's windows, on the line of the card's head strip
     handle = M.button("sc_show", 0, 0, "GFX_sort_button_100x29", B.key("sc_show", "£victory_points Record"), tooltip=B.key(
         "sc_show_tt", "Show the record of this state: when it was taken and by whose troops, the citation of your divisions, its lines in the War Diary."))
@@ -3739,7 +3884,9 @@ def frame(portrait_version):
     state_script += block("mod1440_state_card_by", (
         'context_type = selected_state_context\nwindow_name = "mod1440_state_card_by"\nparent_window_token = selected_state_view\n\n'
         + block("visible", shown_card + taken + is_one("mod1440_sr_has_by") + "\n") + "\n"
-        + block("properties", shown("sc_by_face", "mod1440_sr_by_p")) + "\n"
+        + block("dynamic_lists", face_list("sc_by_gface_grid", "mod1440_sr_by_ul", "sc_by_gface")) + "\n"
+        + block("properties", shown("sc_by_face", "mod1440_sr_by_p") + block("sc_by_gface", GAME_FACE)) + "\n"
+        + block("triggers", block("sc_by_gface_visible", SERVES + "\n")) + "\n"
         + block("ai_enabled", "always = no\n")))
     state_script += block("mod1440_state_card_handle", (
         'context_type = selected_state_context\nwindow_name = "mod1440_state_card_handle"\nparent_window_token = selected_state_view\n\n'
@@ -3800,9 +3947,11 @@ def frame(portrait_version):
     # who took the state: the general on the spot and his portrait, for the state card
     by_whom = (tmp("sr_p", "token:" + UNKNOWN)
                + iff("check_variable = { of_best > 0 }", block("var:of_who", (
-                   iff(portrait_stale(portrait_version), "mod1440_p_officer = yes\n") + tmp("sr_p", "mod1440_p"))))
-               + block("var:tr_s", setv("mod1440_sr_has_by", 0) + iff("check_variable = { of_best > 0 }", (
-                   setv("mod1440_sr_by", "of_who") + setv("mod1440_sr_by_p", "sr_p") + setv("mod1440_sr_has_by", 1)))))
+                   officer_table(portrait_version) + tmp("sr_p", "mod1440_p"))))
+               + block("var:tr_s", setv("mod1440_sr_has_by", 0) + "clear_array = mod1440_sr_by_ul\n" + iff("check_variable = { of_best > 0 }", (
+                   setv("mod1440_sr_by", "of_who") + setv("mod1440_sr_by_p", "sr_p") + setv("mod1440_sr_has_by", 1)
+                   # E7: the general on the spot, kept for the game's face on the card (a unit leader: he was found among them)
+                   + "add_to_array = { mod1440_sr_by_ul = of_who }\n"))))
 
     script_effects = (
         "# The Records: what the window shows. Sets the buttons' frames and makes the list of the open page.\n"
@@ -3848,7 +3997,9 @@ def frame(portrait_version):
             + "mod1440_wr_daily = yes\nmod1440_gv_daily = yes\nmod1440_of_seen = yes\nmod1440_of_gone = yes\n"
             + casualty_step
             + block("every_controlled_state", "limit = { check_variable = { mod1440_sr_day > 0 } }\n" + setv("mod1440_sr_held", "global.num_days")
-                    + "subtract_from_variable = { mod1440_sr_held = mod1440_sr_day }\n")
+                    + "subtract_from_variable = { mod1440_sr_held = mod1440_sr_day }\n"
+                    # E7 gate B: the general of the card is asked again whether he is a unit leader; if not, the table's portrait
+                    + iff(is_one("mod1440_sr_has_by"), unit_leader_into("mod1440_sr_by", "mod1440_sr_by_ul", "sr_ul")))
             + iff(is_one("mod1440_rec_open"), "mod1440_rec_show = yes\n")))
         + "\n# The Records: a war has begun between the country in scope and wr_c (a hook says who attacked).\n"
         # E4 round 2: wr_how, who declared (1 we, 2 they), kept on the war's row
@@ -4012,7 +4163,7 @@ def officer_scene_hide(award=False):
     """What script hides in the officers scene: a German general's file (rank 2, status 1), three traits, two
     medals, five diary lines; with award=True the Award mode with four medals of the country instead."""
     from unit_medals_table import MEDALS
-    hide = ["of_arrow_up", "of_arrow_down", "of_c_none", "of_c_rank_1", "of_c_rank_3", "of_c_since", "of_c_prom", "of_c_lvl",
+    hide = ["of_arrow_up", "of_arrow_down", "of_c_none", "of_c_face", "of_c_rank_1", "of_c_rank_3", "of_c_since", "of_c_prom", "of_c_lvl",
             "of_c_tr_none", "of_c_tr_over", "of_c_tr_other", "of_ln_none", "of_c_dec_none"]
     hide += ["of_c_status_" + s for s in ("off", "cap", "grp", "fleet", "idle")]
     hide += ["of_c_c3_i1", "of_c_c4_i1"]
@@ -4070,11 +4221,22 @@ def government_scene_hide():
         return out
 
     hide += seats("adv", 2, CABINET_SLOTS) + seats("hc", 1, MEMBER_SLOTS)
+    # E7: Fritsch (chief of the army) and Rundstedt (high command) are generals: the game draws their faces in the
+    # place of the large portrait, and the table's small one is hidden
+    hide += ["gv_of_0_face", "gv_hc_0_face"]
     hide += ["gv_adv_none_%d" % k for k in range(CABINET_SLOTS) if k != 2]
     hide += ["gv_of_0_none", "gv_of_0_vacant", "gv_of_0_big", "gv_of_0_since_old"]
     for k in range(1, len(OFFICES)):
         hide += ["gv_of_%d%s" % (k, part) for part in seat]
     return hide
+
+
+def government_face_rows():
+    """E7: the rows of the lists of the game's faces in the government scene: the chief of the army and the first
+    member of the high command are generals (Fritsch, Rundstedt)."""
+    rows = dict(("gv_of_%d_gface_grid" % k, 1 if k == 0 else 0) for k in range(len(OFFICES)))
+    rows.update(("gv_hc_%d_gface_grid" % k, 1 if k == 0 else 0) for k in range(MEMBER_SLOTS))
+    return rows
 
 
 # The War Diary's scene (E1 review): a campaign like the design's (the United States in 1943) drawn row by row. Each
@@ -4141,8 +4303,9 @@ def diary_rows(rows, new_days=DIARY_NEW_DAYS):
             if folded:
                 put("wd_row_fold", n, "+%d states" % what[2])
         elif kind == "officer":
-            for widget in ("wd_row_face", "wd_row_file"):
-                put(widget, n)
+            # E7: the face of one who serves is the game's, in the list of faces; the table's for one who has left
+            put("wd_row_face" if words == "Left the service" else "wd_row_gface", n)
+            put("wd_row_file", n)
             put("wd_row_who", n, "§Y%s§!" % what[1])
         elif kind == "person":
             put("wd_row_name", n, "§Y%s§!" % what[1])
@@ -4152,7 +4315,7 @@ def diary_rows(rows, new_days=DIARY_NEW_DAYS):
             put("wd_row_lines" + suffix, n)
             put("wd_row_b" + suffix, n, country)
         if officer:
-            put("wd_row_cface", n)
+            put("wd_row_gcface", n)
             put("wd_row_cfile", n)
             put("wd_row_c", n, "§Y%s§!" % officer)
         put("wd_row_marked" if marked else "wd_row_mark", n)
@@ -4161,9 +4324,24 @@ def diary_rows(rows, new_days=DIARY_NEW_DAYS):
              "wd_row_a", "wd_row_point", "wd_row_fold", "wd_row_face", "wd_row_file", "wd_row_who", "wd_row_name", "wd_row_flag", "wd_row_lines",
              "wd_row_b", "wd_row_flag_near", "wd_row_lines_near", "wd_row_b_near", "wd_row_cface", "wd_row_cfile", "wd_row_c", "wd_row_mark",
              "wd_row_marked"] + ["wd_row_icon_%d" % f for f in FAMILY_ICON]
-    for widget in every:
+    for widget in every + list(DIARY_FACES):
         only.setdefault(widget, [])
     return only, samples
+
+
+# E7: the two lists of faces over the diary's rows: (their row window, their grid) by the icon in it
+DIARY_FACES = {"wd_row_gface": ("mod1440_records_wd_row_gface_row", "wd_row_gface_grid"),
+               "wd_row_gcface": ("mod1440_records_wd_row_gcface_row", "wd_row_gcface_grid")}
+
+
+def diary_faces(only, count):
+    """E7: what the scene's "only" of the diary's rows says of the lists of faces moves to their own row windows;
+    returns (rows, listRows, only by row window) for <count> rows."""
+    rows = dict((grid, count) for window, grid in DIARY_FACES.values())
+    list_rows = dict((grid, window) for window, grid in DIARY_FACES.values())
+    by_window = {"mod1440_records_diary_row": dict((w, v) for w, v in only.items() if w not in DIARY_FACES)}
+    by_window.update((window, {icon: only.get(icon, [])}) for icon, (window, grid) in DIARY_FACES.items())
+    return rows, list_rows, by_window
 
 
 def diary_scene(place, crop, shot, back):
@@ -4199,6 +4377,8 @@ def diary_scene(place, crop, shot, back):
         seen.add(day)
     dated.append(("8 December, 1941", 1, "War declared by", None, "State of Japan", None, None, False))
     follow_only, follow_samples = diary_rows(dated, new_days=0)
+    follow_rows, face_rows, follow_by = diary_faces(follow_only, len(dated))
+    page_rows, face_rows, page_by = diary_faces(only, len(DIARY_CAMPAIGN))
     follow_page = ["wd_none", "wd_count", "wd_count_state", "wd_heads_3", "wd_heads_4", "wd_hn_none"] + pane_hide
 
     # nothing written yet of a filter: the list empty, the chronicle's two lines, no citation
@@ -4206,23 +4386,28 @@ def diary_scene(place, crop, shot, back):
                   + ["wd_ch_%d%s" % (k, part) for k in range(WD_CHRON_LINES) for part in ("", "_d", "_bg", "_s", "_p", "_b")]
                   + ["wd_ch_%d_f%d" % (k, f) for k in range(WD_CHRON_LINES) for f in FAMILY_ICON])
     states = [
-        {"name": "follow", "rows": {"wd_grid": len(dated)},
+        {"name": "follow", "rows": dict(follow_rows, wd_grid=len(dated)),
          "frames": {"mod1440_records_wd": {"wd_show_all": 1, "wd_hn_cap": 2, "wd_hn_sea": 2, "wd_hn_air": 2}},
-         "hide": {"mod1440_records_wd": follow_page}, "only": {"mod1440_records_diary_row": follow_only},
+         "hide": {"mod1440_records_wd": follow_page}, "only": follow_by,
          "samples": {"mod1440_records_diary_row": follow_samples,
                      "mod1440_records_wd": dict(page, wd_count_country="§YState of Japan§!: lines 1 - 57 of 57")},
          "_note": "A click on a country's name: its lines only (filter 8), its name where the Officer head was; no filter lit."},
-        {"name": "empty", "rows": {"wd_grid": 0}, "hide": {"mod1440_records_wd": empty_page},
+        {"name": "empty", "rows": dict(diary_faces({}, 0)[0], wd_grid=0), "hide": {"mod1440_records_wd": empty_page},
          "samples": {"mod1440_records_wd": dict(page, wd_ch_n="The lines you marked, kept for good: 0 of 300.")},
          "_note": "A filter with nothing written yet; no line marked; no citation."},
     ]
     return {
         "phase": "E1", "file": "mod1440_records.gui", "screenshot": shot,
-        "windows": [dict(place, name="mod1440_records_wd", rows={"wd_grid": len(DIARY_CAMPAIGN)}, listRows={"wd_grid": "mod1440_records_diary_row"},
+        "windows": [dict(place, name="mod1440_records_wd", rows=dict(page_rows, wd_grid=len(DIARY_CAMPAIGN)),
+                         listRows=dict(face_rows, wd_grid="mod1440_records_diary_row"),
                          hide=diary_page, frames={"wd_show_all": 2, "wd_hn_cap": 2, "wd_hn_sea": 2, "wd_hn_air": 2},
                          _note="A window of its own over the map, opened from the Records button of the top bar. "
-                                                "The list shows a campaign like the design's; flags and faces are the renderer's samples."),
-                    {"name": "mod1440_records_diary_row", "skip": True, "only": only,
+                                                "The list shows a campaign like the design's; flags and faces are the renderer's samples. E7: the "
+                                                "faces of serving officers are two lists of their own over the rows (the game draws each one's face); "
+                                                "the left officer (Leslie McNair) shows the table's portrait."),
+                    {"name": "mod1440_records_wd_row_gface_row", "skip": True, "only": page_by["mod1440_records_wd_row_gface_row"]},
+                    {"name": "mod1440_records_wd_row_gcface_row", "skip": True, "only": page_by["mod1440_records_wd_row_gcface_row"]},
+                    {"name": "mod1440_records_diary_row", "skip": True, "only": page_by["mod1440_records_diary_row"],
                      "_note": "Each widget is drawn in the rows script shows it in: the day on its first row, the band of the day, the new "
                               "lines of the first day on the lighter band, runs of states folded, the numbers of a line."}],
         "samples": {"mod1440_records_diary_row": row_samples, "mod1440_records_wd": page},
@@ -4282,6 +4467,21 @@ DIARY_CHECKLIST = [
     "no line is on the lighter band; no 'Left the service' line for an officer gone before",
     "error.log: no line that names the mod, no 'invalid scope for var', no 'Could not find sprite type', no unknown trigger has_war_with",
 ]
+# --- E7 --- the War Diary's faces through the game (image = portrait, SGUI-053)
+DIARY_CHECKLIST += [
+    "E7 with Road to 56: after mod1440_chk_e7_generals (Himmler, Bormann, Canaris get a command) and one day, the 'Commissioned' lines: "
+    "each officer's face beside his name is his own, the same as in the game's commander picker (Himmler: Road to 56's texture file; "
+    "Canaris: his civilian portrait, accepted by the user), not the unknown leader",
+    "E7: a state taken with a general on the spot: Keitel given Army 1 (in Brandenburg), mod1440_chk_war, then mod1440_chk_e7_take (Army 1's "
+    "divisions moved to Poznan, which Germany then takes; game.log 'MOD1440 e7 take: N German divisions'): the line 'State taken Poznan' "
+    "names Keitel in the Officer column with his own face (Road to 56's texture file), the same as in his army's leader view. No general on "
+    "the line: mod1440_chk_e7_take_again (Poland takes it back, Germany again)",
+    "E7: the faces sit exactly on their lines (no offset, none on a line without an officer) while the list scrolls with the wheel and the "
+    "scrollbar; a click on an officer's face or name still opens his file; mod1440_chk_e7_log lists one face per officer line",
+    "E7: an officer who left the service (mod1440_chk_e7_retire after choosing him on the Officers page, then one day): his 'Left the service' "
+    "line shows the table's portrait or the unknown leader, never an empty spot",
+]
+# --- end E7 ---
 
 
 # --- E4 round 2 --- the Wars scene (tools/scenes/wars.json): a German campaign of 14 May 1942 like the design's
@@ -4403,7 +4603,9 @@ def war_file_hide(st):
     row4 = ("surr" if st["open"] else "end") if one else "gave"
     hide += ["wr_c_%s%s" % (x, part) for x in ("surr", "end", "gave") if x != row4 for part in ("", "_l")]
     for k in range(WR_COMMANDERS):
-        names = (["wr_k_%d_stripe" % k] if k % 2 else []) + ["wr_k_%d_face" % k, "wr_k_%d" % k] + ["wr_k_%d_%s" % (k, p) for x, p, w in WF_TALLY]
+        # E7: the sample's commanders serve: the game draws their faces (war_face_rows()), the table's portraits are hidden
+        hide.append("wr_k_%d_face" % k)
+        names = (["wr_k_%d_stripe" % k] if k % 2 else []) + ["wr_k_%d" % k] + ["wr_k_%d_%s" % (k, p) for x, p, w in WF_TALLY]
         rank_names = ["wr_k_%d_rank_%d" % (k, r) for r in (1, 2, 3)]
         hide += names + rank_names if k >= len(ranks) else [w for r, w in enumerate(rank_names, start=1) if r != ranks[k]]
 
@@ -4448,6 +4650,11 @@ def war_file_samples(st, lines, commanders, words):
         out["wr_k_%d" % k] = "§Y%s§!" % name
         out.update({"wr_k_%d_st" % k: str(st_), "wr_k_%d_vp" % k: str(vp), "wr_k_%d_cap" % k: str(cap)})
     return out
+
+
+def war_face_rows(st):
+    """E7: the rows of the five lists of the commanders' faces in state <st>: one per commander the file names."""
+    return dict(("wr_k_%d_gface_grid" % k, 1 if k < len(st["commanders"]) else 0) for k in range(WR_COMMANDERS))
 
 
 def war_marks(count):
@@ -4529,17 +4736,17 @@ def wars_scene(place, crop, shot, back, setup):
     lists = {"wr_now_grid": len(WS_TODAY), "wr_old_grid": len(WS_DONE)}
     list_rows = {"wr_now_grid": "mod1440_records_war_row", "wr_old_grid": "mod1440_records_past_war_row", "wr_en_grid": "mod1440_records_enemy_row"}
     states = [
-        {"name": "file", "rows": dict(lists, wr_en_grid=0), "hide": {window: war_file_hide(yug)}, "place": {window: war_marks(len(yug["lines"]))},
+        {"name": "file", "rows": dict(lists, wr_en_grid=0, **war_face_rows(yug)), "hide": {window: war_file_hide(yug)}, "place": {window: war_marks(len(yug["lines"]))},
          "samples": {window: war_file_samples(yug, WS_LINES_YUGOSLAVIA, WS_COMMANDERS["file"], yug_words)},
          "_note": "The finished war with Yugoslavia alone (1938-39): Hitler throughout, Prince Paul at the start and a leader with no portrait the game "
                   "can name at the end (the flag box); How it ended in the figures; no enemies table, the War Diary runs on into the right column."},
-        {"name": "three", "rows": dict(lists, wr_en_grid=len(WS_ENEMIES["three"])), "hide": {window: war_file_hide(three)},
+        {"name": "three", "rows": dict(lists, wr_en_grid=len(WS_ENEMIES["three"]), **war_face_rows(three)), "hide": {window: war_file_hide(three)},
          "place": {window: war_marks(len(three["lines"]))},
          "only": {"mod1440_records_enemy_row": three_only},
          "samples": {window: war_file_samples(three, WS_LINES_CZECHOSLOVAKIA, WS_COMMANDERS["three"], three_words),
                      "mod1440_records_enemy_row": three_enemies},
          "_note": "The finished war with Czechoslovakia and two other enemies, Yugoslavia chosen in the enemies table."},
-        {"name": "unrecorded", "rows": dict(lists, wr_en_grid=0), "hide": {window: war_file_hide(unrecorded)},
+        {"name": "unrecorded", "rows": dict(lists, wr_en_grid=0, **war_face_rows(unrecorded)), "hide": {window: war_file_hide(unrecorded)},
          "place": {window: war_marks(len(unrecorded["lines"]))},
          "samples": {window: war_file_samples(unrecorded, WS_LINES_YUGOSLAVIA, WS_COMMANDERS["file"], unrecorded_words)},
          "_note": "E4 fix round 1: a finished war of a migrated save: neither of their heads recorded, so one flag box, 'Throughout the war', "
@@ -4547,14 +4754,16 @@ def wars_scene(place, crop, shot, back, setup):
     ]
     return {
         "phase": "E4", "file": "mod1440_records.gui", "screenshot": shot,
-        "windows": [dict(place, name=window, rows=dict(lists, wr_en_grid=len(WS_ENEMIES["page"])), listRows=list_rows,
+        "windows": [dict(place, name=window, rows=dict(lists, wr_en_grid=len(WS_ENEMIES["page"]), **war_face_rows(page)),
+                         listRows=dict(list_rows, **dict(("wr_k_%d_gface_grid" % k, "mod1440_records_wr_k_gface_row") for k in range(WR_COMMANDERS))),
                          hide=war_file_hide(page), place=war_marks(len(page["lines"])),
                          _note="A German campaign of 14 May 1942: the war of today with Poland and twelve other enemies, the United Kingdom chosen in "
                                "the enemies table. Flags and portraits are the renderer's placeholders (script names them); the marks of the track "
                                "stand where script puts them (x by property)."),
                     {"name": "mod1440_records_war_row", "skip": True, "only": now_only},
                     {"name": "mod1440_records_past_war_row", "skip": True, "only": done_only, "frames": {"wo_row_plate": frames}},
-                    {"name": "mod1440_records_enemy_row", "skip": True, "only": page_only}],
+                    {"name": "mod1440_records_enemy_row", "skip": True, "only": page_only},
+                    {"name": "mod1440_records_wr_k_gface_row", "skip": True}],
         "samples": {window: war_file_samples(page, WS_LINES_POLAND, WS_COMMANDERS["page"], page_words),
                     "mod1440_records_war_row": now_rows, "mod1440_records_past_war_row": done_rows, "mod1440_records_enemy_row": page_enemies},
         "states": states,
@@ -4571,7 +4780,12 @@ def wars_scene(place, crop, shot, back, setup):
     }
 
 
-WARS_CHECKLIST = [
+WARS_CHECKLIST_E7 = [
+    "E7 with Road to 56: in the file of the war with Poland after mod1440_chk_e7_take (and a day), the faces under "
+    "'Our commanders in this war' are each general's own, the same as in his army's leader view (34x46); mod1440_chk_e7_log: 'war k 1 ...'",
+    "E7: a file with fewer than five commanders shows no face on the empty lines; a war with none shows only 'None of your generals ...'",
+]
+WARS_CHECKLIST = WARS_CHECKLIST_E7 + [
     "The page in the steel look: three steel cards in the left column (The campaign 548x220, Wars of today 548x188, Finished wars 548x670), "
     "6 apart, each with a head band of 27 holding its title and the column heads (Days / Our dead / Their dead / Surr.; Began / Our dead / Their dead / End); "
     "the window's ground, title strip and tabs unchanged; the Wars tab's tooltip 'One row per war, its enemies joined'",
@@ -4639,10 +4853,12 @@ def scenes():
         "war_diary": diary_scene(place, crop, shot, back),
         "officers": {
             "phase": "E2", "file": "mod1440_records.gui", "screenshot": shot,
-            "windows": [dict(place, name="mod1440_records_of", rows={"of_grid": 21}, listRows={"of_grid": "mod1440_records_officer_row"},
-                             hide=officer_hide, _note="The file shows a German general with three traits, two medals and five lines of the War Diary; script hides the twins of his rank, status and command, the admiral's plates and the Award mode. A portrait is the game's unknown leader until script names the officer's sprite; a trait icon is a sample until script names the trait."),
+            "windows": [dict(place, name="mod1440_records_of", rows={"of_grid": 21, "of_c_gface_grid": 1},
+                             listRows={"of_grid": "mod1440_records_officer_row", "of_c_gface_grid": "mod1440_records_of_c_gface_row"},
+                             hide=officer_hide, _note="The file shows a German general with three traits, two medals and five lines of the War Diary; script hides the twins of his rank, status and command, the admiral's plates and the Award mode. A portrait is the renderer's unknown leader: in the game each serving officer's row and his file draw his own face (E7, image = portrait), the table's portrait only for one who has left; a trait icon is a sample until script names the trait."),
+                        {"name": "mod1440_records_of_c_gface_row", "skip": True},
                         {"name": "mod1440_records_officer_row", "skip": True,
-                         "hide": ["of_row_pick", "of_row_name_sel", "of_cell_c3_navy", "of_cell_c4_navy", "of_cell_cmd_navy", "of_row_tr_3", "of_row_tr_4",
+                         "hide": ["of_row_pick", "of_row_name_sel", "of_row_face_table", "of_cell_c3_navy", "of_cell_c4_navy", "of_cell_cmd_navy", "of_row_tr_3", "of_row_tr_4",
                                   "of_row_tr_5", "of_row_tr_more", "of_row_md_2"]
                          + ["of_row_st_" + suffix for suffix, words, condition in officer_status() if suffix != "gen_cmd"]}],
             "setup": tab(1),
@@ -4661,15 +4877,31 @@ def scenes():
                 "Award... shows the country's medals over the decorations and diary cards; Award one; the plate says awarded with the date; Back to his file shows the medal on the rack at full size and in his row at half size",
                 "Take back last; choosing another officer ends the Award mode",
                 "An admiral (Raeder): manoeuvring and coordination icons, Ships and the four ship kinds",
-                "error.log: no line about has_trait, a sprite GFX_trait_ or GFX_1440p_medal_, or an array index"],
+                "error.log: no line about has_trait, a sprite GFX_trait_ or GFX_1440p_medal_, or an array index",
+                # --- E7 ---
+                "E7 with Road to 56: every row's face is the officer's own, as the game's Officer Corps lists and commander picker show him: "
+                "Wilhelm Keitel and Franz Halder (texture files of Road to 56, the unknown leader before E7), Rundstedt, Manstein; the admirals "
+                "Raeder, Doenitz and Otto Ciliax (texture file) as in the Officer Corps' Admirals list",
+                "E7: after mod1440_chk_e7_generals (one day, or a click on All): Heinrich Himmler (texture file), Martin Bormann and Wilhelm Canaris "
+                "(his civilian portrait, as the commander picker) as rows with their own faces",
+                "E7: click Keitel: his file shows his own face at full size (156x210); click Himmler: the same in his file",
+                "E7: choose an officer, effect mod1440_chk_e7_retire, one day, filter Former: his row and his file show the table's portrait "
+                "(or the unknown leader for one the table lacks), not the game's unknown man; mod1440_chk_e7_log: 'file 0'. game.log at the "
+                "effect: 'MOD1440 e7 retired <name>: is_unit_leader no' (not known before; 'yes' is a finding: the pages would draw him as the unknown man)",
+                "E7 gate B: the faces hold on a day after the start without opening the Officers page first: close the Records on the War "
+                "Diary tab on day 1 (they reopen on the page they were closed on), run one day, open them, then select Poznan on the map: the "
+                "officers' faces in the diary and on Poznan's state card are the game's (decided by is_unit_leader, not by the day last seen)",
+                "E7: the faces scale as before (34x46 in the rows) and stay on their rows while the list scrolls; error.log: no line naming "
+                "'portrait', mod1440_of_c_ul or is_unit_leader"],
         },
         "government": {
             "phase": "E3", "file": "mod1440_records.gui", "screenshot": shot,
-            "windows": [dict(place, name="mod1440_records_gv", rows={"gv_fac_grid": 1, "gv_sub_grid": 1},
-                             listRows={"gv_fac_grid": "mod1440_records_fac_row", "gv_sub_grid": "mod1440_records_sub_row"},
+            "windows": [dict(place, name="mod1440_records_gv", rows=dict({"gv_fac_grid": 1, "gv_sub_grid": 1}, **government_face_rows()),
+                             listRows=dict({"gv_fac_grid": "mod1440_records_fac_row", "gv_sub_grid": "mod1440_records_sub_row"},
+                                           **dict((grid, "mod1440_records_gv_gface_row") for grid in government_face_rows())),
                              hide=government_scene_hide(),
                              _note="The sample state of E3 check 1: Todt and Neurath hired, Fritsch chief of the army, Rundstedt in the high command, Denmark a subject; script hides the empty seats, the twins of the dates and the other ideologies.")]
-                       + [{"name": "mod1440_records_%s_row" % n, "skip": True} for n in ("fac", "sub")],
+                       + [{"name": "mod1440_records_%s_row" % n, "skip": True} for n in ("fac", "sub", "gv_gface")],
             "setup": tab(2),
             "teardown": [{"clickWidget": "mod1440_records_gv/gv_tab_0", "wait": 0.8}] + back,
             "expect": ["mod1440_records_gv/gv_close"],
@@ -4683,7 +4915,13 @@ def scenes():
                 "High command: Fritsch as chief of the army with his portrait and \"Oberkommando des Heeres\"; the vacant offices with the unknown portrait",
                 "Faction members and subjects as flag tiles, four to a row (puppet Denmark: effect mod1440_chk_puppet)",
                 "Heads of government: Hitler, \"before the record began - today\"",
-                "error.log: no line about is_character, has_character or a sprite of an advisor"],
+                "error.log: no line about is_character, has_character or a sprite of an advisor",
+                # --- E7 ---
+                "E7 with Road to 56, after mod1440_chk_hire and one day: the chief of the army and a member of the high command who are generals "
+                "(Fritsch if the DLC lets him be hired, Rundstedt) show their army portrait at 48x65 in the place of the advisor's small one, the "
+                "same face as in the game's commander picker; mod1440_chk_e7_log: 'chiefs 1 ...' and 'members 1 ...'",
+                "E7: a political advisor (Neurath, Todt) and a theorist keep the advisor's small portrait; the head of government and the heads "
+                "of the record keep their portraits (or the flag box); no unknown man anywhere on the page"],
         },
         "wars": wars_scene(place, crop, shot, back, tab(3)),     # E4 round 2
     }

@@ -10,8 +10,8 @@ on_actions = {
 					mod1440_ev_init = yes
 					mod1440_tb_default = yes
 				}
+				mod1440_pop_round = yes
 			}
-			mod1440_pop_round = yes
 		}
 	}
 	on_daily = {

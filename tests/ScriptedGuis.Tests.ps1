@@ -103,7 +103,9 @@ BeforeAll {
         # --- E4 round 2 --- (2026-10-29) Wars: which enemies fight one war (on one side, the same role against them),
         # how a war ended for the country itself, a country's ideology for its head of government; all read-only.
         # casualties_inflicted_by is asked inside meta_trigger only.
-        'has_war_together_with', 'has_offensive_war_with', 'is_subject_of', 'casualties_inflicted_by'
+        'has_war_together_with', 'has_offensive_war_with', 'is_subject_of', 'casualties_inflicted_by',
+        # --- E7 --- (2026-10-29) whether a character has a unit leader role, before the game draws his face; read-only
+        'is_unit_leader'
     )
 
     # Adds to $Into every command of a block that is neither allowed nor an effect of the mod's own.
@@ -148,6 +150,15 @@ Describe 'Scripted GUI files' {
         }
         $wrong | Should -BeNullOrEmpty -Because 'a file named like a vanilla file would replace it'
     }
+
+    # --- E7 --- (2026-10-29) the throwaway files of a check: the check effects and the portrait probe of phase E7
+    It 'hold no throwaway file of a check' {
+        $python = (Get-Command python -ErrorAction SilentlyContinue).Source
+        if (-not $python) { Set-ItResult -Skipped -Because 'Python is not installed'; return }
+        $output = & $python -I (Join-Path (Join-Path $script:RepoRoot 'tools') 'check_effects.py') --check 2>&1
+        $LASTEXITCODE | Should -Be 0 -Because ("they never ship; python -I tools/check_effects.py --restore removes them: " + ($output -join ' '))
+    }
+    # --- end E7 ---
 }
 
 Describe 'Scripted GUIs' {
@@ -221,6 +232,63 @@ Describe 'Scripted GUIs' {
         }
         $problems | Should -BeNullOrEmpty -Because 'the mod shows values of the own country only (wiki/Scripted-GUIs.md, rule 2)'
     }
+
+    # --- E7 --- (2026-10-29) the portraits of unit leaders through the game's own code [SGUI-053]
+    It 'draw a unit leader with image = portrait, in a list row whose scope is that leader' {
+        # The arrays a list of the game's faces may read: each holds generals, admirals or operatives only, as the mod
+        # keeps them (of_me). A head of government, an advisor who is no general or an officer who has left would draw
+        # the unknown man, so no other array, and no icon outside a list row, may ask for the value.
+        $leaderArrays = '^mod1440_(of_rows|ar_leaders|of_c_ul|wr_k_\d_ul|gv_of_\d_ul|gv_hc_\d_ul|sr_by_ul|wd_ga|wd_gc)$'
+        $count = 0
+        $problems = foreach ($gui in $script:Guis) {
+            $properties = Get-GuiBlock -Node $gui.Node -Key 'properties'
+            if (-not $properties) { continue }
+            # the widgets of the rows of each list with change_scope = yes, and the array it reads
+            $rows = @{}
+            $lists = Get-GuiBlock -Node $gui.Node -Key 'dynamic_lists'
+            foreach ($list in @($(if ($lists) { $lists.Children }))) {
+                if ((Get-GuiValue -Node $list -Key 'change_scope') -ne 'yes') { continue }
+                $entry = Find-Container -Name ([string](Get-GuiValue -Node $list -Key 'entry_container'))
+                if (-not $entry) { continue }
+                foreach ($block in @(Get-GuiNodes -Node $entry.Node)) {
+                    $name = [string](Get-GuiValue -Node $block -Key 'name')
+                    if ($name) { $rows[$name] = [pscustomobject]@{ Array = [string](Get-GuiValue -Node $list -Key 'array'); Node = $block } }
+                }
+            }
+            foreach ($entry in @($properties.Children)) {
+                if ((Get-GuiValue -Node $entry -Key 'image') -ne 'portrait') { continue }
+                $count++
+                $row = $rows[[string]$entry.Key]
+                if (-not $row) { "$($gui.Name): '$($entry.Key)' is not in a row of a list with change_scope = yes"; continue }
+                if ($row.Array -notmatch $leaderArrays) { "$($gui.Name): '$($entry.Key)' reads the array '$($row.Array)', which is not one of unit leaders" }
+                $sprite = [string](Get-GuiValue -Node $row.Node -Key 'spriteType')
+                if ($sprite -ne 'GFX_portrait_unknown') { "$($gui.Name): '$($entry.Key)' has the sprite '$sprite', not GFX_portrait_unknown (the size of the large portrait)" }
+            }
+        }
+        $problems | Should -BeNullOrEmpty -Because 'the value draws the unit leader of the row scope; anything else draws the unknown man'
+        $count | Should -BeGreaterOrEqual 8 -Because 'Officers (row, file), Army Readiness, War Diary (two), state card, Wars, Government (one icon for the chiefs and the members)'
+    }
+
+    It 'keep the table of officer portraits only as the fallback of a game face' {
+        # An icon that shows an officer's sprite from the table (tools/portraits_table.py) is the twin of a game face,
+        # shown only where the officer may have left his role: it has a _visible trigger, and its GUI has a game face.
+        $tableOfOfficers = '^\[\?mod1440_(p|of_c_p|wr_k_\d_p|sr_by_p|wd_[ac]p\^i)\.GetTokenKey\]$'
+        $problems = foreach ($gui in $script:Guis) {
+            $properties = Get-GuiBlock -Node $gui.Node -Key 'properties'
+            if (-not $properties) { continue }
+            $triggers = Get-GuiBlock -Node $gui.Node -Key 'triggers'
+            $visible = @($(if ($triggers) { $triggers.Children | ForEach-Object { [string]$_.Key } }))
+            $images = @($properties.Children | ForEach-Object { [string](Get-GuiValue -Node $_ -Key 'image') })
+            foreach ($entry in @($properties.Children)) {
+                if ([string](Get-GuiValue -Node $entry -Key 'image') -notmatch $tableOfOfficers) { continue }
+                if ($images -notcontains 'portrait') { "$($gui.Name): '$($entry.Key)' shows an officer from the table and the GUI has no game face" }
+                # the state card's table portrait lies under the game face: the card outlives the general's service
+                if ($visible -notcontains "$($entry.Key)_visible" -and $gui.Name -ne 'mod1440_state_card_by') { "$($gui.Name): '$($entry.Key)' shows the table's portrait with no trigger" }
+            }
+        }
+        $problems | Should -BeNullOrEmpty -Because 'a unit leader shows the face the game shows; the table misses mods, texture files and generated faces'
+    }
+    # --- end E7 ---
 }
 
 Describe 'Script of the mod' {

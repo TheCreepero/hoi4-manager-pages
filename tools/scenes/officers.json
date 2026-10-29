@@ -14,15 +14,18 @@
       "freeWindow": true,
       "name": "mod1440_records_of",
       "rows": {
-        "of_grid": 21
+        "of_grid": 21,
+        "of_c_gface_grid": 1
       },
       "listRows": {
-        "of_grid": "mod1440_records_officer_row"
+        "of_grid": "mod1440_records_officer_row",
+        "of_c_gface_grid": "mod1440_records_of_c_gface_row"
       },
       "hide": [
         "of_arrow_up",
         "of_arrow_down",
         "of_c_none",
+        "of_c_face",
         "of_c_rank_1",
         "of_c_rank_3",
         "of_c_since",
@@ -224,7 +227,11 @@
         "of_md_3_name",
         "of_award_3"
       ],
-      "_note": "The file shows a German general with three traits, two medals and five lines of the War Diary; script hides the twins of his rank, status and command, the admiral's plates and the Award mode. A portrait is the game's unknown leader until script names the officer's sprite; a trait icon is a sample until script names the trait."
+      "_note": "The file shows a German general with three traits, two medals and five lines of the War Diary; script hides the twins of his rank, status and command, the admiral's plates and the Award mode. A portrait is the renderer's unknown leader: in the game each serving officer's row and his file draw his own face (E7, image = portrait), the table's portrait only for one who has left; a trait icon is a sample until script names the trait."
+    },
+    {
+      "name": "mod1440_records_of_c_gface_row",
+      "skip": true
     },
     {
       "name": "mod1440_records_officer_row",
@@ -232,6 +239,7 @@
       "hide": [
         "of_row_pick",
         "of_row_name_sel",
+        "of_row_face_table",
         "of_cell_c3_navy",
         "of_cell_c4_navy",
         "of_cell_cmd_navy",
@@ -429,7 +437,13 @@
     "Award... shows the country's medals over the decorations and diary cards; Award one; the plate says awarded with the date; Back to his file shows the medal on the rack at full size and in his row at half size",
     "Take back last; choosing another officer ends the Award mode",
     "An admiral (Raeder): manoeuvring and coordination icons, Ships and the four ship kinds",
-    "error.log: no line about has_trait, a sprite GFX_trait_ or GFX_1440p_medal_, or an array index"
+    "error.log: no line about has_trait, a sprite GFX_trait_ or GFX_1440p_medal_, or an array index",
+    "E7 with Road to 56: every row's face is the officer's own, as the game's Officer Corps lists and commander picker show him: Wilhelm Keitel and Franz Halder (texture files of Road to 56, the unknown leader before E7), Rundstedt, Manstein; the admirals Raeder, Doenitz and Otto Ciliax (texture file) as in the Officer Corps' Admirals list",
+    "E7: after mod1440_chk_e7_generals (one day, or a click on All): Heinrich Himmler (texture file), Martin Bormann and Wilhelm Canaris (his civilian portrait, as the commander picker) as rows with their own faces",
+    "E7: click Keitel: his file shows his own face at full size (156x210); click Himmler: the same in his file",
+    "E7: choose an officer, effect mod1440_chk_e7_retire, one day, filter Former: his row and his file show the table's portrait (or the unknown leader for one the table lacks), not the game's unknown man; mod1440_chk_e7_log: 'file 0'. game.log at the effect: 'MOD1440 e7 retired <name>: is_unit_leader no' (not known before; 'yes' is a finding: the pages would draw him as the unknown man)",
+    "E7 gate B: the faces hold on a day after the start without opening the Officers page first: close the Records on the War Diary tab on day 1 (they reopen on the page they were closed on), run one day, open them, then select Poznan on the map: the officers' faces in the diary and on Poznan's state card are the game's (decided by is_unit_leader, not by the day last seen)",
+    "E7: the faces scale as before (34x46 in the rows) and stay on their rows while the list scrolls; error.log: no line naming 'portrait', mod1440_of_c_ul or is_unit_leader"
   ],
   "teardown": [
     {

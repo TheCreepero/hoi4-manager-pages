@@ -66,7 +66,7 @@ function Set-HoiPlayset {
 
     $paths = Get-HoiPaths
     if (-not (Test-Path -LiteralPath $paths.ModFile)) { throw "Launcher mod file not found: $($paths.ModFile). Run build.ps1 -DevLink first." }
-    if (-not $Vanilla -and -not $Mods) {
+    if (-not $Vanilla -and (-not $Mods -or @($Mods) -contains $script:HarnessModFile)) {
         # The launcher file names the folder the game loads. After build.ps1 -Deploy that is a copy in
         # Documents, and a check would then show that copy instead of the working tree, without any error.
         $modText = [System.IO.File]::ReadAllText($paths.ModFile, [System.Text.Encoding]::UTF8)

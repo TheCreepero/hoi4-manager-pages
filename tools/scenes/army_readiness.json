@@ -101,7 +101,6 @@
       "hide": [
         "ar_row_pick",
         "ar_row_army",
-        "ar_row_unknown",
         "ar_row_loc_none",
         "ar_row_eq_lowbar",
         "ar_row_worst_0",
@@ -120,7 +119,7 @@
           9
         ]
       },
-      "_note": "A row per commander with troops, Army names off (its default; the state names shows them). Twins script shows per row stand in the samples, with an empty text where the other one shows. The portrait is the game's unknown leader: script names each one's sprite."
+      "_note": "A row per commander with troops, Army names off (its default; the state names shows them). Twins script shows per row stand in the samples, with an empty text where the other one shows. The portrait is the renderer's unknown leader: in the game each row draws its commander's own face (E7, image = portrait)."
     },
     {
       "name": "mod1440_army_readiness_handle",
@@ -732,7 +731,9 @@
     "Hover the row: the tooltip gives his name, entrenchment, readiness for the plan, battle plans, traits, the average combat progress, the other divisions and the worst kind with its numbers (Light Tank: 620 of 1010 style)",
     "Sort the armies by Div, Fighting, Planning, Equipped and Worst: the arrow follows and the chosen army keeps its light band after a sort and after Count again",
     "A general without a number (mod1440_chk_by_effect, then given an army; or a general of Add German Generals AI REWORK): listed with his values, chosen by a click, his equipment shown",
-    "error.log: no line naming mod1440, no Could not find sprite type, no invalid scope line, also with the playset's 55 kinds"
+    "error.log: no line naming mod1440, no Could not find sprite type, no invalid scope line, also with the playset's 55 kinds",
+    "E7 with Road to 56: each commander's row shows his own face, the same as on his army's badge and in his leader window: Keitel or Halder if given an army (texture files, the unknown leader before E7), the others as the game's commander picker; no row with the unknown leader unless the game shows him so",
+    "E7: error.log has no line naming 'portrait', mod1440_p_officer or the on_startup line 'mod1440_pop_round: Invalid Scope'"
   ],
   "teardown": [
     {
@@ -781,7 +782,6 @@
           "ar_er_stock"
         ],
         "mod1440_army_readiness_row": [
-          "ar_row_unknown",
           "ar_row_loc_none",
           "ar_row_eq_lowbar",
           "ar_row_worst_0",
@@ -918,7 +918,6 @@
       "hide": {
         "mod1440_army_readiness_row": [
           "ar_row_pick",
-          "ar_row_unknown",
           "ar_row_loc_none",
           "ar_row_eq_lowbar",
           "ar_row_worst_0",
