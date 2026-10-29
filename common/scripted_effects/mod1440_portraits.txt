@@ -985,11 +985,11 @@ mod1440_p_officer = {
 		}
 	}
 	set_variable = { mod1440_p = p_tok }
-	set_variable = { mod1440_p_ver = 95029 }
+	set_variable = { mod1440_p_ver = 568382 }
 	set_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep }
 }
 
-# In the scope of a head of government, PREV his country: the sprite is left in p_tok. 891 leaders.
+# In the scope of a head of government, PREV his country: the sprite is left in p_tok. 892 leaders.
 mod1440_p_leader = {
 	set_temp_variable = { p_tok = token:GFX_portrait_unknown }
 	set_temp_variable = { p_found = 0 }
@@ -16210,6 +16210,11 @@ mod1440_p_ld_SPR = {
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
+		limit = { PREV = { has_character = SPR_anarchist_commune } is_character = SPR_anarchist_commune }
+		set_temp_variable = { p_tok = token:GFX_portrait_SPR_anarchist_commune }
+		set_temp_variable = { p_found = 1 }
+	}
+	else_if = {
 		limit = { PREV = { has_character = SPA_francisco_franco } is_character = SPA_francisco_franco }
 		set_temp_variable = { p_tok = token:GFX_portrait_spain_francisco_franco }
 		set_temp_variable = { p_found = 1 }
@@ -17167,7 +17172,7 @@ mod1440_p_ld_mod_ZAN = {
 }
 
 # Advisors (tools/portraits_table.py, ADVISORS): the small portrait and the role of the advisor in scope,
-# PREV his country, for each kind of seat. 7049 roles.
+# PREV his country, for each kind of seat. 7053 roles.
 mod1440_p_adv_political_advisor = {
 	set_temp_variable = { p_tok = token:GFX_idea_unknown }
 	set_temp_variable = { p_role = token:mod1440_blank }
@@ -24630,7 +24635,7 @@ mod1440_p_adv_political_advisor_ARG = {
 	}
 	else_if = {
 		limit = { PREV = { has_character = ARG_antonio_soto } is_character = ARG_antonio_soto }
-		set_temp_variable = { p_role = token:anti_unionist_pure_anarchist }
+		set_temp_variable = { p_role = token:ARG_anti_unionist_pure_anarchist }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -29679,7 +29684,7 @@ mod1440_p_adv_political_advisor_ETH = {
 	else_if = {
 		limit = { PREV = { has_character = ETH_getachew_abate } is_character = ETH_getachew_abate }
 		set_temp_variable = { p_tok = token:GFX_portrait_ETH_getachew_abate_small }
-		set_temp_variable = { p_role = token:minister_of_the_interior_abate }
+		set_temp_variable = { p_role = token:ETH_minister_of_the_interior_abate }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -31884,7 +31889,7 @@ mod1440_p_adv_political_advisor_HUN = {
 	}
 	else_if = {
 		limit = { PREV = { has_character = HUN_zoltan_tildy } is_character = HUN_zoltan_tildy }
-		set_temp_variable = { p_role = token:democratic_reformer }
+		set_temp_variable = { p_role = token:HUN_democracy_advocate }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -38455,6 +38460,11 @@ mod1440_p_adv_political_advisor_RAJ = {
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
+		limit = { PREV = { has_character = RAJ_GOE_subbier_appadurai_ayer } is_character = RAJ_GOE_subbier_appadurai_ayer }
+		set_temp_variable = { p_role = token:RAJ_GOE_minister_of_publicity_and_propaganda }
+		set_temp_variable = { p_found = 1 }
+	}
+	else_if = {
 		limit = { PREV = { has_character = RAJ_bhimrao_ramji_ambedkar } is_character = RAJ_bhimrao_ramji_ambedkar }
 		set_temp_variable = { p_role = token:democratic_reformer }
 		set_temp_variable = { p_found = 1 }
@@ -38489,6 +38499,11 @@ mod1440_p_adv_political_advisor_RAJ = {
 	else_if = {
 		limit = { PREV = { has_character = RAJ_GOE_jawaharlal_nehru } is_character = RAJ_GOE_jawaharlal_nehru }
 		set_temp_variable = { p_role = token:anti_colonial_humanist }
+		set_temp_variable = { p_found = 1 }
+	}
+	else_if = {
+		limit = { PREV = { has_character = RAJ_GOE_vallabhbhai_patel } is_character = RAJ_GOE_vallabhbhai_patel }
+		set_temp_variable = { p_role = token:RAJ_GOE_iron_man_of_india }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -41870,7 +41885,7 @@ mod1440_p_adv_political_advisor_URG = {
 	}
 	else_if = {
 		limit = { PREV = { has_character = URG_domingo_mendivil } is_character = URG_domingo_mendivil }
-		set_temp_variable = { p_role = token:SWE_minister_of_defense }
+		set_temp_variable = { p_role = token:URG_minister_of_defense }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -49616,6 +49631,11 @@ mod1440_p_adv_high_command_RAJ = {
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
+		limit = { PREV = { has_character = RAJ_GOE_richard_peirse } is_character = RAJ_GOE_richard_peirse }
+		set_temp_variable = { p_role = token:air_strategic_bombing_2 }
+		set_temp_variable = { p_found = 1 }
+	}
+	else_if = {
 		limit = { PREV = { has_character = RAJ_w_h_gould_bradford } is_character = RAJ_w_h_gould_bradford }
 		set_temp_variable = { p_tok = token:GFX_idea_generic_navy_europe_1 }
 		set_temp_variable = { p_role = token:navy_anti_submarine_2 }
@@ -56767,7 +56787,7 @@ mod1440_p_adv_navy_chief_BUL = {
 	else_if = {
 		limit = { PREV = { has_character = BUL_bonyu_stoev_pironkov } is_character = BUL_bonyu_stoev_pironkov }
 		set_temp_variable = { p_tok = token:GFX_idea_generic_navy_europe_2 }
-		set_temp_variable = { p_role = token:navy_naval_air_defense_2 }
+		set_temp_variable = { p_role = token:navy_chief_commerce_raiding_2 }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -56992,7 +57012,7 @@ mod1440_p_adv_navy_chief_CUB = {
 	else_if = {
 		limit = { PREV = { has_character = CUB_sandalio_junco } is_character = CUB_sandalio_junco }
 		set_temp_variable = { p_tok = token:GFX_idea_generic_navy_south_america_2 }
-		set_temp_variable = { p_role = token:navy_fleet_logistics_2 }
+		set_temp_variable = { p_role = token:navy_chief_commerce_raiding_2 }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
@@ -61595,9 +61615,14 @@ mod1440_p_adv_air_chief_RAJ = {
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {
+		limit = { PREV = { has_character = RAJ_GOE_asghar_khan } is_character = RAJ_GOE_asghar_khan }
+		set_temp_variable = { p_role = token:air_chief_night_operations_2 }
+		set_temp_variable = { p_found = 1 }
+	}
+	else_if = {
 		limit = { PREV = { has_character = RAJ_GOE_mughal_air_guy } is_character = RAJ_GOE_mughal_air_guy }
 		set_temp_variable = { p_tok = token:GFX_idea_generic_air_arab_2 }
-		set_temp_variable = { p_role = token:air_chief_night_operations_2 }
+		set_temp_variable = { p_role = token:air_chief_safety_2 }
 		set_temp_variable = { p_found = 1 }
 	}
 	else_if = {

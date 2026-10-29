@@ -1,8 +1,8 @@
-"""Made by tools/make_game_tables.py from the game 1.19.3.0: change the game, not this file.
+"""Made by tools/make_game_tables.py from the game 1.19.4.0: change the game, not this file.
 
 A row is (trait, who can have it: army, navy or both, its icon GFX_trait_<trait> or "" without one), in the
 order an officer's row shows his traits. The traits of operatives are left out.
-182 traits, 7 without an icon."""
+184 traits, 7 without an icon."""
 
 TRAITS = [
     ('old_guard', 'army', 'GFX_trait_old_guard'),
@@ -75,8 +75,9 @@ TRAITS = [
     ('PRC_survivor_of_the_long_march', 'army', 'GFX_trait_PRC_survivor_of_the_long_march'),
     ('SIC_dubious_loyalty', 'army', 'GFX_trait_SIC_dubious_loyalty'),
     ('YUN_dubious_loyalty', 'army', 'GFX_trait_YUN_dubious_loyalty'),
-    ('CHI_dubious_loyalty', 'army', 'GFX_trait_CHI_dubious_loyalty'),
+    ('CHI_dubious_loyalty', 'both', 'GFX_trait_CHI_dubious_loyalty'),
     ('XSM_dubious_loyalty', 'army', 'GFX_trait_XSM_dubious_loyalty'),
+    ('CHI_watched_officer', 'both', 'GFX_trait_CHI_watched_officer'),
     ('INS_loyalty_to_indonesia', 'army', 'GFX_trait_INS_loyalty_to_indonesia'),
     ('INS_loyalty_to_netherlands', 'army', 'GFX_trait_INS_loyalty_to_netherlands'),
     ('ETH_hero_of_ethiopia', 'both', 'GFX_trait_ETH_hero_of_ethiopia'),
@@ -94,6 +95,7 @@ TRAITS = [
     ('trait_SOV_trotskyist', 'both', 'GFX_trait_trait_SOV_trotskyist'),
     ('trait_SOV_bukharinist', 'both', 'GFX_trait_trait_SOV_bukharinist'),
     ('trait_SOV_foreign_military_advisor', 'both', 'GFX_trait_trait_SOV_foreign_military_advisor'),
+    ('communist_sympathizer', 'both', 'GFX_trait_communist_sympathizer'),
     ('SWE_promoted_away_from_power', 'army', 'GFX_trait_SWE_promoted_away_from_power'),
     ('sick', 'both', 'GFX_trait_sick'),
     ('wounded', 'both', 'GFX_trait_wounded'),

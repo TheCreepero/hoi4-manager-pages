@@ -1,9 +1,9 @@
-"""Made by tools/make_game_tables.py from the game 1.19.3.0: change the game, not this file.
+"""Made by tools/make_game_tables.py from the game 1.19.4.0: change the game, not this file.
 
 A row is (character, file of common/characters, army sprite, navy sprite, civilian sprite, roles).
 TAGS are the files that carry the name of a country: script asks a country for its tag before it goes
 through the people of that file.
-1801 characters."""
+1802 characters."""
 
 TAGS = ['ABK', 'AFA', 'AFG', 'ALB', 'ALT', 'AOI', 'ARG', 'AST', 'ASY', 'AUS', 'BAN', 'BAR', 'BAY', 'BEL', 'BHU', 'BIA', 'BLR', 'BOL', 'BRA', 'BRD', 'BRM', 'BSK', 'BUK', 'BUL', 'BYA', 'CAM', 'CAN', 'CAT', 'CHI', 'CHL', 'CHR', 'CHU', 'CIN', 'COG', 'COL', 'COS', 'CPS', 'CRI', 'CRO', 'CUB', 'CZE', 'DAG', 'DEN', 'DOM', 'DON', 'ECU', 'ELS', 'ENG', 'EST', 'ETH', 'FIN', 'FRA', 'GAR', 'GEN', 'GEO', 'GER', 'GHA', 'GRE', 'GUA', 'HAI', 'HAN', 'HES', 'HOL', 'HON', 'HUN', 'IAS', 'ICE', 'IMO', 'INC', 'INS', 'INU', 'IRE', 'IRQ', 'ISR', 'ITA', 'ITZ', 'JAN', 'JAP', 'JOR', 'KAL', 'KAR', 'KAT', 'KBK', 'KHI', 'KKP', 'KOM', 'KOR', 'KUB', 'KUR', 'KUW', 'LAO', 'LAT', 'LBV', 'LEB', 'LIT', 'LUX', 'MAL', 'MAN', 'MAY', 'MEK', 'MEL', 'MEN', 'MEX', 'MIS', 'MNT', 'MON', 'NAH', 'NEP', 'NIC', 'NOA', 'NOR', 'NZL', 'OKN', 'OMA', 'PAL', 'PAN', 'PAR', 'PER', 'PHI', 'POL', 'POR', 'PRC', 'PRE', 'PRU', 'RAJ', 'RAP', 'RHI', 'RIF', 'RKA', 'RKB', 'RKH', 'RKI', 'RKK', 'RKM', 'RKO', 'RKT', 'RKU', 'RNA', 'RNG', 'ROM', 'RUT', 'RWA', 'SAF', 'SAU', 'SAX', 'SHL', 'SIA', 'SIL', 'SLO', 'SOK', 'SOV', 'SPR', 'SWE', 'SWI', 'SYR', 'TAN', 'TAT', 'THU', 'TIB', 'TOS', 'TTS', 'TUR', 'UBD', 'UDM', 'UKR', 'URG', 'USA', 'VEN', 'VGE', 'VIN', 'WUR', 'YAK', 'YEM', 'YUG']
 
@@ -1569,6 +1569,7 @@ PORTRAITS = [
     ('SPR_alejandro_lerroux', 'SPR', '', '', 'GFX_portrait_SPR_alejandro_lerroux', 'country_leader'),
     ('SPA_jose_antonio_primo_de_rivera', 'SPR', '', '', 'GFX_portrait_SPA_jose_antonio_primo_de_rivera', 'country_leader'),
     ('SPR_manuel_fal_conde', 'SPR', '', '', 'GFX_portrait_SPA_manuel_fal_conde', 'country_leader'),
+    ('SPR_anarchist_commune', 'SPR', '', '', 'GFX_portrait_SPR_anarchist_commune', 'country_leader'),
     ('SPR_vicente_rojo_lluch', 'SPR', 'GFX_portrait_SPR_vicente_rojo_lluch', '', '', 'corps_commander'),
     ('SPR_jose_miaja', 'SPR', 'GFX_portrait_SPR_jose_miaja', '', '', 'corps_commander'),
     ('SPR_jose_asensio_torrado', 'SPR', 'GFX_portrait_SPR_jose_asensio_torrado', '', '', 'corps_commander'),
@@ -1813,7 +1814,7 @@ PORTRAITS = [
 
 # The advisor roles: (character, file of common/characters, sprite, slot, first trait of the role, large).
 # The sprite is the small portrait; the large one (large = 1) when no .gfx declares the small; "" when
-# neither is declared. 3765 roles.
+# neither is declared. 3769 roles.
 ADVISORS = [
     ('AFG_hares_muzafar', 'AFG', 'GFX_idea_generic_army_arab_3', 'high_command', 'army_entrenchment_2', 0),
     ('AFG_asadullah_seraj_khan', 'AFG', 'GFX_idea_generic_army_arab_1', 'army_chief', 'army_chief_defensive_2', 0),
@@ -1915,7 +1916,7 @@ ADVISORS = [
     ('AOI_enrico_cerulli', 'AOI', 'GFX_portrait_AOI_enrico_cerulli_small', 'political_advisor', 'scholar_of_ethiopian_and_somali_studies', 0),
     ('ARG_enrique_mosca', 'ARG', '', 'political_advisor', 'democratic_reformer', 0),
     ('ARG_rodolfo_ghioldi', 'ARG', '', 'political_advisor', 'socialist_writer', 0),
-    ('ARG_antonio_soto', 'ARG', '', 'political_advisor', 'anti_unionist_pure_anarchist', 0),
+    ('ARG_antonio_soto', 'ARG', '', 'political_advisor', 'ARG_anti_unionist_pure_anarchist', 0),
     ('ARG_carlos_marquez', 'ARG', '', 'theorist', 'military_theorist', 0),
     ('ARG_eduardo_avalos', 'ARG', '', 'high_command', 'army_logistics_2', 0),
     ('ARG_juan_peron', 'ARG', '', 'high_command', 'army_regrouping_2', 0),
@@ -2240,7 +2241,7 @@ ADVISORS = [
     ('BUL_bogdan_filov', 'BUL', 'GFX_idea_bul_bogdan_filov', 'political_advisor', 'ambitious_negotiator_neutrality', 0),
     ('BUL_kimon_georgiev', 'BUL', 'GFX_idea_bul_kimon_georgiev', 'political_advisor', 'technocrat', 0),
     ('BUL_ivan_gaidimitriv', 'BUL', 'GFX_idea_generic_air_europe_1', 'theorist', 'air_warfare_theorist', 0),
-    ('BUL_bonyu_stoev_pironkov', 'BUL', 'GFX_idea_generic_navy_europe_2', 'navy_chief', 'navy_naval_air_defense_2', 0),
+    ('BUL_bonyu_stoev_pironkov', 'BUL', 'GFX_idea_generic_navy_europe_2', 'navy_chief', 'navy_chief_commerce_raiding_2', 0),
     ('BUL_nikola_totev_markov', 'BUL', 'GFX_idea_generic_navy_europe_1', 'navy_chief', 'navy_chief_decisive_battle_1', 0),
     ('BUL_blagoi_ivanov', 'BUL', 'GFX_idea_generic_army_europe_4', 'high_command', 'army_regrouping_2', 0),
     ('CAN_kenneth_stuart', 'CAN', '', 'theorist', 'military_theorist', 0),
@@ -2536,7 +2537,7 @@ ADVISORS = [
     ('CUB_sergio_carbo', 'CUB', 'GFX_idea_generic_air_south_america_2', 'theorist', 'air_warfare_theorist', 0),
     ('CUB_fulgencio_batista', 'CUB', 'GFX_idea_generic_army_south_america_5', 'army_chief', 'army_chief_offensive_2', 0),
     ('CUB_rodrigo_a_fuentes', 'CUB', 'GFX_idea_generic_navy_south_america_3', 'navy_chief', 'navy_chief_maneuver_2', 0),
-    ('CUB_sandalio_junco', 'CUB', 'GFX_idea_generic_navy_south_america_2', 'navy_chief', 'navy_fleet_logistics_2', 0),
+    ('CUB_sandalio_junco', 'CUB', 'GFX_idea_generic_navy_south_america_2', 'navy_chief', 'navy_chief_commerce_raiding_2', 0),
     ('CUB_salvador_castaneda_castro', 'CUB', 'GFX_idea_generic_army_south_america_4', 'army_chief', 'army_chief_defensive_2', 0),
     ('CUB_angel_gonzalez', 'CUB', 'GFX_idea_generic_navy_south_america_2', 'high_command', 'navy_amphibious_assault_2', 0),
     ('CUB_julio_sanguily', 'CUB', 'GFX_idea_generic_navy_south_america_3', 'theorist', 'naval_theorist', 0),
@@ -2852,7 +2853,7 @@ ADVISORS = [
     ('ETH_mulugeta_yeggazu_of_illubabor', 'ETH', 'GFX_portrait_ETH_mulugeta_yeggazu_of_illubabor_small', 'army_chief', 'army_chief_morale_2', 0),
     ('ETH_abuna_qerellos_iv', 'ETH', 'GFX_portrait_ETH_abuna_qerellos_iv_small', 'political_advisor', 'archbishop_of_ethiopian_orthodox_tewahedo_church', 0),
     ('ETH_heruy_wolde_selassie', 'ETH', 'GFX_portrait_ETH_heruy_wolde_selassie_small', 'political_advisor', 'japanizer', 0),
-    ('ETH_getachew_abate', 'ETH', 'GFX_portrait_ETH_getachew_abate_small', 'political_advisor', 'minister_of_the_interior_abate', 0),
+    ('ETH_getachew_abate', 'ETH', 'GFX_portrait_ETH_getachew_abate_small', 'political_advisor', 'ETH_minister_of_the_interior_abate', 0),
     ('ETH_workneh_eshete', 'ETH', 'GFX_portrait_ETH_workneh_eshete_small', 'political_advisor', 'modernizer_and_diplomat', 0),
     ('ETH_yilma_deressa', 'ETH', 'GFX_portrait_ETH_yilma_deressa_small', 'political_advisor', 'minister_of_finance_deressa', 0),
     ('ETH_tekle_hawariat_tekle_mariyam', 'ETH', 'GFX_portrait_ETH_tekle_hawariat_tekle_mariyam_small', 'political_advisor', 'minister_of_finance_mariyam', 0),
@@ -3259,7 +3260,7 @@ ADVISORS = [
     ('HUN_bela_rakosi', 'HUN', '', 'air_chief', 'air_chief_ground_support_2', 0),
     ('HUN_laszlo_hary', 'HUN', '', 'air_chief', 'air_chief_reform_2', 0),
     ('HUN_gusztav_gratz', 'HUN', '', 'political_advisor', 'staunch_monarchist', 0),
-    ('HUN_zoltan_tildy', 'HUN', '', 'political_advisor', 'democratic_reformer', 0),
+    ('HUN_zoltan_tildy', 'HUN', '', 'political_advisor', 'HUN_democracy_advocate', 0),
     ('HUN_jozsef_szell', 'HUN', '', 'political_advisor', 'silent_workhorse', 0),
     ('HUN_bela_imredy', 'HUN', '', 'political_advisor', 'HUN_magyar_nemzeti_bank_president', 0),
     ('HUN_pal_teleki', 'HUN', '', 'political_advisor', 'HUN_scholary_politician', 0),
@@ -4510,6 +4511,7 @@ ADVISORS = [
     ('PUE_ar', 'PUE', 'GFX_idea_generic_army_south_america_5', 'high_command', 'army_regrouping_2', 0),
     ('PUE_acgs', 'PUE', 'GFX_idea_generic_air_south_america_3', 'air_chief', 'air_chief_ground_support_2', 0),
     ('RAJ_GOE_arcot_doraiswamy_loganadan', 'RAJ', '', 'political_advisor', 'governor_of_the_andaman_islands', 0),
+    ('RAJ_GOE_subbier_appadurai_ayer', 'RAJ', '', 'political_advisor', 'RAJ_GOE_minister_of_publicity_and_propaganda', 0),
     ('RAJ_GOE_shah_nawaz_khan', 'RAJ', '', 'high_command', 'army_logistics_2', 0),
     ('RAJ_orde_wingate', 'RAJ', 'GFX_portrait_RAJ_orde_wingate_small', 'high_command', 'special_operations_specialist', 0),
     ('RAJ_rajendra_prasad', 'RAJ', '', 'theorist', 'military_theorist', 0),
@@ -4532,10 +4534,12 @@ ADVISORS = [
     ('RAJ_bruce_w_mcpherson', 'RAJ', 'GFX_idea_generic_air_europe_1', 'air_chief', 'air_chief_safety_2', 0),
     ('RAJ_subroto_mukherjee', 'RAJ', 'GFX_idea_generic_air_arab_3', 'air_chief', 'air_chief_ground_support_2', 0),
     ('RAJ_ravindra_darshan_singh', 'RAJ', '', 'air_chief', 'air_chief_night_operations_2', 0),
+    ('RAJ_GOE_asghar_khan', 'RAJ', '', 'air_chief', 'air_chief_night_operations_2', 0),
     ('RAJ_ram_singh_thakur', 'RAJ', '', 'high_command', 'army_infantry_2', 0),
     ('RAJ_arjan_singh_vibhusan', 'RAJ', 'GFX_idea_generic_air_arab_3', 'high_command', 'air_air_combat_training_3', 0),
     ('RAJ_aspy_merwan_engineer', 'RAJ', '', 'high_command', 'air_naval_strike_2', 0),
     ('RAJ_mehar_singh', 'RAJ', '', 'high_command', 'air_close_air_support_3', 0),
+    ('RAJ_GOE_richard_peirse', 'RAJ', '', 'high_command', 'air_strategic_bombing_2', 0),
     ('RAJ_w_h_gould_bradford', 'RAJ', 'GFX_idea_generic_navy_europe_1', 'high_command', 'navy_anti_submarine_2', 0),
     ('RAJ_bhimrao_ramji_ambedkar', 'RAJ', '', 'political_advisor', 'democratic_reformer', 0),
     ('RAJ_karam_singh_mann', 'RAJ', 'GFX_idea_generic_political_advisor_india_2', 'political_advisor', 'communist_revolutionary', 0),
@@ -4544,6 +4548,7 @@ ADVISORS = [
     ('RAJ_john_edward_golightly', 'RAJ', 'GFX_idea_generic_political_advisor_europe_5', 'political_advisor', 'silent_workhorse', 0),
     ('RAJ_chakravarti_rajagopalachari', 'RAJ', '', 'political_advisor', 'popular_figurehead', 0),
     ('RAJ_GOE_jawaharlal_nehru', 'RAJ', '', 'political_advisor', 'anti_colonial_humanist', 0),
+    ('RAJ_GOE_vallabhbhai_patel', 'RAJ', '', 'political_advisor', 'RAJ_GOE_iron_man_of_india', 0),
     ('RAJ_GOE_muhammad_ali_jinnah', 'RAJ', '', 'political_advisor', 'all_india_muslim_league_leader', 0),
     ('RAJ_GOE_tara_singh', 'RAJ', '', 'political_advisor', 'sikh_activist', 0),
     ('RAJ_GOE_rash_behari_bose', 'RAJ', '', 'political_advisor', 'exiled_dissident', 0),
@@ -4577,7 +4582,7 @@ ADVISORS = [
     ('RAJ_GOE_mughal_army_command_5', 'RAJ', 'GFX_idea_generic_air_arab_1', 'high_command', 'army_regrouping_2', 0),
     ('RAJ_GOE_mughal_theorist', 'RAJ', 'GFX_idea_generic_political_advisor_arab_1', 'theorist', 'military_theorist', 0),
     ('RAJ_GOE_mughal_navy_guy', 'RAJ', 'GFX_idea_generic_navy_arab_2', 'navy_chief', 'navy_chief_reform_2', 0),
-    ('RAJ_GOE_mughal_air_guy', 'RAJ', 'GFX_idea_generic_air_arab_2', 'air_chief', 'air_chief_night_operations_2', 0),
+    ('RAJ_GOE_mughal_air_guy', 'RAJ', 'GFX_idea_generic_air_arab_2', 'air_chief', 'air_chief_safety_2', 0),
     ('RAJ_intel_generic', 'RAJ', 'GFX_idea_generic_political_advisor_arab_2', 'political_advisor', 'head_of_intelligence', 0),
     ('RAJ_cap_industry_mughal', 'RAJ', 'GFX_idea_generic_political_advisor_arab_3', 'political_advisor', 'captain_of_industry', 0),
     ('RAJ_mughal_industrialist', 'RAJ', 'GFX_idea_generic_captain_of_industry_middle_eastern_2d', 'political_advisor', 'war_industrialist', 0),
@@ -5301,7 +5306,7 @@ ADVISORS = [
     ('URG_zoilo_saldias', 'URG', '', 'political_advisor', 'captain_of_industry', 0),
     ('URG_juan_cesar_mussio_fournier', 'URG', '', 'political_advisor', 'JUNO_minister_of_public_health', 0),
     ('URG_cesar_gutierrez', 'URG', '', 'political_advisor', 'SWE_minister_of_agriculture', 0),
-    ('URG_domingo_mendivil', 'URG', '', 'political_advisor', 'SWE_minister_of_defense', 0),
+    ('URG_domingo_mendivil', 'URG', '', 'political_advisor', 'URG_minister_of_defense', 0),
     ('URG_andres_puyol', 'URG', 'GFX_idea_generic_political_advisor_south_america_2', 'political_advisor', 'war_industrialist', 0),
     ('URG_alfredo_campos', 'URG', '', 'political_advisor', 'BRA_minister_of_defense', 0),
     ('URG_julio_roletti', 'URG', 'GFX_idea_generic_political_advisor_south_america_1', 'political_advisor', 'NOR_pragmatic_defense_minister', 0),

@@ -97,7 +97,7 @@ mod1440_ar_count = {
 			set_variable = { mod1440_al_loc = 0 }
 			set_variable = { mod1440_al_lcnt = 0 }
 			if = {
-				limit = { check_variable = { ar_player = 1 } OR = { NOT = { check_variable = { mod1440_p_ver = 95029 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+				limit = { check_variable = { ar_player = 1 } OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
 				mod1440_p_officer = yes
 			}
 			if = {
