@@ -1,4 +1,4 @@
-"""Made by tools/make_game_tables.py from the game 1.19.4.0: change the game, not this file.
+"""Made by tools/make_game_tables.py from the game 1.19.4.1: change the game, not this file.
 
 A row is (province, state, value). The name of a point is the game's text VICTORY_POINTS_<province>.
 1497 victory points."""

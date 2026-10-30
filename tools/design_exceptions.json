@@ -25,7 +25,8 @@
     {"rule": "row", "window": "mod1440_records_wd", "item": "GFX_1440p_SG_stripe_384x26", "why": "The War Diary pane's tables at 26 (WD_TROW), set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_records_wd", "item": "GFX_1440p_SG_stripe_384x46", "why": "The chronicle's rows of 46 (WD_CHRON_ROW), two lines, set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_records_diary_row", "item": "GFX_1440p_SG_*_1198x34", "why": "A diary line of 34 (WD_ROW) with a portrait of 23x31, set before the ruleset's pitches."},
-    {"rule": "row", "window": "mod1440_records_of", "item": "GFX_1440p_SG_stripe_642x22", "why": "The service record's lines of 22 in an officer's file, set before the ruleset's pitches."},
+    {"rule": "row", "window": "mod1440_records_of", "item": "GFX_1440p_SG_pick_460x62", "why": "E2 round 2: not a table row: the rim of the dark field that holds the army's name in an officer's file (the chosen-row plate as a frame, gate A round 1)."},
+    {"rule": "row", "window": "mod1440_records_of", "item": "GFX_1440p_SG_pick_624x26", "why": "E2 round 2: not a table row: the plate of the chain card's total line (Under his command), 26 high between the column captions and the rows of 32, as the design draws it."},
     {"rule": "row", "window": "mod1440_records_gv", "item": "GFX_1440p_SG_*_526x*", "why": "Government rows of people with their portraits (52 to 90), set before the ruleset's pitches."},
     {"rule": "row", "window": "mod1440_records_wr", "item": "GFX_1440p_SG_stripe_580x26", "why": "Not a table row: the inside of the track of a war's file (the war score bar's frame), kept from E4's first build; the file's tables are at 24, 32 and 48 since E4 round 2."},
     {"rule": "row", "window": "mod1440_records_*war_row", "item": "GFX_1440p_SG_pick_258x33", "why": "A war in the list, with its flags, at 33, set before the ruleset's pitches."}

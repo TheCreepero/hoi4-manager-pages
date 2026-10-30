@@ -9384,9 +9384,11 @@ mod1440_gv_marks = {
 }
 
 # Officers: the traits of the officer in scope, kept on him (tools/traits_table.py and traits_mods_table.py:
-# 230 traits; a general is asked about 176, an admiral about 128). Run when num_traits has changed.
+# 230 traits; a general is asked about 176, an admiral about 128), each with the text key of its effects
+# (tools/trait_effects_table.py, 184 of them). Run when num_traits has changed.
 mod1440_of_traits = {
 	clear_array = mod1440_of_tr
+	clear_array = mod1440_of_tr_e
 	if = {
 		limit = { is_navy_leader = yes }
 		if = {
@@ -9394,66 +9396,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = war_hero }
 				add_to_array = { mod1440_of_tr = token:war_hero }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_war_hero }
 			}
 			if = {
 				limit = { has_trait = old_guard_navy }
 				add_to_array = { mod1440_of_tr = token:old_guard_navy }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_old_guard_navy }
 			}
 			if = {
 				limit = { has_trait = gentlemanly }
 				add_to_array = { mod1440_of_tr = token:gentlemanly }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_gentlemanly }
 			}
 			if = {
 				limit = { has_trait = gunnery_expert }
 				add_to_array = { mod1440_of_tr = token:gunnery_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_gunnery_expert }
 			}
 			if = {
 				limit = { has_trait = cuts_corners }
 				add_to_array = { mod1440_of_tr = token:cuts_corners }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_cuts_corners }
 			}
 			if = {
 				limit = { has_trait = chief_engineer }
 				add_to_array = { mod1440_of_tr = token:chief_engineer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_chief_engineer }
 			}
 			if = {
 				limit = { has_trait = navy_media_personality }
 				add_to_array = { mod1440_of_tr = token:navy_media_personality }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_navy_media_personality }
 			}
 			if = {
 				limit = { has_trait = bold }
 				add_to_array = { mod1440_of_tr = token:bold }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_bold }
 			}
 			if = {
 				limit = { has_trait = navy_career_officer }
 				add_to_array = { mod1440_of_tr = token:navy_career_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_navy_career_officer }
 			}
 			if = {
 				limit = { has_trait = battleship_adherent }
 				add_to_array = { mod1440_of_tr = token:battleship_adherent }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_battleship_adherent }
 			}
 			if = {
 				limit = { has_trait = aviation_enthusiast }
 				add_to_array = { mod1440_of_tr = token:aviation_enthusiast }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_aviation_enthusiast }
 			}
 			if = {
 				limit = { has_trait = caustic_personality }
 				add_to_array = { mod1440_of_tr = token:caustic_personality }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_caustic_personality }
 			}
 			if = {
 				limit = { has_trait = craven }
 				add_to_array = { mod1440_of_tr = token:craven }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_craven }
 			}
 			if = {
 				limit = { has_trait = naval_lineage }
 				add_to_array = { mod1440_of_tr = token:naval_lineage }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_naval_lineage }
 			}
 			if = {
 				limit = { has_trait = submarine_officer }
 				add_to_array = { mod1440_of_tr = token:submarine_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_submarine_officer }
 			}
 			if = {
 				limit = { has_trait = destroyer_officer }
 				add_to_array = { mod1440_of_tr = token:destroyer_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_destroyer_officer }
 			}
 		}
 		if = {
@@ -9461,66 +9479,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = cruiser_officer }
 				add_to_array = { mod1440_of_tr = token:cruiser_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_cruiser_officer }
 			}
 			if = {
 				limit = { has_trait = heavy_ship_officer }
 				add_to_array = { mod1440_of_tr = token:heavy_ship_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_heavy_ship_officer }
 			}
 			if = {
 				limit = { has_trait = carrier_officer }
 				add_to_array = { mod1440_of_tr = token:carrier_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_carrier_officer }
 			}
 			if = {
 				limit = { has_trait = trait_SPA_nationalist_sympathies }
 				add_to_array = { mod1440_of_tr = token:trait_SPA_nationalist_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPA_nationalist_sympathies }
 			}
 			if = {
 				limit = { has_trait = trait_SPA_falangist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPA_falangist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPA_falangist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPA_carlist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPA_carlist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPA_carlist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPR_republican_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPR_republican_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPR_republican_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPR_stalinist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPR_stalinist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPR_stalinist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPR_anti_stalinist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPR_anti_stalinist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPR_anti_stalinist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_BUL_zveno_member }
 				add_to_array = { mod1440_of_tr = token:trait_BUL_zveno_member }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_BUL_zveno_member }
 			}
 			if = {
 				limit = { has_trait = trait_BUL_tsar_loyalist }
 				add_to_array = { mod1440_of_tr = token:trait_BUL_tsar_loyalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_BUL_tsar_loyalist }
 			}
 			if = {
 				limit = { has_trait = trait_BUL_ff_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_BUL_ff_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_BUL_ff_sympathizer }
 			}
 			if = {
 				limit = { has_trait = trait_TUR_kemalist_champion }
 				add_to_array = { mod1440_of_tr = token:trait_TUR_kemalist_champion }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_TUR_kemalist_champion }
 			}
 			if = {
 				limit = { has_trait = trait_GRE_stauch_monarchist }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_stauch_monarchist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_stauch_monarchist }
 			}
 			if = {
 				limit = { has_trait = trait_GRE_venezelist_loyalist }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_venezelist_loyalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_venezelist_loyalist }
 			}
 			if = {
 				limit = { has_trait = trait_GRE_marxist_acolyte }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_marxist_acolyte }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_marxist_acolyte }
 			}
 		}
 		if = {
@@ -9528,66 +9562,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = trait_GRE_fascist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_fascist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_fascist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = trait_HUN_fascist_sympathies }
 				add_to_array = { mod1440_of_tr = token:trait_HUN_fascist_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_HUN_fascist_sympathies }
 			}
 			if = {
 				limit = { has_trait = trait_HUN_vitez }
 				add_to_array = { mod1440_of_tr = token:trait_HUN_vitez }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_HUN_vitez }
 			}
 			if = {
 				limit = { has_trait = trait_JAP_kodoha_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_JAP_kodoha_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_JAP_kodoha_sympathizer }
 			}
 			if = {
 				limit = { has_trait = JAP_royal_lineage }
 				add_to_array = { mod1440_of_tr = token:JAP_royal_lineage }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_royal_lineage }
 			}
 			if = {
 				limit = { has_trait = JAP_kamikaze_proponent }
 				add_to_array = { mod1440_of_tr = token:JAP_kamikaze_proponent }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_kamikaze_proponent }
 			}
 			if = {
 				limit = { has_trait = JAP_tohokai_sympathies }
 				add_to_array = { mod1440_of_tr = token:JAP_tohokai_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_tohokai_sympathies }
 			}
 			if = {
 				limit = { has_trait = JAP_IJA_loyalist }
 				add_to_array = { mod1440_of_tr = token:JAP_IJA_loyalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_IJA_loyalist }
 			}
 			if = {
 				limit = { has_trait = JAP_government_supporter }
 				add_to_array = { mod1440_of_tr = token:JAP_government_supporter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_government_supporter }
 			}
 			if = {
 				limit = { has_trait = CHI_dubious_loyalty }
 				add_to_array = { mod1440_of_tr = token:CHI_dubious_loyalty }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_CHI_dubious_loyalty }
 			}
 			if = {
 				limit = { has_trait = CHI_watched_officer }
 				add_to_array = { mod1440_of_tr = token:CHI_watched_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_CHI_watched_officer }
 			}
 			if = {
 				limit = { has_trait = ETH_hero_of_ethiopia }
 				add_to_array = { mod1440_of_tr = token:ETH_hero_of_ethiopia }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ETH_hero_of_ethiopia }
 			}
 			if = {
 				limit = { has_trait = JAP_communist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:JAP_communist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_communist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = BALTIC_ex_russian }
 				add_to_array = { mod1440_of_tr = token:BALTIC_ex_russian }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_BALTIC_ex_russian }
 			}
 			if = {
 				limit = { has_trait = BALTIC_anti_bolshevik }
 				add_to_array = { mod1440_of_tr = token:BALTIC_anti_bolshevik }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_BALTIC_anti_bolshevik }
 			}
 			if = {
 				limit = { has_trait = POL_sanation_left_leader }
 				add_to_array = { mod1440_of_tr = token:POL_sanation_left_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_POL_sanation_left_leader }
 			}
 		}
 		if = {
@@ -9595,66 +9645,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = POL_sanation_right_leader }
 				add_to_array = { mod1440_of_tr = token:POL_sanation_right_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_POL_sanation_right_leader }
 			}
 			if = {
 				limit = { has_trait = peasant_sympathiser }
 				add_to_array = { mod1440_of_tr = token:peasant_sympathiser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_peasant_sympathiser }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_cowed_by_stalin_navy }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_cowed_by_stalin_navy }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_cowed_by_stalin_navy }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_stalinist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_stalinist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_stalinist }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_trotskyist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_trotskyist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_trotskyist }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_bukharinist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_bukharinist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_bukharinist }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_foreign_military_advisor }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_foreign_military_advisor }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_foreign_military_advisor }
 			}
 			if = {
 				limit = { has_trait = communist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:communist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_communist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = sick }
 				add_to_array = { mod1440_of_tr = token:sick }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_sick }
 			}
 			if = {
 				limit = { has_trait = wounded }
 				add_to_array = { mod1440_of_tr = token:wounded }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_wounded }
 			}
 			if = {
 				limit = { has_trait = reassigned }
 				add_to_array = { mod1440_of_tr = token:reassigned }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_reassigned }
 			}
 			if = {
 				limit = { has_trait = disgruntled }
 				add_to_array = { mod1440_of_tr = token:disgruntled }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_disgruntled }
 			}
 			if = {
 				limit = { has_trait = demoted }
 				add_to_array = { mod1440_of_tr = token:demoted }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_demoted }
 			}
 			if = {
 				limit = { has_trait = substance_abuser }
 				add_to_array = { mod1440_of_tr = token:substance_abuser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_substance_abuser }
 			}
 			if = {
 				limit = { has_trait = substance_addict }
 				add_to_array = { mod1440_of_tr = token:substance_addict }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_substance_addict }
 			}
 			if = {
 				limit = { has_trait = hidden_sympathies }
 				add_to_array = { mod1440_of_tr = token:hidden_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_hidden_sympathies }
 			}
 		}
 		if = {
@@ -9662,66 +9728,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = recently_promoted }
 				add_to_array = { mod1440_of_tr = token:recently_promoted }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_recently_promoted }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_determined }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_determined }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_determined }
 			}
 			if = {
 				limit = { has_trait = SWE_wounded_in_protests }
 				add_to_array = { mod1440_of_tr = token:SWE_wounded_in_protests }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SWE_wounded_in_protests }
 			}
 			if = {
 				limit = { has_trait = SWE_disillusioned_with_the_government }
 				add_to_array = { mod1440_of_tr = token:SWE_disillusioned_with_the_government }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SWE_disillusioned_with_the_government }
 			}
 			if = {
 				limit = { has_trait = concealment_expert }
 				add_to_array = { mod1440_of_tr = token:concealment_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_concealment_expert }
 			}
 			if = {
 				limit = { has_trait = lone_wolf }
 				add_to_array = { mod1440_of_tr = token:lone_wolf }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_lone_wolf }
 			}
 			if = {
 				limit = { has_trait = silent_hunter }
 				add_to_array = { mod1440_of_tr = token:silent_hunter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_silent_hunter }
 			}
 			if = {
 				limit = { has_trait = lancer }
 				add_to_array = { mod1440_of_tr = token:lancer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_lancer }
 			}
 			if = {
 				limit = { has_trait = search_pattern_expert }
 				add_to_array = { mod1440_of_tr = token:search_pattern_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_search_pattern_expert }
 			}
 			if = {
 				limit = { has_trait = destroyer_leader }
 				add_to_array = { mod1440_of_tr = token:destroyer_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_destroyer_leader }
 			}
 			if = {
 				limit = { has_trait = cruiser_captain }
 				add_to_array = { mod1440_of_tr = token:cruiser_captain }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_cruiser_captain }
 			}
 			if = {
 				limit = { has_trait = mine_craft }
 				add_to_array = { mod1440_of_tr = token:mine_craft }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_mine_craft }
 			}
 			if = {
 				limit = { has_trait = flight_deck_manager }
 				add_to_array = { mod1440_of_tr = token:flight_deck_manager }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_flight_deck_manager }
 			}
 			if = {
 				limit = { has_trait = ground_pounder }
 				add_to_array = { mod1440_of_tr = token:ground_pounder }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ground_pounder }
 			}
 			if = {
 				limit = { has_trait = big_guns_expert }
 				add_to_array = { mod1440_of_tr = token:big_guns_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_big_guns_expert }
 			}
 			if = {
 				limit = { has_trait = safety_first }
 				add_to_array = { mod1440_of_tr = token:safety_first }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_safety_first }
 			}
 		}
 		if = {
@@ -9729,66 +9811,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = smoke_screen_expert }
 				add_to_array = { mod1440_of_tr = token:smoke_screen_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_smoke_screen_expert }
 			}
 			if = {
 				limit = { has_trait = torpedo_expert }
 				add_to_array = { mod1440_of_tr = token:torpedo_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_torpedo_expert }
 			}
 			if = {
 				limit = { has_trait = loading_drill_master }
 				add_to_array = { mod1440_of_tr = token:loading_drill_master }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_loading_drill_master }
 			}
 			if = {
 				limit = { has_trait = hunter_killer }
 				add_to_array = { mod1440_of_tr = token:hunter_killer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_hunter_killer }
 			}
 			if = {
 				limit = { has_trait = fly_swatter }
 				add_to_array = { mod1440_of_tr = token:fly_swatter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_fly_swatter }
 			}
 			if = {
 				limit = { has_trait = fighter_director }
 				add_to_array = { mod1440_of_tr = token:fighter_director }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_fighter_director }
 			}
 			if = {
 				limit = { has_trait = dive_bomber }
 				add_to_array = { mod1440_of_tr = token:dive_bomber }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_dive_bomber }
 			}
 			if = {
 				limit = { has_trait = torpedo_bomber }
 				add_to_array = { mod1440_of_tr = token:torpedo_bomber }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_torpedo_bomber }
 			}
 			if = {
 				limit = { has_trait = marksman }
 				add_to_array = { mod1440_of_tr = token:marksman }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_marksman }
 			}
 			if = {
 				limit = { has_trait = crisis_magician }
 				add_to_array = { mod1440_of_tr = token:crisis_magician }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_crisis_magician }
 			}
 			if = {
 				limit = { has_trait = arctic_water_expert }
 				add_to_array = { mod1440_of_tr = token:arctic_water_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_arctic_water_expert }
 			}
 			if = {
 				limit = { has_trait = inshore_fighter }
 				add_to_array = { mod1440_of_tr = token:inshore_fighter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_inshore_fighter }
 			}
 			if = {
 				limit = { has_trait = blue_water_expert }
 				add_to_array = { mod1440_of_tr = token:blue_water_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_blue_water_expert }
 			}
 			if = {
 				limit = { has_trait = green_water_expert }
 				add_to_array = { mod1440_of_tr = token:green_water_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_green_water_expert }
 			}
 			if = {
 				limit = { has_trait = blockade_runner }
 				add_to_array = { mod1440_of_tr = token:blockade_runner }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_blockade_runner }
 			}
 			if = {
 				limit = { has_trait = seawolf }
 				add_to_array = { mod1440_of_tr = token:seawolf }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_seawolf }
 			}
 		}
 		if = {
@@ -9796,66 +9894,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = spotter }
 				add_to_array = { mod1440_of_tr = token:spotter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_spotter }
 			}
 			if = {
 				limit = { has_trait = fleet_protector }
 				add_to_array = { mod1440_of_tr = token:fleet_protector }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_fleet_protector }
 			}
 			if = {
 				limit = { has_trait = superior_tactician }
 				add_to_array = { mod1440_of_tr = token:superior_tactician }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_superior_tactician }
 			}
 			if = {
 				limit = { has_trait = air_controller }
 				add_to_array = { mod1440_of_tr = token:air_controller }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_air_controller }
 			}
 			if = {
 				limit = { has_trait = ironside }
 				add_to_array = { mod1440_of_tr = token:ironside }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ironside }
 			}
 			if = {
 				limit = { has_trait = submarine_captain }
 				add_to_array = { mod1440_of_tr = token:submarine_captain }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = promising }
 				add_to_array = { mod1440_of_tr = token:promising }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = flemish }
 				add_to_array = { mod1440_of_tr = token:flemish }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = walloon }
 				add_to_array = { mod1440_of_tr = token:walloon }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = EGY_aristocrat }
 				add_to_array = { mod1440_of_tr = token:EGY_aristocrat }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = AFG_barakzai_royalist }
 				add_to_array = { mod1440_of_tr = token:AFG_barakzai_royalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = AUS_nazi_loyalties }
 				add_to_array = { mod1440_of_tr = token:AUS_nazi_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = ARM_anti_communist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:ARM_anti_communist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = MEN_fascist_sympathies }
 				add_to_array = { mod1440_of_tr = token:MEN_fascist_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_marshal_master_exploder }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_marshal_master_exploder }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_vibrates }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_vibrates }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 		if = {
@@ -9863,46 +9977,57 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = r56w_trait_army_packed_lunch }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_packed_lunch }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_saw_a_squirrel }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_saw_a_squirrel }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_knows_what_you_did }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_knows_what_you_did }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_force_user }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_force_user }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_is_a_lemur }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_is_a_lemur }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_personal_space }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_personal_space }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_free_coffee }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_free_coffee }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_ocean_haiku }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_ocean_haiku }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_hates_water }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_hates_water }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_rubber_duck }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_rubber_duck }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_can_swim }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_can_swim }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 	}
@@ -9912,66 +10037,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = old_guard }
 				add_to_array = { mod1440_of_tr = token:old_guard }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_old_guard }
 			}
 			if = {
 				limit = { has_trait = brilliant_strategist }
 				add_to_array = { mod1440_of_tr = token:brilliant_strategist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_brilliant_strategist }
 			}
 			if = {
 				limit = { has_trait = inflexible_strategist }
 				add_to_array = { mod1440_of_tr = token:inflexible_strategist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_inflexible_strategist }
 			}
 			if = {
 				limit = { has_trait = politically_connected }
 				add_to_array = { mod1440_of_tr = token:politically_connected }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_politically_connected }
 			}
 			if = {
 				limit = { has_trait = brave }
 				add_to_array = { mod1440_of_tr = token:brave }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_brave }
 			}
 			if = {
 				limit = { has_trait = war_hero }
 				add_to_array = { mod1440_of_tr = token:war_hero }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_war_hero }
 			}
 			if = {
 				limit = { has_trait = career_officer }
 				add_to_array = { mod1440_of_tr = token:career_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_career_officer }
 			}
 			if = {
 				limit = { has_trait = trait_cautious }
 				add_to_array = { mod1440_of_tr = token:trait_cautious }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_cautious }
 			}
 			if = {
 				limit = { has_trait = trait_reckless }
 				add_to_array = { mod1440_of_tr = token:trait_reckless }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_reckless }
 			}
 			if = {
 				limit = { has_trait = media_personality }
 				add_to_array = { mod1440_of_tr = token:media_personality }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_media_personality }
 			}
 			if = {
 				limit = { has_trait = harsh_leader }
 				add_to_array = { mod1440_of_tr = token:harsh_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_harsh_leader }
 			}
 			if = {
 				limit = { has_trait = bearer_of_artillery }
 				add_to_array = { mod1440_of_tr = token:bearer_of_artillery }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_bearer_of_artillery }
 			}
 			if = {
 				limit = { has_trait = infantry_officer }
 				add_to_array = { mod1440_of_tr = token:infantry_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_infantry_officer }
 			}
 			if = {
 				limit = { has_trait = cavalry_officer }
 				add_to_array = { mod1440_of_tr = token:cavalry_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_cavalry_officer }
 			}
 			if = {
 				limit = { has_trait = armor_officer }
 				add_to_array = { mod1440_of_tr = token:armor_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_armor_officer }
 			}
 			if = {
 				limit = { has_trait = engineer_officer }
 				add_to_array = { mod1440_of_tr = token:engineer_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_engineer_officer }
 			}
 		}
 		if = {
@@ -9979,66 +10120,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = irregulars_officer }
 				add_to_array = { mod1440_of_tr = token:irregulars_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_irregulars_officer }
 			}
 			if = {
 				limit = { has_trait = ascari_officer }
 				add_to_array = { mod1440_of_tr = token:ascari_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ascari_officer }
 			}
 			if = {
 				limit = { has_trait = militias_officer }
 				add_to_array = { mod1440_of_tr = token:militias_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_militias_officer }
 			}
 			if = {
 				limit = { has_trait = jaeger }
 				add_to_array = { mod1440_of_tr = token:jaeger }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_jaeger }
 			}
 			if = {
 				limit = { has_trait = trait_SPA_nationalist_sympathies }
 				add_to_array = { mod1440_of_tr = token:trait_SPA_nationalist_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPA_nationalist_sympathies }
 			}
 			if = {
 				limit = { has_trait = trait_SPA_falangist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPA_falangist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPA_falangist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPA_carlist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPA_carlist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPA_carlist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPR_republican_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPR_republican_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPR_republican_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPR_stalinist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPR_stalinist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPR_stalinist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_SPR_anti_stalinist_loyalties }
 				add_to_array = { mod1440_of_tr = token:trait_SPR_anti_stalinist_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SPR_anti_stalinist_loyalties }
 			}
 			if = {
 				limit = { has_trait = trait_BUL_zveno_member }
 				add_to_array = { mod1440_of_tr = token:trait_BUL_zveno_member }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_BUL_zveno_member }
 			}
 			if = {
 				limit = { has_trait = trait_BUL_tsar_loyalist }
 				add_to_array = { mod1440_of_tr = token:trait_BUL_tsar_loyalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_BUL_tsar_loyalist }
 			}
 			if = {
 				limit = { has_trait = trait_BUL_ff_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_BUL_ff_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_BUL_ff_sympathizer }
 			}
 			if = {
 				limit = { has_trait = trait_TUR_kemalist_champion }
 				add_to_array = { mod1440_of_tr = token:trait_TUR_kemalist_champion }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_TUR_kemalist_champion }
 			}
 			if = {
 				limit = { has_trait = trait_GRE_stauch_monarchist }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_stauch_monarchist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_stauch_monarchist }
 			}
 			if = {
 				limit = { has_trait = trait_GRE_venezelist_loyalist }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_venezelist_loyalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_venezelist_loyalist }
 			}
 		}
 		if = {
@@ -10046,66 +10203,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = trait_GRE_marxist_acolyte }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_marxist_acolyte }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_marxist_acolyte }
 			}
 			if = {
 				limit = { has_trait = trait_GRE_fascist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_GRE_fascist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_GRE_fascist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = trait_HUN_fascist_sympathies }
 				add_to_array = { mod1440_of_tr = token:trait_HUN_fascist_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_HUN_fascist_sympathies }
 			}
 			if = {
 				limit = { has_trait = trait_HUN_vitez }
 				add_to_array = { mod1440_of_tr = token:trait_HUN_vitez }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_HUN_vitez }
 			}
 			if = {
 				limit = { has_trait = trait_JAP_kodoha_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_JAP_kodoha_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_JAP_kodoha_sympathizer }
 			}
 			if = {
 				limit = { has_trait = JAP_royal_lineage }
 				add_to_array = { mod1440_of_tr = token:JAP_royal_lineage }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_royal_lineage }
 			}
 			if = {
 				limit = { has_trait = JAP_tohokai_sympathies }
 				add_to_array = { mod1440_of_tr = token:JAP_tohokai_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_tohokai_sympathies }
 			}
 			if = {
 				limit = { has_trait = JAP_IJA_loyalist }
 				add_to_array = { mod1440_of_tr = token:JAP_IJA_loyalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_IJA_loyalist }
 			}
 			if = {
 				limit = { has_trait = JAP_government_supporter }
 				add_to_array = { mod1440_of_tr = token:JAP_government_supporter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_government_supporter }
 			}
 			if = {
 				limit = { has_trait = expeditionary_leader_trait }
 				add_to_array = { mod1440_of_tr = token:expeditionary_leader_trait }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_expeditionary_leader_trait }
 			}
 			if = {
 				limit = { has_trait = inspirational_bagpiper }
 				add_to_array = { mod1440_of_tr = token:inspirational_bagpiper }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_inspirational_bagpiper }
 			}
 			if = {
 				limit = { has_trait = loyalty_to_britain }
 				add_to_array = { mod1440_of_tr = token:loyalty_to_britain }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_loyalty_to_britain }
 			}
 			if = {
 				limit = { has_trait = loyalty_to_pakistan }
 				add_to_array = { mod1440_of_tr = token:loyalty_to_pakistan }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_loyalty_to_pakistan }
 			}
 			if = {
 				limit = { has_trait = loyalty_to_india }
 				add_to_array = { mod1440_of_tr = token:loyalty_to_india }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_loyalty_to_india }
 			}
 			if = {
 				limit = { has_trait = IRQ_golden_square_member }
 				add_to_array = { mod1440_of_tr = token:IRQ_golden_square_member }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_IRQ_golden_square_member }
 			}
 			if = {
 				limit = { has_trait = PRC_survivor_of_the_long_march }
 				add_to_array = { mod1440_of_tr = token:PRC_survivor_of_the_long_march }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_PRC_survivor_of_the_long_march }
 			}
 		}
 		if = {
@@ -10113,66 +10286,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = SIC_dubious_loyalty }
 				add_to_array = { mod1440_of_tr = token:SIC_dubious_loyalty }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SIC_dubious_loyalty }
 			}
 			if = {
 				limit = { has_trait = YUN_dubious_loyalty }
 				add_to_array = { mod1440_of_tr = token:YUN_dubious_loyalty }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_YUN_dubious_loyalty }
 			}
 			if = {
 				limit = { has_trait = CHI_dubious_loyalty }
 				add_to_array = { mod1440_of_tr = token:CHI_dubious_loyalty }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_CHI_dubious_loyalty }
 			}
 			if = {
 				limit = { has_trait = XSM_dubious_loyalty }
 				add_to_array = { mod1440_of_tr = token:XSM_dubious_loyalty }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_XSM_dubious_loyalty }
 			}
 			if = {
 				limit = { has_trait = CHI_watched_officer }
 				add_to_array = { mod1440_of_tr = token:CHI_watched_officer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_CHI_watched_officer }
 			}
 			if = {
 				limit = { has_trait = INS_loyalty_to_indonesia }
 				add_to_array = { mod1440_of_tr = token:INS_loyalty_to_indonesia }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_INS_loyalty_to_indonesia }
 			}
 			if = {
 				limit = { has_trait = INS_loyalty_to_netherlands }
 				add_to_array = { mod1440_of_tr = token:INS_loyalty_to_netherlands }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_INS_loyalty_to_netherlands }
 			}
 			if = {
 				limit = { has_trait = ETH_hero_of_ethiopia }
 				add_to_array = { mod1440_of_tr = token:ETH_hero_of_ethiopia }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ETH_hero_of_ethiopia }
 			}
 			if = {
 				limit = { has_trait = JAP_communist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:JAP_communist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_communist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = BALTIC_ex_russian }
 				add_to_array = { mod1440_of_tr = token:BALTIC_ex_russian }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_BALTIC_ex_russian }
 			}
 			if = {
 				limit = { has_trait = BALTIC_anti_bolshevik }
 				add_to_array = { mod1440_of_tr = token:BALTIC_anti_bolshevik }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_BALTIC_anti_bolshevik }
 			}
 			if = {
 				limit = { has_trait = POL_sanation_left_leader }
 				add_to_array = { mod1440_of_tr = token:POL_sanation_left_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_POL_sanation_left_leader }
 			}
 			if = {
 				limit = { has_trait = POL_sanation_right_leader }
 				add_to_array = { mod1440_of_tr = token:POL_sanation_right_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_POL_sanation_right_leader }
 			}
 			if = {
 				limit = { has_trait = peasant_sympathiser }
 				add_to_array = { mod1440_of_tr = token:peasant_sympathiser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_peasant_sympathiser }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_cowed_by_stalin_army }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_cowed_by_stalin_army }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_cowed_by_stalin_army }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_stalinist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_stalinist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_stalinist }
 			}
 		}
 		if = {
@@ -10180,66 +10369,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = trait_SOV_trotskyist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_trotskyist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_trotskyist }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_bukharinist }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_bukharinist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_bukharinist }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_foreign_military_advisor }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_foreign_military_advisor }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_foreign_military_advisor }
 			}
 			if = {
 				limit = { has_trait = communist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:communist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_communist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = SWE_promoted_away_from_power }
 				add_to_array = { mod1440_of_tr = token:SWE_promoted_away_from_power }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SWE_promoted_away_from_power }
 			}
 			if = {
 				limit = { has_trait = sick }
 				add_to_array = { mod1440_of_tr = token:sick }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_sick }
 			}
 			if = {
 				limit = { has_trait = wounded }
 				add_to_array = { mod1440_of_tr = token:wounded }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_wounded }
 			}
 			if = {
 				limit = { has_trait = reassigned }
 				add_to_array = { mod1440_of_tr = token:reassigned }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_reassigned }
 			}
 			if = {
 				limit = { has_trait = disgruntled }
 				add_to_array = { mod1440_of_tr = token:disgruntled }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_disgruntled }
 			}
 			if = {
 				limit = { has_trait = demoted }
 				add_to_array = { mod1440_of_tr = token:demoted }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_demoted }
 			}
 			if = {
 				limit = { has_trait = substance_abuser }
 				add_to_array = { mod1440_of_tr = token:substance_abuser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_substance_abuser }
 			}
 			if = {
 				limit = { has_trait = substance_addict }
 				add_to_array = { mod1440_of_tr = token:substance_addict }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_substance_addict }
 			}
 			if = {
 				limit = { has_trait = hidden_sympathies }
 				add_to_array = { mod1440_of_tr = token:hidden_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_hidden_sympathies }
 			}
 			if = {
 				limit = { has_trait = recently_promoted }
 				add_to_array = { mod1440_of_tr = token:recently_promoted }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_recently_promoted }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_determined }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_determined }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_determined }
 			}
 			if = {
 				limit = { has_trait = SWE_wounded_in_protests }
 				add_to_array = { mod1440_of_tr = token:SWE_wounded_in_protests }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SWE_wounded_in_protests }
 			}
 		}
 		if = {
@@ -10247,66 +10452,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = SWE_disillusioned_with_the_government }
 				add_to_array = { mod1440_of_tr = token:SWE_disillusioned_with_the_government }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SWE_disillusioned_with_the_government }
 			}
 			if = {
 				limit = { has_trait = logistics_wizard }
 				add_to_array = { mod1440_of_tr = token:logistics_wizard }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_logistics_wizard }
 			}
 			if = {
 				limit = { has_trait = offensive_doctrine }
 				add_to_array = { mod1440_of_tr = token:offensive_doctrine }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_offensive_doctrine }
 			}
 			if = {
 				limit = { has_trait = defensive_doctrine }
 				add_to_array = { mod1440_of_tr = token:defensive_doctrine }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_defensive_doctrine }
 			}
 			if = {
 				limit = { has_trait = fast_planner }
 				add_to_array = { mod1440_of_tr = token:fast_planner }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_fast_planner }
 			}
 			if = {
 				limit = { has_trait = thorough_planner }
 				add_to_array = { mod1440_of_tr = token:thorough_planner }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_thorough_planner }
 			}
 			if = {
 				limit = { has_trait = unyielding_defender }
 				add_to_array = { mod1440_of_tr = token:unyielding_defender }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_unyielding_defender }
 			}
 			if = {
 				limit = { has_trait = aggressive_assaulter }
 				add_to_array = { mod1440_of_tr = token:aggressive_assaulter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_aggressive_assaulter }
 			}
 			if = {
 				limit = { has_trait = organisational_leader }
 				add_to_array = { mod1440_of_tr = token:organisational_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_organisational_leader }
 			}
 			if = {
 				limit = { has_trait = inspirational_leader }
 				add_to_array = { mod1440_of_tr = token:inspirational_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_inspirational_leader }
 			}
 			if = {
 				limit = { has_trait = expert_delegator }
 				add_to_array = { mod1440_of_tr = token:expert_delegator }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_expert_delegator }
 			}
 			if = {
 				limit = { has_trait = panzer_expert }
 				add_to_array = { mod1440_of_tr = token:panzer_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_panzer_expert }
 			}
 			if = {
 				limit = { has_trait = combined_arms_expert }
 				add_to_array = { mod1440_of_tr = token:combined_arms_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_combined_arms_expert }
 			}
 			if = {
 				limit = { has_trait = cavalry_expert }
 				add_to_array = { mod1440_of_tr = token:cavalry_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_cavalry_expert }
 			}
 			if = {
 				limit = { has_trait = fortress_buster }
 				add_to_array = { mod1440_of_tr = token:fortress_buster }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_fortress_buster }
 			}
 			if = {
 				limit = { has_trait = scavenger }
 				add_to_array = { mod1440_of_tr = token:scavenger }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_scavenger }
 			}
 		}
 		if = {
@@ -10314,66 +10535,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = infantry_expert }
 				add_to_array = { mod1440_of_tr = token:infantry_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_infantry_expert }
 			}
 			if = {
 				limit = { has_trait = ambusher }
 				add_to_array = { mod1440_of_tr = token:ambusher }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ambusher }
 			}
 			if = {
 				limit = { has_trait = invader_ii }
 				add_to_array = { mod1440_of_tr = token:invader_ii }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_invader_ii }
 			}
 			if = {
 				limit = { has_trait = naval_liason }
 				add_to_array = { mod1440_of_tr = token:naval_liason }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_naval_liason }
 			}
 			if = {
 				limit = { has_trait = skirmisher }
 				add_to_array = { mod1440_of_tr = token:skirmisher }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_skirmisher }
 			}
 			if = {
 				limit = { has_trait = paratrooper }
 				add_to_array = { mod1440_of_tr = token:paratrooper }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_paratrooper }
 			}
 			if = {
 				limit = { has_trait = camouflage_expert }
 				add_to_array = { mod1440_of_tr = token:camouflage_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_camouflage_expert }
 			}
 			if = {
 				limit = { has_trait = expert_improviser }
 				add_to_array = { mod1440_of_tr = token:expert_improviser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_expert_improviser }
 			}
 			if = {
 				limit = { has_trait = guerilla_fighter }
 				add_to_array = { mod1440_of_tr = token:guerilla_fighter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_guerilla_fighter }
 			}
 			if = {
 				limit = { has_trait = adaptable }
 				add_to_array = { mod1440_of_tr = token:adaptable }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_adaptable }
 			}
 			if = {
 				limit = { has_trait = winter_expert }
 				add_to_array = { mod1440_of_tr = token:winter_expert }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_winter_expert }
 			}
 			if = {
 				limit = { has_trait = winter_specialist }
 				add_to_array = { mod1440_of_tr = token:winter_specialist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_winter_specialist }
 			}
 			if = {
 				limit = { has_trait = desert_fox }
 				add_to_array = { mod1440_of_tr = token:desert_fox }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_desert_fox }
 			}
 			if = {
 				limit = { has_trait = swamp_fox }
 				add_to_array = { mod1440_of_tr = token:swamp_fox }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_swamp_fox }
 			}
 			if = {
 				limit = { has_trait = trait_mountaineer }
 				add_to_array = { mod1440_of_tr = token:trait_mountaineer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_mountaineer }
 			}
 			if = {
 				limit = { has_trait = hill_fighter }
 				add_to_array = { mod1440_of_tr = token:hill_fighter }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_hill_fighter }
 			}
 		}
 		if = {
@@ -10381,66 +10618,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = jungle_rat }
 				add_to_array = { mod1440_of_tr = token:jungle_rat }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_jungle_rat }
 			}
 			if = {
 				limit = { has_trait = ranger }
 				add_to_array = { mod1440_of_tr = token:ranger }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_ranger }
 			}
 			if = {
 				limit = { has_trait = urban_assault_specialist }
 				add_to_array = { mod1440_of_tr = token:urban_assault_specialist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_urban_assault_specialist }
 			}
 			if = {
 				limit = { has_trait = organizer }
 				add_to_array = { mod1440_of_tr = token:organizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_organizer }
 			}
 			if = {
 				limit = { has_trait = cavalry_leader }
 				add_to_array = { mod1440_of_tr = token:cavalry_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_cavalry_leader }
 			}
 			if = {
 				limit = { has_trait = infantry_leader }
 				add_to_array = { mod1440_of_tr = token:infantry_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_infantry_leader }
 			}
 			if = {
 				limit = { has_trait = skilled_staffer }
 				add_to_array = { mod1440_of_tr = token:skilled_staffer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_skilled_staffer }
 			}
 			if = {
 				limit = { has_trait = trickster }
 				add_to_array = { mod1440_of_tr = token:trickster }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trickster }
 			}
 			if = {
 				limit = { has_trait = trait_engineer }
 				add_to_array = { mod1440_of_tr = token:trait_engineer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_engineer }
 			}
 			if = {
 				limit = { has_trait = panzer_leader }
 				add_to_array = { mod1440_of_tr = token:panzer_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_panzer_leader }
 			}
 			if = {
 				limit = { has_trait = commando }
 				add_to_array = { mod1440_of_tr = token:commando }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_commando }
 			}
 			if = {
 				limit = { has_trait = naval_invader }
 				add_to_array = { mod1440_of_tr = token:naval_invader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_naval_invader }
 			}
 			if = {
 				limit = { has_trait = jaeger_trait }
 				add_to_array = { mod1440_of_tr = token:jaeger_trait }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = lucky }
 				add_to_array = { mod1440_of_tr = token:lucky }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = vigorous }
 				add_to_array = { mod1440_of_tr = token:vigorous }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = promising }
 				add_to_array = { mod1440_of_tr = token:promising }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 		if = {
@@ -10448,66 +10701,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = air_force_ties }
 				add_to_array = { mod1440_of_tr = token:air_force_ties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = artillerist }
 				add_to_array = { mod1440_of_tr = token:artillerist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = caring_leader }
 				add_to_array = { mod1440_of_tr = token:caring_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = obsessed_by_artillery }
 				add_to_array = { mod1440_of_tr = token:obsessed_by_artillery }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = meticulous }
 				add_to_array = { mod1440_of_tr = token:meticulous }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = decided_planner }
 				add_to_array = { mod1440_of_tr = token:decided_planner }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = homeland_connoisseur }
 				add_to_array = { mod1440_of_tr = token:homeland_connoisseur }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = unpopular }
 				add_to_array = { mod1440_of_tr = token:unpopular }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = funnies_inventor }
 				add_to_array = { mod1440_of_tr = token:funnies_inventor }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = bad_staffer }
 				add_to_array = { mod1440_of_tr = token:bad_staffer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = flemish }
 				add_to_array = { mod1440_of_tr = token:flemish }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = walloon }
 				add_to_array = { mod1440_of_tr = token:walloon }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = retraining }
 				add_to_array = { mod1440_of_tr = token:retraining }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = jumping_general }
 				add_to_array = { mod1440_of_tr = token:jumping_general }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = skeletons_blessing }
 				add_to_array = { mod1440_of_tr = token:skeletons_blessing }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = attentive_surgeon }
 				add_to_array = { mod1440_of_tr = token:attentive_surgeon }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 		if = {
@@ -10515,66 +10784,82 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = EGY_aristocrat }
 				add_to_array = { mod1440_of_tr = token:EGY_aristocrat }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = AFG_barakzai_royalist }
 				add_to_array = { mod1440_of_tr = token:AFG_barakzai_royalist }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = AUS_nazi_loyalties }
 				add_to_array = { mod1440_of_tr = token:AUS_nazi_loyalties }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = ARM_anti_communist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:ARM_anti_communist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = MEN_fascist_sympathies }
 				add_to_array = { mod1440_of_tr = token:MEN_fascist_sympathies }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_marshal_master_exploder }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_marshal_master_exploder }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_vibrates }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_vibrates }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_packed_lunch }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_packed_lunch }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_saw_a_squirrel }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_saw_a_squirrel }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_knows_what_you_did }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_knows_what_you_did }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_force_user }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_force_user }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_is_a_lemur }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_is_a_lemur }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_personal_space }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_personal_space }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_army_free_coffee }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_army_free_coffee }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_ocean_haiku }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_ocean_haiku }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_hates_water }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_hates_water }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 		if = {
@@ -10582,10 +10867,12 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = r56w_trait_navy_rubber_duck }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_rubber_duck }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_navy_can_swim }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_navy_can_swim }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 	}
@@ -10597,22 +10884,27 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = JAP_samurai_lineage }
 				add_to_array = { mod1440_of_tr = token:JAP_samurai_lineage }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_samurai_lineage }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_monarchist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_monarchist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_monarchist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = SIA_under_investigation }
 				add_to_array = { mod1440_of_tr = token:SIA_under_investigation }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SIA_under_investigation }
 			}
 			if = {
 				limit = { has_trait = EGY_brotherhood_sympathiser }
 				add_to_array = { mod1440_of_tr = token:EGY_brotherhood_sympathiser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_generic_is_breathing }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_generic_is_breathing }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 	}
@@ -10622,64 +10914,78 @@ mod1440_of_traits = {
 			if = {
 				limit = { has_trait = promoted_from_the_ranks }
 				add_to_array = { mod1440_of_tr = token:promoted_from_the_ranks }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_promoted_from_the_ranks }
 			}
 			if = {
 				limit = { has_trait = JAP_samurai_lineage }
 				add_to_array = { mod1440_of_tr = token:JAP_samurai_lineage }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_JAP_samurai_lineage }
 			}
 			if = {
 				limit = { has_trait = trait_SOV_monarchist_sympathizer }
 				add_to_array = { mod1440_of_tr = token:trait_SOV_monarchist_sympathizer }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_trait_SOV_monarchist_sympathizer }
 			}
 			if = {
 				limit = { has_trait = motivated }
 				add_to_array = { mod1440_of_tr = token:motivated }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_motivated }
 			}
 			if = {
 				limit = { has_trait = INS_secret_commander }
 				add_to_array = { mod1440_of_tr = token:INS_secret_commander }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_INS_secret_commander }
 			}
 			if = {
 				limit = { has_trait = SIA_under_investigation }
 				add_to_array = { mod1440_of_tr = token:SIA_under_investigation }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_SIA_under_investigation }
 			}
 			if = {
 				limit = { has_trait = exiled_leader }
 				add_to_array = { mod1440_of_tr = token:exiled_leader }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_exiled_leader }
 			}
 			if = {
 				limit = { has_trait = EGY_brotherhood_sympathiser }
 				add_to_array = { mod1440_of_tr = token:EGY_brotherhood_sympathiser }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = too_young_too_simple }
 				add_to_array = { mod1440_of_tr = token:too_young_too_simple }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = sometimes_naive }
 				add_to_array = { mod1440_of_tr = token:sometimes_naive }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = i_am_angry }
 				add_to_array = { mod1440_of_tr = token:i_am_angry }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = black_rimmed_glasses }
 				add_to_array = { mod1440_of_tr = token:black_rimmed_glasses }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = experienced_100_battles }
 				add_to_array = { mod1440_of_tr = token:experienced_100_battles }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 			if = {
 				limit = { has_trait = r56w_trait_generic_is_breathing }
 				add_to_array = { mod1440_of_tr = token:r56w_trait_generic_is_breathing }
+				add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 			}
 		}
 	}
 	set_variable = { mod1440_of_tr_k = mod1440_of_tr^num }
 	set_variable = { mod1440_of_tr_n = num_traits }
-	set_variable = { mod1440_of_tr_v = 646776 }
+	set_variable = { mod1440_of_tr_v = 9181 }
 	set_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep }
 	set_temp_variable = { tr_shown = mod1440_of_tr_i }
 	clamp_temp_variable = { var = tr_shown max = 6 }
@@ -10693,6 +10999,7 @@ mod1440_of_traits = {
 		if = {
 			limit = { check_variable = { mod1440_of_tr^num < 6 } }
 			add_to_array = { mod1440_of_tr = token:unknown }
+			add_to_array = { mod1440_of_tr_e = token:mod1440_tre_none }
 		}
 	}
 }
@@ -11304,7 +11611,7 @@ mod1440_of_seen = {
 			}
 		}
 		if = {
-			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
+			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 9181 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
 			mod1440_of_traits = yes
 		}
 		if = {
@@ -11361,7 +11668,7 @@ mod1440_of_seen = {
 			}
 		}
 		if = {
-			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
+			limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 9181 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
 			mod1440_of_traits = yes
 		}
 		if = {
@@ -11503,83 +11810,192 @@ mod1440_of_gone = {
 	}
 }
 
-# Officers: makes the list of the page again: who the filter wants, in the order of the chosen column,
-# every second row marked for its stripe.
-mod1440_of_list = {
-	mod1440_of_seen = yes
-	clear_array = mod1440_of_rows
-	for_each_scope_loop = {
-		array = mod1440_of_known
-		set_variable = { mod1440_of_ul = 0 }
+# Officers (E2 round 2): the chain of command for the country in scope, once a day after Army Readiness's count:
+# each general who leads an army with troops keeps the field marshal whose army group he is taken to serve in
+# (mod1440_of_fm; mod1440_of_fm_n how many army groups matched, 0 none, 2 or more: likely), and the marshal
+# keeps his generals (mod1440_of_subs).
+mod1440_of_chain = {
+	if = {
+		limit = { NOT = { has_variable = mod1440_of_chain_since } }
+		set_variable = { mod1440_of_chain_since = global.date }
+	}
+	every_army_leader = {
+		clear_array = mod1440_of_subs
+		set_variable = { mod1440_of_fm_n = 0 }
+		set_variable = { mod1440_of_fm_c = 0 }
+		set_variable = { mod1440_of_cap = num_units }
+	}
+	set_temp_variable = { ch_x = 0 }
+	every_army_leader = {
 		if = {
-			limit = { is_unit_leader = yes }
-			set_variable = { mod1440_of_ul = 1 }
+			limit = { NOT = { check_variable = { has_orders_group = 0 } } NOT = { check_variable = { has_orders_group = 1 } } }
+			set_temp_variable = { ch_x = 1 }
 		}
+	}
+	set_variable = { mod1440_of_exact = ch_x }
+	mod1440_of_how = yes
+	if = {
+		limit = { check_variable = { mod1440_of_exact = 1 } }
+		mod1440_of_chain_exact = yes
+	}
+	else = {
+		mod1440_of_chain_guess = yes
+	}
+}
+
+# Officers (E2b): the chain of command on a patched game (SCR-086), and the guess of E2 on any other.
+mod1440_of_chain_exact = {
+	every_army_leader = {
+		limit = { NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } }
+		set_temp_variable = { ch_o = has_orders_group }
+		mod1440_of_me = yes
 		if = {
-			limit = { is_unit_leader = yes OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
-			mod1440_p_officer = yes
-		}
-		if = {
-			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
-			set_variable = { mod1440_p = token:GFX_portrait_unknown }
-			set_variable = { mod1440_p_ver = 568382 }
-			set_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep }
-		}
-		set_temp_variable = { of_keep = 1 }
-		if = {
-			limit = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } }
-			mod1440_of_traits = yes
-		}
-		if = {
-			limit = { NOT = { check_variable = { mod1440_of_md_ep = global.mod1440_tk_ep } } }
-			mod1440_of_medals_again = yes
-		}
-		if = {
-			limit = { NOT = { check_variable = { mod1440_of_rm_n = mod1440_of_dec^num } } }
-			mod1440_of_rack = yes
-		}
-		if = {
-			limit = { check_variable = { mod1440_of_rm^num < 3 } }
-			mod1440_of_rack = yes
-		}
-		if = {
-			limit = { check_variable = { ROOT.mod1440_of_show = 5 } NOT = { check_variable = { mod1440_of_seen_day < global.num_days } } }
-			set_temp_variable = { of_keep = 0 }
-		}
-		if = {
-			limit = { NOT = { check_variable = { ROOT.mod1440_of_show = 5 } } check_variable = { mod1440_of_seen_day < global.num_days } }
-			set_temp_variable = { of_keep = 0 }
-		}
-		if = {
-			limit = { check_variable = { ROOT.mod1440_of_show = 1 } is_navy_leader = yes }
-			set_temp_variable = { of_keep = 0 }
-		}
-		if = {
-			limit = { check_variable = { ROOT.mod1440_of_show = 2 } NOT = { is_navy_leader = yes } }
-			set_temp_variable = { of_keep = 0 }
-		}
-		if = {
-			limit = { check_variable = { ROOT.mod1440_of_show = 3 } check_variable = { num_units < 1 } check_variable = { num_ships < 1 } }
-			set_temp_variable = { of_keep = 0 }
-		}
-		if = {
-			limit = { check_variable = { ROOT.mod1440_of_show = 4 } check_variable = { mod1440_of_dec^num < 1 } }
-			set_temp_variable = { of_keep = 0 }
-		}
-		if = {
-			limit = { check_variable = { of_keep = 1 } }
-			mod1440_of_me = yes
+			limit = { NOT = { check_variable = { ch_o = 0 } } NOT = { check_variable = { of_me = 0 } } }
+			set_temp_variable = { ch_g = of_me }
+			set_temp_variable = { ch_fm = 0 }
+			PREV = {
+				every_army_leader = {
+					limit = { is_leading_army_group = yes }
+					set_temp_variable = { ch_mo = has_orders_group }
+					if = {
+						limit = { check_variable = { var = ch_mo value = ch_o compare = equals } }
+						mod1440_of_me = yes
+						if = {
+							limit = { NOT = { check_variable = { of_me = 0 } } }
+							set_temp_variable = { ch_fm = of_me }
+						}
+					}
+				}
+			}
 			if = {
-				limit = { NOT = { check_variable = { of_me = 0 } } }
-				add_to_array = { ROOT.mod1440_of_rows = of_me }
+				limit = { NOT = { check_variable = { ch_fm = 0 } } }
+				set_variable = { mod1440_of_fm = ch_fm }
+				set_variable = { mod1440_of_fm_n = 1 }
+				set_variable = { mod1440_of_fm_c = 1 }
+				var:ch_fm = {
+					add_to_array = { mod1440_of_subs = ch_g }
+				}
 			}
 		}
 	}
+}
+mod1440_of_chain_guess = {
+	clear_array = mod1440_of_ch_pg
+	clear_array = mod1440_of_ch_pm
+	clear_array = mod1440_of_ch_pk
+	every_army_leader = {
+		limit = { NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } check_variable = { mod1440_al_lcnt > 0 } }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			set_temp_variable = { ch_g = of_me }
+			set_temp_variable = { ch_s = mod1440_al_loc }
+			set_temp_variable = { ch_n = mod1440_al_lcnt }
+			set_temp_variable = { ch_u = num_units }
+			set_temp_variable = { ch_hits = 0 }
+			PREV = {
+				every_army_leader = {
+					limit = { is_leading_army_group = yes }
+					set_temp_variable = { ch_m = num_units_in_state@var:ch_s }
+					set_temp_variable = { ch_mu = num_units }
+					if = {
+						limit = { check_variable = { var = ch_m value = ch_n compare = greater_than_or_equals } check_variable = { var = ch_mu value = ch_u compare = greater_than_or_equals } }
+						add_to_temp_variable = { ch_hits = 1 }
+						mod1440_of_me = yes
+						if = {
+							limit = { NOT = { check_variable = { of_me = 0 } } }
+							add_to_array = { PREV.mod1440_of_ch_pg = ch_g }
+							add_to_array = { PREV.mod1440_of_ch_pm = of_me }
+							set_temp_variable = { ch_k = ch_n }
+							multiply_temp_variable = { ch_k = 1000 }
+							divide_temp_variable = { ch_k = ch_m }
+							add_to_temp_variable = { ch_k = ch_u }
+							add_to_array = { PREV.mod1440_of_ch_pk = ch_k }
+						}
+					}
+				}
+			}
+			set_variable = { mod1440_of_fm_c = ch_hits }
+		}
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_of_ch_pk^num
+		value = ch_step
+		find_highest_in_array = {
+			array = mod1440_of_ch_pk
+			value = ch_hi
+			index = ch_at
+		}
+		if = {
+			limit = { check_variable = { ch_hi > 0 } }
+			set_temp_variable = { ch_g = mod1440_of_ch_pg^ch_at }
+			set_temp_variable = { ch_fm = mod1440_of_ch_pm^ch_at }
+			set_variable = { mod1440_of_ch_pk^ch_at = -1 }
+			var:ch_g = {
+				if = {
+					limit = { check_variable = { mod1440_of_fm_n = 0 } }
+					set_temp_variable = { ch_u = num_units }
+					set_temp_variable = { ch_ok = 0 }
+					var:ch_fm = {
+						if = {
+							limit = { check_variable = { var = mod1440_of_cap value = ch_u compare = greater_than_or_equals } }
+							subtract_from_variable = { mod1440_of_cap = ch_u }
+							add_to_array = { mod1440_of_subs = ch_g }
+							set_temp_variable = { ch_ok = 1 }
+						}
+					}
+					if = {
+						limit = { check_variable = { ch_ok = 1 } }
+						set_variable = { mod1440_of_fm = ch_fm }
+						set_variable = { mod1440_of_fm_n = mod1440_of_fm_c }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Officers (E2b): the words the tooltips of Reports to and Order of battle say of the links (mod1440_of_chain_how).
+mod1440_of_how = {
+	if = {
+		limit = { check_variable = { mod1440_of_exact = 1 } }
+		set_variable = { mod1440_of_chain_how = token:mod1440_chain_exact }
+	}
+	else_if = {
+		limit = { check_variable = { mod1440_ar_names = 1 } }
+		set_variable = { mod1440_of_chain_how = token:mod1440_chain_unpatched }
+	}
+	else = {
+		set_variable = { mod1440_of_chain_how = token:mod1440_chain_guess }
+	}
+}
+
+# Officers (E2 round 2): the battles of a general in scope counted for his field marshal too (decision 4).
+mod1440_of_g_won = {
+	if = {
+		limit = { check_variable = { mod1440_of_fm_n > 0 } }
+		var:mod1440_of_fm = {
+			add_to_variable = { mod1440_of_gwon = 1 }
+		}
+	}
+}
+mod1440_of_g_lost = {
+	if = {
+		limit = { check_variable = { mod1440_of_fm_n > 0 } }
+		var:mod1440_of_fm = {
+			add_to_variable = { mod1440_of_glost = 1 }
+		}
+	}
+}
+
+# Officers (E2 round 2): mod1440_of_part in the order of the chosen column (mod1440_of_sort_by, _up).
+mod1440_of_order = {
 	if = {
 		limit = { check_variable = { mod1440_of_sort_by > 0 } }
 		clear_array = mod1440_of_keys
 		for_each_scope_loop = {
-			array = mod1440_of_rows
+			array = mod1440_of_part
 			set_temp_variable = { of_key = 0 }
 			if = {
 				limit = { check_variable = { ROOT.mod1440_of_sort_by = 1 } }
@@ -11642,21 +12058,205 @@ mod1440_of_list = {
 		clear_array = mod1440_of_sorted
 		for_loop_effect = {
 			start = 0
-			end = mod1440_of_rows^num
+			end = mod1440_of_part^num
 			value = of_step
 			find_highest_in_array = {
 				array = mod1440_of_keys
 				value = of_high
 				index = of_at
 			}
-			add_to_array = { mod1440_of_sorted = mod1440_of_rows^of_at }
+			add_to_array = { mod1440_of_sorted = mod1440_of_part^of_at }
 			set_variable = { mod1440_of_keys^of_at = -2000000 }
 		}
-		clear_array = mod1440_of_rows
+		clear_array = mod1440_of_part
 		for_each_loop = {
 			array = mod1440_of_sorted
 			value = of_copy
-			add_to_array = { mod1440_of_rows = of_copy }
+			add_to_array = { mod1440_of_part = of_copy }
+		}
+	}
+}
+
+# Officers (E2 round 2): the rows of Order of battle (filter 6).
+mod1440_of_oob = {
+	mod1440_of_chain = yes
+	clear_array = mod1440_of_part
+	every_army_leader = {
+		limit = { is_leading_army_group = yes }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			add_to_array = { PREV.mod1440_of_part = of_me }
+		}
+	}
+	mod1440_of_order = yes
+	clear_array = mod1440_of_oob_fm
+	for_each_loop = {
+		array = mod1440_of_part
+		value = ob_v
+		add_to_array = { mod1440_of_oob_fm = ob_v }
+	}
+	for_each_scope_loop = {
+		array = mod1440_of_oob_fm
+		set_variable = { mod1440_of_ind = 0 }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			add_to_array = { ROOT.mod1440_of_rows = of_me }
+		}
+		ROOT = {
+			clear_array = mod1440_of_part
+		}
+		for_each_loop = {
+			array = mod1440_of_subs
+			value = ob_s
+			add_to_array = { ROOT.mod1440_of_part = ob_s }
+		}
+		ROOT = {
+			mod1440_of_order = yes
+			for_each_scope_loop = {
+				array = mod1440_of_part
+				set_variable = { mod1440_of_ind = 1 }
+				mod1440_of_me = yes
+				if = {
+					limit = { NOT = { check_variable = { of_me = 0 } } }
+					add_to_array = { ROOT.mod1440_of_rows = of_me }
+				}
+			}
+		}
+	}
+	clear_array = mod1440_of_part
+	every_army_leader = {
+		limit = { NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } NOT = { check_variable = { mod1440_of_fm_n > 0 } } }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			add_to_array = { PREV.mod1440_of_part = of_me }
+		}
+	}
+	mod1440_of_order = yes
+	for_each_scope_loop = {
+		array = mod1440_of_part
+		set_variable = { mod1440_of_ind = 0 }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			add_to_array = { ROOT.mod1440_of_rows = of_me }
+		}
+	}
+	clear_array = mod1440_of_part
+	every_navy_leader = {
+		limit = { check_variable = { num_ships > 0 } }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			add_to_array = { PREV.mod1440_of_part = of_me }
+		}
+	}
+	mod1440_of_order = yes
+	for_each_scope_loop = {
+		array = mod1440_of_part
+		set_variable = { mod1440_of_ind = 0 }
+		mod1440_of_me = yes
+		if = {
+			limit = { NOT = { check_variable = { of_me = 0 } } }
+			add_to_array = { ROOT.mod1440_of_rows = of_me }
+		}
+	}
+}
+
+# Officers: makes the list of the page again: who the filter wants, in the order of the chosen column,
+# every second row marked for its stripe.
+mod1440_of_list = {
+	mod1440_of_seen = yes
+	clear_array = mod1440_of_rows
+	clear_array = mod1440_of_part
+	for_each_scope_loop = {
+		array = mod1440_of_known
+		set_variable = { mod1440_of_ul = 0 }
+		if = {
+			limit = { is_unit_leader = yes }
+			set_variable = { mod1440_of_ul = 1 }
+		}
+		if = {
+			limit = { is_unit_leader = yes OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+			mod1440_p_officer = yes
+		}
+		if = {
+			limit = { OR = { NOT = { check_variable = { mod1440_p_ver = 568382 } } NOT = { check_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep } } } }
+			set_variable = { mod1440_p = token:GFX_portrait_unknown }
+			set_variable = { mod1440_p_ver = 568382 }
+			set_variable = { mod1440_p_ver_ep = global.mod1440_tk_ep }
+		}
+		set_temp_variable = { of_keep = 1 }
+		set_variable = { mod1440_of_ind = 0 }
+		if = {
+			limit = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 9181 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } }
+			mod1440_of_traits = yes
+		}
+		if = {
+			limit = { NOT = { check_variable = { mod1440_of_md_ep = global.mod1440_tk_ep } } }
+			mod1440_of_medals_again = yes
+		}
+		if = {
+			limit = { NOT = { check_variable = { mod1440_of_rm_n = mod1440_of_dec^num } } }
+			mod1440_of_rack = yes
+		}
+		if = {
+			limit = { check_variable = { mod1440_of_rm^num < 3 } }
+			mod1440_of_rack = yes
+		}
+		if = {
+			limit = { check_variable = { ROOT.mod1440_of_show = 5 } NOT = { check_variable = { mod1440_of_seen_day < global.num_days } } }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { NOT = { check_variable = { ROOT.mod1440_of_show = 5 } } check_variable = { mod1440_of_seen_day < global.num_days } }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { check_variable = { ROOT.mod1440_of_show = 1 } is_navy_leader = yes }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { check_variable = { ROOT.mod1440_of_show = 2 } NOT = { is_navy_leader = yes } }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { check_variable = { ROOT.mod1440_of_show = 3 } check_variable = { num_units < 1 } check_variable = { num_ships < 1 } }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { check_variable = { ROOT.mod1440_of_show = 4 } check_variable = { mod1440_of_dec^num < 1 } }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { check_variable = { ROOT.mod1440_of_show = 6 } }
+			set_temp_variable = { of_keep = 0 }
+		}
+		if = {
+			limit = { check_variable = { of_keep = 1 } }
+			mod1440_of_me = yes
+			if = {
+				limit = { NOT = { check_variable = { of_me = 0 } } }
+				add_to_array = { ROOT.mod1440_of_part = of_me }
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { mod1440_of_show = 6 } }
+		mod1440_of_oob = yes
+	}
+	else = {
+		mod1440_of_order = yes
+		for_each_scope_loop = {
+			array = mod1440_of_part
+			set_variable = { mod1440_of_ind = 0 }
+			mod1440_of_me = yes
+			if = {
+				limit = { NOT = { check_variable = { of_me = 0 } } }
+				add_to_array = { ROOT.mod1440_of_rows = of_me }
+			}
 		}
 	}
 	set_temp_variable = { of_par = 0 }
@@ -11677,6 +12277,7 @@ mod1440_of_list = {
 	set_variable = { mod1440_of_frame_3 = 1 }
 	set_variable = { mod1440_of_frame_4 = 1 }
 	set_variable = { mod1440_of_frame_5 = 1 }
+	set_variable = { mod1440_of_frame_6 = 1 }
 	if = {
 		limit = { check_variable = { mod1440_of_show = 0 } }
 		set_variable = { mod1440_of_frame_0 = 2 }
@@ -11701,6 +12302,10 @@ mod1440_of_list = {
 		limit = { check_variable = { mod1440_of_show = 5 } }
 		set_variable = { mod1440_of_frame_5 = 2 }
 	}
+	if = {
+		limit = { check_variable = { mod1440_of_show = 6 } }
+		set_variable = { mod1440_of_frame_6 = 2 }
+	}
 	mod1440_md_list = yes
 	mod1440_of_card = yes
 }
@@ -11709,6 +12314,7 @@ mod1440_of_list = {
 # where his file reads them. His own values are read in his scope (X33).
 mod1440_of_card = {
 	clear_array = mod1440_of_c_ul
+	clear_array = mod1440_of_c_subs
 	if = {
 		limit = { check_variable = { mod1440_of_has_sel = 1 } }
 		mod1440_ev_grow = yes
@@ -11718,6 +12324,7 @@ mod1440_of_card = {
 		clear_array = mod1440_of_c_dec_frame
 		clear_array = mod1440_of_c_dec_strip
 		clear_array = mod1440_of_c_tr
+		clear_array = mod1440_of_c_tr_e
 		set_temp_variable = { of_ul = 0 }
 		var:mod1440_of_sel = {
 			set_variable = { PREV.mod1440_of_c_skill = skill_level }
@@ -11763,8 +12370,95 @@ mod1440_of_card = {
 				limit = { check_variable = { mod1440_of_seen_day < global.num_days } }
 				set_variable = { PREV.mod1440_of_c_status = 4 }
 			}
+			set_variable = { PREV.mod1440_of_c_mode = 0 }
 			if = {
-				limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 646776 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
+				limit = { NOT = { check_variable = { mod1440_of_seen_day < global.num_days } } check_variable = { num_units > 0 } NOT = { is_navy_leader = yes } }
+				set_variable = { PREV.mod1440_of_c_mode = 1 }
+				if = {
+					limit = { is_leading_army_group = yes }
+					set_variable = { PREV.mod1440_of_c_mode = 2 }
+				}
+			}
+			if = {
+				limit = { NOT = { check_variable = { mod1440_of_seen_day < global.num_days } } is_navy_leader = yes check_variable = { num_ships > 0 } }
+				set_variable = { PREV.mod1440_of_c_mode = 3 }
+			}
+			set_variable = { PREV.mod1440_of_c_inf = num_infantry }
+			set_variable = { PREV.mod1440_of_c_mot = num_motorized }
+			set_variable = { PREV.mod1440_of_c_mech = num_mechanized }
+			set_variable = { PREV.mod1440_of_c_att = num_units_offensive_combats }
+			set_variable = { PREV.mod1440_of_c_dfd = num_units_defensive_combats }
+			set_variable = { PREV.mod1440_of_c_ent = avg_unit_entrenchment_ratio }
+			set_variable = { PREV.mod1440_of_c_bp = num_battle_plans }
+			set_variable = { PREV.mod1440_of_c_tr_as = num_assigned_traits }
+			set_variable = { PREV.mod1440_of_c_oth = num_units }
+			subtract_from_variable = { PREV.mod1440_of_c_oth = num_infantry }
+			subtract_from_variable = { PREV.mod1440_of_c_oth = num_armored }
+			subtract_from_variable = { PREV.mod1440_of_c_oth = num_motorized }
+			subtract_from_variable = { PREV.mod1440_of_c_oth = num_mechanized }
+			set_variable = { PREV.mod1440_of_c_has_eq = 0 }
+			set_variable = { PREV.mod1440_of_c_lcnt = 0 }
+			set_variable = { PREV.mod1440_of_c_has_hq = 0 }
+			if = {
+				limit = { check_variable = { num_units > 0 } NOT = { is_navy_leader = yes } }
+				if = {
+					limit = { has_variable = mod1440_al_eq }
+					set_variable = { PREV.mod1440_of_c_eq = mod1440_al_eq }
+					set_variable = { PREV.mod1440_of_c_has_eq = 1 }
+				}
+				if = {
+					limit = { check_variable = { mod1440_al_lcnt > 0 } }
+					set_variable = { PREV.mod1440_of_c_loc = mod1440_al_loc }
+					set_variable = { PREV.mod1440_of_c_lcnt = mod1440_al_lcnt }
+				}
+				if = {
+					limit = { check_variable = { mod1440_al_hq > 0 } }
+					set_variable = { PREV.mod1440_of_c_hq = mod1440_al_hq }
+					set_variable = { PREV.mod1440_of_c_has_hq = 1 }
+				}
+			}
+			set_variable = { PREV.mod1440_of_c_can = 0 }
+			if = {
+				limit = { check_variable = { num_assigned_traits < num_max_traits } }
+				set_variable = { PREV.mod1440_of_c_can = 1 }
+			}
+			set_variable = { PREV.mod1440_of_c_fromdiv = 0 }
+			if = {
+				limit = { is_promoted_from_unit = yes }
+				set_variable = { PREV.mod1440_of_c_fromdiv = 1 }
+			}
+			set_variable = { PREV.mod1440_of_c_chain = 0 }
+			set_variable = { PREV.mod1440_of_c_fm_n = 0 }
+			set_variable = { PREV.mod1440_of_c_subs_n = 0 }
+			set_variable = { PREV.mod1440_of_c_gwon = mod1440_of_gwon }
+			set_variable = { PREV.mod1440_of_c_glost = mod1440_of_glost }
+			if = {
+				limit = { NOT = { check_variable = { mod1440_of_seen_day < global.num_days } } is_leading_army_group = yes }
+				set_variable = { PREV.mod1440_of_c_chain = 1 }
+				set_variable = { PREV.mod1440_of_c_subs_n = mod1440_of_subs^num }
+				for_each_loop = {
+					array = mod1440_of_subs
+					value = of_v
+					index = of_i
+					if = {
+						limit = { check_variable = { of_i < 5 } }
+						add_to_array = { PREV.mod1440_of_c_subs = of_v }
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { check_variable = { mod1440_of_seen_day < global.num_days } } NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } check_variable = { mod1440_of_fm_n > 0 } }
+				set_variable = { PREV.mod1440_of_c_fm = mod1440_of_fm }
+				set_variable = { PREV.mod1440_of_c_fm_n = mod1440_of_fm_n }
+				set_temp_variable = { of_f = mod1440_of_fm }
+				set_temp_variable = { of_k = 0 }
+				var:of_f = {
+					set_temp_variable = { of_k = mod1440_of_subs^num }
+				}
+				set_variable = { PREV.mod1440_of_c_fm_k = of_k }
+			}
+			if = {
+				limit = { OR = { OR = { NOT = { check_variable = { mod1440_of_tr_v = 9181 } } NOT = { check_variable = { mod1440_of_tr_v_ep = global.mod1440_tk_ep } } } NOT = { check_variable = { mod1440_of_tr_n = num_traits } } } }
 				mod1440_of_traits = yes
 			}
 			set_variable = { PREV.mod1440_of_c_traits = num_traits }
@@ -11779,6 +12473,11 @@ mod1440_of_card = {
 				array = mod1440_of_tr
 				value = of_v
 				add_to_array = { PREV.mod1440_of_c_tr = of_v }
+			}
+			for_each_loop = {
+				array = mod1440_of_tr_e
+				value = of_v
+				add_to_array = { PREV.mod1440_of_c_tr_e = of_v }
 			}
 			set_variable = { PREV.mod1440_of_c_won = mod1440_of_won }
 			set_variable = { PREV.mod1440_of_c_lost = mod1440_of_lost }
@@ -11847,7 +12546,20 @@ mod1440_of_card = {
 		}
 		clamp_variable = { var = mod1440_of_c_tr_other min = 0 }
 		clamp_variable = { var = mod1440_of_c_tr_over min = 0 }
+		clamp_variable = { var = mod1440_of_c_oth min = 0 }
+		set_variable = { mod1440_of_c_subs_more = mod1440_of_c_subs_n }
+		subtract_from_variable = { mod1440_of_c_subs_more = 5 }
 		set_variable = { mod1440_of_c_dec_n = mod1440_of_c_dec_key^num }
+		if = {
+			limit = { check_variable = { mod1440_of_c_dec_n > 0 } }
+			set_temp_variable = { of_dl = mod1440_of_c_dec_n }
+			subtract_from_temp_variable = { of_dl = 1 }
+			set_variable = { mod1440_of_c_dec_lk = mod1440_of_c_dec_key^of_dl }
+			set_variable = { mod1440_of_c_dec_ld = mod1440_of_c_dec_date^of_dl }
+			set_variable = { mod1440_of_c_dec_tx = mod1440_of_c_dec_n }
+			multiply_variable = { mod1440_of_c_dec_tx = 46 }
+			add_to_variable = { mod1440_of_c_dec_tx = 24 }
+		}
 		for_each_loop = {
 			array = mod1440_of_c_dec_set
 			value = md_v
@@ -11970,6 +12682,7 @@ mod1440_of_card = {
 			if = {
 				limit = { check_variable = { mod1440_of_c_tr^num < 6 } }
 				add_to_array = { mod1440_of_c_tr = token:unknown }
+				add_to_array = { mod1440_of_c_tr_e = token:mod1440_tre_none }
 			}
 		}
 		for_each_loop = {
@@ -12031,7 +12744,7 @@ mod1440_of_card = {
 				set_temp_variable = { mg_m = mg_e }
 				subtract_from_temp_variable = { mg_e = 1 }
 				if = {
-					limit = { check_variable = { mod1440_of_ln_date^num < 11 } OR = { AND = { check_variable = { mod1440_ev_sa^mg_m = 1 } check_variable = { mod1440_ev_a^mg_m = mod1440_of_sel } } AND = { check_variable = { mod1440_ev_sc^mg_m = 1 } check_variable = { mod1440_ev_c^mg_m = mod1440_of_sel } } } }
+					limit = { check_variable = { mod1440_of_ln_date^num < 8 } OR = { AND = { check_variable = { mod1440_ev_sa^mg_m = 1 } check_variable = { mod1440_ev_a^mg_m = mod1440_of_sel } } AND = { check_variable = { mod1440_ev_sc^mg_m = 1 } check_variable = { mod1440_ev_c^mg_m = mod1440_of_sel } } } }
 					add_to_array = { mod1440_of_ln_date = mod1440_ev_date^mg_m }
 					add_to_array = { mod1440_of_ln_kind = mod1440_ev_kind^mg_m }
 					add_to_array = { mod1440_of_ln_fam = mod1440_ev_fam^mg_m }
@@ -12053,7 +12766,7 @@ mod1440_of_card = {
 				if = {
 					limit = { NOT = { check_variable = { mod1440_tr_x^mg_m = 1 } } }
 					if = {
-						limit = { check_variable = { mod1440_of_ln_date^num < 11 } OR = { AND = { check_variable = { mod1440_tr_sa^mg_m = 1 } check_variable = { mod1440_tr_a^mg_m = mod1440_of_sel } } AND = { check_variable = { mod1440_tr_sc^mg_m = 1 } check_variable = { mod1440_tr_c^mg_m = mod1440_of_sel } } } }
+						limit = { check_variable = { mod1440_of_ln_date^num < 8 } OR = { AND = { check_variable = { mod1440_tr_sa^mg_m = 1 } check_variable = { mod1440_tr_a^mg_m = mod1440_of_sel } } AND = { check_variable = { mod1440_tr_sc^mg_m = 1 } check_variable = { mod1440_tr_c^mg_m = mod1440_of_sel } } } }
 						add_to_array = { mod1440_of_ln_date = mod1440_tr_date^mg_m }
 						add_to_array = { mod1440_of_ln_kind = mod1440_tr_kind^mg_m }
 						add_to_array = { mod1440_of_ln_fam = mod1440_tr_fam^mg_m }
@@ -12073,10 +12786,10 @@ mod1440_of_card = {
 		set_variable = { mod1440_of_ln_n = mod1440_of_ln_date^num }
 		for_loop_effect = {
 			start = 0
-			end = 11
+			end = 8
 			value = pad_n
 			if = {
-				limit = { check_variable = { mod1440_of_ln_date^num < 11 } }
+				limit = { check_variable = { mod1440_of_ln_date^num < 8 } }
 				add_to_array = { mod1440_of_ln_date = 0 }
 				add_to_array = { mod1440_of_ln_kind = token:mod1440_blank }
 				add_to_array = { mod1440_of_ln_a = 0 }
@@ -12088,6 +12801,135 @@ mod1440_of_card = {
 	if = {
 		limit = { NOT = { check_variable = { mod1440_of_has_sel = 1 } } }
 		set_variable = { mod1440_of_awarding = 0 }
+	}
+	set_variable = { mod1440_of_y_468 = 468 }
+	set_variable = { mod1440_of_y_472 = 472 }
+	set_variable = { mod1440_of_y_473 = 473 }
+	set_variable = { mod1440_of_y_476 = 476 }
+	set_variable = { mod1440_of_y_502 = 502 }
+	set_variable = { mod1440_of_y_506 = 506 }
+	set_variable = { mod1440_of_y_507 = 507 }
+	set_variable = { mod1440_of_y_542 = 542 }
+	set_variable = { mod1440_of_y_547 = 547 }
+	set_variable = { mod1440_of_y_600 = 600 }
+	set_variable = { mod1440_of_y_605 = 605 }
+	set_variable = { mod1440_of_y_607 = 607 }
+	set_variable = { mod1440_of_y_641 = 641 }
+	set_variable = { mod1440_of_y_642 = 642 }
+	set_variable = { mod1440_of_y_665 = 665 }
+	set_variable = { mod1440_of_y_666 = 666 }
+	set_variable = { mod1440_of_y_669 = 669 }
+	set_variable = { mod1440_of_y_670 = 670 }
+	set_variable = { mod1440_of_y_689 = 689 }
+	set_variable = { mod1440_of_y_690 = 690 }
+	set_variable = { mod1440_of_y_692 = 692 }
+	set_variable = { mod1440_of_y_696 = 696 }
+	set_variable = { mod1440_of_y_713 = 713 }
+	set_variable = { mod1440_of_y_714 = 714 }
+	set_variable = { mod1440_of_y_726 = 726 }
+	set_variable = { mod1440_of_y_729 = 729 }
+	set_variable = { mod1440_of_y_730 = 730 }
+	set_variable = { mod1440_of_y_737 = 737 }
+	set_variable = { mod1440_of_y_738 = 738 }
+	set_variable = { mod1440_of_y_752 = 752 }
+	set_variable = { mod1440_of_y_756 = 756 }
+	set_variable = { mod1440_of_y_770 = 770 }
+	set_variable = { mod1440_of_y_784 = 784 }
+	set_variable = { mod1440_of_y_786 = 786 }
+	set_variable = { mod1440_of_y_789 = 789 }
+	set_variable = { mod1440_of_y_790 = 790 }
+	set_variable = { mod1440_of_y_812 = 812 }
+	set_variable = { mod1440_of_y_816 = 816 }
+	set_variable = { mod1440_of_y_846 = 846 }
+	set_variable = { mod1440_of_y_849 = 849 }
+	set_variable = { mod1440_of_y_850 = 850 }
+	set_variable = { mod1440_of_y_851 = 851 }
+	set_variable = { mod1440_of_y_872 = 872 }
+	set_variable = { mod1440_of_y_876 = 876 }
+	set_variable = { mod1440_of_y_877 = 877 }
+	set_variable = { mod1440_of_y_879 = 879 }
+	set_variable = { mod1440_of_y_901 = 901 }
+	set_variable = { mod1440_of_y_906 = 906 }
+	set_variable = { mod1440_of_y_909 = 909 }
+	set_variable = { mod1440_of_y_910 = 910 }
+	set_variable = { mod1440_of_y_925 = 925 }
+	set_variable = { mod1440_of_y_932 = 932 }
+	set_variable = { mod1440_of_y_936 = 936 }
+	set_variable = { mod1440_of_y_949 = 949 }
+	set_variable = { mod1440_of_y_966 = 966 }
+	set_variable = { mod1440_of_y_969 = 969 }
+	set_variable = { mod1440_of_y_970 = 970 }
+	set_variable = { mod1440_of_y_973 = 973 }
+	set_variable = { mod1440_of_y_992 = 992 }
+	set_variable = { mod1440_of_y_996 = 996 }
+	set_variable = { mod1440_of_y_997 = 997 }
+	set_variable = { mod1440_of_y_1021 = 1021 }
+	set_variable = { mod1440_of_y_1045 = 1045 }
+	if = {
+		limit = { check_variable = { mod1440_of_c_chain = 1 } }
+		add_to_variable = { mod1440_of_y_468 = 62 }
+		add_to_variable = { mod1440_of_y_472 = 62 }
+		add_to_variable = { mod1440_of_y_473 = 62 }
+		add_to_variable = { mod1440_of_y_476 = 62 }
+		add_to_variable = { mod1440_of_y_502 = 62 }
+		add_to_variable = { mod1440_of_y_506 = 62 }
+		add_to_variable = { mod1440_of_y_507 = 62 }
+		add_to_variable = { mod1440_of_y_542 = 62 }
+		add_to_variable = { mod1440_of_y_547 = 62 }
+		add_to_variable = { mod1440_of_y_600 = 62 }
+		add_to_variable = { mod1440_of_y_605 = 62 }
+		add_to_variable = { mod1440_of_y_607 = 62 }
+		add_to_variable = { mod1440_of_y_641 = 62 }
+		add_to_variable = { mod1440_of_y_642 = 62 }
+		add_to_variable = { mod1440_of_y_665 = 62 }
+		add_to_variable = { mod1440_of_y_666 = 62 }
+		add_to_variable = { mod1440_of_y_669 = 62 }
+		add_to_variable = { mod1440_of_y_670 = 62 }
+		add_to_variable = { mod1440_of_y_689 = 62 }
+		add_to_variable = { mod1440_of_y_690 = 62 }
+		add_to_variable = { mod1440_of_y_692 = 62 }
+		add_to_variable = { mod1440_of_y_696 = 62 }
+		add_to_variable = { mod1440_of_y_713 = 62 }
+		add_to_variable = { mod1440_of_y_714 = 62 }
+		add_to_variable = { mod1440_of_y_726 = 62 }
+		add_to_variable = { mod1440_of_y_729 = 62 }
+		add_to_variable = { mod1440_of_y_730 = 62 }
+		add_to_variable = { mod1440_of_y_737 = 62 }
+		add_to_variable = { mod1440_of_y_738 = 62 }
+		add_to_variable = { mod1440_of_y_752 = 62 }
+		add_to_variable = { mod1440_of_y_756 = 62 }
+		add_to_variable = { mod1440_of_y_770 = 62 }
+		add_to_variable = { mod1440_of_y_784 = 62 }
+		add_to_variable = { mod1440_of_y_786 = 62 }
+		add_to_variable = { mod1440_of_y_789 = 62 }
+		add_to_variable = { mod1440_of_y_790 = 62 }
+		add_to_variable = { mod1440_of_y_812 = 62 }
+		add_to_variable = { mod1440_of_y_816 = 62 }
+		add_to_variable = { mod1440_of_y_846 = 62 }
+		add_to_variable = { mod1440_of_y_849 = 62 }
+		add_to_variable = { mod1440_of_y_850 = 62 }
+		add_to_variable = { mod1440_of_y_851 = 62 }
+		add_to_variable = { mod1440_of_y_872 = 62 }
+		add_to_variable = { mod1440_of_y_876 = 62 }
+		add_to_variable = { mod1440_of_y_877 = 62 }
+		add_to_variable = { mod1440_of_y_879 = 62 }
+		add_to_variable = { mod1440_of_y_901 = 62 }
+		add_to_variable = { mod1440_of_y_906 = 62 }
+		add_to_variable = { mod1440_of_y_909 = 62 }
+		add_to_variable = { mod1440_of_y_910 = 62 }
+		add_to_variable = { mod1440_of_y_925 = 62 }
+		add_to_variable = { mod1440_of_y_932 = 62 }
+		add_to_variable = { mod1440_of_y_936 = 62 }
+		add_to_variable = { mod1440_of_y_949 = 62 }
+		add_to_variable = { mod1440_of_y_966 = 62 }
+		add_to_variable = { mod1440_of_y_969 = 62 }
+		add_to_variable = { mod1440_of_y_970 = 62 }
+		add_to_variable = { mod1440_of_y_973 = 62 }
+		add_to_variable = { mod1440_of_y_992 = 62 }
+		add_to_variable = { mod1440_of_y_996 = 62 }
+		add_to_variable = { mod1440_of_y_997 = 62 }
+		add_to_variable = { mod1440_of_y_1021 = 62 }
+		add_to_variable = { mod1440_of_y_1045 = 62 }
 	}
 	add_to_variable = { mod1440_rec_dirty = 1 }
 }
@@ -16918,6 +17760,7 @@ mod1440_rec_daily = {
 	mod1440_wr_daily = yes
 	mod1440_gv_daily = yes
 	mod1440_of_seen = yes
+	mod1440_of_chain = yes
 	mod1440_of_gone = yes
 	set_temp_variable = { ev_ck = casualties_k }
 	if = {

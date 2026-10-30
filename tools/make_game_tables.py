@@ -545,6 +545,183 @@ def write_mod_traits(game, user):
     print("wrote tools/traits_mods_table.py: %d traits of %s, %d of the game's gone" % (len(rows), ", ".join(mods) or "no mod", len(gone)))
 
 
+# --- E2 round 2 --- the effects of the game's unit leader traits, as finished lines of a tooltip (2026-10-30)
+# The Officers page shows a trait's effects when the pointer is on its icon or name. A tooltip of a scripted GUI leaves a
+# $KEY$ as written [SGUI-019], so the lines are written here, in each language of the game, from the trait's own block
+# (common/unit_leader), the game's names of the modifiers, skills, terrains and sub-units (localisation/<language>), and
+# how the executable shows each modifier (value type, colour, decimals: the Manager's Artifacts/executable/modifiers.md,
+# MODF-001). The frame words ("gain chance", "his own") are English, as every text of the mod. A key the tool cannot
+# describe is counted in a last line that leaves it to the game's own tooltip. Other mods' traits get no lines (decision
+# 5A of 2026-10-30): the page says their effects are in the game's own tooltip.
+MODIFIERS_REPORT = os.path.join(os.path.dirname(os.path.dirname(ROOT)), "Artifacts", "executable", "modifiers.md")
+TRAIT_LANGUAGES = ["english", "braz_por", "french", "german", "japanese", "korean", "polish", "russian", "simp_chinese", "spanish"]
+TRAIT_MODIFIER_BLOCKS = {"modifier": "", "non_shared_modifier": "(his own) ", "corps_commander_modifier": "(as general) ",
+                         "field_marshal_modifier": "(as field marshal) "}
+TRAIT_SKILLS = {"attack_skill": "SKILL_ATTACK", "defense_skill": "SKILL_DEFENSE", "planning_skill": "SKILL_PLANNING",
+                "logistics_skill": "SKILL_LOGISTICS", "maneuvering_skill": "SKILL_NAVY_LEADER_MANEUVERING",
+                "coordination_skill": "SKILL_NAVY_LEADER_COORDINATION"}
+TRAIT_TERRAIN_STATS = {"attack": "SKILL_ATTACK", "defence": "SKILL_DEFENSE", "movement": None}
+# keys of a trait's block that say nothing a player reads as an effect (where it stands in the tree, its cost, the AI)
+TRAIT_QUIET = {"type", "trait_type", "gui_row", "gui_column", "parent", "any_parent", "all_parents", "num_parents_needed", "cost",
+               "ai_will_do", "new_commander_weight", "allowed", "unit_trigger", "mutually_exclusive", "gain_xp", "gain_xp_leader",
+               "gain_xp_on_spotting", "show_in_combat", "prerequisites", "slot", "specialist_advisor_trait", "expert_advisor_trait",
+               "genius_advisor_trait", "sprite", "required_parent", "show_in_tree", "override_effect_tooltip", "enable_ability"}
+TRAIT_KIND_WORDS = {"personality_trait": "Personality trait", "status_trait": "Status trait", "basic_trait": "Earned trait",
+                    "assignable_terrain_trait": "Terrain trait", "basic_terrain_trait": "Terrain trait", "exile": "Exile trait"}
+
+
+def modifier_report(path=MODIFIERS_REPORT):
+    """name -> (localisation key, value type, colour, decimals) from the Manager's report of the executable's modifiers;
+    None when the report is not there (a copy of this repository outside the Manager)."""
+    if not os.path.isfile(path):
+        return None
+    out = {}
+    for line in io.open(path, encoding="utf-8"):
+        cells = [c.strip() for c in line.split("|")]
+        if len(cells) > 7 and cells[1].startswith("`") and cells[3].startswith("`"):
+            out[cells[1].strip("`")] = (cells[3].strip("`"), cells[4], cells[5], int(cells[6] or 0))
+    return out
+
+
+def _top_level(body):
+    """The text of a block without its nested blocks."""
+    out, depth = [], 0
+    for ch in body:
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        elif depth == 0:
+            out.append(ch)
+    return "".join(out)
+
+
+def _loc_name(loc, english, key):
+    """A name of the game in this language (English where the language lacks it), without colour codes, icons,
+    $placeholders$ and a trailing colon."""
+    words = loc.get(key) or english.get(key) or key
+    words = re.sub(r"\$[^$]*\$|§.|£\w+", "", words)
+    return words.replace("\\n", " ").strip(" :")
+
+
+def _number(v, decimals):
+    return ("%+." + str(decimals) + "f") % v
+
+
+def _modifier_line(mods, loc, english, name, value):
+    key, kind, colour, decimals = mods[name]
+    v = float(value)
+    if kind == "percentage":
+        shown = _number(v * 100, decimals) + "%"
+    elif kind.startswith("percentage in hundred"):
+        shown = _number(v, decimals) + "%"
+    elif kind == "yes/no":
+        shown = "yes"
+    else:
+        shown = _number(v, decimals)
+    good = (v > 0) == (colour == "good") if colour in ("good", "bad") else None
+    code = "§Y" if good is None else ("§G" if good else "§R")
+    return "%s: %s%s§!" % (_loc_name(loc, english, key), code, shown)
+
+
+def trait_lines(body, mods, loc, english, navy=False):
+    """The lines of one trait in one language, and how many of its keys no line describes."""
+    lines, unknown = [], 0
+    for key, val in re.findall(r"^\s*([A-Za-z_0-9]+)\s*=\s*(-?[0-9.]+)\s*$", _top_level(body), re.M):
+        skill = key[:-len("_factor")] if key.endswith("_skill_factor") else key
+        if skill in TRAIT_SKILLS:
+            loc_key = TRAIT_SKILLS[skill]
+            if navy and skill in ("attack_skill", "defense_skill"):
+                loc_key = loc_key.replace("SKILL_", "SKILL_NAVY_LEADER_")
+            if key.endswith("_factor"):
+                lines.append("%s gain chance: §Gx%g§!" % (_loc_name(loc, english, loc_key), 1 + float(val)))
+            else:
+                lines.append("%s: §G%+d§!" % (_loc_name(loc, english, loc_key), int(float(val))))
+        elif key not in TRAIT_QUIET:
+            unknown += 1
+    for key, inner in blocks(body):
+        if key in TRAIT_MODIFIER_BLOCKS:
+            prefix = TRAIT_MODIFIER_BLOCKS[key]
+            for name, val in re.findall(r"^\s*([A-Za-z_0-9]+)\s*=\s*(-?[0-9.]+)", _top_level(inner), re.M):
+                if name in mods:
+                    lines.append(prefix + _modifier_line(mods, loc, english, name, val))
+                else:
+                    unknown += 1
+            for terrain, inner2 in blocks(inner):
+                stats = re.findall(r"([a-z]+)\s*=\s*(-?[0-9.]+)", inner2)
+                if stats and all(k in TRAIT_TERRAIN_STATS for k, v in stats):
+                    parts = ["%s §G%+.0f%%§!" % (_loc_name(loc, english, TRAIT_TERRAIN_STATS[k]) if TRAIT_TERRAIN_STATS[k] else "Movement",
+                                                         float(v) * 100) for k, v in stats]
+                    lines.append("%s%s: %s" % (prefix, _loc_name(loc, english, terrain), ", ".join(parts)))
+                else:
+                    unknown += 1
+        elif key == "sub_unit_modifiers":
+            for unit, inner2 in blocks(inner):
+                for name, val in re.findall(r"^\s*([A-Za-z_0-9]+)\s*=\s*(-?[0-9.]+)", inner2, re.M):
+                    if name in mods:
+                        lines.append("%s: %s" % (_loc_name(loc, english, unit), _modifier_line(mods, loc, english, name, val)))
+                    else:
+                        unknown += 1
+        elif key == "trait_xp_factor":
+            for name, val in re.findall(r"([A-Za-z_0-9]+)\s*=\s*(-?[0-9.]+)", inner):
+                lines.append("%s experience: §G%+.0f%%§!" % (_loc_name(loc, english, name), float(val) * 100))
+        elif key not in TRAIT_QUIET:
+            unknown += 1
+    return lines, unknown
+
+
+def trait_kind(body):
+    found = re.search(r"\btrait_type\s*=\s*(\w+)", body)
+    kind = found.group(1) if found else ""
+    if kind == "assignable_trait":
+        types = re.search(r"\btype\s*=\s*(\{[^}]*\}|\w+)", body)
+        types = re.findall(r"\w+", types.group(1)) if types else []
+        return "Field marshal trait" if types == ["field_marshal"] else "Admiral trait" if types == ["navy"] else "General trait"
+    return TRAIT_KIND_WORDS.get(kind, "Trait")
+
+
+def trait_effects_table(game, made):
+    """The text of tools/trait_effects_table.py, or None without the modifiers report."""
+    mods = modifier_report()
+    if mods is None:
+        return None
+    view = game_view(game)
+    rows = traits(view, sprite_names(view))
+    bodies = view.ids("common/unit_leader", "leader_traits")
+    nowhere = os.path.join(ROOT, "scratch", "no-such-mod")      # the game's own texts only, not the mod's
+    english = guiparse.load_localisation(game, nowhere, "english")
+    effects, described, partial = {}, 0, 0
+    for language in TRAIT_LANGUAGES:
+        loc = english if language == "english" else guiparse.load_localisation(game, nowhere, language)
+        table = {}
+        for name, who, _sprite in rows:
+            body = bodies.get(name, ("", None))[0]
+            lines, unknown = trait_lines(body, mods, loc, english, navy=(who == "navy"))
+            out = ["§g%s§!" % trait_kind(body)] + lines
+            if unknown:
+                out.append("§gand %s the game's own tooltip names§!" % ("one effect" if unknown == 1 else "%d effects" % unknown))
+            if not lines and not unknown:
+                out.append("§gNo effect of its own.§!")
+            desc = loc.get(name + "_desc") or english.get(name + "_desc")
+            if desc and desc.strip():
+                out += ["", desc.strip()]
+            table[name] = out
+            if language == "english":
+                described += 1 if lines and not unknown else 0
+                partial += 1 if lines and unknown else 0
+        effects[language] = table
+    print("trait effects: %d traits, %d described fully, %d in part" % (len(rows), described, partial))
+    return ('"""Made by tools/make_game_tables.py from the game %s and the Manager\'s Artifacts/executable/modifiers.md:\n'
+            "change the game, not this file.\n\n"
+            "EFFECTS[language][trait] are the lines of the trait's tooltip on the Officers page: its kind, its effects with\n"
+            "the game's own names, a count of what only the game's own tooltip names, and its description.\n"
+            '%d traits, %d described fully, %d in part."""\n\nEFFECTS = {\n%s}\n'
+            % (made, len(rows), described, partial,
+               "".join("    %r: {\n%s    },\n" % (language, "".join("        %r: %r,\n" % (name, effects[language][name]) for name, _w, _s in rows))
+                       for language in TRAIT_LANGUAGES)))
+# --- end E2 round 2 ---
+
+
 def version(game):
     for line in io.open(os.path.join(game, "launcher-settings.json"), encoding="utf-8", errors="replace"):
         m = re.search(r'"rawVersion"\s*:\s*"([^"]+)"', line)
@@ -607,6 +784,11 @@ def main(argv):
         "tools/equipment_kinds_table.py": kinds_table(game),       # d2-readiness
     }
     officer_tables(game, made, files)                   # e-officers-gov
+    effects = trait_effects_table(game, made)           # E2 round 2: left as it is without the Manager's modifiers report
+    if effects is not None:
+        files["tools/trait_effects_table.py"] = effects
+    else:
+        print("no %s: tools/trait_effects_table.py left as it is" % MODIFIERS_REPORT)
     stale = []
     for rel, content in files.items():
         path = os.path.join(ROOT, rel)

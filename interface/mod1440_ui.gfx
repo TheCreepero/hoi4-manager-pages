@@ -1903,4 +1903,201 @@ spriteTypes = {
 		tilingCenter = yes
 	}
 	# --- end E4 round 2 ---
+	# --- E2 round 2 --- the Officers page of the Records, redesign of 2026-10-30 (scratch/phases/E2/layout.json): its eleven
+	# steel cards (bitmaps cut from the steel bar by tools/stretch_background.py), the rule before the Army names switch, the
+	# bands and plates of the list and the file at the ruleset's pitches, the dark field of the army, the award plates and
+	# the hit areas of the column heads, the rows and the links
+	spriteType = {
+		name = "GFX_1440p_OF_filters"
+		textureFile = "gfx/interface/mod1440/of_filters.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_list"
+		textureFile = "gfx/interface/mod1440/of_list.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_who"
+		textureFile = "gfx/interface/mod1440/of_who.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_cmd"
+		textureFile = "gfx/interface/mod1440/of_cmd.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_chain"
+		textureFile = "gfx/interface/mod1440/of_chain.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_traits"
+		textureFile = "gfx/interface/mod1440/of_traits.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_rec"
+		textureFile = "gfx/interface/mod1440/of_rec.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_diary"
+		textureFile = "gfx/interface/mod1440/of_diary.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_diary_m"
+		textureFile = "gfx/interface/mod1440/of_diary_m.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_award"
+		textureFile = "gfx/interface/mod1440/of_award.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_OF_award_m"
+		textureFile = "gfx/interface/mod1440/of_award_m.dds"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_rule_2x30"
+		size = { x = 2 y = 30 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 1 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_960x48"
+		size = { x = 960 y = 48 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_460x32"
+		size = { x = 460 y = 32 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_624x24"
+		size = { x = 624 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_624x32"
+		size = { x = 624 y = 32 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_960x48"
+		size = { x = 960 y = 48 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_460x62"
+		size = { x = 460 y = 62 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_624x26"
+		size = { x = 624 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_452x54"
+		size = { x = 452 y = 54 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_tile_306x56"
+		size = { x = 306 y = 56 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+		effectFile = "gfx/FX/buttonstate_nodowneffect.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_84x28"
+		size = { x = 84 y = 28 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_160x30"
+		size = { x = 160 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_52x30"
+		size = { x = 52 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_44x30"
+		size = { x = 44 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_168x30"
+		size = { x = 168 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_56x30"
+		size = { x = 56 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_50x30"
+		size = { x = 50 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_96x30"
+		size = { x = 96 y = 30 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_288x48"
+		size = { x = 288 y = 48 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_364x24"
+		size = { x = 364 y = 24 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_hit_240x32"
+		size = { x = 240 y = 32 }
+		textureFile = "gfx//interface//tiles//tiled_window_transparent.dds"
+		borderSize = { x = 1 y = 1 }
+		tilingCenter = yes
+	}
+	# --- end E2 round 2 ---
 }

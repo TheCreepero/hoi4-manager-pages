@@ -1,4 +1,4 @@
-"""Made by tools/make_game_tables.py from the game 1.19.4.0: change the game, not this file.
+"""Made by tools/make_game_tables.py from the game 1.19.4.1: change the game, not this file.
 
 A row is (idea of a law, the sprite of its picture or "" when no .gfx declares it).
 33 laws."""

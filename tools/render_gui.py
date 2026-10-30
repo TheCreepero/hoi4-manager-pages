@@ -251,6 +251,15 @@ class Renderer:
                 # --- E4 round 2 --- a list gives one frame per instance, in drawing order (the plates of a list of rows)
                 self.frames[(w["name"], n)] = [int(v) for v in f] if isinstance(f, list) else int(f)
         self._frame_index = {}
+        # --- E2 round 2 --- the sprite script names for an icon (the image property: a trait's icon): "images" per window,
+        # {widget: sprite, or a list with one per instance in drawing order}; a state's "images" of a window replaces the window's
+        self.images = {}
+        self._image_index = {}
+        state_images = self.state.get("images") or {}
+        for w in self.scene.get("windows") or []:
+            for n, v in (state_images.get(w["name"]) if w["name"] in state_images else (w.get("images") or {})).items():
+                self.images[(w["name"], n)] = v
+        # --- end E2 round 2 ---
         # --- D2 round 2 --- widgets script shows in some rows of a list only (the band of every second row,
         # the chosen row): "only" per window, {widget: [instance numbers from 0, in drawing order]}; a state's
         # "only" of a window replaces the window's own
@@ -582,6 +591,7 @@ class Renderer:
         if depth == 0:
             self._sample_index = {}
             self._only_index = {}       # D2 round 2
+            self._image_index = {}      # E2 round 2
             self._frame_index = {}      # E4 round 2
         outer = getattr(self, "_window", None)
         self._window = name
@@ -786,6 +796,13 @@ class Renderer:
     def draw_sprite_widget(self, node, parent, canvas, window_name, clip, key):
         name = node.name or ""
         sprite_name = self.value(node.get("quadTextureSprite")) or self.value(node.get("spriteType"))
+        named = self.images.get((window_name, name))         # --- E2 round 2 --- the image property's sprite
+        if isinstance(named, list):
+            k = self._image_index.get((window_name, name), 0)
+            self._image_index[(window_name, name)] = k + 1
+            named = named[k] if k < len(named) else None
+        if named and self.sprite(named) is not None:
+            sprite_name = named
         sprite = self.sprite(sprite_name)
         frame = int(gp.number(self.value(node.get("frame")), 1) or 1)
         picked = self.frames.get((window_name, name))

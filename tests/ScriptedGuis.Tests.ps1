@@ -105,7 +105,10 @@ BeforeAll {
         # casualties_inflicted_by is asked inside meta_trigger only.
         'has_war_together_with', 'has_offensive_war_with', 'is_subject_of', 'casualties_inflicted_by',
         # --- E7 --- (2026-10-29) whether a character has a unit leader role, before the game draws his face; read-only
-        'is_unit_leader'
+        'is_unit_leader',
+        # --- E2 --- (2026-10-30) Officers, redesign round: whether he was promoted from a division's command; read-only
+        # (can_select_trait left with E2b fix round 1: it takes a trait, not yes)
+        'is_promoted_from_unit'
     )
 
     # Adds to $Into every command of a block that is neither allowed nor an effect of the mod's own.
@@ -238,7 +241,7 @@ Describe 'Scripted GUIs' {
         # The arrays a list of the game's faces may read: each holds generals, admirals or operatives only, as the mod
         # keeps them (of_me). A head of government, an advisor who is no general or an officer who has left would draw
         # the unknown man, so no other array, and no icon outside a list row, may ask for the value.
-        $leaderArrays = '^mod1440_(of_rows|ar_leaders|of_c_ul|wr_k_\d_ul|gv_of_\d_ul|gv_hc_\d_ul|sr_by_ul|wd_ga|wd_gc)$'
+        $leaderArrays = '^mod1440_(of_rows|ar_leaders|of_c_ul|of_c_subs|wr_k_\d_ul|gv_of_\d_ul|gv_hc_\d_ul|sr_by_ul|wd_ga|wd_gc)$'
         $count = 0
         $problems = foreach ($gui in $script:Guis) {
             $properties = Get-GuiBlock -Node $gui.Node -Key 'properties'
@@ -363,4 +366,32 @@ Describe 'Texts of the mod' {
         }
         @($missing | Sort-Object -Unique) | Should -BeNullOrEmpty
     }
+
+    # --- E2 fix round 1 --- (2026-10-30) the trait effects were written to mod1440_l_traits_<language>.yml, which the game
+    # never read: it loads a localisation file only when its name ends in _l_<language>.yml [LOC-001]
+    It 'are in files the game reads: every name ends in _l_ and the language of its folder, .yml' {
+        $locDir = Join-Path $script:RepoRoot 'localisation'
+        $wrong = foreach ($file in @($(if (Test-Path $locDir) { Get-ChildItem -Path $locDir -Recurse -File }))) {
+            $language = Split-Path -Leaf (Split-Path -Parent $file.FullName)
+            if ($language -eq 'replace') { $language = Split-Path -Leaf (Split-Path -Parent (Split-Path -Parent $file.FullName)) }
+            if ($file.Name -notlike "*_l_$language.yml") { $file.FullName.Substring($script:RepoRoot.Length + 1) }
+        }
+        @($wrong) | Should -BeNullOrEmpty -Because 'the game skips a localisation file whose name does not end in _l_<language>.yml, and its keys show bare (LOC-001)'
+    }
+    # --- end E2 fix round 1 ---
+}
+
+Describe 'Triggers of the mod' {
+    # --- E2b fix round 1 --- (2026-10-30) can_select_trait takes a trait; "can_select_trait = yes" is "Not a valid value: yes"
+    # in error.log and tests nothing (the green mark of the Officers page showed on every row)
+    It 'ask can_select_trait only with a trait' {
+        $bad = foreach ($file in @(Get-ChildItem -Path $script:CommonDir -Recurse -File -Filter '*.txt')) {
+            foreach ($m in [regex]::Matches([System.IO.File]::ReadAllText($file.FullName), '\bcan_select_trait\s*=\s*(\w+)')) {
+                if ($m.Groups[1].Value -in @('yes', 'no')) { "$($file.Name): $($m.Value)" }
+            }
+            foreach ($m in [regex]::Matches([System.IO.File]::ReadAllText($file.FullName), '\bcan_select_trait\s*=\s*\{\s*\}')) { "$($file.Name): $($m.Value)" }
+        }
+        @($bad) | Should -BeNullOrEmpty -Because 'can_select_trait needs a trait name; yes or no is "Not a valid value" and tests nothing'
+    }
+    # --- end E2b fix round 1 ---
 }

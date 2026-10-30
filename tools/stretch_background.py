@@ -1820,6 +1820,16 @@ JOBS = [
     {"source": STEEL_BAR, "output": "wr_today.dds", "compose": lambda source: steel_piece(source, "steel", 548, 188, 27, 1.9, 15)},
     {"source": STEEL_BAR, "output": "wr_done.dds", "compose": lambda source: steel_piece(source, "steel", 548, 670, 27, 1.9, 15)},
     # --- end E4 round 2 ---
+    # --- E2 round 2 --- the eleven steel cards of the Officers page (scratch/phases/E2/layout.json; GFX_1440p_OF_<name>, the sizes
+    # tools/build_records.py's OF_CARDS names): the filters and the list, the five cards of the file, the chain card of a field
+    # marshal, the shorter diary under it, and the Award mode for a general's file and a marshal's
+] + [{"source": STEEL_BAR, "output": "of_%s.dds" % name,
+       "compose": (lambda w, h, head, bottom: lambda source: steel_piece(source, "steel", w, h, head, 1.9, bottom))(*(size + (15,))[:4])}
+     # the filters' card is all head band: its 46 rows take a bottom edge of 6 (the edge of 15 would make it 55 high)
+     for name, size in [("filters", (1006, 46, 38, 6)), ("list", (1006, 1038, 38)), ("who", (640, 250, 0)), ("cmd", (640, 206, 38)),
+                        ("chain", (640, 268, 38)), ("traits", (640, 126, 27)), ("rec", (640, 240, 38)), ("diary", (640, 244, 27)),
+                        ("diary_m", (640, 182, 27)), ("award", (640, 490, 38)), ("award_m", (640, 428, 38))]] + [
+    # --- end E2 round 2 ---
     # --- d2-readiness ---
     {
         # The picture of mechanized equipment on Army Readiness (GFX_1440p_archetype_mechanized_equipment_medium):

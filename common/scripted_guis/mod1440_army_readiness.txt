@@ -342,6 +342,7 @@ scripted_gui = {
 					set_variable = { mod1440_ar_names = 1 }
 					set_variable = { mod1440_ar_names_fr = 2 }
 				}
+				mod1440_of_how = yes
 			}
 			ar_ah_cmd_click = {
 				set_variable = { mod1440_ar_al_by = 0 }

@@ -1,4 +1,4 @@
-"""Made by tools/make_game_tables.py from the game 1.19.4.0: change the game, not this file.
+"""Made by tools/make_game_tables.py from the game 1.19.4.1: change the game, not this file.
 
 A row is (trait, who can have it: army, navy or both, its icon GFX_trait_<trait> or "" without one), in the
 order an officer's row shows his traits. The traits of operatives are left out.

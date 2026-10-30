@@ -586,11 +586,14 @@ def army_readiness():
     # D2 fix round 2: the army's name under each commander is the player's choice (decision 8): it comes from a
     # local patch of hoi4.exe [SCR-078], and an unpatched game writes "Himself" there. The toggle stands beside the
     # card's title, its second frame for "on" (as the choices of the States page).
-    inner = button("ar_names", 130, 5, "GFX_sort_button_100x29", B.key("ar_names", "Army names"), tooltip=B.key(
-        "ar_names_tt", "Shows each army's name under its commander. Needs the local patch of hoi4.exe (Modding Manager, Set-HoiArmyNameProperty.ps1); without it this line would read Himself."))
+    # --- E2b --- (2026-10-30) the switch reads "Patched game" on both pages, with the Records' tooltip (build_records.PATCH_TIP);
+    # a click also renews the words the Officers page says of its chain of command (mod1440_of_how)
+    inner = button("ar_names", 130, 5, "GFX_sort_button_100x29", B.key("ar_names", "Patched game"), tooltip=B.key(
+        "ar_names_tt", build_records.PATCH_TIP))
     properties += block("ar_names", "frame = mod1440_ar_names_fr\n")
     effects += block("ar_names_click", iff(is_one("mod1440_ar_names"), setv("mod1440_ar_names", 0) + setv("mod1440_ar_names_fr", 1))
-                     + els(setv("mod1440_ar_names", 1) + setv("mod1440_ar_names_fr", 2)))
+                     + els(setv("mod1440_ar_names", 1) + setv("mod1440_ar_names_fr", 2)) + "mod1440_of_how = yes\n")
+    # --- end E2b ---
     inner += text("ar_al_caption", 240, 13, 679, B.key("ar_al_caption", "§g[?mod1440_ar_leaders^num|0] commanders with troops. Click one for his army's equipment, right-click for the map.§!"),
                  FONT_SMALL, "right", 20)
     # D2 fix round 1: one commander in the singular

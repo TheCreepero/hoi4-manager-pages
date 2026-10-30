@@ -1,4 +1,4 @@
-"""Made by tools/make_game_tables.py from the game 1.19.4.0: change the game, not this file.
+"""Made by tools/make_game_tables.py from the game 1.19.4.1: change the game, not this file.
 
 The kinds of land equipment of the Army Readiness page: every archetype a land sub-unit needs. A row is
 (kind, sprite of its picture, width, height of the picture).

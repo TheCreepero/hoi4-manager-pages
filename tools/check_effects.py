@@ -1109,6 +1109,143 @@ mod1440_chk_sizes4 = {
 """
 # --- end E4 round 2 ---
 
+# --- E2 round 2 ---
+# The Officers page after its redesign (2026-10-30). As Germany: the chain of command by both methods, a battle counted
+# for a field marshal, and the values the page reads (num_assigned_traits, num_max_traits, a free trait slot,
+# is_promoted_from_unit, num_armored, the battle plans). A marshal leading an army group is made by hand in the game
+# (two armies, create an army group, assign a field marshal); run the daily round once (or click Order of battle).
+E2_OWNERS = ("GER", "AUS", "CZE", "POL", "HOL", "BEL", "LUX", "FRA", "DEN", "SWI")      # where Germany's armies stand in a check
+
+
+def e2_provinces():
+    """{state id: [provinces]} of the states the game's history gives to E2_OWNERS; {} without the game."""
+    import glob
+    import re
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import guiparse
+        game = guiparse.find_game_dir()
+    except Exception:
+        game = None
+    out = {}
+    for path in sorted(glob.glob(os.path.join(game or "-", "history", "states", "*.txt"))):
+        text = re.sub(r"#[^\n]*", "", io.open(path, encoding="utf-8-sig", errors="replace").read())
+        sid = re.search(r"\bid\s*=\s*(\d+)", text)
+        owner = re.search(r"\bowner\s*=\s*(\w+)", text)
+        provinces = re.search(r"\bprovinces\s*=\s*\{([^}]*)\}", text)
+        if sid and owner and provinces and owner.group(1) in E2_OWNERS:
+            out[int(sid.group(1))] = [int(p) for p in provinces.group(1).split()]
+    return out
+
+
+def e2_effects():
+    states = e2_provinces()
+    which = "".join("\t\t\t\t%sif = { limit = { state = %d } set_temp_variable = { chk_sid = %d } }\n" % ("" if n == 0 else "else_", s, s)
+                    for n, s in enumerate(sorted(states)))
+    tests = ""
+    for n, (s, provinces) in enumerate(sorted(states.items())):
+        body = ""
+        for p in provinces:
+            body += ("\t\t\t\tif = { limit = { is_leading_army_in_province = %d } log = \"MOD1440 e2 oob: province %d general [THIS.GetName] yes\"\n"
+                     "\t\t\t\t\tset_temp_variable = { chk_p = %d }\n"
+                     "\t\t\t\t\tPREV = { every_army_leader = { limit = { is_leading_army_group = yes }\n"
+                     "\t\t\t\t\t\tif = { limit = { is_leading_army_in_province = { province = %d include_field_marshal = yes } } "
+                     "log = \"MOD1440 e2 oob: province %d marshal [THIS.GetName] yes (literal)\" }\n"
+                     "\t\t\t\t\t\tif = { limit = { is_leading_army_in_province = { province = var:chk_p include_field_marshal = yes } } "
+                     "log = \"MOD1440 e2 oob: province %d marshal [THIS.GetName] yes (var:)\" }\n"
+                     "\t\t\t\t\t} }\n\t\t\t\t}\n" % (p, p, p, p, p, p))
+        tests += "\t\t\t%sif = { limit = { check_variable = { chk_sid = %d } }\n%s\t\t\t}\n" % ("" if n == 0 else "else_", s, body)
+    return """
+# The chain of command, both methods, for every general who leads an army with troops: his state (Army Readiness's
+# mod1440_al_loc) and count; each marshal leading an army group asked num_units_in_state there (the state method) and
+# the province trigger on each province of that state where the general leads (the province method), literal and var:.
+mod1440_chk_e2_oob = {
+\tmod1440_ar_count = yes
+\tlog = "MOD1440 e2 oob: start [?global.date.GetDateStringNoHourLong]"
+\tevery_army_leader = {
+\t\tlimit = { is_leading_army_group = yes }
+\t\tlog = "MOD1440 e2 oob: marshal [THIS.GetName] leads an army group, num_units [?num_units] num_units_in_state@loc [?num_units_in_state@var:mod1440_al_loc] loc [?mod1440_al_loc.GetName]"
+\t}
+\tevery_army_leader = {
+\t\tlimit = { NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } }
+\t\tset_temp_variable = { chk_s = mod1440_al_loc }
+\t\tset_temp_variable = { chk_n = mod1440_al_lcnt }
+\t\tlog = "MOD1440 e2 oob: general [THIS.GetName] num_units [?num_units] state [?chk_s.GetName] count [?chk_n]"
+\t\tPREV = {
+\t\t\tevery_army_leader = {
+\t\t\t\tlimit = { is_leading_army_group = yes }
+\t\t\t\tlog = "MOD1440 e2 oob:   marshal [THIS.GetName] num_units_in_state there [?num_units_in_state@var:chk_s] (state method: links if >= [?chk_n])"
+\t\t\t}
+\t\t}
+\t\tset_temp_variable = { chk_sid = 0 }
+\t\tif = {
+\t\t\tlimit = { check_variable = { chk_n > 0 } }
+\t\t\tvar:chk_s = {
+""" + which + """\t\t\t}
+""" + tests + """\t\t}
+\t\tlog = "MOD1440 e2 oob:   state id [?chk_sid] (0: not among the states this effect knows)"
+\t}
+\tmod1440_of_chain = yes
+\tmod1440_chk_e2_log = yes
+}
+
+# A battle counted for a field marshal: a won and a lost battle of the first general linked to a marshal, through the
+# hooks' own effects (on_army_leader_won_combat and _lost_combat call them under the human check).
+mod1440_chk_e2_battle = {
+\tset_temp_variable = { chk_done = 0 }
+\tevery_army_leader = {
+\t\tlimit = { check_variable = { mod1440_of_fm_n > 0 } check_variable = { chk_done = 0 } }
+\t\tset_temp_variable = { chk_done = 1 }
+\t\tlog = "MOD1440 e2 battle: [THIS.GetName] under [?mod1440_of_fm.GetName]"
+\t\tvar:mod1440_of_fm = { log = "MOD1440 e2 battle: marshal [THIS.GetName] before gwon [?mod1440_of_gwon] glost [?mod1440_of_glost]" }
+\t\tmod1440_of_g_won = yes
+\t\tmod1440_of_g_lost = yes
+\t\tvar:mod1440_of_fm = { log = "MOD1440 e2 battle: marshal [THIS.GetName] after gwon [?mod1440_of_gwon] glost [?mod1440_of_glost]" }
+\t}
+\tif = { limit = { check_variable = { chk_done = 0 } } log = "MOD1440 e2 battle: no general is linked to a marshal (run mod1440_chk_e2_oob first)" }
+}
+
+# What the page reads of every leader, and his link.
+mod1440_chk_e2_log = {
+\tevery_army_leader = {
+\t\tset_temp_variable = { chk_can = 0 }
+\t\tif = { limit = { check_variable = { num_assigned_traits < num_max_traits } } set_temp_variable = { chk_can = 1 } }
+\t\tset_temp_variable = { chk_div = 0 }
+\t\tif = { limit = { is_promoted_from_unit = yes } set_temp_variable = { chk_div = 1 } }
+\t\tlog = "MOD1440 e2 leader: [THIS.GetName] fm [?mod1440_of_fm.GetName] fm_n [?mod1440_of_fm_n] subs [?mod1440_of_subs^num] gwon [?mod1440_of_gwon] glost [?mod1440_of_glost] assigned [?num_assigned_traits] max [?num_max_traits] traits [?num_traits] can_select [?chk_can] from_division [?chk_div] div [?num_units] armoured [?num_armored] plans [?num_battle_plans] planning [?avg_unit_planning_ratio] entrenchment [?avg_unit_entrenchment_ratio] eq [?mod1440_al_eq] hq [?mod1440_al_hq.GetName]"
+\t}
+\tevery_navy_leader = {
+\t\tset_temp_variable = { chk_can = 0 }
+\t\tif = { limit = { check_variable = { num_assigned_traits < num_max_traits } } set_temp_variable = { chk_can = 1 } }
+\t\tlog = "MOD1440 e2 leader: [THIS.GetName] (admiral) assigned [?num_assigned_traits] max [?num_max_traits] can_select [?chk_can] ships [?num_ships]"
+\t}
+}
+"""
+
+
+HISTORY += e2_effects()
+# --- end E2 round 2 ---
+
+
+# --- E2b ---
+# The exact chain of command on a game with the Modding Manager's field marshal patch (SCR-086): every army leader's
+# has_orders_group as an integer (the patch gives the army group's id x 0.00001; unpatched it is 1 or 0), whether he leads
+# an army group, the link the chain made, and mod1440_of_exact. Run mod1440_of_chain first (it runs once a day).
+HISTORY += """
+mod1440_chk_e2b_log = {
+	mod1440_of_chain = yes
+	log = "MOD1440 e2b: exact [?mod1440_of_exact] how [?mod1440_of_chain_how.GetTokenKey]"
+	every_army_leader = {
+		set_temp_variable = { chk_o = has_orders_group }
+		multiply_temp_variable = { chk_o = 100000 }
+		set_temp_variable = { chk_g = 0 }
+		if = { limit = { is_leading_army_group = yes } set_temp_variable = { chk_g = 1 } }
+		log = "MOD1440 e2b: [THIS.GetName] has_orders_group x100000 [?chk_o|0] raw [?has_orders_group|5] army_group [?chk_g] divisions [?num_units] fm [?mod1440_of_fm.GetName] fm_n [?mod1440_of_fm_n] subs [?mod1440_of_subs^num]"
+	}
+}
+"""
+# --- end E2b ---
+
 # --- E7 probe ---
 # Phase E7 (2026-10-29), step 1: does properties = { <icon> = { image = "portrait" } } draw the scope's unit leader
 # portrait through the game's own portrait code (register SGUI-053, read in hoi4.exe 1.19.3, not yet seen in the game)?

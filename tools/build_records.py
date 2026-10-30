@@ -1071,36 +1071,55 @@ def mark_script():
 
 # ---------------------------------------------------------------- Officers (E2)
 
-# The redesign of 2026-10-16 (e-officers-gov): a table of 22 rows with the rank and status under the name, the
-# game's stat icons as heads and each officer's traits as the game's icons; beside it his file as five cards
-# (who he is, traits, service record, decorations, War Diary). Award is a mode of the decorations card.
+# E2 round 2 (2026-10-30; scratch/phases/E2/layout.json, design.json; the user took every recommendation): the page in
+# the steel look. The left column is a card of filters (seven: Order of battle is number 6, and the Army names switch
+# apart behind a rule) and the list's card (rows of 48, 20 in sight, the column heads in its head band); the right
+# column is the chosen officer's file in five steel cards: who he is (his army as its second subject, Reports to,
+# Stands in), Command (a general's or an admiral's) or the Chain of command (a field marshal leading an army group),
+# Traits (each trait with a tooltip of its effects, tools/trait_effects_table.py), the Service record (a banded table
+# over the rack of his medals) and his lines of the War Diary. The chain card is 62 taller than Command: the three
+# cards under it move down by a y property on each of their widgets (a nested container takes none, SGUI-013), and the
+# diary keeps 5 lines. The steel cards are bitmaps cut from the steel bar (tools/stretch_background.py, GFX_1440p_OF_*).
+#
+# The chain of command is worked out once a day (mod1440_of_chain): a general who leads an army with troops is
+# linked to the field marshal leading an army group who has at least as many divisions in the state where most of
+# the general's stand (Army Readiness's mod1440_al_loc), and at least as many divisions in all; of several, the one
+# with most divisions there, marked as likely (decision 6). OF_CHAIN = False builds the page without it (no filter
+# Order of battle, no Reports to, a marshal's file shows Command): the fallback if the game check finds no link.
+#
 # A column is (name, value of the officer, width, head text or None, head icon or None, what the tooltip says).
-# An admiral has no planning and logistics: his third and fourth levels are manoeuvring and coordination, and
-# his command is ships.
+# An admiral has no planning and logistics: his third and fourth levels are manoeuvring and coordination, and his
+# command is ships.
+OF_CHAIN = True
 OF_COLUMNS = [
-    ("skill", "skill_level", 56, "Skill", None, "Skill level."),
+    ("skill", "skill_level", 52, "Skill", None, "Skill level."),
     ("atk", "attack_level", 44, None, "GFX_trait_attack", "Attack."),
     ("def", "defense_level", 44, None, "GFX_trait_defense", "Defence."),
     ("c3", "planning_level", 44, None, "GFX_trait_planning", "Planning; for an admiral manoeuvring."),
     ("c4", "logistics_level", 44, None, "GFX_trait_logistics", "Logistics; for an admiral coordination."),
-    ("traits", "num_traits", 168, "Traits", None, "His traits, as the game's icons: who he is first, the skills he learnt last."),
-    ("cmd", "num_units", 60, "Cmd", None, "Divisions under his command today; for an admiral ships."),
+    ("traits", "num_traits", 168, "Traits", None, "His traits, as the game's icons: who he is first, the skills he learnt last. "
+     "The pointer on one shows what it does."),
+    ("cmd", "num_units", 56, "Div", None, "Divisions under his command today; for an admiral ships. A field marshal's in grey: "
+     "they are counted again under his generals."),
     ("won", "mod1440_of_won", 50, "Won", None, "Battles won since the record began."),
     ("lost", "mod1440_of_lost", 50, "Lost", None, "Battles lost since the record began."),
-    ("dec", "mod1440_of_dec^num", 88, "Medals", None, "Decorations you have awarded."),
+    ("dec", "mod1440_of_dec^num", 96, "Medals", None, "Decorations you have awarded."),
 ]
 OF_NAVY = {"c3": "maneuvering_level", "c4": "coordination_level", "cmd": "num_ships"}
 OF_NAVY_ICON = {"c3": "GFX_trait_maneuvering", "c4": "GFX_trait_coordination"}
 OF_NUMBERS = ("skill", "atk", "def", "c3", "c4", "cmd", "won", "lost")      # the columns that show a number
 OF_FACE_W, OF_FACE = 40, 0.22               # the column of the portrait in a row, and how small it is drawn (34x46)
-OF_NAME = 260                               # the name and under it the rank and status
-OF_ROW_W = OF_FACE_W + OF_NAME + sum(c[2] for c in OF_COLUMNS)
-OF_ROW = 48
-OF_HIT = "GFX_1440p_SG_hit_300x48"          # the row's button: the portrait and the name, with nothing drawn
-OF_FILTER_Y = REC_BODY_Y                    # the filters stand inside the page's body (the frame's contract)
-OF_HEAD_Y = REC_BODY_Y + 38
-OF_LIST_Y = OF_HEAD_Y + 32
-OF_LIST_H = REC_BODY_Y + REC_BODY_H - OF_LIST_Y
+OF_NAME = 272                               # the name and under it the rank and his command
+OF_ROW_W = OF_FACE_W + OF_NAME + sum(c[2] for c in OF_COLUMNS)     # 960
+OF_ROW, OF_ROWS = 48, 20                    # rows in sight (21 before: the filters' card takes one)
+OF_HIT = "GFX_1440p_SG_hit_288x48"          # the row's button: the portrait and the name, with nothing drawn; the mark after it
+OF_COL_X, OF_COL_W = REC_BODY_X, 1006       # the left column: the filters' card and the list's card
+OF_LIST_TOP = REC_BODY_Y + 46 + 6           # 168: the list's card, under the filters' card
+OF_ROW_X, OF_ROW_Y = 22, OF_LIST_TOP + 42   # the first row
+OF_HEAD_Y = OF_LIST_TOP + 8                 # the column heads in the head band
+OF_FILTER_X, OF_FILTER_STEP = 22, 124
+OF_INDENT = 20                              # Order of battle: a general under his field marshal
+OF_MARK_X = 290                             # the green mark of a trait that can be chosen, after the name
 OF_FILTERS = [
     (0, "all", "All", "Every officer serving today."),
     (1, "army", "Army", "Generals and field marshals."),
@@ -1108,38 +1127,58 @@ OF_FILTERS = [
     (3, "cmd", "With a command", "Officers who lead troops or ships today."),
     (4, "dec", "Decorated", "Officers you have decorated."),
     (5, "former", "Former", "Officers the record knows who serve no longer."),
+    (6, "oob", "Order of battle", "The chain of command: each army group's field marshal with his generals under him, then the "
+     "armies that answer to the High Command, then the fleets.\\nThe links, made once a day: "
+     "[?mod1440_of_chain_how.GetTokenLocalizedKey]."),
 ]
-OF_CARD_X = REC_BODY_X + OF_ROW_W + 30 + 12
-OF_CARD_W = REC_BODY_X + REC_BODY_W - OF_CARD_X
-OF_CARD_Y = REC_BODY_Y
-OF_SIDE = 14 + 156 + 16                     # where the text beside the portrait of a file begins
-OF_CARD_GAP = 12
-# the five cards of the file, top to bottom: (name, height); the diary takes the rest
-OF_CARDS = [("head", 240), ("traits", 108), ("rec", 184), ("dec", 220)]
+OF_FILE_X, OF_FILE_W = 1026, 640            # the file: REC_BODY_X + 1006 + 6
+OF_DY = 62                                  # how much lower Traits, Service record and the diary stand under the chain card
+OF_STEEL = "GFX_1440p_OF_%s"                # the page's steel cards: (width, height, head band)
+OF_CARDS = {"filters": (1006, 46, 38), "list": (1006, 1038, 38), "who": (640, 250, 0), "cmd": (640, 206, 38),
+            "chain": (640, 268, 38), "traits": (640, 126, 27), "rec": (640, 240, 38), "diary": (640, 244, 27),
+            "diary_m": (640, 182, 27), "award": (640, 490, 38), "award_m": (640, 428, 38)}
+# the file's cards, from the top of the page's body: who 0, Command or the chain 256, then (a marshal's 62 lower)
+OF_TOP = {"who": 0, "cmd": 256, "traits": 468, "rec": 600, "diary": 846}
+OF_PAIR = 24                                # a row of the file's banded tables
+OF_CHAIN_ROWS = 5                           # generals the chain card names; "+N more" and Order of battle for the rest
 CARD_SPRITE = "GFX_1440p_SG_card_%dx%d"
 TRAIT_ICONS = 6         # trait icons in a row, and traits named in a file
 TRAIT_STEP = 24         # from one trait icon of a row to the next (an icon is 23x33)
 TRAIT_SAMPLE = ["GFX_trait_old_guard", "GFX_trait_brilliant_strategist", "GFX_trait_trait_cautious",
                 "GFX_trait_infantry_officer", "GFX_trait_war_hero", "GFX_trait_career_officer"]     # what the renderer draws
 TRAIT_PAD = "token:unknown"                 # GFX_trait_unknown, the game's own picture of a trait it cannot show
+TRAIT_NO_EFFECTS = "mod1440_tre_none"       # another mod's trait: its effects are in the game's own tooltip (decision 5)
 ROW_MEDALS = 3          # medals at half size in a row
 MEDAL_SLOTS = 12        # decorations a country can award at most (Chile has twelve medals)
-RACK = 9                # medals at full size on the rack of a file
-CARD_LINES = 11         # diary lines a file shows
-DEC_LINES = 3           # decorations the file lists by name
+RACK = 9                # medals on the rack of a file, at 0.6
+RACK_TEXT = 4           # the newest medal's name and date stand after the rack while it holds this many or fewer
+CARD_LINES = 8          # diary lines a file shows; under the chain card 5
+CHAIN_LINES = 5
 DEC_ARRAYS = ["dec", "dec_key", "dec_date", "dec_set", "dec_frame"]     # an officer's decorations, on the officer
 SHIP_KINDS = [("k1", "carrier", "Carriers"), ("k2", "capital", "Capital ships"), ("k3", "screen", "Screens"),
               ("k4", "submarine", "Submarines")]
+# the left half of the service record: (name, label, value, tooltip)
 OF_FIGURES = [
     ("won", "Battles won", "[?mod1440_of_c_won|0]", "Counted since the record began."),
     ("lost", "Battles lost", "[?mod1440_of_c_lost|0]", "Counted since the record began."),
     ("states", "States taken", "[?mod1440_of_c_states|0]", "States you took while he had the most divisions in them."),
     ("vps", "Points taken", "[?mod1440_of_c_vps|0]", "Victory points you took from an enemy while he had the most divisions in their state."),
     ("vpl", "Points lost", "[?mod1440_of_c_vpl|0]", "Victory points an enemy took while he had the most divisions in their state."),
-    ("decs", "Decorations", "[?mod1440_of_c_dec_n|0]", "Decorations you have awarded him."),
 ]
+# the right half: a field marshal's rows, and a general's or an admiral's (Promoted to field marshal left out)
+OF_DATES = {"since": "Commissioned", "prom": "Promoted to field marshal", "lvl": "Last skill level"}
+OF_RIGHT = {"m": ["since", "prom", "lvl", "div", "dec"], "o": ["since", "lvl", "div", "dec"]}
 # the status of an officer, by what the game says of him: (name, the words in a row, a trigger in his scope)
 FORMER = "check_variable = { mod1440_of_seen_day < global.num_days }"
+# E2b: the tooltip of the switch on both pages (tools/build_managers.py's Army Readiness reads it)
+PATCH_TIP = ("Tick when your hoi4.exe carries the Modding Manager's patch (Set-HoiArmyNameProperty.ps1): it gives the names of "
+             "armies and army groups here and on Army Readiness, and the exact chain of command. Every game update undoes the "
+             "patch: the chain of command then falls back to its guess by itself, and the names would read Himself until you "
+             "untick this.")
+ARMY_NAME = "[THIS.GetHerselfHimselfCap]"
+# E2b fix round 1: a free slot in the officer's trait tree, in his scope: fewer traits chosen than slots (the Traits head's pair)
+FREE_SLOT = "check_variable = { num_assigned_traits < num_max_traits }"   # his army's name on the patched hoi4.exe (SCR-078), behind Army names
+NAMES_ON = "check_variable = { ROOT.mod1440_ar_names = 1 }"
 
 
 def through(name, x, y, sprite, scale=None):
@@ -1161,26 +1200,56 @@ def trait_table():
     return [row for row in TRAITS + [row for row in others if row[0] not in own] if plain_name.match(row[0])]
 
 
+def trait_effects():
+    """E2 round 2: the lines of each of the game's traits by language (tools/trait_effects_table.py, made by
+    tools/make_game_tables.py); empty when the table has not been made."""
+    try:
+        from trait_effects_table import EFFECTS
+    except ImportError:
+        EFFECTS = {}
+    return EFFECTS
+
+
+def trait_effect_files():
+    """E2 round 2: localisation/<language>/mod1440_traits_l_<language>.yml (E2 fix round 1: the game reads only a file
+    whose name ends in _l_<language>.yml, LOC-001), the text keys mod1440_tre_<trait> that the
+    trait cache holds beside each trait (mod1440_of_tr_e), in the game's languages: the trait's kind, its effects with
+    the game's own names, its description. Another mod's trait holds mod1440_tre_none."""
+    effects = trait_effects()
+    out = {}
+    for language in M.LANGUAGES:
+        table = effects.get(language) or effects.get("english") or {}
+        entries = ' %s:0 "%s"\n' % (TRAIT_NO_EFFECTS, "\u00a7gAnother mod's trait: its effects are in the game's own tooltip.\u00a7!")
+        entries += "".join(' mod1440_tre_%s:0 "%s"\n' % (name, "\\n".join(lines)) for name, lines in sorted(table.items()))
+        out["localisation/%s/mod1440_traits_l_%s.yml" % (language, language)] = "\ufeffl_%s:\n" % language + entries
+    return out
+
+
 def trait_cache():
     """The script that keeps an officer's traits on him (mod1440_of_traits), and the version of the table.
 
     mod1440_of_tr     the traits the table names, as text keys: those with an icon first; padded to six
+    mod1440_of_tr_e   E2 round 2: beside each, the text key of its effects (mod1440_tre_<trait>, or mod1440_tre_none)
     mod1440_of_tr_i   how many of them have an icon, mod1440_of_tr_k how many the table named
     mod1440_of_tr_n   num_traits when the array was made: the daily round makes it again when that changes
     mod1440_of_tr_plus  traits beyond the icons a row shows (more than six, no icon, or another mod's)"""
     rows = trait_table()
-    version = table_version(rows)
+    described = set((trait_effects().get("english") or {}).keys())
+    # E2 round 2: the effects belong to the version, so every officer's cache is made again once with mod1440_of_tr_e
+    version = table_version((rows, sorted(described), "tr_e"))
 
     def tests(kind, with_icon):
         """The tests for one kind of officer, in groups of 16: a group runs while traits are still missing."""
         chosen = [name for name, who, sprite in rows if who in (kind, "both") and bool(sprite) == with_icon]
         out = ""
         for start in range(0, len(chosen), 16):
-            body = "".join(iff("has_trait = %s" % name, "add_to_array = { mod1440_of_tr = token:%s }\n" % name) for name in chosen[start:start + 16])
+            body = "".join(iff("has_trait = %s" % name, "add_to_array = { mod1440_of_tr = token:%s }\n" % name
+                               + "add_to_array = { mod1440_of_tr_e = token:%s }\n" % ("mod1440_tre_" + name if name in described else TRAIT_NO_EFFECTS))
+                           for name in chosen[start:start + 16])
             out += iff("check_variable = { mod1440_of_tr^num < num_traits }", body)
         return out
 
-    body = ("clear_array = mod1440_of_tr\n"
+    body = ("clear_array = mod1440_of_tr\nclear_array = mod1440_of_tr_e\n"
             + iff("is_navy_leader = yes", tests("navy", True)) + els(tests("army", True))
             + setv("mod1440_of_tr_i", "mod1440_of_tr^num")
             + iff("is_navy_leader = yes", tests("navy", False)) + els(tests("army", False))
@@ -1189,11 +1258,12 @@ def trait_cache():
             + tmp("tr_shown", "mod1440_of_tr_i") + "clamp_temp_variable = { var = tr_shown max = %d }\n" % TRAIT_ICONS
             + setv("mod1440_of_tr_plus", "num_traits") + "subtract_from_variable = { mod1440_of_tr_plus = tr_shown }\n"
             + "clamp_variable = { var = mod1440_of_tr_plus min = 0 }\n"
-            + pad([("mod1440_of_tr", TRAIT_PAD)], TRAIT_ICONS))
+            + pad([("mod1440_of_tr", TRAIT_PAD), ("mod1440_of_tr_e", "token:" + TRAIT_NO_EFFECTS)], TRAIT_ICONS))
     army = sum(1 for row in rows if row[1] in ("army", "both"))
     navy = sum(1 for row in rows if row[1] in ("navy", "both"))
     text = ("# Officers: the traits of the officer in scope, kept on him (tools/traits_table.py and traits_mods_table.py:\n"
-            "# %d traits; a general is asked about %d, an admiral about %d). Run when num_traits has changed.\n" % (len(rows), army, navy)
+            "# %d traits; a general is asked about %d, an admiral about %d), each with the text key of its effects\n"
+            "# (tools/trait_effects_table.py, %d of them). Run when num_traits has changed.\n" % (len(rows), army, navy, len(described))
             + block("mod1440_of_traits", body))
     return text, version
 
@@ -1208,37 +1278,54 @@ def medal_tokens(sets, source, target, count, index="md_v"):
         + "add_to_array = { %s = md_strip }\n" % target))
 
 
-def subject(prefix, k, x, y, width, has):
-    """The state or the victory point a line of a file is about: one text for each, script shows which.
-    Returns the widgets and their triggers."""
-    out = M.text("%s_%d_s" % (prefix, k), x, y, width, B.key("%s_%d_s" % (prefix, k), "§Y[?mod1440_%s_a^%d.GetName]§!" % (prefix, k)), M.FONT_SMALL, height=22)
-    out += M.text("%s_%d_p" % (prefix, k), x, y, width, B.key("%s_%d_p" % (prefix, k), "§Y[?mod1440_%s_a^%d.GetTokenLocalizedKey]§!" % (prefix, k)),
-                  M.FONT_SMALL, height=22)
-    more = has + "check_variable = { mod1440_%s_date^num > %d }\n" % (prefix, k)
-    return out, (block("%s_%d_s_visible" % (prefix, k), more + "check_variable = { mod1440_%s_sa^%d = 2 }\n" % (prefix, k))
-                 + block("%s_%d_p_visible" % (prefix, k), more + "check_variable = { mod1440_%s_sa^%d = 3 }\n" % (prefix, k)))
-
-
 def officer_status():
-    """The words under an officer's name in a row: (widget suffix, words, trigger in his scope). One is true."""
-    ranks = [("fm", "Field Marshal", "is_field_marshal = yes"), ("gen", "General", "is_corps_commander = yes"),
-             ("adm", "Admiral", "is_navy_leader = yes")]
+    """The words under an officer's name in a row: (widget suffix, words, trigger in his scope, test of a sample row).
+    One is true. E2 round 2: the army he commands (its name with Army names on, SCR-078), an army group's armies."""
     out = []
-    for rank, word, trigger in ranks:
+    serving = "NOT = { %s }" % FORMER
+    free = serving + " NOT = { is_general_captured = yes }"
+    group = "is_leading_army_group = yes"
+    army = "NOT = { %s } check_variable = { num_units > 0 }" % group
+    for rank, word, trigger in (("fm", "Field Marshal", "is_field_marshal = yes NOT = { is_navy_leader = yes }"),
+                                ("gen", "General", "is_corps_commander = yes NOT = { is_field_marshal = yes } NOT = { is_navy_leader = yes }"),
+                                ("adm", "Admiral", "is_navy_leader = yes")):
+        lead = "\u00a7g%s  \u00b7  " % word
         if rank == "adm":
-            states = [("off", "§Rno longer serving§!", FORMER),
-                      ("cmd", "commands [?num_ships|0] ships", "NOT = { %s } check_variable = { num_ships > 0 }" % FORMER),
-                      ("idle", "unassigned", "NOT = { %s } NOT = { check_variable = { num_ships > 0 } }" % FORMER)]
+            states = [("off", lead + "\u00a7!\u00a7Rno longer serving\u00a7!", FORMER, ("off",)),
+                      ("cmd", lead + "Fleet of [?num_ships|0] ships\u00a7!", "%s check_variable = { num_ships > 0 }" % serving, ("fleet",)),
+                      ("idle", lead + "unassigned\u00a7!", "%s NOT = { check_variable = { num_ships > 0 } }" % serving, ("idle",))]
         else:
-            free = "NOT = { %s } NOT = { is_general_captured = yes }" % FORMER
-            states = [("off", "§Rno longer serving§!", FORMER),
-                      ("cap", "§Rcaptured§!", "NOT = { %s } is_general_captured = yes" % FORMER),
-                      ("grp", "leads an army group", free + " is_leading_army_group = yes"),
-                      ("cmd", "commands [?num_units|0] divisions", free + " NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 }"),
-                      ("idle", "unassigned", free + " NOT = { is_leading_army_group = yes } NOT = { check_variable = { num_units > 0 } }")]
-        for state, words, condition in states:
-            out.append(("%s_%s" % (rank, state), "§g%s · %s§!" % (word, words), "%s %s" % (trigger, condition)))
+            states = [("off", lead + "\u00a7!\u00a7Rno longer serving\u00a7!", FORMER, ("off",)),
+                      ("cap", lead + "\u00a7!\u00a7Rcaptured\u00a7!", "%s is_general_captured = yes" % serving, ("cap",)),
+                      ("army", lead + "\u00a7!" + ARMY_NAME, "%s %s %s" % (free, army, NAMES_ON), ("army", True)),
+                      ("armyd", lead + "army of [?num_units|0] divisions\u00a7!", "%s %s NOT = { %s }" % (free, army, NAMES_ON), ("army", False)),
+                      ("idle", lead + "unassigned\u00a7!", "%s NOT = { %s } NOT = { check_variable = { num_units > 0 } }" % (free, group), ("idle",))]
+            if rank == "fm":
+                links = "check_variable = { mod1440_of_subs^num > 0 }"
+                # E2 fix round 1: with Army names on, the army group's own name: the patched property reads the orders group a
+                # marshal leads, and an army group is one (group+0x39 set, its name at +0x160 like an army's; build.json newFacts)
+                states[2:2] = [("grpn", lead + "\u00a7!" + ARMY_NAME, "%s %s %s" % (free, group, NAMES_ON), ("grp", "name")),
+                               ("grp", lead + "Army group of [?mod1440_of_subs^num|0] armies\u00a7!",
+                                "%s %s %s NOT = { %s }" % (free, group, links, NAMES_ON), ("grp", True)),
+                               ("grpd", lead + "Army group of [?num_units|0] divisions\u00a7!",
+                                "%s %s NOT = { %s } NOT = { %s }" % (free, group, links, NAMES_ON), ("grp", False))]
+        for state, words, condition, test in states:
+            out.append(("%s_%s" % (rank, state), words, "%s %s" % (trigger, condition), (rank,) + test))
     return out
+
+
+def status_shown(test, r):
+    """Whether the status line <test> (officer_status()) is the one of the sample row r."""
+    rank, state = test[0], test[1]
+    if r["rank"] != rank or r["status"] != state:
+        return False
+    if state == "army":
+        return test[2] == r["names"]
+    if state == "grp":
+        if test[2] == "name":
+            return r["names"]
+        return not r["names"] and test[2] == (r.get("subs", 0) > 0)
+    return True
 
 
 def officers(portrait_version):
@@ -1248,48 +1335,103 @@ def officers(portrait_version):
     body, effects, properties = head("of", 1, "Every general and admiral, with what the mod has written down about him. Click one for his record.")
     triggers = ""
     row_triggers = ""
-    for n, (value, name, label, tip) in enumerate(OF_FILTERS):
-        body += M.button("of_show_%s" % name, REC_BODY_X + 2 + n * 146, OF_FILTER_Y, "GFX_sort_button_140x29", B.key("of_show_%s" % name, label),
-                         tooltip=B.key("of_show_%s_tt" % name, tip))
+    sub_triggers = ""
+    # E2 round 2: what the renderer's scene needs: each widget of the file with the test of a sample state that says
+    # whether script shows it, and the same for the rows (tools/scenes/officers.json, officer_scene())
+    shows, row_shows, sub_shows = {}, {}, {}
+
+    def show(name, trigger, test):
+        """A widget of the file shown when <trigger> holds; <test>(st) says it of a sample state."""
+        nonlocal triggers
+        triggers += block(name + "_visible", trigger if trigger.endswith("\n") else trigger + "\n")
+        shows[name] = test
+
+    def row_show(name, trigger, test):
+        nonlocal row_triggers
+        row_triggers += block(name + "_visible", trigger if trigger.endswith("\n") else trigger + "\n")
+        row_shows[name] = test
+
+    filters = [f for f in OF_FILTERS if OF_CHAIN or f[0] != 6]
+    names_on = is_one("mod1440_ar_names")
+
+    # ---- the filters: a steel card that is all head band; the chosen one shows the button's second frame
+    body += M.icon("of_f_filters_bg", OF_COL_X, REC_BODY_Y, OF_STEEL % "filters")
+    for n, (value, name, label, tip) in enumerate(filters):
+        body += M.button("of_show_%s" % name, OF_FILTER_X + n * OF_FILTER_STEP, REC_BODY_Y + 5, "GFX_sort_button_120x29",
+                         B.key("of_show_%s" % name, label), tooltip=B.key("of_show_%s_tt" % name, tip))
         effects += block("of_show_%s_click" % name, setv("mod1440_of_show", value) + "mod1440_of_list = yes\n")
         properties += block("of_show_%s" % name, "frame = mod1440_of_frame_%d\n" % value)
-    body += M.text("of_count", REC_BODY_X + 2 + 6 * 146 + 8, OF_FILTER_Y + 4, 100, B.key("of_count", "[?mod1440_of_rows^num|0] listed"), M.FONT_SMALL)
+    # the Army names switch (decision 2): Army Readiness's own switch, a setting and not a filter (gate A round 1):
+    # behind a rule, the pages' gold checkbox and its words; either page turns it
+    # E2b (2026-10-30): the switch says what it stands for, a patched game (scratch/phases/E2b/design.json); the same variable
+    names_tip = B.key("of_names_tt", PATCH_TIP)
+    # E2b: rule, box and words 4 px further left than E2 drew them: "Patched game" is 83 px in hoi_16mbs and the box ends at the card's inner edge (1012)
+    body += M.icon("of_names_rule", 891, REC_BODY_Y + 7, "GFX_1440p_SG_rule_2x30")
+    body += checkbox("of_names", 900, REC_BODY_Y + 11, 1, names_tip)
+    properties += block("of_names", "frame = mod1440_ar_names_fr\n")
+    body += M.button("of_names_hit", 924, REC_BODY_Y + 8, "GFX_1440p_SG_hit_84x28", tooltip=names_tip)
+    body += plain("of_names_l", 927, REC_BODY_Y + 12, OF_COL_X + OF_COL_W - 8 - 927, B.key("of_names_l", "Patched game"), M.FONT_SMALL, height=20)
+    toggle = (iff(names_on, setv("mod1440_ar_names", 0) + setv("mod1440_ar_names_fr", 1))
+              + els(setv("mod1440_ar_names", 1) + setv("mod1440_ar_names_fr", 2)) + "mod1440_of_how = yes\n"
+              + "add_to_variable = { mod1440_rec_dirty = 1 }\n")
+    effects += block("of_names_click", toggle) + block("of_names_hit_click", toggle)
 
-    # ---- column heads: a click sorts, a second click turns the order. A level has the game's icon on its plate.
-    x = REC_BODY_X + OF_FACE_W
-    body += M.button("of_sort_name", x, OF_HEAD_Y, layout.head_sprite(OF_NAME), B.key("of_sort_name", "Officer"),
+    # ---- the list: a steel card whose head band holds the column heads. A click sorts, a second click turns the order.
+    body += M.icon("of_f_list_bg", OF_COL_X, OF_LIST_TOP, OF_STEEL % "list")
+    body += M.button("of_sort_name", OF_ROW_X + OF_FACE_W, OF_LIST_TOP + 4, "GFX_1440p_SG_hit_160x30",
                      tooltip=B.key("of_sort_name_tt", "Back to the order of the game."))
+    body += plain("of_sort_name_l", OF_ROW_X + 46, OF_HEAD_Y, 150, B.key("of_sort_name", "Officer"))
     effects += block("of_sort_name_click", setv("mod1440_of_sort_by", 0) + "mod1440_of_list = yes\n")
-    x += OF_NAME
-    middle = (OF_ROW - 30) // 2 + 4         # the line of a number in the middle of the row
+    body += M.text("of_count", OF_ROW_X + 200, OF_HEAD_Y + 2, 104, B.key("of_count", "\u00a7g[?mod1440_of_rows^num|0] listed\u00a7!"), M.FONT_SMALL, "right", 20)
+    x = OF_ROW_X + OF_FACE_W + OF_NAME
+    rx = OF_FACE_W + OF_NAME
+    middle = 12                             # the line of a number in a row
     entry = M.icon("of_row_stripe", 0, 0, STRIPE % (OF_ROW_W, OF_ROW))
     entry += M.icon("of_row_pick", 0, 0, PICK % (OF_ROW_W, OF_ROW))
+    row_show("of_row_stripe", is_one("mod1440_of_odd") + " NOT = { %s }" % is_one("mod1440_of_picked"), lambda r: r["odd"] and not r["picked"])
+    row_show("of_row_pick", is_one("mod1440_of_picked"), lambda r: r["picked"])
     # E7: the row's scope is the officer: while he is a unit leader (mod1440_of_ul, UL_MARK) the game draws his face; one
-    # who has left the service shows the table's portrait (a character without a unit leader role would draw the unknown man)
-    entry += portrait("of_row_face", 3, 1, OF_FACE)
-    properties += block("of_row_face", GAME_FACE)
+    # who has left the service shows the table's portrait. E2 round 2: under Order of battle a general under his field
+    # marshal stands 20 further right (mod1440_of_ind, set where the list is made), on twins of the face and the lines.
+    indent = is_one("mod1440_of_ind")
+    for suffix, dx, cond, test in (("", 0, "NOT = { %s }" % indent, lambda r: not r["ind"]), ("_in", OF_INDENT, indent, lambda r: r["ind"])):
+        entry += portrait("of_row_face" + suffix, 3 + dx, 1, OF_FACE)
+        properties += block("of_row_face" + suffix, GAME_FACE)
+        row_show("of_row_face" + suffix, SERVES + " " + cond, lambda r, t=test: r["serves"] and t(r))
     entry += portrait("of_row_face_table", 3, 1, OF_FACE)
     properties += shown("of_row_face_table", "mod1440_p")
-    row_triggers += block("of_row_face_visible", SERVES + "\n") + block("of_row_face_table_visible", "NOT = { %s }\n" % SERVES)
+    row_show("of_row_face_table", "NOT = { %s }" % SERVES, lambda r: not r["serves"])
     # the whole of the portrait and the name is the button, and nothing of it is drawn
     entry += M.button("of_row", 0, 0, OF_HIT, tooltip=B.key("of_row_tt", "Show this officer's record"))
-    entry += plain("of_row_name", OF_FACE_W + 6, 4, OF_NAME - 10, B.key("of_row_name", "[THIS.GetName]"), height=22)
-    entry += plain("of_row_name_sel", OF_FACE_W + 6, 4, OF_NAME - 10, B.key("of_row_name_sel", "§Y[THIS.GetName]§!"), height=22)
-    row_triggers += block("of_row_stripe_visible", is_one("mod1440_of_odd") + "\n") + block("of_row_pick_visible", is_one("mod1440_of_picked") + "\n")
-    row_triggers += block("of_row_name_visible", "NOT = { %s }\n" % is_one("mod1440_of_picked")) + block("of_row_name_sel_visible", is_one("mod1440_of_picked") + "\n")
-    for suffix, words, condition in officer_status():
+    for suffix, dx, cond, test in (("", 0, "NOT = { %s }" % indent, lambda r: not r["ind"]), ("_in", OF_INDENT, indent, lambda r: r["ind"])):
+        entry += fixed(plain("of_row_name" + suffix, OF_FACE_W + 6 + dx, 3, 236 - dx, B.key("of_row_name", "[THIS.GetName]"), height=22))
+        entry += fixed(plain("of_row_name_sel" + suffix, OF_FACE_W + 6 + dx, 3, 236 - dx, B.key("of_row_name_sel", "\u00a7Y[THIS.GetName]\u00a7!"), height=22))
+        row_show("of_row_name" + suffix, "NOT = { %s } %s" % (is_one("mod1440_of_picked"), cond), lambda r, t=test: not r["picked"] and t(r))
+        row_show("of_row_name_sel" + suffix, "%s %s" % (is_one("mod1440_of_picked"), cond), lambda r, t=test: r["picked"] and t(r))
+    for suffix, words, condition, test in officer_status():
         widget = "of_row_st_" + suffix
-        entry += plain(widget, OF_FACE_W + 6, 26, OF_NAME - 10, B.key(widget, words), M.FONT_SMALL, height=20)
-        row_triggers += block(widget + "_visible", condition + "\n")
+        entry += fixed(plain(widget, OF_FACE_W + 6, 26, 262, B.key(widget, words), M.FONT_SMALL, height=20))
+        if test[1] == "army":
+            # a general (or a field marshal) whose army serves in an army group: indented under Order of battle
+            entry += fixed(plain(widget + "_in", OF_FACE_W + 6 + OF_INDENT, 26, 262 - OF_INDENT, B.key(widget, words), M.FONT_SMALL, height=20))
+            row_show(widget, condition + " NOT = { %s }" % indent, lambda r, t=test: status_shown(t, r) and not r["ind"])
+            row_show(widget + "_in", condition + " " + indent, lambda r, t=test: status_shown(t, r) and r["ind"])
+        else:
+            row_show(widget, condition, lambda r, t=test: status_shown(t, r))
+    # the green mark after the name: a free slot in his trait tree (E2b fix round 1: can_select_trait takes a trait, not yes,
+    # and tested nothing; the pair of the Traits head's "N of M chosen" does, and is no loop)
+    entry += M.icon("of_row_mark", OF_MARK_X, 8, "GFX_army_experience")
+    entry = entry[:-3] + ' pdx_tooltip = "%s" }\n' % B.key("of_row_mark_tt", "A free slot in his trait tree: a trait can be chosen there.")
+    row_show("of_row_mark", "NOT = { %s } %s" % (FORMER, FREE_SLOT), lambda r: r.get("can", False))
     keys = ""
-    rx = OF_FACE_W + OF_NAME
+    head_hits = ""
     for number, (name, value, width, label, picture, tip) in enumerate(OF_COLUMNS, start=1):
         tooltip = B.key("of_sort_%s_tt" % name, tip + "\\nClick to sort, click again to turn the order.")
+        head_hits += M.button("of_sort_%s" % name, x, OF_LIST_TOP + 4, "GFX_1440p_SG_hit_%dx30" % width, tooltip=tooltip)
         if label:
-            body += M.button("of_sort_%s" % name, x, OF_HEAD_Y, layout.head_sprite(width), B.key("of_sort_%s" % name, label), tooltip=tooltip)
+            body += plain("of_sort_%s_l" % name, x, OF_HEAD_Y, width, B.key("of_sort_%s" % name, label), M.FONT_LABEL, "centre", 22)
         else:
-            body += M.button("of_sort_%s" % name, x, OF_HEAD_Y, layout.head_sprite(width), tooltip=tooltip)
-            body += through("of_sort_%s_icon" % name, x + (width - 27) // 2, OF_HEAD_Y + 2, picture)
+            body += through("of_sort_%s_icon" % name, x + (width - 27) // 2, OF_LIST_TOP + 6, picture)
         effects += block("of_sort_%s_click" % name, (
             iff("check_variable = { mod1440_of_sort_by = %d }" % number, flip("mod1440_of_up"))
             + els(setv("mod1440_of_sort_by", number) + setv("mod1440_of_up", 0))
@@ -1299,41 +1441,53 @@ def officers(portrait_version):
             key += iff("is_navy_leader = yes", tmp("of_key", OF_NAVY[name]))
         keys += iff("check_variable = { ROOT.mod1440_of_sort_by = %d }" % number, key, "if" if number == 1 else "else_if")
         if name in OF_NUMBERS:
-            font = M.FONT_VALUE if name == "skill" else M.FONT_LABEL
-            entry += M.text("of_cell_%s" % name, rx + 2, middle, width - 4, B.key("of_cell_%s" % name, "[?%s|0]" % value), font, "centre", 22)
-            if name in OF_NAVY:
+            cell = "[?%s|0]" % value
+            entry += M.text("of_cell_%s" % name, rx + 2, middle, width - 4, B.key("of_cell_%s" % name, cell), M.FONT_VALUE, "centre", 24)
+            if name == "cmd":
+                # divisions; a field marshal's of his army group in grey (counted again under his generals); ships
+                entry += M.text("of_cell_cmd_group", rx + 2, middle, width - 4, B.key("of_cell_cmd_group", "\u00a7g[?num_units|0]\u00a7!"),
+                                M.FONT_VALUE, "centre", 24)
+                entry += M.text("of_cell_cmd_navy", rx + 2, middle, width - 4, B.key("of_cell_cmd_navy", "[?num_ships|0]"), M.FONT_VALUE, "centre", 24)
+                row_show("of_cell_cmd", "NOT = { is_navy_leader = yes } NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 }",
+                         lambda r: r["rank"] != "adm" and r["status"] == "army")
+                row_show("of_cell_cmd_group", "NOT = { is_navy_leader = yes } is_leading_army_group = yes", lambda r: r["status"] == "grp")
+                row_show("of_cell_cmd_navy", "is_navy_leader = yes check_variable = { num_ships > 0 }", lambda r: r["status"] == "fleet")
+            elif name in OF_NAVY:
                 entry += M.text("of_cell_%s_navy" % name, rx + 2, middle, width - 4, B.key("of_cell_%s_navy" % name, "[?%s|0]" % OF_NAVY[name]),
-                                font, "centre", 22)
-                row_triggers += block("of_cell_%s_visible" % name, "NOT = { is_navy_leader = yes }\n")
-                row_triggers += block("of_cell_%s_navy_visible" % name, "is_navy_leader = yes\n")
+                                M.FONT_VALUE, "centre", 24)
+                row_show("of_cell_%s" % name, "NOT = { is_navy_leader = yes }", lambda r: r["rank"] != "adm")
+                row_show("of_cell_%s_navy" % name, "is_navy_leader = yes", lambda r: r["rank"] == "adm")
             elif name in ("won", "lost"):
-                row_triggers += block("of_cell_%s_visible" % name, M.more_than_zero(value))
+                row_show("of_cell_%s" % name, M.more_than_zero(value), lambda r, n=name: r.get(n, 0) > 0)
         elif name == "traits":
-            # his traits as the game's icons, from the array kept on him; +N for those no icon stands for
+            # his traits as the game's icons, from the array kept on him; each with the tooltip of its effects (E2
+            # round 2); +N for those no icon stands for
             for t in range(TRAIT_ICONS):
                 widget = "of_row_tr_%d" % t
-                entry += M.icon(widget, rx + 4 + t * TRAIT_STEP, 7, TRAIT_SAMPLE[t])
+                tip_key = B.key(widget + "_tt", "\u00a7Y[?mod1440_of_tr^%d.GetTokenLocalizedKey]\u00a7!\\n[?mod1440_of_tr_e^%d.GetTokenLocalizedKey]" % (t, t))
+                entry += M.icon(widget, rx + 4 + t * TRAIT_STEP, 7, TRAIT_SAMPLE[t])[:-3] + ' pdx_tooltip = "%s" }\n' % tip_key
                 properties += block(widget, 'image = "GFX_trait_[?mod1440_of_tr^%d.GetTokenKey]"\n' % t)
-                row_triggers += block(widget + "_visible", "check_variable = { mod1440_of_tr_i > %d }\n" % t)
+                row_show(widget, "check_variable = { mod1440_of_tr_i > %d }" % t, lambda r, t=t: r["tr"] > t)
             entry += M.text("of_row_tr_more", rx + 4 + TRAIT_ICONS * TRAIT_STEP, 14, width - 8 - TRAIT_ICONS * TRAIT_STEP,
                             B.key("of_row_tr_more", "+[?mod1440_of_tr_plus|0]"), M.FONT_SMALL, height=20)
-            row_triggers += block("of_row_tr_more_visible", M.more_than_zero("mod1440_of_tr_plus"))
+            row_show("of_row_tr_more", M.more_than_zero("mod1440_of_tr_plus"), lambda r: r.get("plus", 0) > 0)
         elif name == "dec":
             # up to three of his medals at half size: the strip of its set and its frame, kept for the row
             for k in range(ROW_MEDALS):
                 widget = "of_row_md_%d" % k
                 entry += scaled(widget, rx + 4 + k * 28, 3, MEDAL_STRIP % "ger", 0.5)
                 properties += block(widget, 'image = "[?mod1440_of_rm^%d.GetTokenKey]"\nframe = mod1440_of_rf^%d\n' % (k, k))
-                row_triggers += block(widget + "_visible", "check_variable = { mod1440_of_dec^num > %d }\n" % k)
+                row_show(widget, "check_variable = { mod1440_of_dec^num > %d }" % k, lambda r, k=k: r.get("dec", 0) > k)
         x += width
         rx += width
-    first = REC_BODY_X + OF_FACE_W + OF_NAME + OF_COLUMNS[0][2] - M.ARROW_DX
-    body += scaled("of_arrow_down", first, OF_HEAD_Y + M.ARROW_DY, "GFX_arrow_down_small", M.ARROW)
-    body += scaled("of_arrow_up", first, OF_HEAD_Y + M.ARROW_DY, "GFX_arrow_up_small", M.ARROW)
+    body += head_hits
+    first = OF_ROW_X + OF_FACE_W + OF_NAME + OF_COLUMNS[0][2] - M.ARROW_DX
+    body += scaled("of_arrow_down", first, OF_LIST_TOP + 2, "GFX_arrow_down_small", M.ARROW)
+    body += scaled("of_arrow_up", first, OF_LIST_TOP + 2, "GFX_arrow_up_small", M.ARROW)
     properties += block("of_arrow_down", "x = mod1440_of_arrow_x\n") + block("of_arrow_up", "x = mod1440_of_arrow_x\n")
-    triggers += block("of_arrow_down_visible", M.more_than_zero("mod1440_of_sort_by") + "NOT = { %s }\n" % is_one("mod1440_of_up"))
-    triggers += block("of_arrow_up_visible", M.more_than_zero("mod1440_of_sort_by") + is_one("mod1440_of_up") + "\n")
-    body += listing("of_list", "of_grid", REC_BODY_X, OF_LIST_Y, OF_ROW_W + 30, OF_LIST_H, OF_ROW)
+    show("of_arrow_down", M.more_than_zero("mod1440_of_sort_by") + "NOT = { %s }\n" % is_one("mod1440_of_up"), lambda st: False)
+    show("of_arrow_up", M.more_than_zero("mod1440_of_sort_by") + is_one("mod1440_of_up") + "\n", lambda st: False)
+    body += war_listing("of_list", "of_grid", OF_ROW_X, OF_ROW_Y, OF_ROWS * OF_ROW, width=OF_ROW_W, outer=OF_ROW_W + 30, step=OF_ROW)
     # the row's scope is the officer: the mark of the one chosen before is taken off, his put on; Award ends
     effects += block("of_row_click", (
         "mod1440_of_me = yes\n"
@@ -1341,220 +1495,471 @@ def officers(portrait_version):
                 + setv("mod1440_of_sel", "of_me") + setv("mod1440_of_has_sel", 1) + setv("mod1440_of_awarding", 0))
         + setv("mod1440_of_picked", 1) + block("ROOT", "mod1440_of_card = yes\n")))
 
-    # ---- the file of the chosen officer: five cards drawn as icons, so that the Award mode can put one card over two
+    # ---- the file of the chosen officer, in a box at OF_FILE_X; positions are the box's
     has = is_one("mod1440_of_has_sel") + "\n"
     award = is_one("mod1440_of_awarding")
     filing = has + "NOT = { %s }\n" % award           # his file, not the Award mode
     awarding = has + award + "\n"
-    W = OF_CARD_W
-    tops = {}
-    y = 0
-    for name, height in OF_CARDS:
-        tops[name] = y
-        y += height + OF_CARD_GAP
-    tops["diary"] = y
-    diary_h = REC_BODY_H - y
-    award_h = REC_BODY_H - tops["dec"]
+    chain = is_one("mod1440_of_c_chain")
+    not_chain = "NOT = { %s }\n" % chain
+    W = OF_FILE_W
+    rank = lambda n: "check_variable = { mod1440_of_c_rank = %d }\n" % n
+    mode = lambda n: "check_variable = { mod1440_of_c_mode = %d }\n" % n
+    navy = rank(3)
+    army = "NOT = { %s }\n" % navy.strip()
+    serving = "check_variable = { mod1440_of_c_status < 3 }\n"
     inner = ""
-    for name, height in OF_CARDS + [("diary", diary_h)]:
-        inner += M.icon("of_f_%s_bg" % name, 0, tops[name], CARD_SPRITE % (W, height))
-    inner += M.icon("of_f_award_bg", 0, tops["dec"], CARD_SPRITE % (W, award_h))
-    triggers += shown_if(["of_f_dec_bg", "of_f_diary_bg"], "NOT = { %s }\n" % award) + block("of_f_award_bg_visible", award + "\n")
+    lower = ""                  # the widgets of Traits, Service record and the diary: a y property each (OF_DY)
+    lprops = {}                 # their properties
 
-    def title(name, words, top, when=None):
-        nonlocal inner, triggers
-        inner += M.text("of_f_%s_title" % name, 14, top + 8, W - 28, B.key("of_f_%s_title" % name, words), M.FONT_CARD, height=30)
-        if when:
-            triggers += block("of_f_%s_title_visible" % name, when)
+    def lprop(name, line):
+        lprops[name] = lprops.get(name, "") + line
 
-    def variants(name, x, y, width, font, fmt, options):
-        """One of several texts on the same spot, each shown when its condition holds."""
-        out, extra = "", ""
-        for suffix, value, condition in options:
-            widget = "of_c_%s%s" % (name, suffix)
-            out += M.text(widget, x, y, width, B.key(widget, value), font, fmt, 22)
-            extra += block(widget + "_visible", has + condition)
-        return out, extra
-
-    def plate(name, x, y, value, icons, tip=None):
-        """A level: the game's icon over the number, on a plate. icons: (sprite, condition) each."""
-        nonlocal inner, triggers
-        inner += M.icon(name + "_bg", x, y, M.tile_sprite(88))
-        for n, (sprite, condition) in enumerate(icons):
-            inner += M.icon("%s_i%d" % (name, n), x + (88 - 27) // 2, y + 5, sprite)
-            triggers += block("%s_i%d_visible" % (name, n), has + condition)
-        inner += M.text(name, x + 6, y + 30, 76, B.key(name, value), M.FONT_VALUE, "centre", 26,
-                        tooltip=B.key(name + "_tt", tip) if tip else None)
-        triggers += block(name + "_bg_visible", has) + block(name + "_visible", has)
-
-    rank3 = "check_variable = { mod1440_of_c_rank = 3 }\n"
-    army = "NOT = { %s }\n" % rank3.strip()
-
-    # who he is: portrait, name, rank and status, the levels, his command
-    top = tops["head"]
+    # who he is: the portrait, name, rank and status; his army as the card's second subject; his levels; Reports to; Stands in
+    inner += M.icon("of_f_who_bg", 0, OF_TOP["who"], OF_STEEL % "who")
     # E7: a unit leader's face is a list of one row (mod1440_of_c_ul, filled by mod1440_of_card); the table's portrait
     # shows for one who is no unit leader any more
-    inner += portrait("of_c_face", 14, top + 14)
+    inner += portrait("of_c_face", 8, 8)
     properties += shown("of_c_face", "mod1440_of_c_p")
-    inner += face_grid("of_c_gface_grid", 14, top + 14, 1.0)
+    inner += face_grid("of_c_gface_grid", 8, 8, 1.0)
     properties += block("of_c_gface", GAME_FACE)
-    inner += M.text("of_c_name", OF_SIDE, top + 10, W - OF_SIDE - 14, B.key("of_c_name", "[?mod1440_of_sel.GetName]"), M.FONT_TITLE, height=40, fixed=True)
-    inner += M.text("of_c_none", 16, top + 18, W - 32, B.key("of_c_none", "Click an officer in the table to open his file."), M.FONT_LABEL)
-    triggers += shown_if(["of_c_name"], has) + block("of_c_none_visible", "NOT = { %s }\n" % has.strip())
-    triggers += block("of_c_face_visible", has + "check_variable = { mod1440_of_c_ul^num < 1 }\n")
-    status = lambda n: "check_variable = { mod1440_of_c_status = %d }\n" % n
-    for name, x, width, font, options in (
-            ("rank", OF_SIDE + 2, 150, M.FONT_LABEL, [("_1", "§YField Marshal§!", "check_variable = { mod1440_of_c_rank = 1 }\n"),
-                                                     ("_2", "§YGeneral§!", "check_variable = { mod1440_of_c_rank = 2 }\n"),
-                                                     ("_3", "§YAdmiral§!", rank3)]),
-            ("status", OF_SIDE + 130, W - OF_SIDE - 144, M.FONT_SMALL, [
-                ("_off", "§Rno longer serving§!", status(4)), ("_cap", "§Rcaptured§!", status(3)),
-                ("_grp", "serving  ·  leads an army group", status(2)),
-                ("_army", "serving  ·  commands an army", status(1) + army), ("_fleet", "serving  ·  commands a fleet", status(1) + rank3),
-                ("_idle", "serving  ·  unassigned", status(0))])):
-        piece, extra = variants(name, x, top + 56 + (2 if font == M.FONT_SMALL else 0), width, font, "left", options)
-        inner += piece
-        triggers += extra
-    inner += M.icon("of_c_skill_bg", OF_SIDE, top + 84, M.tile_sprite(88))
-    inner += M.text("of_c_skill_l", OF_SIDE + 6, top + 91, 76, B.key("of_c_skill_l", "Skill"), M.FONT_SMALL, "centre", 20)
-    inner += M.text("of_c_skill", OF_SIDE + 6, top + 114, 76, B.key("of_c_skill", "[?mod1440_of_c_skill|0]"), M.FONT_VALUE, "centre", 26)
-    triggers += shown_if(["of_c_skill_bg", "of_c_skill_l", "of_c_skill"], has)
-    for n, (name, column) in enumerate((("atk", "atk"), ("def", "def"), ("c3", "c3"), ("c4", "c4"))):
+    show("of_c_face", has + "check_variable = { mod1440_of_c_ul^num < 1 }\n", lambda st: st["has"] and not st["ul"])
+    inner += M.text("of_c_name", 172, 10, 460, B.key("of_c_name", "[?mod1440_of_sel.GetName]"), M.FONT_CARD, height=30, fixed=True)
+    inner += M.text("of_c_none", 16, 18, W - 32, B.key("of_c_none", "Click an officer in the table to open his file."), M.FONT_LABEL)
+    show("of_c_name", has, lambda st: st["has"])
+    show("of_c_none", "NOT = { %s }\n" % has.strip(), lambda st: not st["has"])
+    for r, word in ((1, "Field Marshal"), (2, "General"), (3, "Admiral")):
+        for s, words, cond in (("on", "serving", "check_variable = { mod1440_of_c_status < 3 }\n"),
+                               ("cap", "\u00a7Rcaptured\u00a7!", "check_variable = { mod1440_of_c_status = 3 }\n"),
+                               ("off", "\u00a7Rno longer serving\u00a7!", "check_variable = { mod1440_of_c_status = 4 }\n")):
+            widget = "of_c_rs_%d_%s" % (r, s)
+            inner += M.text(widget, 172, 44, 460, B.key(widget, "\u00a7Y%s\u00a7!   \u00a7g\u00b7  \u00a7!%s" % (word, words)), M.FONT_LABEL, height=22)
+            show(widget, has + rank(r) + cond,
+                 lambda st, r=r, s=s: st["has"] and st["rank"] == r and {"on": st["status"] < 3, "cap": st["status"] == 3, "off": st["status"] == 4}[s])
+    # the army: the lighter plate of a chosen row as a rim round a near-black field; its name in the name font in white
+    # (gate A round 1). Names on: a list of one row whose scope is the officer reads the army's name [SCR-078].
+    army_tip = B.key("of_f_army_tt", "His command. With Army names on, the army's name as the game shows it (it needs the local "
+                     "patch of hoi4.exe; without it the name would read Himself).")
+    inner += M.icon("of_f_army_rim", 172, 70, PICK % (460, 62))
+    inner += M.icon("of_f_army_field", 176, 74, INSET % (452, 54))[:-3] + ' pdx_tooltip = "%s" }\n' % army_tip
+    show("of_f_army_rim", has, lambda st: st["has"])
+    show("of_f_army_field", has, lambda st: st["has"])
+    inner += ('gridboxtype = {\n\tname = "of_c_army_grid"\n\tposition = { x = 188 y = 88 }\n\tsize = { width = 290 height = 30 }\n'
+              '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n')
+    army_entry = M.text("of_c_army_name", 0, 0, 290, B.key("of_c_army_name", ARMY_NAME), M.FONT_CARD, height=30, fixed=True)
+    # E2 fix round 1: also a field marshal's army group (its name through the same patched property); one who leads neither
+    # would read the pronoun
+    army_row_trigger = block("of_c_army_name_visible", "%s\nOR = { is_leading_army = yes is_leading_army_group = yes }\n" % NAMES_ON)
+    for widget, words, cond, test in (
+            ("of_c_army_n", "Army of [?mod1440_of_c_cmd|0] divisions", mode(1) + "NOT = { %s }\n" % names_on, lambda st: st["mode"] == 1 and not st["names"]),
+            ("of_c_army_grp", "Army group of [?mod1440_of_c_subs_n|0] armies", mode(2) + M.more_than_zero("mod1440_of_c_subs_n")
+             + "NOT = { %s }\n" % names_on, lambda st: st["mode"] == 2 and st["subs"] > 0 and not st["names"]),
+            ("of_c_army_grpd", "Army group", mode(2) + "NOT = { %s }\n" % M.more_than_zero("mod1440_of_c_subs_n").strip()
+             + "NOT = { %s }\n" % names_on, lambda st: st["mode"] == 2 and not st["subs"] and not st["names"]),
+            ("of_c_army_fleet", "Fleet", mode(3), lambda st: st["mode"] == 3),
+            ("of_c_army_none", "\u00a7gNo command\u00a7!", mode(0), lambda st: st["mode"] == 0)):
+        inner += M.text(widget, 188, 88, 290, B.key(widget, words), M.FONT_CARD, height=30, fixed=True)
+        show(widget, has + cond, lambda st, t=test: st["has"] and t(st))
+    inner += M.text("of_c_army_div", 486, 80, 138, B.key("of_c_army_div", "[?mod1440_of_c_cmd|0] divisions"), M.FONT_VALUE, "right", 24)
+    inner += M.text("of_c_army_bat", 486, 108, 138, B.key("of_c_army_bat", "[?mod1440_of_c_bat|0] battalions"), M.FONT_LABEL, "right", 22)
+    inner += M.text("of_c_army_ships", 486, 80, 138, B.key("of_c_army_ships", "[?mod1440_of_c_cmd|0] ships"), M.FONT_VALUE, "right", 24)
+    show("of_c_army_div", has + "OR = { %s %s }\n" % (mode(1).strip(), mode(2).strip()), lambda st: st["has"] and st["mode"] in (1, 2))
+    show("of_c_army_bat", has + "OR = { %s %s }\n" % (mode(1).strip(), mode(2).strip()), lambda st: st["has"] and st["mode"] in (1, 2))
+    show("of_c_army_ships", has + mode(3), lambda st: st["has"] and st["mode"] == 3)
+    # the levels: one banded row of 32, Skill and the four levels with the game's icons
+    inner += M.icon("of_f_levels", 172, 140, STRIPE % (460, 32))
+    show("of_f_levels", has, lambda st: st["has"])
+    cell = 460 // 5
+    inner += M.text("of_c_skill_l", 180, 144, 60, B.key("of_c_skill_l", "Skill"), M.FONT_LABEL, height=22)
+    inner += M.text("of_c_skill", 172, 143, cell - 8, B.key("of_c_skill", "[?mod1440_of_c_skill|0]"), M.FONT_VALUE, "right", 24)
+    show("of_c_skill_l", has, lambda st: st["has"])
+    show("of_c_skill", has, lambda st: st["has"])
+    for n, column in enumerate(("atk", "def", "c3", "c4"), start=1):
+        cx = 172 + n * cell
         sprite = [c[4] for c in OF_COLUMNS if c[0] == column][0]
-        icons = [(sprite, army), (OF_NAVY_ICON[column], rank3)] if column in OF_NAVY_ICON else [(sprite, "")]
         tip = [c[5] for c in OF_COLUMNS if c[0] == column][0]
-        plate("of_c_" + name, OF_SIDE + (n + 1) * 94, top + 84, "[?mod1440_of_c_%s|0]" % name, icons, tip)
-    command = [("div", "Divisions", "[?mod1440_of_c_cmd|0]", "Divisions he commands today."),
-               ("bat", "Battalions", "[?mod1440_of_c_bat|0]", "Battalions in those divisions."),
-               ("fight", "Fighting", "[?mod1440_of_c_fight|0]", "Divisions of his in a battle today."),
-               ("arm", "Armoured", "[?mod1440_of_c_arm|0]", "Divisions of his whose main kind is armour."),
-               ("plan", "Planning", "[?mod1440_of_c_plan|%0]", "The planning his divisions have built up, on average.")]
-    fleet = [("ships", "Ships", "[?mod1440_of_c_cmd|0]", "Ships he commands today.")] + [
-        (short, words, "[?mod1440_of_c_%s|0]" % short, "%s he commands today." % words) for short, kind, words in SHIP_KINDS]
-    for group, condition in ((command, army), (fleet, rank3)):
-        for n, (name, label, value, tip) in enumerate(group):
-            piece, extra = tile("of_c_" + name, OF_SIDE + n * 94, top + 156, label, value, tip, has + condition, width=88)
-            inner += piece
-            triggers += extra
+        icons = [(sprite, army, lambda st: st["rank"] != 3), (OF_NAVY_ICON[column], navy, lambda st: st["rank"] == 3)] \
+            if column in OF_NAVY_ICON else [(sprite, "", lambda st: True)]
+        for i, (picture, condition, test) in enumerate(icons):
+            inner += M.icon("of_c_%s_i%d" % (column, i), cx + 8, 142, picture)
+            show("of_c_%s_i%d" % (column, i), has + condition, lambda st, t=test: st["has"] and t(st))
+        inner += M.text("of_c_%s" % column, cx, 143, cell - 8, B.key("of_c_%s" % column, "[?mod1440_of_c_%s|0]" % column), M.FONT_VALUE, "right", 24,
+                        tooltip=B.key("of_c_%s_tt" % column, tip))
+        show("of_c_%s" % column, has, lambda st: st["has"])
+    # Reports to: the field marshal whose army group his army serves in (a click opens his file), or the High Command
+    commanding = has + serving + "OR = { %s %s }\n" % (mode(1).strip(), mode(2).strip())
+    if OF_CHAIN:
+        linked = M.more_than_zero("mod1440_of_c_fm_n")
+        inner += M.text("of_c_rep_l", 172, 180, 92, B.key("of_c_rep_l", "Reports to"), M.FONT_SMALL, height=20)
+        inner += M.text("of_c_rep", 268, 178, 364, B.key("of_c_rep", "\u00a7Y[?mod1440_of_c_fm.GetName]\u00a7!  \u00a7g\u00b7  army group of "
+                                                         "[?mod1440_of_c_fm_k|0] armies\u00a7!"), M.FONT_LABEL, height=22, fixed=True)
+        # E2 fix round 1: with Army names on, the army group's name after the marshal's (the patched property of the character
+        # the variable holds, as GetName is); the count of its armies moves into the tooltip (a long marshal's and group's
+        # name fill the line); a marshal's own line keeps the count of his armies the name field no longer says
+        inner += M.text("of_c_rep_n", 268, 178, 364, B.key("of_c_rep_n", "\u00a7Y[?mod1440_of_c_fm.GetName]\u00a7!  \u00a7g\u00b7  \u00a7!"
+                                                             "[?mod1440_of_c_fm.GetHerselfHimselfCap]"),
+                        M.FONT_LABEL, height=22, fixed=True)
+        inner += M.text("of_c_rep_hc", 268, 178, 364, B.key("of_c_rep_hc", "\u00a7gHigh Command\u00a7!"), M.FONT_LABEL, height=22)
+        inner += M.text("of_c_rep_hc_grp", 268, 178, 364, B.key("of_c_rep_hc_grp", "\u00a7gHigh Command  \u00b7  his army group of "
+                                                                   "[?mod1440_of_c_subs_n|0] armies\u00a7!"), M.FONT_LABEL, height=22)
+        inner += M.button("of_c_rep_go", 268, 177, "GFX_1440p_SG_hit_364x24", tooltip=B.key(
+            "of_c_rep_go_tt", "His field marshal, [?mod1440_of_chain_how.GetTokenLocalizedKey]. His army group has "
+            "[?mod1440_of_c_fm_k|0] armies. Click for the marshal's file."))
+        inner += M.button("of_c_rep_likely", 268, 177, "GFX_1440p_SG_hit_364x24", tooltip=B.key(
+            "of_c_rep_likely_tt", "Likely his field marshal, [?mod1440_of_chain_how.GetTokenLocalizedKey]: more than one army group "
+            "has divisions in the state where most of his stand, and this one has the most there; it has [?mod1440_of_c_fm_k|0] armies. "
+            "Click for the marshal's file."))
+        show("of_c_rep_l", commanding, lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2))
+        show("of_c_rep", commanding + linked + "NOT = { %s }\n" % names_on,
+             lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and st["fm"] > 0 and not st["names"])
+        show("of_c_rep_n", commanding + linked + names_on + "\n",
+             lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and st["fm"] > 0 and st["names"])
+        show("of_c_rep_go", commanding + "check_variable = { mod1440_of_c_fm_n = 1 }\n", lambda st: False)
+        show("of_c_rep_likely", commanding + "check_variable = { mod1440_of_c_fm_n > 1 }\n", lambda st: False)
+        named_group = mode(2).strip() + " " + M.more_than_zero("mod1440_of_c_subs_n").strip() + " " + names_on
+        show("of_c_rep_hc", commanding + "NOT = { %s }\nNOT = { %s }\n" % (linked.strip(), named_group),
+             lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and not st["fm"] and not (st["mode"] == 2 and st["subs"] and st["names"]))
+        show("of_c_rep_hc_grp", commanding + "NOT = { %s }\n%s\n" % (linked.strip(), named_group),
+             lambda st: st["has"] and st["status"] < 3 and st["mode"] == 2 and not st["fm"] and st["subs"] and st["names"])
+        effects += block("of_c_rep_go_click", open_file("mod1440_of_c_fm")) + block("of_c_rep_likely_click", open_file("mod1440_of_c_fm"))
+    # Stands in: the state where most of his divisions stand (Army Readiness's count), and his HQ; the go-to button
+    located = M.more_than_zero("mod1440_of_c_lcnt")
+    hq = is_one("mod1440_of_c_has_hq")
+    inner += M.text("of_c_loc_l", 172, 206, 92, B.key("of_c_loc_l", "Stands in"), M.FONT_SMALL, height=20)
+    inner += M.text("of_c_loc", 268, 204, 324, B.key("of_c_loc", "\u00a7Y[?mod1440_of_c_loc.GetName]\u00a7!  \u00a7g\u00b7  HQ in [?mod1440_of_c_hq.GetName]\u00a7!"),
+                    M.FONT_LABEL, height=22, fixed=True)
+    inner += M.text("of_c_loc_nohq", 268, 204, 324, B.key("of_c_loc_nohq", "\u00a7Y[?mod1440_of_c_loc.GetName]\u00a7!  \u00a7g\u00b7  HQ not deployed\u00a7!"),
+                    M.FONT_LABEL, height=22, fixed=True)
+    inner += M.text("of_c_loc_sea", 268, 204, 324, B.key("of_c_loc_sea", "\u00a7gat sea, or not counted yet\u00a7!"), M.FONT_LABEL, height=22)
+    inner += M.button("of_c_go", W - 40, 200, "GFX_countryaction_gotolocation_big", tooltip=B.key("of_c_go_tt", "Show where most of his divisions stand"))
+    show("of_c_loc_l", commanding, lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2))
+    show("of_c_loc", commanding + located + hq + "\n", lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and st["loc"] and st["hq"])
+    show("of_c_loc_nohq", commanding + located + "NOT = { %s }\n" % hq, lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and st["loc"] and not st["hq"])
+    show("of_c_loc_sea", commanding + "NOT = { %s }\n" % located.strip(), lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and not st["loc"])
+    show("of_c_go", commanding + located, lambda st: st["has"] and st["status"] < 3 and st["mode"] in (1, 2) and st["loc"])
+    go = tmp("of_go", "mod1440_of_c_loc") + block("var:of_go", block("ROOT", "goto_state = PREV\n"))
+    effects += block("of_c_go_click", go)
 
-    # his traits by icon and name; how many he has of how many he can take, and those the table does not know
-    top = tops["traits"]
-    title("traits", "Traits", top)
-    inner += M.text("of_c_tr_count", W - 14 - 260, top + 14, 260, B.key("of_c_tr_count", "[?mod1440_of_c_traits|0] of [?mod1440_of_c_max|0] he can take"),
-                    M.FONT_SMALL, "right", 20, tooltip=B.key("of_c_tr_count_tt", "His traits, of the traits the game lets him take."))
-    inner += M.text("of_c_tr_other", W - 14 - 260 - 170, top + 14, 160, B.key("of_c_tr_other", "+[?mod1440_of_c_tr_other|0] of other mods"),
-                    M.FONT_SMALL, "right", 20, tooltip=B.key("of_c_tr_other_tt", "Traits the mod's table of traits does not name: another mod's."))
-    inner += M.text("of_c_tr_over", W - 14 - 260 - 170 - 110, top + 14, 100, B.key("of_c_tr_over", "+[?mod1440_of_c_tr_over|0] more"),
-                    M.FONT_SMALL, "right", 20)
-    inner += M.text("of_c_tr_none", 18, top + 46, W - 36, B.key("of_c_tr_none", "No trait the mod's table names."), M.FONT_SMALL, height=22)
-    triggers += block("of_c_tr_count_visible", has) + block("of_c_tr_other_visible", has + M.more_than_zero("mod1440_of_c_tr_other"))
-    triggers += block("of_c_tr_over_visible", has + M.more_than_zero("mod1440_of_c_tr_over"))
-    triggers += block("of_c_tr_none_visible", has + "check_variable = { mod1440_of_c_tr_k < 1 }\n")
+    # Command: a general's or an admiral's (and a marshal's while the chain is not built); Show on map and Equipment in the head
+    top = OF_TOP["cmd"]
+    commands = has + not_chain
+    inner += M.icon("of_f_cmd_bg", 0, top, OF_STEEL % "cmd")
+    inner += M.text("of_f_cmd_title", 12, top + 7, 300, B.key("of_f_cmd_title", "Command"), M.FONT_LABEL, height=22)
+    show("of_f_cmd_bg", commands, lambda st: st["has"] and not st["chain"])
+    show("of_f_cmd_title", commands, lambda st: st["has"] and not st["chain"])
+    inner += M.button("of_c_map", W - 8 - 120 - 6 - 120, top + 5, "GFX_sort_button_120x29", B.key("of_c_map", "Show on map"),
+                      tooltip=B.key("of_c_map_tt", "The camera to the state where most of his divisions stand."))
+    inner += M.button("of_c_eq", W - 8 - 120, top + 5, "GFX_sort_button_120x29", B.key("of_c_eq", "Equipment"),
+                      tooltip=B.key("of_c_eq_tt", "Closes the Records and opens Army Readiness with his army chosen: what its divisions hold and need."))
+    show("of_c_map", commands + serving + located, lambda st: st["has"] and not st["chain"] and st["status"] < 3 and st["loc"] and st["mode"] in (1, 2))
+    show("of_c_eq", commands + serving + "OR = { %s %s }\n" % (mode(1).strip(), mode(2).strip()),
+         lambda st: st["has"] and not st["chain"] and st["status"] < 3 and st["mode"] in (1, 2))
+    effects += block("of_c_map_click", go)
+    # Equipment (decision 3): Army Readiness's chosen army is written (a named deviation of the contracts), the Records close
+    effects += block("of_c_eq_click", iff(is_one("mod1440_of_has_sel"), (
+        setv("mod1440_ar_sel", "mod1440_of_sel") + setv("mod1440_ar_has_sel", 1) + "mod1440_rec_close = yes\n"
+        + setv("mod1440_ar_open", 1) + setv("mod1440_ar_small", 0) + setv("mod1440_nf_shown", 0) + "mod1440_ar_count = yes\n")))
+    for n in (1, 3, 5):
+        inner += M.icon("of_f_cmd_band_%d" % n, 8, top + 42 + n * OF_PAIR, STRIPE % (624, OF_PAIR))
+        show("of_f_cmd_band_%d" % n, commands, lambda st: st["has"] and not st["chain"])
+    plan_none = "check_variable = { mod1440_of_c_bp < 1 }"
+    land = [
+        ("div", "Divisions", "[?mod1440_of_c_cmd|0]", None, "inf", "Infantry", "[?mod1440_of_c_inf|0]", None),
+        ("bat", "Battalions", "[?mod1440_of_c_bat|0]", None, "arm", "Armoured", "[?mod1440_of_c_arm|0]", "Divisions whose main kind is armour."),
+        ("fight", "In battle", "[?mod1440_of_c_fight|0]", "[?mod1440_of_c_att|0] attacking, [?mod1440_of_c_dfd|0] defending.",
+         "mot", "Motorised", "[?mod1440_of_c_mot|0]", None),
+        ("plan", "Planning", "[?mod1440_of_c_plan|%0]", "What his divisions have planned, on average. It builds only while a battle plan is drawn.",
+         "mech", "Mechanised", "[?mod1440_of_c_mech|0]", None),
+        ("ent", "Entrenchment", "[?mod1440_of_c_ent|%0]", "How dug in his divisions are, on average.",
+         "oth", "Other kinds", "[?mod1440_of_c_oth|0]", "Cavalry, artillery, rocket and special divisions."),
+        ("bp", "Battle plans", "[?mod1440_of_c_bp|0]", None, "eq", "Equipped", "[?mod1440_of_c_eq|0]%",
+         "What his divisions hold of what they need, as Army Readiness counted it at the start of the day."),
+    ]
+    sea = [("ships", "Ships", "[?mod1440_of_c_cmd|0]", None, "k1", "Carriers", "[?mod1440_of_c_k1|0]", None),
+           ("k2", "Capital ships", "[?mod1440_of_c_k2|0]", None, "k3", "Screens", "[?mod1440_of_c_k3|0]", None),
+           ("k4", "Submarines", "[?mod1440_of_c_k4|0]", None, None, None, None, None)]
+    for kind, rows, condition, test in (("l", land, army, lambda st: st["rank"] != 3), ("s", sea, navy, lambda st: st["rank"] == 3)):
+        for k, (n1, l1, v1, t1, n2, l2, v2, t2) in enumerate(rows):
+            y = top + 42 + k * OF_PAIR
+            for name, label, value, tip, lx, vx, vw in ((n1, l1, v1, t1, 16, 176, 120), (n2, l2, v2, t2, 336, 502, 126)):
+                if not name:
+                    continue
+                widget = "of_c_p_%s_%s" % (kind, name)
+                tooltip = B.key(widget + "_tt", tip) if tip else None
+                inner += M.text(widget + "_l", lx, y, 150, B.key(widget + "_l", label), M.FONT_LABEL, height=22, tooltip=tooltip)
+                inner += M.text(widget, vx, y - 1, vw, B.key(widget, value), M.FONT_VALUE, "right", 24, tooltip=tooltip)
+                when = commands + condition
+                show(widget + "_l", when, lambda st, t=test: st["has"] and not st["chain"] and t(st))
+                if name == "plan":
+                    inner += M.text(widget + "_none", vx, y, vw, B.key(widget + "_none", "no battle plan"), M.FONT_LABEL, "right", 22, tooltip=tooltip)
+                    show(widget, when + "NOT = { %s }\n" % plan_none, lambda st, t=test: st["has"] and not st["chain"] and t(st) and not st["plan_none"])
+                    show(widget + "_none", when + plan_none + "\n", lambda st, t=test: st["has"] and not st["chain"] and t(st) and st["plan_none"])
+                elif name == "eq":
+                    inner += M.text(widget + "_none", vx, y - 1, vw, B.key("of_c_dash", "\u00a7g-\u00a7!"), M.FONT_VALUE, "right", 24, tooltip=tooltip)
+                    counted = is_one("mod1440_of_c_has_eq")
+                    show(widget, when + counted + "\n", lambda st, t=test: st["has"] and not st["chain"] and t(st) and st["eq"])
+                    show(widget + "_none", when + "NOT = { %s }\n" % counted, lambda st, t=test: st["has"] and not st["chain"] and t(st) and not st["eq"])
+                else:
+                    show(widget, when, lambda st, t=test: st["has"] and not st["chain"] and t(st))
+
+    # the Chain of command: a field marshal leading an army group, his armies' battles while under him, his generals
+    if OF_CHAIN:
+        held = has + chain + "\n"
+        inner += M.icon("of_f_chain_bg", 0, top, OF_STEEL % "chain")
+        inner += M.text("of_f_chain_title", 12, top + 7, 260, B.key("of_f_chain_title", "Chain of command"), M.FONT_LABEL, height=22)
+        inner += M.text("of_c_ch_more", 280, top + 10, 220, B.key("of_c_ch_more", "\u00a7g+[?mod1440_of_c_subs_more|0] more: Order of battle\u00a7!"),
+                        M.FONT_SMALL, "right", 20)
+        inner += M.button("of_c_map2", W - 8 - 120, top + 5, "GFX_sort_button_120x29", B.key("of_c_map", "Show on map"),
+                          tooltip=B.key("of_c_map_tt", "The camera to the state where most of his divisions stand."))
+        show("of_f_chain_bg", held, lambda st: st["has"] and st["chain"])
+        show("of_f_chain_title", held, lambda st: st["has"] and st["chain"])
+        show("of_c_ch_more", held + M.more_than_zero("mod1440_of_c_subs_more"), lambda st: st["has"] and st["chain"] and st["subs"] > OF_CHAIN_ROWS)
+        show("of_c_map2", held + located, lambda st: st["has"] and st["chain"] and st["loc"])
+        effects += block("of_c_map2_click", go)
+        for label, cx, cw, fmt in (("General", 48, 200, "left"), ("Army", 256, 166, "left"), ("Div", 426, 50, "centre"),
+                                   ("Won", 480, 46, "centre"), ("Lost", 530, 46, "centre"), ("Skill", 580, 44, "centre")):
+            widget = "of_c_ch_h_" + label.lower()
+            inner += M.text(widget, cx, top + 42, cw, B.key(widget, "\u00a7g%s\u00a7!" % label), M.FONT_SMALL, fmt, 20)
+            show(widget, held, lambda st: st["has"] and st["chain"])
+        ty = top + 64
+        total_tip = B.key("of_c_ch_total_tt", "His army group's divisions today, and the battles his generals' armies won and lost while "
+                          "they served under him, counted from the day this build of the mod first ran.")
+        inner += M.icon("of_c_ch_total_bg", 8, ty, PICK % (624, 26))
+        inner += M.text("of_c_ch_total", 48, ty + 1, 200, B.key("of_c_ch_total", "Under his command"), M.FONT_LABEL, height=22, tooltip=total_tip)
+        inner += M.text("of_c_ch_since", 256, ty + 3, 166, B.key("of_c_ch_since", "\u00a7gsince [?mod1440_of_chain_since.%s]\u00a7!" % LONG), M.FONT_SMALL, height=20)
+        for name, value, cx, cw in (("div", "[?mod1440_of_c_cmd|0]", 426, 50), ("won", "[?mod1440_of_c_gwon|0]", 480, 46),
+                                    ("lost", "[?mod1440_of_c_glost|0]", 530, 46)):
+            inner += M.text("of_c_ch_" + name, cx, ty, cw, B.key("of_c_ch_" + name, value), M.FONT_VALUE, "centre", 24, tooltip=total_tip)
+        for widget in ("of_c_ch_total_bg", "of_c_ch_total", "of_c_ch_since", "of_c_ch_div", "of_c_ch_won", "of_c_ch_lost"):
+            show(widget, held, lambda st: st["has"] and st["chain"])
+        by = ty + 28
+        for n in (1, 3):
+            inner += M.icon("of_c_ch_band_%d" % n, 8, by + n * 32, STRIPE % (624, 32))
+            show("of_c_ch_band_%d" % n, held, lambda st: st["has"] and st["chain"])
+        inner += M.text("of_c_ch_none", 48, by + 6, 560, B.key("of_c_ch_none", "\u00a7gNo general is linked to him today; the link is made once a day.\u00a7!"),
+                        M.FONT_SMALL, height=20, tooltip=B.key("of_c_ch_none_tt", "A general is linked from the state where most of his "
+                                                               "army's divisions stand, once a day."))
+        show("of_c_ch_none", held + "check_variable = { mod1440_of_c_subs_n < 1 }\n", lambda st: st["has"] and st["chain"] and not st["subs"])
+        inner += ('gridboxtype = {\n\tname = "of_c_subs_grid"\n\tposition = { x = 8 y = %d }\n\tsize = { width = 624 height = %d }\n'
+                  '\tslotsize = { width = 1 height = 1 }\n\tadd_horizontal = no\n\tformat = "UPPER_LEFT"\n}\n' % (by, OF_CHAIN_ROWS * 32))
+    # a row of the chain card: the row's scope is the general
+    sub = scaled("of_sub_face", 8, 1, UNKNOWN, 0.15)
+    properties += block("of_sub_face", GAME_FACE)
+    sub += M.button("of_sub_hit", 0, 0, "GFX_1440p_SG_hit_240x32", tooltip=B.key("of_sub_hit_tt", "Click for his file."))
+    sub += fixed(plain("of_sub_name", 40, 4, 200, B.key("of_sub_name", "\u00a7Y[THIS.GetName]\u00a7!"), height=22))
+    sub += M.text("of_sub_army", 248, 4, 166, B.key("of_sub_army", ARMY_NAME), M.FONT_LABEL, height=22, fixed=True)
+    sub += M.text("of_sub_army_n", 248, 4, 166, B.key("of_sub_army_n", "army of [?num_units|0] divisions"), M.FONT_LABEL, height=22, fixed=True)
+    sub_triggers += block("of_sub_army_visible", NAMES_ON + "\n") + block("of_sub_army_n_visible", "NOT = { %s }\n" % NAMES_ON)
+    sub_shows["of_sub_army"] = lambda r: r["names"]
+    sub_shows["of_sub_army_n"] = lambda r: not r["names"]
+    for name, value, cx, cw in (("div", "[?num_units|0]", 418, 50), ("won", "[?mod1440_of_won|0]", 472, 46),
+                                ("lost", "[?mod1440_of_lost|0]", 522, 46), ("skill", "[?skill_level|0]", 572, 44)):
+        sub += M.text("of_sub_" + name, cx, 3, cw, B.key("of_sub_" + name, value), M.FONT_VALUE, "centre", 24)
+    sub += M.icon("of_sub_mark", 604, 9, "GFX_army_experience")[:-3] + ' pdx_tooltip = "%s" }\n' % B.key("of_row_mark_tt", "A free slot in his trait tree: a trait can be chosen there.")
+    sub_triggers += block("of_sub_mark_visible", FREE_SLOT + "\n")
+    sub_shows["of_sub_mark"] = lambda r: r.get("can", False)
+    effects += block("of_sub_hit_click", "mod1440_of_me = yes\n" + block("ROOT", open_file("of_me")))
+
+    # Traits: up to six with icon and name, each with the tooltip of its effects; the chosen of the slots
+    top = OF_TOP["traits"]
+    lower += M.icon("of_f_tr_bg", 0, top, OF_STEEL % "traits")
+    lower += M.text("of_f_tr_title", 12, top + 4, 70, B.key("of_f_traits_title", "Traits"), M.FONT_LABEL, height=22)
+    show("of_f_tr_bg", has, lambda st: st["has"])
+    show("of_f_tr_title", has, lambda st: st["has"])
+    lower += M.text("of_c_tr_over", 80, top + 5, 66, B.key("of_c_tr_over", "+[?mod1440_of_c_tr_over|0] more"), M.FONT_SMALL, height=20)
+    lower += M.text("of_c_tr_other", 146, top + 5, 106, B.key("of_c_tr_other", "+[?mod1440_of_c_tr_other|0] of other mods"), M.FONT_SMALL, height=20,
+                    tooltip=B.key("of_c_tr_other_tt", "Traits the mod's table of traits does not name: another mod's."))
+    show("of_c_tr_over", has + M.more_than_zero("mod1440_of_c_tr_over"), lambda st: st["has"] and st["tr_over"] > 0)
+    show("of_c_tr_other", has + M.more_than_zero("mod1440_of_c_tr_other"), lambda st: st["has"] and st["tr_other"] > 0)
+    can = is_one("mod1440_of_c_can")
+    lower += M.icon("of_c_tr_can_i", 254, top + 8, "GFX_army_experience")
+    lower += M.text("of_c_tr_can", 272, top + 4, 160, B.key("of_c_tr_can", "a trait can be chosen"), M.FONT_LABEL, height=22,
+                    tooltip=B.key("of_c_tr_can_tt", "A free slot in his trait tree (fewer traits chosen than slots): a trait can be chosen there, in the game's "
+                                  "own window of the general or admiral."))
+    show("of_c_tr_can_i", has + serving + can + "\n", lambda st: st["has"] and st["can"])
+    show("of_c_tr_can", has + serving + can + "\n", lambda st: st["has"] and st["can"])
+    lower += M.text("of_c_tr_count", 440, top + 4, 184, B.key("of_c_tr_count", "[?mod1440_of_c_tr_as|0] of [?mod1440_of_c_max|0] chosen"),
+                    M.FONT_LABEL, "right", 22, tooltip=B.key("of_c_tr_count_tt", "Traits chosen in his trait tree (num_assigned_traits), of the slots "
+                                                             "his rank and skill give him (num_max_traits)."))
+    show("of_c_tr_count", has, lambda st: st["has"])
+    lower += M.text("of_c_tr_none", 16, top + 38, W - 32, B.key("of_c_tr_none", "No trait the mod's table names."), M.FONT_SMALL, height=22)
+    show("of_c_tr_none", has + "check_variable = { mod1440_of_c_tr_k < 1 }\n", lambda st: st["has"] and st["tr_k"] < 1)
     for k in range(TRAIT_ICONS):
-        tx, ty = 16 + (k % 3) * 212, top + 40 + (k // 3) * 34
+        tx, ty = 12 + (k % 3) * 208, top + 34 + (k // 3) * 40
         widget = "of_c_tr_%d" % k
-        inner += M.icon(widget, tx, ty, TRAIT_SAMPLE[k])
-        properties += block(widget, 'image = "GFX_trait_[?mod1440_of_c_tr^%d.GetTokenKey]"\n' % k)
-        inner += M.icon(widget + "_x", tx, ty, "GFX_trait_unknown")
-        inner += M.text(widget + "_n", tx + 30, ty + 6, 178, B.key(widget + "_n", "[?mod1440_of_c_tr^%d.GetTokenLocalizedKey]" % k), M.FONT_SMALL, height=22, fixed=True)
-        triggers += block(widget + "_visible", has + "check_variable = { mod1440_of_c_tr_i > %d }\n" % k)
-        triggers += block(widget + "_x_visible", has + "check_variable = { mod1440_of_c_tr_i < %d }\ncheck_variable = { mod1440_of_c_tr_k > %d }\n" % (k + 1, k))
-        triggers += block(widget + "_n_visible", has + "check_variable = { mod1440_of_c_tr_k > %d }\n" % k)
+        tip_key = B.key(widget + "_tt", "\u00a7Y[?mod1440_of_c_tr^%d.GetTokenLocalizedKey]\u00a7!\\n[?mod1440_of_c_tr_e^%d.GetTokenLocalizedKey]" % (k, k))
+        lower += M.icon(widget, tx, ty, TRAIT_SAMPLE[k])[:-3] + ' pdx_tooltip = "%s" }\n' % tip_key
+        lprop(widget, 'image = "GFX_trait_[?mod1440_of_c_tr^%d.GetTokenKey]"\n' % k)
+        lower += M.icon(widget + "_x", tx, ty, "GFX_trait_unknown")[:-3] + ' pdx_tooltip = "%s" }\n' % tip_key
+        lower += M.text(widget + "_n", tx + 29, ty + 5, 172, B.key(widget + "_n", "[?mod1440_of_c_tr^%d.GetTokenLocalizedKey]" % k), M.FONT_LABEL,
+                        height=22, fixed=True, tooltip=tip_key)
+        show(widget, has + "check_variable = { mod1440_of_c_tr_i > %d }\n" % k, lambda st, k=k: st["has"] and st["tr_i"] > k)
+        show(widget + "_x", has + "check_variable = { mod1440_of_c_tr_i < %d }\ncheck_variable = { mod1440_of_c_tr_k > %d }\n" % (k + 1, k),
+             lambda st, k=k: st["has"] and st["tr_i"] <= k < st["tr_k"])
+        show(widget + "_n", has + "check_variable = { mod1440_of_c_tr_k > %d }\n" % k, lambda st, k=k: st["has"] and st["tr_k"] > k)
 
-    # his service record: six figures, three dates
-    top = tops["rec"]
-    title("rec", "Service record", top)
-    for n, (name, label, value, tip) in enumerate(OF_FIGURES):
-        piece, extra = tile("of_c_" + name, 14 + n * 106, top + 42, label, value, tip, has, width=100)
-        inner += piece
-        triggers += extra
-    for n, (name, label) in enumerate((("since", "Commissioned"), ("prom", "Promoted to field marshal"), ("lvl", "Last skill level"))):
-        ly = top + 114 + n * 22
-        inner += M.text("of_c_%s_l" % name, 18, ly, 280, B.key("of_c_%s_l" % name, label), M.FONT_SMALL, height=22)
-        options = [("", "[?mod1440_of_c_%s.%s]" % (name, LONG), is_one("mod1440_of_c_has_%s" % name) + "\n")]
-        options.append(("_old", "before the record began" if name == "since" else "-", "NOT = { %s }\n" % is_one("mod1440_of_c_has_%s" % name)))
-        piece, extra = variants(name, 300, ly - 2, W - 316, M.FONT_LABEL, "left", options)
-        inner += piece
-        triggers += extra + block("of_c_%s_l_visible" % name, has)
-
-    # his decorations: the medals side by side, their names; in the Award mode the country's medals over both cards
-    top = tops["dec"]
-    title("dec", "Decorations", top, has)
-    inner += M.button("of_award_on", W - 310, top + 9, "GFX_sort_button_140x29", B.key("of_award_on", "Award..."),
+    # the Service record: a banded table (the figures, the dates, From a division, Decorations) over the rack of his
+    # medals; Award... and Take back last in its head
+    top = OF_TOP["rec"]
+    lower += M.icon("of_f_rec_bg", 0, top, OF_STEEL % "rec")
+    lower += M.text("of_f_rec_title", 12, top + 7, 240, B.key("of_f_rec_title", "Service record"), M.FONT_LABEL, height=22)
+    show("of_f_rec_bg", filing, lambda st: st["has"] and not st["award"])
+    show("of_f_rec_title", filing, lambda st: st["has"] and not st["award"])
+    lower += M.button("of_award_on", W - 8 - 120 - 6 - 120, top + 5, "GFX_sort_button_120x29", B.key("of_award_on", "Award..."),
                       tooltip=B.key("of_award_on_tt", "Your country's medals: award him one."))
-    inner += M.button("of_takeback", W - 160, top + 9, "GFX_sort_button_140x29", B.key("of_takeback", "Take back last"),
+    lower += M.button("of_takeback", W - 8 - 120, top + 5, "GFX_sort_button_120x29", B.key("of_takeback", "Take back last"),
                       tooltip=B.key("of_takeback_tt", "Takes the decoration awarded last from this officer."))
-    inner += M.button("of_award_off", W - 160, top + 9, "GFX_sort_button_140x29", B.key("of_award_off", "Back to his file"))
-    inner += M.text("of_c_dec_none", 18, top + 46, W - 36, B.key("of_c_dec_none", "None yet. Award... shows the medals of your country."), M.FONT_SMALL, height=22)
-    triggers += block("of_award_on_visible", filing) + block("of_award_off_visible", awarding)
-    triggers += block("of_takeback_visible", filing + M.more_than_zero("mod1440_of_c_dec_n"))
-    triggers += block("of_c_dec_none_visible", filing + "check_variable = { mod1440_of_c_dec_n < 1 }\n")
+    lower += M.button("of_award_off", W - 8 - 120, top + 5, "GFX_sort_button_120x29", B.key("of_award_off", "Back to his file"))
+    show("of_award_on", filing, lambda st: st["has"] and not st["award"])
+    show("of_award_off", awarding, lambda st: st["has"] and st["award"])
+    show("of_takeback", filing + M.more_than_zero("mod1440_of_c_dec_n"), lambda st: st["has"] and not st["award"] and st["dec"] > 0)
     effects += block("of_takeback_click", "mod1440_md_takeback = yes\n")
     effects += block("of_award_on_click", setv("mod1440_of_awarding", 1) + "add_to_variable = { mod1440_rec_dirty = 1 }\n")
     effects += block("of_award_off_click", setv("mod1440_of_awarding", 0) + "add_to_variable = { mod1440_rec_dirty = 1 }\n")
+    for n in (1, 3):
+        lower += M.icon("of_f_rec_band_%d" % n, 8, top + 42 + n * OF_PAIR, STRIPE % (624, OF_PAIR))
+        show("of_f_rec_band_%d" % n, filing, lambda st: st["has"] and not st["award"])
+    for k, (name, label, value, tip) in enumerate(OF_FIGURES):
+        y = top + 42 + k * OF_PAIR
+        tooltip = B.key("of_c_%s_tt" % name, tip)
+        lower += M.text("of_c_%s_l" % name, 16, y, 110, B.key("of_c_%s_l" % name, label), M.FONT_LABEL, height=22, tooltip=tooltip)
+        lower += M.text("of_c_%s" % name, 126, y - 1, 70, B.key("of_c_%s" % name, value), M.FONT_VALUE, "right", 24, tooltip=tooltip)
+        show("of_c_%s_l" % name, filing, lambda st: st["has"] and not st["award"])
+        show("of_c_%s" % name, filing, lambda st: st["has"] and not st["award"])
+    for variant, rows in OF_RIGHT.items():
+        which = rank(1) if variant == "m" else "NOT = { %s }\n" % rank(1).strip()
+        is_m = (lambda st: st["rank"] == 1) if variant == "m" else (lambda st: st["rank"] != 1)
+        for k, name in enumerate(rows):
+            y = top + 42 + k * OF_PAIR
+            widget = "of_c_%s_%s" % (variant, name)
+            when = filing + which
+            test = lambda st, m=is_m: st["has"] and not st["award"] and m(st)
+            label = OF_DATES.get(name) or {"div": "From a division", "dec": "Decorations"}[name]
+            lower += M.text(widget + "_l", 240, y, 190, B.key("of_c_%s_l" % name, label), M.FONT_LABEL, height=22)
+            show(widget + "_l", when, test)
+            if name in OF_DATES:
+                dated = is_one("mod1440_of_c_has_%s" % name)
+                lower += M.text(widget, 430, y, 200, B.key("of_c_%s" % name, "[?mod1440_of_c_%s.%s]" % (name, LONG)), M.FONT_LABEL, "right", 22)
+                lower += M.text(widget + "_old", 430, y, 200, B.key("of_c_%s_old" % name, "before the record began" if name == "since" else "-"),
+                                M.FONT_LABEL, "right", 22)
+                show(widget, when + dated + "\n", lambda st, t=test, n=name: t(st) and n in st["dates"])
+                show(widget + "_old", when + "NOT = { %s }\n" % dated, lambda st, t=test, n=name: t(st) and n not in st["dates"])
+            elif name == "div":
+                tip = B.key("of_c_div_tt", "Whether he was promoted to his command from a division's (or a ship's) command.")
+                lower += M.text(widget, 430, y, 200, B.key("of_c_div_yes", "yes"), M.FONT_LABEL, "right", 22, tooltip=tip)
+                lower += M.text(widget + "_no", 430, y, 200, B.key("of_c_div_no", "no"), M.FONT_LABEL, "right", 22, tooltip=tip)
+                show(widget, when + is_one("mod1440_of_c_fromdiv") + "\n", lambda st, t=test: t(st) and st["fromdiv"])
+                show(widget + "_no", when + "NOT = { %s }\n" % is_one("mod1440_of_c_fromdiv"), lambda st, t=test: t(st) and not st["fromdiv"])
+            else:
+                lower += M.text(widget, 430, y - 1, 200, B.key("of_c_decs", "[?mod1440_of_c_dec_n|0]"), M.FONT_VALUE, "right", 24)
+                show(widget, when, test)
+    my = top + 42 + 5 * OF_PAIR + 8
     for k in range(RACK):
-        more = filing + "check_variable = { mod1440_of_c_dec_n > %d }\n" % k
         tip = B.key("of_c_rack_%d_tt" % k, "[?mod1440_of_c_dec_key^%d.GetTokenLocalizedKey]\\n[?mod1440_of_c_dec_date^%d.%s]" % (k, k, LONG))
         widget = "of_c_rack_%d" % k
-        inner += scaled(widget, 18 + k * 62, top + 42, MEDAL_STRIP % "ger", 1.0, tip)
-        properties += block(widget, 'image = "[?mod1440_of_c_dec_strip^%d.GetTokenKey]"\nframe = mod1440_of_c_dec_frame^%d\n' % (k, k))
-        triggers += block(widget + "_visible", more)
-    for k in range(DEC_LINES):
-        more = filing + "check_variable = { mod1440_of_c_dec_n > %d }\n" % k
-        ly = top + 136 + k * 22
-        inner += M.text("of_c_dec_%d" % k, 18, ly, 370, B.key("of_c_dec_%d" % k, "[?mod1440_of_c_dec_key^%d.GetTokenLocalizedKey]" % k),
-                        M.FONT_LABEL, height=22, fixed=True)
-        inner += M.text("of_c_dec_%d_d" % k, 400, ly + 2, W - 416,
-                        B.key("of_c_dec_%d_d" % k, "[?mod1440_of_c_dec_date^%d.%s]" % (k, LONG)), M.FONT_SMALL, height=22)
-        triggers += block("of_c_dec_%d_visible" % k, more) + block("of_c_dec_%d_d_visible" % k, more)
-    inner += M.text("of_md_hint", 18, top + 42, W - 36, B.key(
-        "of_md_hint", "Your country's medals as the game has them: a record only, no bonus, no cost."), M.FONT_SMALL, height=22)
-    triggers += block("of_md_hint_visible", awarding)
+        lower += scaled(widget, 16 + k * 46, my, MEDAL_STRIP % "ger", 0.6, tip)
+        lprop(widget, 'image = "[?mod1440_of_c_dec_strip^%d.GetTokenKey]"\nframe = mod1440_of_c_dec_frame^%d\n' % (k, k))
+        show(widget, filing + "check_variable = { mod1440_of_c_dec_n > %d }\n" % k, lambda st, k=k: st["has"] and not st["award"] and st["dec"] > k)
+    lower += M.text("of_c_dec_last", 16 + 46 + 8, my + 14, 400, B.key("of_c_dec_last", "\u00a7g[?mod1440_of_c_dec_lk.GetTokenLocalizedKey], "
+                                                                     "[?mod1440_of_c_dec_ld.%s]\u00a7!" % LONG), M.FONT_SMALL, height=20)
+    lprop("of_c_dec_last", "x = mod1440_of_c_dec_tx\n")
+    show("of_c_dec_last", filing + M.more_than_zero("mod1440_of_c_dec_n") + "check_variable = { mod1440_of_c_dec_n < %d }\n" % (RACK_TEXT + 1),
+         lambda st: st["has"] and not st["award"] and 0 < st["dec"] <= RACK_TEXT)
+    lower += M.text("of_c_dec_none", 16, my + 14, W - 32, B.key("of_c_dec_none", "\u00a7gNone yet. Award... shows the medals of your country.\u00a7!"),
+                    M.FONT_SMALL, height=20)
+    show("of_c_dec_none", filing + "check_variable = { mod1440_of_c_dec_n < 1 }\n", lambda st: st["has"] and not st["award"] and st["dec"] < 1)
+
+    # the Award mode: the country's medals over the service record and the diary
+    lower += M.icon("of_f_award_bg", 0, top, OF_STEEL % "award")
+    lower += M.icon("of_f_award_m_bg", 0, top, OF_STEEL % "award_m")
+    lower += M.text("of_f_award_title", 12, top + 7, 300, B.key("of_f_award_title", "Award a decoration"), M.FONT_LABEL, height=22)
+    show("of_f_award_bg", awarding + not_chain, lambda st: st["has"] and st["award"] and not st["chain"])
+    show("of_f_award_m_bg", awarding + chain + "\n", lambda st: st["has"] and st["award"] and st["chain"])
+    show("of_f_award_title", awarding, lambda st: st["has"] and st["award"])
+    lower += M.text("of_md_hint", 16, top + 42, W - 32, B.key(
+        "of_md_hint", "Your country's medals as the game has them: a record only, no bonus, no cost."), M.FONT_SMALL, height=20)
+    show("of_md_hint", awarding, lambda st: st["has"] and st["award"])
     for k in range(MEDAL_SLOTS):
-        px, py = 18 + (k % 2) * 318, top + 66 + (k // 2) * 74
+        px, py = 8 + (k % 2) * 316, top + 66 + (k // 2) * 60
         more = awarding + "check_variable = { mod1440_md_count > %d }\n" % k
         held = "check_variable = { mod1440_md_has^%d = 1 }\n" % k
-        inner += M.icon("of_md_%d_bg" % k, px, py, M.tile_sprite(306, 68))
-        inner += scaled("of_md_%d" % k, px + 10, py + 4, MEDAL_STRIP % "ger", 0.7)
-        properties += block("of_md_%d" % k, 'image = "[?mod1440_md_strip^%d.GetTokenKey]"\nframe = mod1440_md_frame^%d\n' % (k, k))
-        inner += M.text("of_md_%d_name" % k, px + 56, py + 8, 246, B.key("of_md_%d_name" % k, "[?mod1440_md_key^%d.GetTokenLocalizedKey]" % k),
+        lower += M.icon("of_md_%d_bg" % k, px, py, M.tile_sprite(306, 56))
+        lower += scaled("of_md_%d" % k, px + 8, py + 3, MEDAL_STRIP % "ger", 0.6)
+        lprop("of_md_%d" % k, 'image = "[?mod1440_md_strip^%d.GetTokenKey]"\nframe = mod1440_md_frame^%d\n' % (k, k))
+        lower += M.text("of_md_%d_name" % k, px + 52, py + 4, 246, B.key("of_md_%d_name" % k, "[?mod1440_md_key^%d.GetTokenLocalizedKey]" % k),
                         M.FONT_LABEL, height=22, fixed=True)
-        inner += M.button("of_award_%d" % k, px + 56, py + 34, "GFX_sort_button_100x29", B.key("of_award", "Award"))
-        inner += M.text("of_md_%d_held" % k, px + 56, py + 40, 240, B.key("of_md_%d_held" % k, "§Gawarded§! [?mod1440_md_date^%d.%s]" % (k, LONG)),
-                        M.FONT_SMALL, height=22)
-        triggers += "".join(block(w + "_visible", more) for w in ("of_md_%d_bg" % k, "of_md_%d" % k, "of_md_%d_name" % k))
-        triggers += block("of_award_%d_visible" % k, more + "NOT = { %s }\n" % held.strip()) + block("of_md_%d_held_visible" % k, more + held)
+        lower += M.button("of_award_%d" % k, px + 52, py + 26, "GFX_sort_button_100x29", B.key("of_award", "Award"))
+        lower += M.text("of_md_%d_held" % k, px + 52, py + 30, 240, B.key("of_md_%d_held" % k, "\u00a7Gawarded\u00a7! [?mod1440_md_date^%d.%s]" % (k, LONG)),
+                        M.FONT_SMALL, height=20)
+        test = lambda st, k=k: st["has"] and st["award"] and st["medals"] > k
+        for widget in ("of_md_%d_bg" % k, "of_md_%d" % k, "of_md_%d_name" % k):
+            show(widget, more, test)
+        show("of_award_%d" % k, more + "NOT = { %s }\n" % held.strip(), lambda st, k=k, t=test: t(st) and k not in st["held"])
+        show("of_md_%d_held" % k, more + held, lambda st, k=k, t=test: t(st) and k in st["held"])
         effects += block("of_award_%d_click" % k, tmp("md_k", k) + "mod1440_md_award = yes\n")
 
-    # what the War Diary has about him: his own lines, and the states and victory points he was at
-    top = tops["diary"]
-    title("diary", "In the War Diary", top, "NOT = { %s }\n" % award)
-    inner += M.text("of_ln_order", W - 14 - 200, top + 14, 200, B.key("of_ln_order", "newest first"), M.FONT_SMALL, "right", 20)
-    inner += M.text("of_ln_none", 18, top + 44, 500, B.key("of_ln_none", "Nothing yet."), M.FONT_SMALL, height=22)
-    triggers += block("of_ln_order_visible", filing) + block("of_ln_none_visible", filing + "check_variable = { mod1440_of_ln_n < 1 }\n")
+    # what the War Diary has about him: his own lines, and the states and victory points he was at (5 under a chain card)
+    top = OF_TOP["diary"]
+    lower += M.icon("of_f_diary_bg", 0, top, OF_STEEL % "diary")
+    lower += M.icon("of_f_diary_m_bg", 0, top, OF_STEEL % "diary_m")
+    lower += M.text("of_f_diary_title", 12, top + 4, 300, B.key("of_f_diary_title", "In the War Diary"), M.FONT_LABEL, height=22)
+    lower += M.text("of_ln_order", W - 16 - 150, top + 5, 150, B.key("of_ln_order", "\u00a7gnewest first\u00a7!"), M.FONT_SMALL, "right", 20)
+    lower += M.text("of_ln_none", 16, top + 33, 500, B.key("of_ln_none", "Nothing yet."), M.FONT_LABEL, height=22)
+    show("of_f_diary_bg", filing + not_chain, lambda st: st["has"] and not st["award"] and not st["chain"])
+    show("of_f_diary_m_bg", filing + chain + "\n", lambda st: st["has"] and not st["award"] and st["chain"])
+    for widget in ("of_f_diary_title", "of_ln_order"):
+        show(widget, filing, lambda st: st["has"] and not st["award"])
+    show("of_ln_none", filing + "check_variable = { mod1440_of_ln_n < 1 }\n", lambda st: st["has"] and not st["award"] and not st["lines"])
     for k in range(CARD_LINES):
-        more = filing + "check_variable = { mod1440_of_ln_n > %d }\n" % k
-        ly = top + 44 + k * 22
+        more = filing + "check_variable = { mod1440_of_ln_n > %d }\n" % k + (not_chain if k >= CHAIN_LINES else "")
+
+        def line_test(st, k=k):
+            return st["has"] and not st["award"] and k < len(st["lines"]) and (k < CHAIN_LINES or not st["chain"])
+        ly = top + 31 + k * OF_PAIR
         if k % 2:
-            inner += M.icon("of_ln_%d_bg" % k, 10, ly - 2, STRIPE % (W - 20, 22))
-            triggers += block("of_ln_%d_bg_visible" % k, more)
-        inner += M.text("of_ln_%d_d" % k, 18, ly, 150, B.key("of_ln_%d_d" % k, "[?mod1440_of_ln_date^%d.%s]" % (k, LONG)), M.FONT_SMALL, height=22)
+            lower += M.icon("of_ln_%d_bg" % k, 8, ly, STRIPE % (624, OF_PAIR))
+            show("of_ln_%d_bg" % k, more, line_test)
+        lower += M.text("of_ln_%d_d" % k, 16, ly, 136, B.key("of_ln_%d_d" % k, "[?mod1440_of_ln_date^%d.%s]" % (k, LONG)), M.FONT_LABEL, height=22)
+        show("of_ln_%d_d" % k, more, line_test)
         for family, text_icon in sorted(FAMILY_ICON.items()):
             widget = "of_ln_%d_f%d" % (k, family)
-            inner += M.text(widget, 170, ly - 2, 26, B.key("wd_icon_%d" % family, "£" + text_icon), M.FONT_SMALL, height=22)
-            triggers += block(widget + "_visible", more + "check_variable = { mod1440_of_ln_fam^%d = %d }\n" % (k, family))
-        inner += M.text("of_ln_%d" % k, 198, ly, 214, B.key("of_ln_%d" % k, "[?mod1440_of_ln_kind^%d.GetTokenLocalizedKey]" % k), M.FONT_SMALL, height=22)
-        piece, extra = subject("of_ln", k, 416, ly, W - 430, filing)
-        inner += piece
-        triggers += block("of_ln_%d_d_visible" % k, more) + block("of_ln_%d_visible" % k, more) + extra
-    body += M.box("of_card", OF_CARD_X, OF_CARD_Y, OF_CARD_W, REC_BODY_H, inner)
+            lower += M.text(widget, 158, ly, 24, B.key("wd_icon_%d" % family, "\u00a3" + text_icon), M.FONT_SMALL, height=22)
+            show(widget, more + "check_variable = { mod1440_of_ln_fam^%d = %d }\n" % (k, family),
+                 lambda st, k=k, f=family, t=line_test: t(st) and st["lines"][k][0] == f)
+        lower += M.text("of_ln_%d" % k, 184, ly, 206, B.key("of_ln_%d" % k, "[?mod1440_of_ln_kind^%d.GetTokenLocalizedKey]" % k), M.FONT_LABEL,
+                        height=22, fixed=True)
+        show("of_ln_%d" % k, more, line_test)
+        lower += M.text("of_ln_%d_s" % k, 396, ly, 228, B.key("of_ln_%d_s" % k, "\u00a7Y[?mod1440_of_ln_a^%d.GetName]\u00a7!" % k), M.FONT_LABEL,
+                        height=22, fixed=True)
+        lower += M.text("of_ln_%d_p" % k, 396, ly, 228, B.key("of_ln_%d_p" % k, "\u00a7Y[?mod1440_of_ln_a^%d.GetTokenLocalizedKey]\u00a7!" % k),
+                        M.FONT_LABEL, height=22, fixed=True)
+        show("of_ln_%d_s" % k, more + "check_variable = { mod1440_of_ln_sa^%d = 2 }\n" % k, lambda st, k=k, t=line_test: t(st) and st["lines"][k][1] == 2)
+        show("of_ln_%d_p" % k, more + "check_variable = { mod1440_of_ln_sa^%d = 3 }\n" % k, lambda st, k=k, t=line_test: t(st) and st["lines"][k][1] == 3)
+
+    # the y property of every widget of the three lower cards: its place in a general's file, OF_DY lower under the chain card
+    low_at = {}
+    for m in re.finditer(r'name = "(\w+)" position = \{ x = (-?\d+) y = (-?\d+) \}', lower):
+        low_at[m.group(1)] = (int(m.group(2)), int(m.group(3)))
+        lprop(m.group(1), "y = mod1440_of_y_%s\n" % m.group(3))
+    properties += "".join(block(name, lines) for name, lines in lprops.items())
+    lows = sorted(set(y for x, y in low_at.values()))
+    place_y = ("".join(setv("mod1440_of_y_%d" % y, y) for y in lows)
+               + iff(is_one("mod1440_of_c_chain"), "".join("add_to_variable = { mod1440_of_y_%d = %d }\n" % (y, OF_DY) for y in lows)))
+    body += M.box("of_card", OF_FILE_X, REC_BODY_Y, OF_FILE_W, REC_BODY_H, inner + lower)
 
     gui, script = page_gui("of", 1, body, dirty="mod1440_rec_dirty",
                            lists=block("of_grid", 'array = mod1440_of_rows\nchange_scope = yes\nentry_container = "mod1440_records_officer_row"\n')
-                           + face_list("of_c_gface_grid", "mod1440_of_c_ul", "of_c_gface"),
-                           effects=effects, triggers=triggers + row_triggers, properties=properties)
+                           + face_list("of_c_gface_grid", "mod1440_of_c_ul", "of_c_gface")
+                           + block("of_c_army_grid", 'array = mod1440_of_c_ul\nchange_scope = yes\nentry_container = "mod1440_records_of_c_army_row"\n')
+                           + (block("of_c_subs_grid", 'array = mod1440_of_c_subs\nchange_scope = yes\nentry_container = "mod1440_records_of_sub_row"\n')
+                              if OF_CHAIN else ""),
+                           effects=effects, triggers=triggers + row_triggers + army_row_trigger + sub_triggers, properties=properties)
     gui += row("mod1440_records_officer_row", OF_ROW_W, OF_ROW, entry)
     gui += game_face("of_c_gface", 1.0)
+    gui += row("mod1440_records_of_c_army_row", 290, 30, army_entry)
+    gui += row("mod1440_records_of_sub_row", 624, 32, sub)
+    OF_SCENE.clear()
+    OF_SCENE.update({"shows": shows, "row_shows": row_shows, "sub_shows": sub_shows, "low_at": low_at})
 
     # ---- script
     # THIS is nothing a variable can hold for an officer whose command came by an effect: of_me is (places())
@@ -1578,7 +1983,7 @@ def officers(portrait_version):
     # an officer who serves no longer is not seen by the daily run: his portrait and traits are looked at when the list is made
     # (E7: the table's portrait for him alone; the face of one who serves is the game's)
     # (E7 fix round 1: the table's portrait of one who has left is the one cached while he served, officer_table())
-    keep = UL_MARK + officer_table(portrait_version) + tmp("of_keep", 1)
+    keep = UL_MARK + officer_table(portrait_version) + tmp("of_keep", 1) + setv("mod1440_of_ind", 0)
     keep += iff(stale("mod1440_of_tr_v", trait_version), "mod1440_of_traits = yes\n")
     # his medals: their names and strips are text keys too, made again from the numbers of the medals (fix round 1)
     keep += iff(stale("mod1440_of_md"), "mod1440_of_medals_again = yes\n")
@@ -1590,8 +1995,9 @@ def officers(portrait_version):
     keep += iff("check_variable = { ROOT.mod1440_of_show = 2 } NOT = { is_navy_leader = yes }", tmp("of_keep", 0))
     keep += iff("check_variable = { ROOT.mod1440_of_show = 3 } check_variable = { num_units < 1 } check_variable = { num_ships < 1 }", tmp("of_keep", 0))
     keep += iff("check_variable = { ROOT.mod1440_of_show = 4 } check_variable = { mod1440_of_dec^num < 1 }", tmp("of_keep", 0))
-    frames = "".join(setv("mod1440_of_frame_%d" % v, 1) for v, _, _, _ in OF_FILTERS)
-    frames += "".join(iff("check_variable = { mod1440_of_show = %d }" % v, setv("mod1440_of_frame_%d" % v, 2)) for v, _, _, _ in OF_FILTERS)
+    keep += iff("check_variable = { ROOT.mod1440_of_show = 6 }", tmp("of_keep", 0))      # E2 round 2: Order of battle, made apart
+    frames = "".join(setv("mod1440_of_frame_%d" % v, 1) for v, _, _, _ in filters)
+    frames += "".join(iff("check_variable = { mod1440_of_show = %d }" % v, setv("mod1440_of_frame_%d" % v, 2)) for v, _, _, _ in filters)
 
     def date_copy(name):
         return (setv("PREV.mod1440_of_c_%s" % name, "mod1440_of_%s" % name) + setv("PREV.mod1440_of_c_has_%s" % name, 0)
@@ -1633,13 +2039,47 @@ def officers(portrait_version):
         + iff("is_leading_army_group = yes", setv("PREV.mod1440_of_c_status", 2))
         + iff("NOT = { is_navy_leader = yes } is_general_captured = yes", setv("PREV.mod1440_of_c_status", 3))
         + iff(FORMER, setv("PREV.mod1440_of_c_status", 4)))
+    # E2 round 2: the army card's subject (0 none, 1 an army, 2 an army group, 3 a fleet), the Command table, where his
+    # troops stand (Army Readiness's count of the day: mod1440_al_loc, _lcnt, _hq, _eq), the chain of command
+    copy_command = (
+        setv("PREV.mod1440_of_c_mode", 0)
+        + iff("NOT = { %s } check_variable = { num_units > 0 } NOT = { is_navy_leader = yes }" % FORMER, (
+            setv("PREV.mod1440_of_c_mode", 1) + iff("is_leading_army_group = yes", setv("PREV.mod1440_of_c_mode", 2))))
+        + iff("NOT = { %s } is_navy_leader = yes check_variable = { num_ships > 0 }" % FORMER, setv("PREV.mod1440_of_c_mode", 3))
+        + "".join(setv("PREV.mod1440_of_c_%s" % short, variable) for short, variable in (
+            ("inf", "num_infantry"), ("mot", "num_motorized"), ("mech", "num_mechanized"), ("att", "num_units_offensive_combats"),
+            ("dfd", "num_units_defensive_combats"), ("ent", "avg_unit_entrenchment_ratio"), ("bp", "num_battle_plans"),
+            ("tr_as", "num_assigned_traits")))
+        + setv("PREV.mod1440_of_c_oth", "num_units")
+        + "".join("subtract_from_variable = { PREV.mod1440_of_c_oth = %s }\n" % v for v in ("num_infantry", "num_armored", "num_motorized", "num_mechanized"))
+        + setv("PREV.mod1440_of_c_has_eq", 0) + setv("PREV.mod1440_of_c_lcnt", 0) + setv("PREV.mod1440_of_c_has_hq", 0)
+        + iff("check_variable = { num_units > 0 } NOT = { is_navy_leader = yes }", (
+            iff("has_variable = mod1440_al_eq", setv("PREV.mod1440_of_c_eq", "mod1440_al_eq") + setv("PREV.mod1440_of_c_has_eq", 1))
+            + iff("check_variable = { mod1440_al_lcnt > 0 }", setv("PREV.mod1440_of_c_loc", "mod1440_al_loc") + setv("PREV.mod1440_of_c_lcnt", "mod1440_al_lcnt"))
+            # the HQ as Army Readiness asks it (D2 fix round 2: state_deployed, SCR-069)
+            + iff("check_variable = { mod1440_al_hq > 0 }", setv("PREV.mod1440_of_c_hq", "mod1440_al_hq") + setv("PREV.mod1440_of_c_has_hq", 1))))
+        + setv("PREV.mod1440_of_c_can", 0) + iff(FREE_SLOT, setv("PREV.mod1440_of_c_can", 1))
+        + setv("PREV.mod1440_of_c_fromdiv", 0) + iff("is_promoted_from_unit = yes", setv("PREV.mod1440_of_c_fromdiv", 1))
+        + setv("PREV.mod1440_of_c_chain", 0) + setv("PREV.mod1440_of_c_fm_n", 0) + setv("PREV.mod1440_of_c_subs_n", 0)
+        + setv("PREV.mod1440_of_c_gwon", "mod1440_of_gwon") + setv("PREV.mod1440_of_c_glost", "mod1440_of_glost"))
+    if OF_CHAIN:
+        copy_command += (
+            iff("NOT = { %s } is_leading_army_group = yes" % FORMER, (
+                setv("PREV.mod1440_of_c_chain", 1) + setv("PREV.mod1440_of_c_subs_n", "mod1440_of_subs^num")
+                + block("for_each_loop", "array = mod1440_of_subs\nvalue = of_v\nindex = of_i\n" + iff(
+                    "check_variable = { of_i < %d }" % OF_CHAIN_ROWS, "add_to_array = { PREV.mod1440_of_c_subs = of_v }\n"))))
+            + iff("NOT = { %s } NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } check_variable = { mod1440_of_fm_n > 0 }" % FORMER, (
+                setv("PREV.mod1440_of_c_fm", "mod1440_of_fm") + setv("PREV.mod1440_of_c_fm_n", "mod1440_of_fm_n")
+                + tmp("of_f", "mod1440_of_fm") + tmp("of_k", 0) + block("var:of_f", tmp("of_k", "mod1440_of_subs^num"))
+                + setv("PREV.mod1440_of_c_fm_k", "of_k"))))
     copy_traits = (
         iff(stale_traits, "mod1440_of_traits = yes\n")
         + setv("PREV.mod1440_of_c_traits", "num_traits") + setv("PREV.mod1440_of_c_max", "num_max_traits")
         + setv("PREV.mod1440_of_c_tr_i", "mod1440_of_tr_i") + setv("PREV.mod1440_of_c_tr_k", "mod1440_of_tr_k")
         + setv("PREV.mod1440_of_c_tr_other", "num_traits") + "subtract_from_variable = { PREV.mod1440_of_c_tr_other = mod1440_of_tr_k }\n"
         + setv("PREV.mod1440_of_c_tr_over", "mod1440_of_tr_k") + "subtract_from_variable = { PREV.mod1440_of_c_tr_over = %d }\n" % TRAIT_ICONS
-        + block("for_each_loop", "array = mod1440_of_tr\nvalue = of_v\nadd_to_array = { PREV.mod1440_of_c_tr = of_v }\n"))
+        + block("for_each_loop", "array = mod1440_of_tr\nvalue = of_v\nadd_to_array = { PREV.mod1440_of_c_tr = of_v }\n")
+        + block("for_each_loop", "array = mod1440_of_tr_e\nvalue = of_v\nadd_to_array = { PREV.mod1440_of_c_tr_e = of_v }\n"))
     # E1 review: who left the service or was captured (mod1440_of_gone, once a day after mod1440_of_seen)
     write = lambda kind: fill(kind, a="of_me") + block("PREV", "mod1440_ev_add = yes\n")
     captured = "NOT = { is_navy_leader = yes } is_general_captured = yes"
@@ -1654,6 +2094,116 @@ def officers(portrait_version):
            + els(setv("mod1440_of_held", 0)))
     gone_script = iff("NOT = { %s }" % is_one("mod1440_of_gone_v"), first_run) + els(
         block("for_each_scope_loop", "array = mod1440_of_known\n" + UL_MARK + iff(FORMER, not_met) + els(met)))
+
+    # E2 round 2: the list is made in mod1440_of_part, put into the chosen order (mod1440_of_order), and appended to the
+    # rows; Order of battle does it once for the army groups, once for each marshal's generals (indented), once for the
+    # armies under the High Command and once for the fleets
+    def append(ind):
+        return block("for_each_scope_loop", "array = mod1440_of_part\n" + setv("mod1440_of_ind", ind) + "mod1440_of_me = yes\n"
+                     + iff(has_me, "add_to_array = { ROOT.mod1440_of_rows = of_me }\n"))
+
+    def gather(scope, limit):
+        return ("clear_array = mod1440_of_part\n"
+                + block(scope, "limit = { %s }\nmod1440_of_me = yes\n" % limit + iff(has_me, "add_to_array = { PREV.mod1440_of_part = of_me }\n")))
+    order = iff("check_variable = { mod1440_of_sort_by > 0 }", (
+        "clear_array = mod1440_of_keys\n"
+        + block("for_each_scope_loop", "array = mod1440_of_part\n" + tmp("of_key", 0) + keys
+                + iff(is_one("ROOT.mod1440_of_up"), "multiply_temp_variable = { of_key = -1 }\n")
+                + "add_to_array = { ROOT.mod1440_of_keys = of_key }\n")
+        + "clear_array = mod1440_of_sorted\n"
+        + block("for_loop_effect", "start = 0\nend = mod1440_of_part^num\nvalue = of_step\n"
+                + block("find_highest_in_array", "array = mod1440_of_keys\nvalue = of_high\nindex = of_at\n")
+                + "add_to_array = { mod1440_of_sorted = mod1440_of_part^of_at }\n" + setv("mod1440_of_keys^of_at", -2000000))
+        + "clear_array = mod1440_of_part\n"
+        + block("for_each_loop", "array = mod1440_of_sorted\nvalue = of_copy\nadd_to_array = { mod1440_of_part = of_copy }\n")))
+    oob = (
+        "mod1440_of_chain = yes\n"
+        + gather("every_army_leader", "is_leading_army_group = yes") + "mod1440_of_order = yes\n"
+        + "clear_array = mod1440_of_oob_fm\n"
+        + block("for_each_loop", "array = mod1440_of_part\nvalue = ob_v\nadd_to_array = { mod1440_of_oob_fm = ob_v }\n")
+        + block("for_each_scope_loop", (
+            "array = mod1440_of_oob_fm\n" + setv("mod1440_of_ind", 0) + "mod1440_of_me = yes\n"
+            + iff(has_me, "add_to_array = { ROOT.mod1440_of_rows = of_me }\n")
+            + block("ROOT", "clear_array = mod1440_of_part\n")
+            + block("for_each_loop", "array = mod1440_of_subs\nvalue = ob_s\nadd_to_array = { ROOT.mod1440_of_part = ob_s }\n")
+            + block("ROOT", "mod1440_of_order = yes\n" + append(1))))
+        + gather("every_army_leader", "NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } "
+                 "NOT = { check_variable = { mod1440_of_fm_n > 0 } }") + "mod1440_of_order = yes\n" + append(0)
+        + gather("every_navy_leader", "check_variable = { num_ships > 0 }") + "mod1440_of_order = yes\n" + append(0))
+    # The chain of command, once a day after Army Readiness's count (mod1440_al_loc on each general with troops): see
+    # the head of this section. Cost: the marshals leading an army group times the generals leading an army.
+    # E2 fix round 2 (2026-10-30): the state test alone linked an army that serves in no army group (Cranz's I. SS-Standarten,
+    # 3 divisions in Gdynia's state) to a marshal whose armies also stood there. Now each match is a candidate pair (general,
+    # marshal, key), and the pairs are taken strongest first: the key is the share of the marshal's divisions in the general's
+    # state that the general holds (x 1000), then the larger army. A marshal's num_units is the sum of his armies' divisions,
+    # so each marshal keeps what remains of it (mod1440_of_cap); a general is linked only if his num_units fits, else his next
+    # candidate, else the High Command. mod1440_of_fm_n keeps how many marshals matched him (2 or more: likely, decision 6).
+    pair = ("add_to_array = { PREV.mod1440_of_ch_pg = ch_g }\nadd_to_array = { PREV.mod1440_of_ch_pm = of_me }\n"
+            + tmp("ch_k", "ch_n") + "multiply_temp_variable = { ch_k = 1000 }\ndivide_temp_variable = { ch_k = ch_m }\n"
+            + "add_to_temp_variable = { ch_k = ch_u }\nadd_to_array = { PREV.mod1440_of_ch_pk = ch_k }\n")
+    take = (tmp("ch_g", "mod1440_of_ch_pg^ch_at") + tmp("ch_fm", "mod1440_of_ch_pm^ch_at") + setv("mod1440_of_ch_pk^ch_at", -1)
+            + block("var:ch_g", iff("check_variable = { mod1440_of_fm_n = 0 }", (
+                tmp("ch_u", "num_units") + tmp("ch_ok", 0)
+                + block("var:ch_fm", iff("check_variable = { var = mod1440_of_cap value = ch_u compare = greater_than_or_equals }", (
+                    "subtract_from_variable = { mod1440_of_cap = ch_u }\nadd_to_array = { mod1440_of_subs = ch_g }\n" + tmp("ch_ok", 1))))
+                + iff("check_variable = { ch_ok = 1 }", setv("mod1440_of_fm", "ch_fm") + setv("mod1440_of_fm_n", "mod1440_of_fm_c"))))))
+    guess_script = (
+        "clear_array = mod1440_of_ch_pg\nclear_array = mod1440_of_ch_pm\nclear_array = mod1440_of_ch_pk\n"
+        + block("every_army_leader", (
+            "limit = { NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } check_variable = { mod1440_al_lcnt > 0 } }\n"
+            + "mod1440_of_me = yes\n"
+            + iff(has_me, (
+                tmp("ch_g", "of_me") + tmp("ch_s", "mod1440_al_loc") + tmp("ch_n", "mod1440_al_lcnt") + tmp("ch_u", "num_units")
+                + tmp("ch_hits", 0)
+                + block("PREV", block("every_army_leader", (
+                    "limit = { is_leading_army_group = yes }\n"
+                    + tmp("ch_m", "num_units_in_state@var:ch_s") + tmp("ch_mu", "num_units")
+                    + iff("check_variable = { var = ch_m value = ch_n compare = greater_than_or_equals } "
+                          "check_variable = { var = ch_mu value = ch_u compare = greater_than_or_equals }", (
+                              "add_to_temp_variable = { ch_hits = 1 }\nmod1440_of_me = yes\n" + iff(has_me, pair))))))
+                + setv("mod1440_of_fm_c", "ch_hits")))))
+        # the pairs, strongest first: each is looked at once
+        + block("for_loop_effect", "start = 0\nend = mod1440_of_ch_pk^num\nvalue = ch_step\n"
+                + block("find_highest_in_array", "array = mod1440_of_ch_pk\nvalue = ch_hi\nindex = ch_at\n")
+                + iff("check_variable = { ch_hi > 0 }", take)))
+    # E2b (2026-10-30, SCR-086): on a game with the Modding Manager's field marshal patch, has_orders_group is the id of the army
+    # group a leader serves in (his own for a field marshal; 0 for none) as id x 0.00001; unpatched it is 1 or 0. The day's
+    # values tell which (mod1440_of_exact), whatever the switch says (decision 2A). Exact: a general with an army takes the
+    # marshal leading an army group whose value equals his; one at most can, so mod1440_of_fm_n is 1 and nothing is likely; 0
+    # is the High Command. The values are copied into temporary variables and compared with check_variable's var/value form,
+    # as the guess compares its counts.
+    exact_script = (
+        block("every_army_leader", (
+            "limit = { NOT = { is_leading_army_group = yes } check_variable = { num_units > 0 } }\n"
+            + tmp("ch_o", "has_orders_group") + "mod1440_of_me = yes\n"
+            + iff("NOT = { check_variable = { ch_o = 0 } } %s" % has_me, (
+                tmp("ch_g", "of_me") + tmp("ch_fm", 0)
+                + block("PREV", block("every_army_leader", (
+                    "limit = { is_leading_army_group = yes }\n" + tmp("ch_mo", "has_orders_group")
+                    + iff("check_variable = { var = ch_mo value = ch_o compare = equals }", "mod1440_of_me = yes\n"
+                          + iff(has_me, tmp("ch_fm", "of_me"))))))
+                + iff("NOT = { check_variable = { ch_fm = 0 } }", (
+                    setv("mod1440_of_fm", "ch_fm") + setv("mod1440_of_fm_n", 1) + setv("mod1440_of_fm_c", 1)
+                    + block("var:ch_fm", "add_to_array = { mod1440_of_subs = ch_g }\n"))))))))
+    chain_script = (
+        iff("NOT = { has_variable = mod1440_of_chain_since }", setv("mod1440_of_chain_since", "global.date"))
+        + block("every_army_leader", "clear_array = mod1440_of_subs\n" + setv("mod1440_of_fm_n", 0) + setv("mod1440_of_fm_c", 0)
+                + setv("mod1440_of_cap", "num_units"))
+        # a patched game: some army leader's value is neither 0 nor 1
+        + tmp("ch_x", 0) + block("every_army_leader", iff("NOT = { check_variable = { has_orders_group = 0 } } "
+                                                          "NOT = { check_variable = { has_orders_group = 1 } }", tmp("ch_x", 1)))
+        + setv("mod1440_of_exact", "ch_x") + "mod1440_of_how = yes\n"
+        + iff(is_one("mod1440_of_exact"), "mod1440_of_chain_exact = yes\n") + els("mod1440_of_chain_guess = yes\n"))
+    lists_script = (
+        "mod1440_of_seen = yes\nclear_array = mod1440_of_rows\nclear_array = mod1440_of_part\n"
+        + block("for_each_scope_loop", "array = mod1440_of_known\n" + keep
+                + iff("check_variable = { of_keep = 1 }", "mod1440_of_me = yes\n" + iff(
+                    has_me, "add_to_array = { ROOT.mod1440_of_part = of_me }\n")))
+        + (iff("check_variable = { mod1440_of_show = 6 }", "mod1440_of_oob = yes\n") + els("mod1440_of_order = yes\n" + append(0))
+           if OF_CHAIN else "mod1440_of_order = yes\n" + append(0))
+        + tmp("of_par", 0) + block("for_each_scope_loop", "array = mod1440_of_rows\n" + setv("mod1440_of_odd", "of_par")
+                                   + iff("check_variable = { of_par = 0 }", tmp("of_par", 1)) + els(tmp("of_par", 0)))
+        + frames + "mod1440_md_list = yes\nmod1440_of_card = yes\n")
     script_effects = (
         places()
         + trait_script
@@ -1689,34 +2239,37 @@ def officers(portrait_version):
         "# mod1440_of_held on him keep each to one line; met again, free again, the mark clears. The first run takes\n"
         "# those already gone without a line.\n"
         + block("mod1440_of_gone", gone_script)
+        + "\n# Officers (E2 round 2): the chain of command for the country in scope, once a day after Army Readiness's count:\n"
+        "# each general who leads an army with troops keeps the field marshal whose army group he is taken to serve in\n"
+        "# (mod1440_of_fm; mod1440_of_fm_n how many army groups matched, 0 none, 2 or more: likely), and the marshal\n"
+        "# keeps his generals (mod1440_of_subs).\n"
+        + block("mod1440_of_chain", chain_script if OF_CHAIN else "")
+        + "\n# Officers (E2b): the chain of command on a patched game (SCR-086), and the guess of E2 on any other.\n"
+        + block("mod1440_of_chain_exact", exact_script if OF_CHAIN else "")
+        + block("mod1440_of_chain_guess", guess_script if OF_CHAIN else "")
+        + "\n# Officers (E2b): the words the tooltips of Reports to and Order of battle say of the links (mod1440_of_chain_how).\n"
+        + block("mod1440_of_how", (
+            iff(is_one("mod1440_of_exact"), setv("mod1440_of_chain_how", token("chain_exact", "from the game")))
+            + block("else_if", "limit = { %s }\n" % is_one("mod1440_ar_names")
+                    + setv("mod1440_of_chain_how", token("chain_unpatched", "guessed from where his troops stand: the game is not patched")))
+            + els(setv("mod1440_of_chain_how", token("chain_guess", "guessed from where his troops stand")))))
+        + "\n# Officers (E2 round 2): the battles of a general in scope counted for his field marshal too (decision 4).\n"
+        + block("mod1440_of_g_won", iff("check_variable = { mod1440_of_fm_n > 0 }", block("var:mod1440_of_fm", "add_to_variable = { mod1440_of_gwon = 1 }\n")))
+        + block("mod1440_of_g_lost", iff("check_variable = { mod1440_of_fm_n > 0 }", block("var:mod1440_of_fm", "add_to_variable = { mod1440_of_glost = 1 }\n")))
+        + "\n# Officers (E2 round 2): mod1440_of_part in the order of the chosen column (mod1440_of_sort_by, _up).\n"
+        + block("mod1440_of_order", order)
+        + "\n# Officers (E2 round 2): the rows of Order of battle (filter 6).\n"
+        + block("mod1440_of_oob", oob if OF_CHAIN else "")
         + "\n# Officers: makes the list of the page again: who the filter wants, in the order of the chosen column,\n"
         "# every second row marked for its stripe.\n"
-        + block("mod1440_of_list", (
-            "mod1440_of_seen = yes\nclear_array = mod1440_of_rows\n"
-            + block("for_each_scope_loop", "array = mod1440_of_known\n" + keep
-                    + iff("check_variable = { of_keep = 1 }", "mod1440_of_me = yes\n" + iff(
-                        has_me, "add_to_array = { ROOT.mod1440_of_rows = of_me }\n")))
-            + iff("check_variable = { mod1440_of_sort_by > 0 }", (
-                "clear_array = mod1440_of_keys\n"
-                + block("for_each_scope_loop", "array = mod1440_of_rows\n" + tmp("of_key", 0) + keys
-                        + iff(is_one("ROOT.mod1440_of_up"), "multiply_temp_variable = { of_key = -1 }\n")
-                        + "add_to_array = { ROOT.mod1440_of_keys = of_key }\n")
-                + "clear_array = mod1440_of_sorted\n"
-                + block("for_loop_effect", "start = 0\nend = mod1440_of_rows^num\nvalue = of_step\n"
-                        + block("find_highest_in_array", "array = mod1440_of_keys\nvalue = of_high\nindex = of_at\n")
-                        + "add_to_array = { mod1440_of_sorted = mod1440_of_rows^of_at }\n" + setv("mod1440_of_keys^of_at", -2000000))
-                + "clear_array = mod1440_of_rows\n"
-                + block("for_each_loop", "array = mod1440_of_sorted\nvalue = of_copy\nadd_to_array = { mod1440_of_rows = of_copy }\n")))
-            + tmp("of_par", 0) + block("for_each_scope_loop", "array = mod1440_of_rows\n" + setv("mod1440_of_odd", "of_par")
-                                       + iff("check_variable = { of_par = 0 }", tmp("of_par", 1)) + els(tmp("of_par", 0)))
-            + frames + "mod1440_md_list = yes\nmod1440_of_card = yes\n"))
+        + block("mod1440_of_list", lists_script)
         + "\n# Officers: copies the chosen officer's values, traits, record, decorations and diary lines to the country,\n"
         "# where his file reads them. His own values are read in his scope (X33).\n"
-        + block("mod1440_of_card", "clear_array = mod1440_of_c_ul\n" + iff(is_one("mod1440_of_has_sel"), (
-            "mod1440_ev_grow = yes\n" + "".join("clear_array = mod1440_of_c_%s\n" % part for part in DEC_ARRAYS[1:] + ["dec_strip", "tr"])
+        + block("mod1440_of_card", "clear_array = mod1440_of_c_ul\nclear_array = mod1440_of_c_subs\n" + iff(is_one("mod1440_of_has_sel"), (
+            "mod1440_ev_grow = yes\n" + "".join("clear_array = mod1440_of_c_%s\n" % part for part in DEC_ARRAYS[1:] + ["dec_strip", "tr", "tr_e"])
             + tmp("of_ul", 0)
             + block("var:mod1440_of_sel", (
-                copy_levels + copy_traits
+                copy_levels + copy_command + copy_traits
                 + setv("PREV.mod1440_of_c_won", "mod1440_of_won") + setv("PREV.mod1440_of_c_lost", "mod1440_of_lost")
                 + setv("PREV.mod1440_of_c_states", "mod1440_of_states")
                 + setv("PREV.mod1440_of_c_vps", "mod1440_of_vps") + setv("PREV.mod1440_of_c_vpl", "mod1440_of_vpl")
@@ -1728,11 +2281,19 @@ def officers(portrait_version):
                           for part in DEC_ARRAYS[1:])))
             + iff("check_variable = { of_ul = 1 }", "add_to_array = { mod1440_of_c_ul = mod1440_of_sel }\n")
             + "clamp_variable = { var = mod1440_of_c_tr_other min = 0 }\nclamp_variable = { var = mod1440_of_c_tr_over min = 0 }\n"
+            + "clamp_variable = { var = mod1440_of_c_oth min = 0 }\n"
+            + setv("mod1440_of_c_subs_more", "mod1440_of_c_subs_n") + "subtract_from_variable = { mod1440_of_c_subs_more = %d }\n" % OF_CHAIN_ROWS
             + setv("mod1440_of_c_dec_n", "mod1440_of_c_dec_key^num")
+            # the newest decoration's name and date after the rack (E2 round 2)
+            + iff("check_variable = { mod1440_of_c_dec_n > 0 }", (
+                tmp("of_dl", "mod1440_of_c_dec_n") + "subtract_from_temp_variable = { of_dl = 1 }\n"
+                + setv("mod1440_of_c_dec_lk", "mod1440_of_c_dec_key^of_dl") + setv("mod1440_of_c_dec_ld", "mod1440_of_c_dec_date^of_dl")
+                + setv("mod1440_of_c_dec_tx", "mod1440_of_c_dec_n") + "multiply_variable = { mod1440_of_c_dec_tx = 46 }\n"
+                + "add_to_variable = { mod1440_of_c_dec_tx = 24 }\n"))
             + medal_tokens(sets, "mod1440_of_c_dec_set", "mod1440_of_c_dec_strip", RACK)
             + pad([("mod1440_of_c_dec_key", BLANK), ("mod1440_of_c_dec_date", 0), ("mod1440_of_c_dec_set", -1), ("mod1440_of_c_dec_frame", 1)], RACK)
             + pad([("mod1440_of_c_dec_strip", "token:" + MEDAL_STRIP % sets[0])], RACK)
-            + pad([("mod1440_of_c_tr", TRAIT_PAD)], TRAIT_ICONS)
+            + pad([("mod1440_of_c_tr", TRAIT_PAD), ("mod1440_of_c_tr_e", "token:" + TRAIT_NO_EFFECTS)], TRAIT_ICONS)
             # which of the medals on offer he holds already, and since when
             + block("for_each_loop", "array = mod1440_md_id\nvalue = md_v\nindex = md_i\n" + tmp("md_h", 0) + tmp("md_d", 0)
                     + block("var:mod1440_of_sel", block("for_each_loop", "array = mod1440_of_dec\nvalue = md_w\nindex = md_j\n" + iff(
@@ -1744,6 +2305,8 @@ def officers(portrait_version):
             + pad([("mod1440_of_ln_date", 0), ("mod1440_of_ln_kind", BLANK), ("mod1440_of_ln_a", 0), ("mod1440_of_ln_sa", 0),
                    ("mod1440_of_ln_fam", 0)], CARD_LINES)))
             + iff("NOT = { %s }" % is_one("mod1440_of_has_sel"), setv("mod1440_of_awarding", 0))
+            # where the three lower cards stand: OF_DY lower under the chain card (mod1440_of_c_chain, set above)
+            + place_y
             + "add_to_variable = { mod1440_rec_dirty = 1 }\n")
         + "\n# Officers: the medals the country in scope has, by the game's own conditions (tools/unit_medals_table.py),\n"
         "# %d at most. They fill the Award mode of the file.\n" % MEDAL_SLOTS
@@ -1780,16 +2343,20 @@ def officers(portrait_version):
                    + iff("check_variable = { of_me = 0 }", block("FROM", "mod1440_of_refs = yes\n") + "mod1440_of_me = yes\n")
                    + iff("NOT = { check_variable = { of_me = 0 } }", fill(kind, a="of_me", n=n) + block("FROM", "mod1440_ev_add = yes\n")))
 
+    # E2 round 2: a general's battle also counts for the field marshal his army serves under (decision 4)
     hooks = {
         "on_unit_leader_created": dated("since", "commissioned"),
         "on_army_leader_promoted": dated("prom", "promoted"),
         "on_unit_leader_level_up": dated("lvl", "level", n="skill_level"),     # part n: the level reached
-        "on_army_leader_won_combat": iff(human, "add_to_variable = { mod1440_of_won = 1 }\n"),
-        "on_army_leader_lost_combat": iff(human, "add_to_variable = { mod1440_of_lost = 1 }\n"),
+        "on_army_leader_won_combat": iff(human, "add_to_variable = { mod1440_of_won = 1 }\n" + ("mod1440_of_g_won = yes\n" if OF_CHAIN else "")),
+        "on_army_leader_lost_combat": iff(human, "add_to_variable = { mod1440_of_lost = 1 }\n" + ("mod1440_of_g_lost = yes\n" if OF_CHAIN else "")),
         "on_navy_leader_won_combat": iff(human, "add_to_variable = { mod1440_of_won = 1 }\n"),
         "on_navy_leader_lost_combat": iff(human, "add_to_variable = { mod1440_of_lost = 1 }\n"),
     }
     return gui, script, script_effects, hooks
+
+
+OF_SCENE = {}           # E2 round 2: the tests of each widget's sample state, filled by officers() for officer_scene()
 
 
 # ---------------------------------------------------------------- characters a variable cannot hold as they are
@@ -3994,7 +4561,8 @@ def frame(portrait_version):
             # a new subject joins its overlord's faction the same day: "Made a subject" says it already (E1 review)
             + els(compare("faction_members", "mod1440_gv_fac", "ev_c",
                           iff("NOT = { is_in_array = { array = subjects value = ev_c } }", line("member_in", b="ev_c")), line("member_out", b="ev_c")))
-            + "mod1440_wr_daily = yes\nmod1440_gv_daily = yes\nmod1440_of_seen = yes\nmod1440_of_gone = yes\n"
+            # E2 round 2: the chain of command after the officers' round, on Army Readiness's count of the day (mod1440_al_loc)
+            + "mod1440_wr_daily = yes\nmod1440_gv_daily = yes\nmod1440_of_seen = yes\nmod1440_of_chain = yes\nmod1440_of_gone = yes\n"
             + casualty_step
             + block("every_controlled_state", "limit = { check_variable = { mod1440_sr_day > 0 } }\n" + setv("mod1440_sr_held", "global.num_days")
                     + "subtract_from_variable = { mod1440_sr_held = mod1440_sr_day }\n"
@@ -4159,46 +4727,304 @@ def sample(inside):
     return ""
 
 
-def officer_scene_hide(award=False):
-    """What script hides in the officers scene: a German general's file (rank 2, status 1), three traits, two
-    medals, five diary lines; with award=True the Award mode with four medals of the country instead."""
-    from unit_medals_table import MEDALS
-    hide = ["of_arrow_up", "of_arrow_down", "of_c_none", "of_c_face", "of_c_rank_1", "of_c_rank_3", "of_c_since", "of_c_prom", "of_c_lvl",
-            "of_c_tr_none", "of_c_tr_over", "of_c_tr_other", "of_ln_none", "of_c_dec_none"]
-    hide += ["of_c_status_" + s for s in ("off", "cap", "grp", "fleet", "idle")]
-    hide += ["of_c_c3_i1", "of_c_c4_i1"]
-    for name in ["ships"] + [short for short, kind, words in SHIP_KINDS]:
-        hide += ["of_c_%s%s" % (name, part) for part in ("_bg", "_l", "")]
-    for k in range(TRAIT_ICONS):
-        hide.append("of_c_tr_%d_x" % k)
-        if k >= 3:
-            hide += ["of_c_tr_%d" % k, "of_c_tr_%d_n" % k]
-    filing = ["of_award_on", "of_takeback", "of_f_dec_bg", "of_f_diary_bg", "of_f_diary_title", "of_ln_order"]
-    filing += ["of_c_rack_%d" % k for k in range(2)] + ["of_c_dec_%d%s" % (k, part) for k in range(2) for part in ("", "_d")]
-    lines = 5
-    for k in range(CARD_LINES):
-        parts = ["of_ln_%d_d" % k, "of_ln_%d" % k, "of_ln_%d_s" % k, "of_ln_%d_p" % k] + ["of_ln_%d_f%d" % (k, f) for f in FAMILY_ICON]
-        if k % 2:
-            parts.append("of_ln_%d_bg" % k)
-        if k >= lines:
-            hide += parts
-            continue
-        family = 4 if k < 2 else 2
-        hide += ["of_ln_%d_f%d" % (k, f) for f in FAMILY_ICON if f != family] + ["of_ln_%d_p" % k]
-        if k < 2:
-            hide.append("of_ln_%d_s" % k)
-        filing += [w for w in parts if w not in hide]
-    hide += ["of_c_rack_%d" % k for k in range(2, RACK)] + ["of_c_dec_%d%s" % (k, part) for k in range(2, DEC_LINES) for part in ("", "_d")]
-    medals = 4
-    awarding = ["of_award_off", "of_f_award_bg", "of_md_hint"]
-    for k in range(MEDAL_SLOTS):
-        parts = ["of_md_%d_bg" % k, "of_md_%d" % k, "of_md_%d_name" % k, "of_award_%d" % k, "of_md_%d_held" % k]
-        if k >= medals:
-            hide += parts
-        else:
-            hide.append("of_md_%d_held" % k if k >= 2 else "of_award_%d" % k)
-            awarding += [w for w in parts if w not in hide]
-    return hide + (filing if award else awarding)
+# --- E2 round 2 --- the Officers scene (tools/scenes/officers.json): Germany on 6 April 1939 as the design drew it
+# (scratch/phases/E2/work/make_layout.py). Whether script shows a widget is worked out from the tests officers() keeps
+# beside each trigger (OF_SCENE), for the file's sample state and for each sample row.
+# key: name, rank (fm, gen, adm), army (None: unassigned), skill, levels, traits, divisions, won, lost, medals, armies (fm)
+OS_PEOPLE = {
+    "witzleben": ("Erwin von Witzleben", "fm", "Heeresgruppe C", 4, (5, 3, 2, 4), ["brilliant_strategist", "old_guard", "politically_connected", "offensive_doctrine", "organizer"], 25, 2, 0, 1, 2),
+    "model": ("Walter Model", "fm", "OKH - Westen", 3, (5, 3, 3, 2), ["brilliant_strategist", "career_officer", "trait_cautious", "offensive_doctrine", "aggressive_assaulter", "organizer"], 28, 0, 0, 0, 3),
+    "leeb": ("Wilhelm Ritter von Leeb", "fm", "Heeresgruppe Nord", 3, (4, 3, 1, 2), ["old_guard", "trait_cautious", "defensive_doctrine"], 20, 0, 0, 0, 2),
+    "bock": ("Fedor von Bock", "gen", "Army 1", 4, (4, 3, 4, 3), ["old_guard", "career_officer", "infantry_officer", "hill_fighter"], 14, 1, 0, 0, 0),
+    "rundstedt": ("Gerd von Rundstedt", "gen", "Army 2", 3, (3, 2, 3, 2), ["old_guard", "trait_cautious", "urban_assault_specialist"], 7, 3, 1, 1, 0),
+    "kluge": ("Günther von Kluge", "gen", "Army 3", 3, (3, 2, 2, 3), ["career_officer", "trait_cautious"], 7, 0, 0, 0, 0),
+    "blaskowitz": ("Johannes Blaskowitz", "gen", "Army 4", 3, (3, 3, 3, 2), ["infantry_officer", "career_officer", "politically_connected", "hill_fighter", "trait_cautious"], 14, 0, 0, 0, 0),
+    "kuchler": ("Georg von Küchler", "gen", "Army 5", 4, (3, 3, 4, 5), ["old_guard", "trait_engineer"], 11, 0, 0, 0, 0),
+    "kleist": ("Ewald von Kleist", "gen", "Panzergruppe Kleist", 2, (2, 1, 2, 2), ["armor_officer", "panzer_leader"], 10, 2, 0, 0, 0),
+    "guderian": ("Heinz Guderian", "gen", "Army 7", 4, (5, 2, 3, 3), ["armor_officer", "panzer_leader", "trait_reckless", "media_personality"], 10, 0, 0, 0, 0),
+    "manstein": ("Erich von Manstein", "gen", "Army 8", 4, (3, 4, 4, 4), ["brilliant_strategist", "infantry_officer", "hill_fighter", "media_personality"], 2, 2, 0, 2, 0),
+    "list": ("Wilhelm List", "gen", "Army 9", 2, (2, 3, 1, 3), ["infantry_officer", "hill_fighter", "trait_cautious"], 2, 0, 0, 0, 0),
+    "rommel": ("Erwin Rommel", "gen", "Army 10", 3, (4, 1, 2, 3), ["infantry_officer", "trait_reckless"], 3, 0, 0, 0, 0),
+    # E2 fix round 2: the user's case of 27 June 1939, an army in no army group whose divisions share a state with one's
+    "cranz": ("Friedrich-Carl Cranz", "gen", "I. SS-Standarten", 2, (2, 2, 1, 2), ["career_officer"], 3, 0, 0, 0, 0),
+    "hoth": ("Hermann Hoth", "gen", None, 3, (3, 3, 3, 2), ["armor_officer"], 0, 0, 0, 0, 0),
+    "paulus": ("Friedrich Paulus", "gen", None, 2, (1, 2, 4, 3), ["career_officer"], 0, 0, 0, 0, 0),
+    "weichs": ("Maximilian von Weichs", "gen", None, 3, (2, 3, 3, 3), ["old_guard"], 0, 0, 0, 0, 0),
+    "reinhardt": ("Georg-Hans Reinhardt", "gen", None, 2, (3, 1, 2, 2), ["armor_officer"], 0, 0, 0, 0, 0),
+    "student": ("Kurt Student", "gen", None, 3, (3, 2, 3, 2), ["commando"], 0, 0, 0, 0, 0),
+    "kesselring": ("Albert Kesselring", "gen", None, 3, (2, 4, 3, 3), ["career_officer"], 0, 0, 0, 0, 0),
+    "jodl": ("Alfred Jodl", "gen", None, 2, (1, 2, 3, 3), ["career_officer"], 0, 0, 0, 0, 0),
+    "raeder": ("Erich Raeder", "adm", "Fleet", 4, (4, 3, 4, 3), ["old_guard_navy", "superior_tactician"], 41, 0, 0, 0, 0),
+    "donitz": ("Karl Dönitz", "adm", "Fleet", 3, (3, 2, 4, 3), ["seawolf"], 30, 0, 0, 0, 0),
+    "lutjens": ("Günther Lütjens", "adm", "Fleet", 3, (3, 3, 3, 2), ["gunnery_expert"], 12, 0, 0, 0, 0),
+}
+OS_CAN = {"rundstedt", "guderian", "kluge"}         # a free slot in the trait tree: the green mark
+OS_PAGE = ["witzleben", "model", "leeb", "bock", "rundstedt", "kluge", "blaskowitz", "kuchler", "kleist", "guderian", "manstein", "list",
+           "rommel", "hoth", "paulus", "weichs", "reinhardt", "student", "kesselring", "jodl"]
+OS_OOB = [("model", 0), ("bock", 1), ("rundstedt", 1), ("kluge", 1), ("witzleben", 0), ("blaskowitz", 1), ("kuchler", 1), ("leeb", 0),
+          ("kleist", 1), ("guderian", 1), ("manstein", 0), ("list", 0), ("rommel", 0), ("cranz", 0), ("raeder", 0), ("donitz", 0), ("lutjens", 0)]
+OS_WORDS = {"fm": "Field Marshal", "gen": "General", "adm": "Admiral"}
+OS_TRAIT_NAMES = {"old_guard": "Old Guard", "trait_cautious": "Cautious", "urban_assault_specialist": "Urban Assault Specialist",
+                  "brilliant_strategist": "Brilliant Strategist", "career_officer": "Career Officer", "offensive_doctrine": "Offensive Doctrine",
+                  "aggressive_assaulter": "Aggressive Assaulter", "organizer": "Organizer", "armor_officer": "Armor Officer",
+                  "panzer_leader": "Panzer Leader"}
+# the diary of a file: (date, family, words, subject, what the subject is: 0 none, 2 a state or country, 3 a text key)
+OS_LINES = {
+    "rundstedt": [("12 March, 1939", 4, "Decorated", "Knight's Cross", 3), ("14 October, 1938", 2, "Victory point taken", "Brno", 3),
+                  ("14 October, 1938", 2, "State taken", "Jihomoravsko", 2), ("9 October, 1938", 2, "Victory point taken", "Olomouc", 3),
+                  ("9 October, 1938", 2, "State taken", "Severní Morava", 2), ("2 October, 1938", 2, "Victory point taken", "Opava", 3),
+                  ("28 September, 1938", 4, "Gained a skill level", "", 0), ("1 October, 1938", 1, "War declared on", "Czechoslovakia", 2)],
+    "model": [("31 October, 1936", 2, "Victory point taken", "Amsterdam", 3), ("31 October, 1936", 2, "Capital taken", "Holland", 2),
+              ("22 September, 1936", 2, "Victory point taken", "Maastricht", 3), ("19 September, 1936", 2, "Victory point taken", "The Hague", 3),
+              ("10 September, 1936", 2, "State taken", "Noord-Brabant", 2), ("12 August, 1936", 4, "Promoted to field marshal", "", 0)],
+    "kleist": [("10 October, 1938", 2, "State taken", "Plzensko", 2), ("8 October, 1938", 1, "Divisions cited in", "Karlovy Vary", 2)],
+}
+
+
+def os_row(key, i, picked, ind, names):
+    """A sample row: what the row's tests read (officer_status(), OF_SCENE['row_shows'])."""
+    name, rank, army, skill, levels, traits, div, won, lost, medals, armies = OS_PEOPLE[key]
+    status = "idle" if army is None else {"fm": "grp", "gen": "army", "adm": "fleet"}[rank]
+    return {"key": key, "rank": rank, "status": status, "names": names, "ind": bool(ind), "picked": key == picked, "odd": i % 2 == 1,
+            "serves": True, "tr": min(len(traits), TRAIT_ICONS), "plus": max(0, len(traits) - TRAIT_ICONS), "dec": medals,
+            "won": won, "lost": lost, "can": key in OS_CAN, "subs": armies}
+
+
+def os_line2(r):
+    name, rank, army, skill, levels, traits, div, won, lost, medals, armies = OS_PEOPLE[r["key"]]
+    lead = "§g%s  ·  " % OS_WORDS[rank]
+    if r["status"] == "idle":
+        return lead + "unassigned§!"
+    if r["status"] == "grp":
+        return lead + "§!" + army if r["names"] else lead + "Army group of %d armies§!" % armies
+    if r["status"] == "fleet":
+        return lead + "Fleet of %d ships§!" % div
+    return lead + "§!" + army if r["names"] else lead + "army of %d divisions§!" % div
+
+
+def os_rows(keys, picked, names):
+    """The list's rows: how many, which instance of each widget script shows, and their texts in drawing order."""
+    rows = [os_row(key, i, picked, ind, names) for i, (key, ind) in enumerate(keys)]
+    only = dict((name, [i for i, r in enumerate(rows) if test(r)]) for name, test in OF_SCENE["row_shows"].items())
+    samples = {}
+
+    def add(widget, text):
+        samples.setdefault(widget, []).append(text)
+    for r in rows:
+        p = OS_PEOPLE[r["key"]]
+        suffix = "_in" if r["ind"] else ""
+        add(("of_row_name_sel" if r["picked"] else "of_row_name") + suffix, "§Y%s§!" % p[0] if r["picked"] else p[0])
+        for status, words, condition, test in officer_status():
+            if status_shown(test, r):
+                add("of_row_st_" + status + (suffix if test[1] == "army" else ""), os_line2(r))
+        add("of_cell_skill", str(p[3]))
+        add("of_cell_atk", str(p[4][0]))
+        add("of_cell_def", str(p[4][1]))
+        add("of_cell_c3_navy" if r["rank"] == "adm" else "of_cell_c3", str(p[4][2]))
+        add("of_cell_c4_navy" if r["rank"] == "adm" else "of_cell_c4", str(p[4][3]))
+        if r["status"] in ("army", "grp", "fleet"):
+            add({"army": "of_cell_cmd", "grp": "of_cell_cmd_group", "fleet": "of_cell_cmd_navy"}[r["status"]],
+                "§g%d§!" % p[6] if r["status"] == "grp" else str(p[6]))
+        for col, value in (("won", p[7]), ("lost", p[8])):
+            if value:
+                add("of_cell_" + col, str(value))
+        if r["plus"]:
+            add("of_row_tr_more", "+%d" % r["plus"])
+    images = {"of_row_tr_%d" % t: ["GFX_trait_" + OS_PEOPLE[r["key"]][5][t] for r in rows if r["tr"] > t] for t in range(TRAIT_ICONS)}
+    return len(rows), only, samples, images
+
+
+def os_file(key, st):
+    """The texts of the file of <key> in the sample state <st>."""
+    name, rank, army, skill, levels, traits, div, won, lost, medals, armies = OS_PEOPLE[key]
+    out = {"of_c_name": name, "of_c_skill": str(skill), "of_c_atk": str(levels[0]), "of_c_def": str(levels[1]),
+           "of_c_c3": str(levels[2]), "of_c_c4": str(levels[3]), "of_c_tr_count": st["count"],
+           "of_c_won": str(won), "of_c_lost": str(lost), "of_c_states": st["states"], "of_c_vps": st["vps"], "of_c_vpl": "0",
+           "of_c_m_dec": str(medals), "of_c_o_dec": str(medals), "of_c_m_since": st.get("since", ""), "of_c_m_prom": st.get("prom", ""),
+           "of_c_o_lvl": st.get("lvl", ""), "of_c_m_lvl": st.get("lvl", "")}
+    for k, trait in enumerate(traits[:TRAIT_ICONS]):
+        out["of_c_tr_%d_n" % k] = OS_TRAIT_NAMES.get(trait, trait)
+    out.update(st.get("words", {}))
+    for k, (date, fam, words, subject, sa) in enumerate(OS_LINES.get(key, [])):
+        out["of_ln_%d_d" % k] = date
+        out["of_ln_%d" % k] = words
+        if sa:
+            out["of_ln_%d_%s" % (k, "s" if sa == 2 else "p")] = "§Y%s§!" % subject
+    return out
+
+
+def os_state(key, **more):
+    name, rank, army, skill, levels, traits, div, won, lost, medals, armies = OS_PEOPLE[key]
+    st = {"has": True, "award": False, "rank": {"fm": 1, "gen": 2, "adm": 3}[rank], "status": 1 if army else 0,
+          "mode": 0 if army is None else {"fm": 2, "gen": 1, "adm": 3}[rank], "chain": rank == "fm" and OF_CHAIN, "names": True,
+          "loc": army is not None and rank != "adm", "hq": True, "fm": 0, "subs": armies, "plan_none": True, "eq": True,
+          "tr_i": min(len(traits), TRAIT_ICONS), "tr_k": len(traits), "tr_other": 0, "tr_over": max(0, len(traits) - TRAIT_ICONS),
+          "can": key in OS_CAN, "dec": medals, "dates": set(), "fromdiv": False, "medals": 0, "held": set(), "ul": True,
+          "lines": [(fam, sa) for date, fam, words, subject, sa in OS_LINES.get(key, [])], "count": "0 of 1 chosen", "states": "0", "vps": "0"}
+    if st["rank"] == 1:
+        st["status"] = 2
+    st.update(more)
+    return st
+
+
+def os_scene_state(state_name, key, rows, picked, names, filter_value, st, note):
+    """One state of the scene: the file of <key> in <st>, the list of <rows> with <picked> chosen."""
+    window = "mod1440_records_of"
+    count, only, row_samples, images = os_rows(rows, picked, names)
+    hide = [name for name, test in OF_SCENE["shows"].items() if not test(st)]
+    place = {}
+    if st["chain"]:
+        place = dict((name, [x, y + OF_DY]) for name, (x, y) in OF_SCENE["low_at"].items())
+    subs = st.get("sub_rows", [])
+    sub_rows = [{"names": names, "can": k in OS_CAN} for k in subs]
+    sub_only = dict((name, [i for i, r in enumerate(sub_rows) if test(r)]) for name, test in OF_SCENE["sub_shows"].items())
+    sub_samples = {"of_sub_name": ["§Y%s§!" % OS_PEOPLE[k][0] for k in subs],
+                   "of_sub_army": [OS_PEOPLE[k][2] for k in subs if names],
+                   "of_sub_army_n": ["army of %d divisions" % OS_PEOPLE[k][6] for k in subs if not names],
+                   "of_sub_div": [str(OS_PEOPLE[k][6]) for k in subs], "of_sub_won": [str(OS_PEOPLE[k][7]) for k in subs],
+                   "of_sub_lost": [str(OS_PEOPLE[k][8]) for k in subs], "of_sub_skill": [str(OS_PEOPLE[k][3]) for k in subs]}
+    frames = {"of_show_" + [f[1] for f in OF_FILTERS if f[0] == filter_value][0]: 2, "of_names": 2 if names else 1}
+    rack = dict(("of_c_rack_%d" % k, 2) for k in range(st["dec"]))
+    traits = OS_PEOPLE[key][5]
+    file_images = dict(("of_c_tr_%d" % k, "GFX_trait_" + trait) for k, trait in enumerate(traits[:TRAIT_ICONS]))
+    file_images.update(("of_row_tr_%d" % t, v) for t, v in [(t, images["of_row_tr_%d" % t]) for t in range(TRAIT_ICONS)])
+    return {
+        "name": state_name, "_note": note,
+        "rows": {"of_grid": count, "of_c_gface_grid": 1, "of_c_army_grid": 1 if st["mode"] in (1, 2) and names else 0, "of_c_subs_grid": len(subs)},
+        "hide": {window: hide}, "place": {window: place}, "frames": {window: dict(frames, **rack)},
+        "only": {"mod1440_records_officer_row": only, "mod1440_records_of_sub_row": sub_only},
+        "images": {window: dict((k, v) for k, v in file_images.items() if k.startswith("of_c_")),
+                   "mod1440_records_officer_row": dict((k, v) for k, v in file_images.items() if k.startswith("of_row_"))},
+        "samples": {window: dict(os_file(key, st), of_count="§g%d listed§!" % (23 if filter_value != 6 else len(rows))),
+                    "mod1440_records_officer_row": row_samples, "mod1440_records_of_sub_row": sub_samples,
+                    "mod1440_records_of_c_army_row": {"of_c_army_name": OS_PEOPLE[key][2] or ""}},
+    }
+
+
+def officer_scene(place, crop, shot, back, setup):
+    page_rows = [(k, 0) for k in OS_PAGE]
+    rundstedt = os_state("rundstedt", fm=1, can=True, dec=1, dates={"lvl"}, states="2", vps="3", words={
+        "of_c_army_div": "7 divisions", "of_c_army_bat": "98 battalions",
+        "of_c_rep": "§YWalter Model§!  §g·  army group of 3 armies§!", "of_c_rep_n": "§YWalter Model§!  §g·  §!OKH - Westen", "of_c_loc": "§YWestfalen§!  §g·  HQ in Rheinland§!",
+        "of_c_p_l_div": "7", "of_c_p_l_bat": "98", "of_c_p_l_fight": "0", "of_c_p_l_ent": "4%", "of_c_p_l_bp": "0",
+        "of_c_p_l_inf": "6", "of_c_p_l_arm": "0", "of_c_p_l_mot": "1", "of_c_p_l_mech": "0", "of_c_p_l_oth": "0", "of_c_p_l_eq": "92%",
+        "of_c_o_lvl": "28 September, 1938", "of_c_dec_last": "§gKnight's Cross, 12 March, 1939§!"})
+    names_off = dict(rundstedt, names=False, words=dict(rundstedt["words"], of_c_army_n="Army of 7 divisions"))
+    model = os_state("model", count="2 of 2 chosen", dates={"since", "prom"}, states="3", vps="9", sub_rows=["bock", "rundstedt", "kluge"], words={
+        "of_c_army_grp": "Army group of 3 armies", "of_c_army_div": "28 divisions", "of_c_army_bat": "392 battalions",
+        "of_c_rep_hc": "§gHigh Command§!", "of_c_rep_hc_grp": "§gHigh Command  ·  his army group of 3 armies§!", "of_c_loc": "§YWestfalen§!  §g·  HQ in Hannover§!",
+        "of_c_ch_since": "§gsince 6 April, 1939§!", "of_c_ch_div": "28", "of_c_ch_won": "4", "of_c_ch_lost": "1",
+        "of_c_m_since": "8 July, 1936", "of_c_m_prom": "12 August, 1936"})
+    kleist = os_state("kleist", fm=1, plan_none=False, states="1", vps="1", words={
+        "of_c_army_div": "10 divisions", "of_c_army_bat": "118 battalions",
+        "of_c_rep": "§YWilhelm Ritter von Leeb§!  §g·  army group of 2 armies§!",
+        "of_c_rep_n": "§YWilhelm Ritter von Leeb§!  §g·  §!Heeresgruppe Nord",
+        "of_c_loc": "§YSchlesien§!  §g·  HQ in Niederschlesien§!",
+        "of_c_p_l_div": "10", "of_c_p_l_bat": "118", "of_c_p_l_fight": "0", "of_c_p_l_plan": "34%", "of_c_p_l_ent": "0%", "of_c_p_l_bp": "1",
+        "of_c_p_l_inf": "2", "of_c_p_l_arm": "4", "of_c_p_l_mot": "3", "of_c_p_l_mech": "1", "of_c_p_l_oth": "0", "of_c_p_l_eq": "87%"})
+    # E2 fix round 2: an army under the High Command (the capacity check left Cranz out of Model's army group)
+    cranz = os_state("cranz", hq=False, words={
+        "of_c_army_div": "3 divisions", "of_c_army_bat": "27 battalions", "of_c_rep_hc": "\u00a7gHigh Command\u00a7!",
+        "of_c_loc_nohq": "\u00a7YPomorze\u00a7!  \u00a7g\u00b7  HQ not deployed\u00a7!",
+        "of_c_p_l_div": "3", "of_c_p_l_bat": "27", "of_c_p_l_fight": "0", "of_c_p_l_ent": "12%", "of_c_p_l_bp": "0",
+        "of_c_p_l_inf": "3", "of_c_p_l_arm": "0", "of_c_p_l_mot": "0", "of_c_p_l_mech": "0", "of_c_p_l_oth": "0", "of_c_p_l_eq": "96%"})
+    states = [
+        os_scene_state("page", "rundstedt", page_rows, "rundstedt", True, 1, rundstedt,
+                       "Filter Army, Gerd von Rundstedt chosen: a general with an army (Army 2) in Walter Model's army group; Army names on."),
+        os_scene_state("traits", "rundstedt", page_rows, "rundstedt", True, 1, rundstedt,
+                       "The same as page; the trait tooltip is drawn over the render by scratch/phases/E2/build/figures.py (the renderer draws no tooltip)."),
+        os_scene_state("marshal", "model", OS_OOB, "model", True, 6, model,
+                       "Filter Order of battle: three army groups with their generals indented, the armies under the High Command, the fleets; "
+                       "Walter Model chosen: the Chain of command card, the three cards under it 62 lower, 5 diary lines."),
+        os_scene_state("unlinked", "cranz", OS_OOB, "cranz", True, 6, cranz,
+                       "E2 fix round 2: filter Order of battle, Friedrich-Carl Cranz chosen: his army I. SS-Standarten serves in no army group; "
+                       "his 3 divisions share Pomorze with Model's armies, whose 28 divisions Leeb's and Blaskowitz's armies fill, so he stands "
+                       "with the armies under the High Command and his file says Reports to High Command."),
+        os_scene_state("units", "kleist", page_rows, "kleist", True, 1, kleist,
+                       "Ewald von Kleist chosen: a panzer army under Leeb with a battle plan (planning 34%), the Command table."),
+        os_scene_state("names_off", "rundstedt", page_rows, "rundstedt", False, 1, names_off,
+                       "Army names off (an unpatched hoi4.exe): each army by its divisions, in the rows and the file."),
+    ]
+    default = states[0]
+    window = "mod1440_records_of"
+    return {
+        "phase": "E2", "file": "mod1440_records.gui", "screenshot": shot,
+        "windows": [dict(place, name=window, rows=default["rows"],
+                         listRows={"of_grid": "mod1440_records_officer_row", "of_c_gface_grid": "mod1440_records_of_c_gface_row",
+                                   "of_c_army_grid": "mod1440_records_of_c_army_row", "of_c_subs_grid": "mod1440_records_of_sub_row"},
+                         hide=default["hide"][window], frames=default["frames"][window], images=default["images"][window],
+                         _note="E2 round 2: the page state (scene states page, traits, marshal, units, names_off: render_gui.py --state). Portraits "
+                               "are the renderer's unknown leader: in the game each serving officer's row, his file and the chain card draw his own "
+                               "face (E7, image = portrait)."),
+                    {"name": "mod1440_records_of_c_gface_row", "skip": True},
+                    {"name": "mod1440_records_of_c_army_row", "skip": True},
+                    {"name": "mod1440_records_of_sub_row", "skip": True, "only": default["only"]["mod1440_records_of_sub_row"]},
+                    {"name": "mod1440_records_officer_row", "skip": True, "only": default["only"]["mod1440_records_officer_row"],
+                     "images": default["images"]["mod1440_records_officer_row"]}],
+        "samples": default["samples"],
+        "states": states,
+        "setup": setup,
+        "teardown": [{"clickWidget": "mod1440_records_of/of_tab_0", "wait": 0.8}] + back,
+        "expect": ["mod1440_records_of/of_close", "mod1440_records_of/of_sort_skill", "mod1440_records_of/of_show_oob", "mod1440_records_of/of_names"],
+        "crop": crop,
+        "manual": ["Battles won and lost, states and victory points taken: they need fighting; a marshal's battles under him need a general's battle",
+                   "A general the game made up: he shows the unknown leader",
+                   "A captured general, an admiral's ship kinds: they need a war or a fleet",
+                   "Two army groups with divisions in one state: the likely link (decision 6)"],
+        "checklist": OFFICERS_CHECKLIST,
+    }
+
+
+OFFICERS_CHECKLIST = [
+    "1. The page in the steel look: the filters' card (14,116 1006x46) with seven buttons All ... Order of battle and, behind a rule, the gold "
+    "checkbox 'Army names'; the list's card (14,168 1006x1038) with the column heads in its head band (Officer, 'N listed', Skill, the four "
+    "level icons, Traits, Div, Won, Lost, Medals); 20 rows of 48 in sight, the list scrolls to its end with the wheel; the file in five steel "
+    "cards at x 1026, 640 wide; the title strip and tabs unchanged",
+    "2. Army name (1.19.4.1, patched): with Army names ticked, a general's row reads 'General  .  <army name>' and his file's dark field shows "
+    "the army's name in white; compare three generals with the army names in the game's army bar (hover the army's badge). Untick: 'army of N "
+    "divisions' in the rows, 'Army of N divisions' in the file; Army Readiness's Army names button shows the same setting (one switch). Note "
+    "what a field marshal leading an army group reads (his rows say 'Army group of N armies' and never ask the property)",
+    "3. Chain of command: effect mod1440_chk_e2_oob (tools/check_effects.py) and read game.log: for each general with troops, his state and "
+    "count, and for each field marshal leading an army group 'num_units_in_state' in that state. Write down whether a marshal's "
+    "num_units_in_state counts his generals' divisions (state method) and, from the same effect, whether is_leading_army_in_province with "
+    "include_field_marshal = yes is true for the general's provinces (province method) and whether 'province = var:' is accepted",
+    "4. Without an army group at the start: form one (select two armies, create an army group, assign a field marshal), run one day: filter "
+    "Order of battle lists the marshal with his generals indented under him, then the armies under the High Command, then the fleets; compare "
+    "with the game's theatre boxes (army group letter, armies by number); move a general to another army group, one day: he moves too",
+    "5. The marshal's file: the Chain of command card (Under his command: divisions = his num_units, Won/Lost of his armies since the build "
+    "ran, 'since <date>'), up to five generals with face, name (click: his file), army, Div, Won, Lost, Skill, the green mark; Traits, "
+    "Service record and the diary stand 62 lower and the diary shows 5 lines. Click a general's name: his file, 'Reports to <marshal>  .  "
+    "army group of N armies' (click: the marshal's file)",
+    "6. A battle counted for a marshal: effect mod1440_chk_e2_battle (a won and a lost battle of a general linked to a marshal through the "
+    "hooks' own effects), then mod1440_chk_e2_log: the marshal's gwon and glost are 1 each and his chain card's line shows them. With "
+    "fighting: whether a field marshal gets on_army_leader_won_combat himself when one of his generals fights (his own Won rises too: write "
+    "it down; Witzleben read Won 2 in the user's game)",
+    "7. Traits: 'N of M chosen' against the trait tree (num_assigned_traits against the chosen traits, num_max_traits against the slots: Model "
+    "2, Rundstedt 1); the green mark in the row and 'a trait can be chosen' in the file against the game's own marker on the general (a leader "
+    "with free experience and a slot); mod1440_chk_e2_log prints both numbers and whether he has a free slot for every leader",
+    "8. Trait tooltips: hover a trait icon in a row and an icon and a name in the file: the trait's name in yellow, its kind, its effects with "
+    "the game's own names in green or red, and its description; compare Cautious and Old Guard with the game's own trait tooltip in the "
+    "general's window; newlines and colours must render (no '\\n' or section signs shown). Another mod's trait: 'its effects are in the game's "
+    "own tooltip'",
+    "9. Command card of a general: Divisions, Battalions, In battle (tooltip attacking/defending), Planning ('no battle plan' while he has "
+    "none; draw a battle plan, wait two days: the percentage against the army badge's planning bar), Entrenchment, Battle plans, Infantry, "
+    "Armoured (against the division badges of his army: a panzer division counts), Motorised, Mechanised, Other kinds, Equipped (against Army "
+    "Readiness's Equipped of the same army)",
+    "10. Stands in: the state where most of his divisions stand and 'HQ in <state>' (or 'HQ not deployed') as Army Readiness's row says; the "
+    "go-to button and Show on map move the camera there",
+    "11. Equipment: the Records close and Army Readiness opens with that general's army chosen (its row lit, the equipment list of the army)",
+    "12. Service record: the banded table (Battles won ... Points lost; Commissioned, Promoted to field marshal for a marshal only, Last skill "
+    "level, From a division, Decorations); Award... shows the country's medals over the service record and the diary (two columns of plates, "
+    "rows of 60); award one: the rack shows it at 0.6 with its name and date after it and in the tooltip; Take back last",
+    "13. An admiral (Raeder): manoeuvring and coordination icons in the level row, 'Fleet' and 'N ships' in the field, Ships and the four ship "
+    "kinds in the Command table; no Reports to, no Stands in, no Equipment",
+    "14. error.log: no line that names the mod, no 'invalid scope for var' (mod1440_of_fm, mod1440_of_c_fm, mod1440_of_c_loc, mod1440_of_c_hq), "
+    "no unknown trigger is_promoted_from_unit, no 'Not a valid value', no 'Could not find sprite type' (GFX_1440p_OF_*, GFX_1440p_SG_rule_2x30, the "
+    "new hit, stripe and pick sprites), no missing localisation mod1440_tre_*",
+    # --- E7 ---
+    "E7: every row's face and the file's face are the officer's own as the game's Officer Corps shows him; the chain card's faces at 23x31",
+]
+# --- end E2 round 2 ---
 
 
 def government_scene_hide():
@@ -4847,53 +5673,9 @@ def scenes():
     def subjects(prefix, count):
         return ["%s_%d_p" % (prefix, k) for k in range(count)]
 
-    officer_hide = officer_scene_hide()
-
     return {
         "war_diary": diary_scene(place, crop, shot, back),
-        "officers": {
-            "phase": "E2", "file": "mod1440_records.gui", "screenshot": shot,
-            "windows": [dict(place, name="mod1440_records_of", rows={"of_grid": 21, "of_c_gface_grid": 1},
-                             listRows={"of_grid": "mod1440_records_officer_row", "of_c_gface_grid": "mod1440_records_of_c_gface_row"},
-                             hide=officer_hide, _note="The file shows a German general with three traits, two medals and five lines of the War Diary; script hides the twins of his rank, status and command, the admiral's plates and the Award mode. A portrait is the renderer's unknown leader: in the game each serving officer's row and his file draw his own face (E7, image = portrait), the table's portrait only for one who has left; a trait icon is a sample until script names the trait."),
-                        {"name": "mod1440_records_of_c_gface_row", "skip": True},
-                        {"name": "mod1440_records_officer_row", "skip": True,
-                         "hide": ["of_row_pick", "of_row_name_sel", "of_row_face_table", "of_cell_c3_navy", "of_cell_c4_navy", "of_cell_cmd_navy", "of_row_tr_3", "of_row_tr_4",
-                                  "of_row_tr_5", "of_row_tr_more", "of_row_md_2"]
-                         + ["of_row_st_" + suffix for suffix, words, condition in officer_status() if suffix != "gen_cmd"]}],
-            "setup": tab(1),
-            "teardown": [{"clickWidget": "mod1440_records_of/of_tab_0", "wait": 0.8}] + back,
-            "expect": ["mod1440_records_of/of_close", "mod1440_records_of/of_sort_skill"],
-            "crop": crop,
-            "manual": ["Battles won and lost, states and victory points taken: they need fighting", "A general the game made up: he shows the unknown leader",
-                       "A captured general, an army group, an admiral's ship kinds: they need a war or a fleet"],
-            "checklist": [
-                "Each row shows its officer's portrait, his rank and status under the name, and his traits as the game's icons (compare three officers with the game's own general window)",
-                "The column heads show the game's attack, defence, planning and logistics icons; a click on each sorts, a second click turns the order",
-                "A click anywhere on an officer's portrait or name opens his file and marks his row, the name in yellow",
-                "The file: portrait, rank and status, the five level plates with their icons, Divisions/Battalions/Fighting/Armoured/Planning against the game's army view",
-                "Traits: icon and name of each, and \"N of M he can take\"; note what num_max_traits gives",
-                "Planning: is it shown as a percentage (0 to 100%)?",
-                "Award... shows the country's medals over the decorations and diary cards; Award one; the plate says awarded with the date; Back to his file shows the medal on the rack at full size and in his row at half size",
-                "Take back last; choosing another officer ends the Award mode",
-                "An admiral (Raeder): manoeuvring and coordination icons, Ships and the four ship kinds",
-                "error.log: no line about has_trait, a sprite GFX_trait_ or GFX_1440p_medal_, or an array index",
-                # --- E7 ---
-                "E7 with Road to 56: every row's face is the officer's own, as the game's Officer Corps lists and commander picker show him: "
-                "Wilhelm Keitel and Franz Halder (texture files of Road to 56, the unknown leader before E7), Rundstedt, Manstein; the admirals "
-                "Raeder, Doenitz and Otto Ciliax (texture file) as in the Officer Corps' Admirals list",
-                "E7: after mod1440_chk_e7_generals (one day, or a click on All): Heinrich Himmler (texture file), Martin Bormann and Wilhelm Canaris "
-                "(his civilian portrait, as the commander picker) as rows with their own faces",
-                "E7: click Keitel: his file shows his own face at full size (156x210); click Himmler: the same in his file",
-                "E7: choose an officer, effect mod1440_chk_e7_retire, one day, filter Former: his row and his file show the table's portrait "
-                "(or the unknown leader for one the table lacks), not the game's unknown man; mod1440_chk_e7_log: 'file 0'. game.log at the "
-                "effect: 'MOD1440 e7 retired <name>: is_unit_leader no' (not known before; 'yes' is a finding: the pages would draw him as the unknown man)",
-                "E7 gate B: the faces hold on a day after the start without opening the Officers page first: close the Records on the War "
-                "Diary tab on day 1 (they reopen on the page they were closed on), run one day, open them, then select Poznan on the map: the "
-                "officers' faces in the diary and on Poznan's state card are the game's (decided by is_unit_leader, not by the day last seen)",
-                "E7: the faces scale as before (34x46 in the rows) and stay on their rows while the list scrolls; error.log: no line naming "
-                "'portrait', mod1440_of_c_ul or is_unit_leader"],
-        },
+        "officers": officer_scene(place, crop, shot, back, tab(1)),     # E2 round 2
         "government": {
             "phase": "E3", "file": "mod1440_records.gui", "screenshot": shot,
             "windows": [dict(place, name="mod1440_records_gv", rows=dict({"gv_fac_grid": 1, "gv_sub_grid": 1}, **government_face_rows()),
@@ -4947,7 +5729,7 @@ def build(managers):
                 hooks[name] = hooks.get(name, "") + body
     SCENES.clear()
     SCENES.update(scenes())
-    return out_gui, out_script, out_effects, hooks, {
+    return out_gui, out_script, out_effects, hooks, dict({
         "common/scripted_effects/mod1440_portraits.txt": portrait_script + advisor_portraits()[0],
         "common/scripted_effects/mod1440_victory_points.txt": point_script,
-    }
+    }, **trait_effect_files())     # E2 round 2: the effects of the traits, in the game's languages
