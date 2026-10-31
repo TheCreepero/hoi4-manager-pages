@@ -231,6 +231,10 @@ class Renderer:
             for n in (state_hide[w["name"]] if w["name"] in state_hide else (w.get("hide") or [])):
                 self.hidden.add((w["name"], n))
             for n, at in list((w.get("place") or {}).items()) + list((state_place.get(w["name"]) or {}).items()):
+                # --- E3 round 2 --- a list of positions: one per drawn instance (the dots of a chart, y by property)
+                if not at or isinstance(at[0], (list, tuple)):
+                    self.placements[(w["name"], n)] = [(float(v[0]), float(v[1])) for v in at]
+                    continue
                 self.placements[(w["name"], n)] = (float(at[0]), float(at[1]))
         for n in self.options.get("hide") or []:
             self.hidden.add(("*", n))
@@ -251,6 +255,7 @@ class Renderer:
                 # --- E4 round 2 --- a list gives one frame per instance, in drawing order (the plates of a list of rows)
                 self.frames[(w["name"], n)] = [int(v) for v in f] if isinstance(f, list) else int(f)
         self._frame_index = {}
+        self._place_index = {}      # E3 round 2: per-instance positions
         # --- E2 round 2 --- the sprite script names for an icon (the image property: a trait's icon): "images" per window,
         # {widget: sprite, or a list with one per instance in drawing order}; a state's "images" of a window replaces the window's
         self.images = {}
@@ -537,6 +542,11 @@ class Renderer:
         for key in (self.list_keys(node.name) if node.name else [node.name]):
             # "parent/widget" first, for a window with several widgets of one name (the overview's item_grid)
             placed = self.placements.get((self._window, key)) or self.placements.get(("*", key))
+            if isinstance(placed, list):        # E3 round 2: the next of the instances' positions
+                index_key = (self._window, key)
+                k = self._place_index.get(index_key, 0)
+                self._place_index[index_key] = k + 1
+                placed = placed[k] if k < len(placed) else None
             if placed is not None:
                 break
         if placed is not None:
@@ -593,6 +603,7 @@ class Renderer:
             self._only_index = {}       # D2 round 2
             self._image_index = {}      # E2 round 2
             self._frame_index = {}      # E4 round 2
+            self._place_index = {}      # E3 round 2
         outer = getattr(self, "_window", None)
         self._window = name
         self.draw_container(node, rect, canvas, name, depth, clip, window_rect=rect)

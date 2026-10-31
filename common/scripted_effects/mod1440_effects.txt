@@ -12290,6 +12290,7 @@ mod1440_h_record = {
 	add_to_array = { mod1440_nf_was = modifier@air_fuel_consumption_factor }
 	add_to_array = { mod1440_nf_was = modifier@experience_gain_air_factor }
 	set_variable = { mod1440_nf_was_date = global.date }
+	mod1440_gv_pp_record = yes
 	if = {
 		limit = { check_variable = { mod1440_nf_shown = 1 } }
 		mod1440_nf_fill = yes

@@ -108,7 +108,12 @@ BeforeAll {
         'is_unit_leader',
         # --- E2 --- (2026-10-30) Officers, redesign round: whether he was promoted from a division's command; read-only
         # (can_select_trait left with E2b fix round 1: it takes a trait, not yes)
-        'is_promoted_from_unit'
+        'is_promoted_from_unit',
+        # --- E3 round 2 --- (2026-10-30) Government: the agency's upgrades, cryptology and operatives, the majors for What we
+        # know of, whether the country is a subject; all read-only (every_operative only writes the mod's own variables on each
+        # operative). has_country_leader_with_trait left with E3 fix round 1: see 'name no trait the loaded game may lack'
+        'has_intelligence_agency', 'has_done_agency_upgrade', 'is_cryptology_department_active',
+        'is_decrypting', 'operative_leader_mission', 'is_major', 'is_subject', 'every_operative'
     )
 
     # Adds to $Into every command of a block that is neither allowed nor an effect of the mod's own.
@@ -241,7 +246,8 @@ Describe 'Scripted GUIs' {
         # The arrays a list of the game's faces may read: each holds generals, admirals or operatives only, as the mod
         # keeps them (of_me). A head of government, an advisor who is no general or an officer who has left would draw
         # the unknown man, so no other array, and no icon outside a list row, may ask for the value.
-        $leaderArrays = '^mod1440_(of_rows|ar_leaders|of_c_ul|of_c_subs|wr_k_\d_ul|gv_of_\d_ul|gv_hc_\d_ul|sr_by_ul|wd_ga|wd_gc)$'
+        # E3 round 2: the game's own array of the country's operatives (an operative is a unit leader, SGUI-053's type 3)
+        $leaderArrays = '^(mod1440_(of_rows|ar_leaders|of_c_ul|of_c_subs|wr_k_\d_ul|gv_of_\d_ul|gv_hc_\d_ul|sr_by_ul|wd_ga|wd_gc)|operatives)$'
         $count = 0
         $problems = foreach ($gui in $script:Guis) {
             $properties = Get-GuiBlock -Node $gui.Node -Key 'properties'
@@ -394,4 +400,17 @@ Describe 'Triggers of the mod' {
         @($bad) | Should -BeNullOrEmpty -Because 'can_select_trait needs a trait name; yes or no is "Not a valid value" and tests nothing'
     }
     # --- end E2b fix round 1 ---
+    # --- E3 fix round 1 --- (2026-10-31) A trigger that names a trait the loaded game does not define is refused at load
+    # ('Invalid trait: <name> ...: has_country_leader_with_trait' in error.log) and keeps a null object; evaluated, it crashed
+    # the game (ACCESS_VIOLATION in FUN_140bffc50 of 1.19.4.1, the user's crash hoi4_20261031_004759 on clicking the Records,
+    # Road to 56; C:\dev\Ghidra\projects\work\crash-e3-records.txt). A published mod cannot know the loaded game's traits, so the
+    # mod's script asks no such trigger. has_trait (the Officers page, E2) is the one listed exception, its owner's to settle.
+    It 'name no trait the loaded game may lack' {
+        $forbidden = '\b(has_country_leader_with_trait|has_country_leader_trait|has_character_trait|has_leader_trait)\s*='
+        $bad = foreach ($file in @(Get-ChildItem -Path $script:CommonDir -Recurse -File -Filter '*.txt')) {
+            foreach ($m in [regex]::Matches([System.IO.File]::ReadAllText($file.FullName), $forbidden)) { "$($file.Name): $($m.Value)" }
+        }
+        @($bad) | Should -BeNullOrEmpty -Because 'a trait the loaded game lacks keeps a null object in the trigger, and evaluating it crashed the game (E3 fix round 1)'
+    }
+    # --- end E3 fix round 1 ---
 }

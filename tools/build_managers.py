@@ -3652,6 +3652,9 @@ def history_script(place):
             + iff("check_variable = { mod1440_h_date^num > %d }" % H_KEEP, forget
                   + "remove_from_array = { array = mod1440_h_date index = 0 }\nremove_from_array = { array = mod1440_h_year index = 0 }\n")
             + was
+            # E3: the Government page's record of party support, the four parties of today beside these months
+            # (tools/build_records.py, government_script; not a series of SERIES, so this page does not change)
+            + "mod1440_gv_pp_record = yes\n"
             + iff(is_one("mod1440_nf_shown"), "mod1440_nf_fill = yes\nmod1440_h_draw = yes\n")))
         + "\n" + spark
         + "\n# History: today's value, the changes and the sparkline of each figure for the tables, then the chosen figure's\n"
@@ -4767,6 +4770,9 @@ def scene_files(gui_by_file):
         # --- e-diary-wars: states the renderer can draw and the harness cannot bring up (render_gui.py --state)
         if "states" in scene:
             document["states"] = scene["states"]
+        # --- E3 round 2: texts a page cuts off on purpose (a fixed box, W28), which the renderer and the tests leave be
+        if "knownCuts" in scene:
+            document["knownCuts"] = scene["knownCuts"]
         out["tools/scenes/%s.json" % name] = json.dumps(document, indent=2, ensure_ascii=True) + "\n"
     return out
 

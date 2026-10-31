@@ -834,311 +834,811 @@ guiTypes = {
 		instantTextboxType = { name = "gv_tab_2_name" position = { x = 758 y = 75 } font = "hoi_18mbs" text = "MOD1440_REC_TAB_2" maxWidth = 150 maxHeight = 24 format = left alwaystransparent = yes }
 		buttonType = { name = "gv_close" position = { x = 1614 y = 12 } quadTextureSprite = "GFX_closebutton" clicksound = click_default shortcut = "ESCAPE" pdx_tooltip = "MOD1440_REC_CLOSE_TT" }
 		containerWindowType = {
-			name = "gv_chief"
+			name = "gv_hog"
 			position = { x = 14 y = 116 }
-			size = { width = 542 height = 316 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_chief_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_CHIEF_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_leader" position = { x = 14 y = 40 } font = "hoi_36header" text = "MOD1440_GV_LEADER" maxWidth = 414 maxHeight = 40 format = left fixedsize = yes }
-			iconType = { name = "gv_flag" position = { x = 446 y = 38 } spriteType = "GFX_shield_medium" }
-			iconType = { name = "gv_face" position = { x = 14 y = 92 } spriteType = "GFX_portrait_unknown" scale = 1.0 }
-			iconType = { name = "gv_group_fascism" position = { x = 186 y = 92 } spriteType = "GFX_ideology_fascism_group" scale = 0.6 }
-			iconType = { name = "gv_group_democratic" position = { x = 186 y = 92 } spriteType = "GFX_ideology_democratic_group" scale = 0.6 }
-			iconType = { name = "gv_group_communism" position = { x = 186 y = 92 } spriteType = "GFX_ideology_communism_group" scale = 0.6 }
-			iconType = { name = "gv_group_neutrality" position = { x = 186 y = 92 } spriteType = "GFX_ideology_neutrality_group" scale = 0.6 }
-			instantTextboxType = { name = "gv_party" position = { x = 234 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_PARTY" maxWidth = 292 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_party_long" position = { x = 234 y = 118 } font = "hoi_16mbs" text = "MOD1440_GV_PARTY_LONG" maxWidth = 292 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_office_l" position = { x = 188 y = 152 } font = "hoi_16mbs" text = "MOD1440_GV_OFFICE_L" maxWidth = 110 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_leader_since" position = { x = 300 y = 152 } font = "hoi_16mbs" text = "MOD1440_GV_LEADER_SINCE" maxWidth = 226 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_leader_since_old" position = { x = 300 y = 152 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 226 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_election_l" position = { x = 188 y = 178 } font = "hoi_16mbs" text = "MOD1440_GV_ELECTION_L" maxWidth = 110 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_election" position = { x = 300 y = 178 } font = "hoi_16mbs" text = "MOD1440_GV_ELECTION" maxWidth = 226 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_next_l" position = { x = 188 y = 204 } font = "hoi_16mbs" text = "MOD1440_GV_NEXT_L" maxWidth = 110 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_next" position = { x = 300 y = 204 } font = "hoi_16mbs" text = "MOD1440_GV_NEXT" maxWidth = 226 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_next_none" position = { x = 300 y = 204 } font = "hoi_16mbs" text = "MOD1440_GV_NEXT_NONE" maxWidth = 226 maxHeight = 22 format = left }
-			iconType = { name = "gv_f_elections_bg" position = { x = 186 y = 238 } spriteType = "GFX_1440p_SG_tile_165x64" }
-			instantTextboxType = { name = "gv_f_elections_l" position = { x = 192 y = 245 } font = "hoi_16mbs" text = "MOD1440_GV_F_ELECTIONS_L" maxWidth = 153 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_GV_F_ELECTIONS_TT" }
-			instantTextboxType = { name = "gv_f_elections" position = { x = 192 y = 268 } font = "hoi_20b" text = "MOD1440_GV_F_ELECTIONS" maxWidth = 153 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_GV_F_ELECTIONS_TT" }
-			iconType = { name = "gv_f_changes_bg" position = { x = 357 y = 238 } spriteType = "GFX_1440p_SG_tile_165x64" }
-			instantTextboxType = { name = "gv_f_changes_l" position = { x = 363 y = 245 } font = "hoi_16mbs" text = "MOD1440_GV_F_CHANGES_L" maxWidth = 153 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_GV_F_CHANGES_TT" }
-			instantTextboxType = { name = "gv_f_changes" position = { x = 363 y = 268 } font = "hoi_20b" text = "MOD1440_GV_F_CHANGES" maxWidth = 153 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_GV_F_CHANGES_TT" }
+			size = { width = 540 height = 446 }
+			iconType = { name = "gv_hog_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_hog" }
+			instantTextboxType = { name = "gv_hog_title" position = { x = 12 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_HOG_TITLE" maxWidth = 316 maxHeight = 22 format = left fixedsize = yes }
+			buttonType = { name = "gv_heads_btn" position = { x = 392 y = 5 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_HEADS_BTN" pdx_tooltip = "MOD1440_GV_HEADS_BTN_TT" }
+			instantTextboxType = { name = "gv_leader" position = { x = 12 y = 44 } font = "hoi_24header" text = "MOD1440_GV_LEADER" maxWidth = 420 maxHeight = 30 format = left fixedsize = yes }
+			iconType = { name = "gv_flag" position = { x = 450 y = 44 } spriteType = "GFX_shield_medium" }
+			instantTextboxType = { name = "gv_party" position = { x = 12 y = 76 } font = "hoi_18mbs" text = "MOD1440_GV_PARTY" maxWidth = 420 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_face" position = { x = 8 y = 106 } spriteType = "GFX_portrait_unknown" scale = 1.0 }
+			iconType = { name = "gv_face_fb" position = { x = 8 y = 106 } spriteType = "GFX_1440p_SG_inset_156x210" scale = 1.0 pdx_tooltip = "MOD1440_GV_FACE_FB_TT" }
+			iconType = { name = "gv_face_fb_flag" position = { x = 45 y = 146 } spriteType = "GFX_shield_medium" }
+			iconType = { name = "gv_face_fb_g1" position = { x = 64 y = 210 } spriteType = "GFX_ideology_fascism_group" scale = 0.667 }
+			iconType = { name = "gv_face_fb_g2" position = { x = 64 y = 210 } spriteType = "GFX_ideology_democratic_group" scale = 0.667 }
+			iconType = { name = "gv_face_fb_g3" position = { x = 64 y = 210 } spriteType = "GFX_ideology_communism_group" scale = 0.667 }
+			iconType = { name = "gv_face_fb_g4" position = { x = 64 y = 210 } spriteType = "GFX_ideology_neutrality_group" scale = 0.667 }
+			iconType = { name = "gv_hog_band_2" position = { x = 172 y = 130 } spriteType = "GFX_1440p_SG_stripe_360x24" }
+			iconType = { name = "gv_hog_band_4" position = { x = 172 y = 178 } spriteType = "GFX_1440p_SG_stripe_360x24" }
+			iconType = { name = "gv_hog_band_6" position = { x = 172 y = 226 } spriteType = "GFX_1440p_SG_stripe_360x24" }
+			iconType = { name = "gv_hog_band_8" position = { x = 172 y = 274 } spriteType = "GFX_1440p_SG_stripe_360x24" }
+			instantTextboxType = { name = "gv_party_long_l" position = { x = 180 y = 108 } font = "hoi_18mbs" text = "MOD1440_GV_PARTY_LONG_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_office_l" position = { x = 180 y = 132 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_rec_l" position = { x = 180 y = 156 } font = "hoi_18mbs" text = "MOD1440_GV_REC_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_election_l" position = { x = 180 y = 180 } font = "hoi_18mbs" text = "MOD1440_GV_ELECTION_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_next_l" position = { x = 180 y = 204 } font = "hoi_18mbs" text = "MOD1440_GV_NEXT_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_support_l" position = { x = 180 y = 228 } font = "hoi_18mbs" text = "MOD1440_GV_SUPPORT_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_stab_l" position = { x = 180 y = 252 } font = "hoi_18mbs" text = "MOD1440_GV_STAB_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_ws_l" position = { x = 180 y = 276 } font = "hoi_18mbs" text = "MOD1440_GV_WS_L" maxWidth = 110 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_party_long" position = { x = 294 y = 108 } font = "hoi_18mbs" text = "MOD1440_GV_PARTY_LONG" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_PARTY_LONG_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_leader_since" position = { x = 294 y = 132 } font = "hoi_18mbs" text = "MOD1440_GV_LEADER_SINCE" maxWidth = 230 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_leader_since_old" position = { x = 294 y = 132 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 230 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_rec" position = { x = 294 y = 156 } font = "hoi_18mbs" text = "MOD1440_GV_REC" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_REC_TT" }
+			instantTextboxType = { name = "gv_election" position = { x = 294 y = 180 } font = "hoi_18mbs" text = "MOD1440_GV_ELECTION" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_next" position = { x = 294 y = 204 } font = "hoi_18mbs" text = "MOD1440_GV_NEXT" maxWidth = 230 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_next_none" position = { x = 294 y = 204 } font = "hoi_18mbs" text = "MOD1440_GV_NEXT_NONE" maxWidth = 230 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_support" position = { x = 294 y = 228 } font = "hoi_18mbs" text = "MOD1440_GV_SUPPORT" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SUPPORT_TT" }
+			instantTextboxType = { name = "gv_stab" position = { x = 294 y = 252 } font = "hoi_18mbs" text = "MOD1440_GV_STAB" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_STAB_TT" }
+			instantTextboxType = { name = "gv_ws" position = { x = 294 y = 276 } font = "hoi_18mbs" text = "MOD1440_GV_WS" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_WS_TT" }
+			iconType = { name = "gv_law_head" position = { x = 8 y = 340 } spriteType = "GFX_1440p_SG_head_524x26" }
+			instantTextboxType = { name = "gv_law_head_t" position = { x = 16 y = 342 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_HEAD_T" maxWidth = 300 maxHeight = 22 format = left }
+			iconType = { name = "gv_law_band_2" position = { x = 8 y = 390 } spriteType = "GFX_1440p_SG_stripe_524x24" }
+			instantTextboxType = { name = "gv_law_0_l" position = { x = 16 y = 368 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_0_L" maxWidth = 120 maxHeight = 22 format = left }
+			iconType = { name = "gv_law_0_pic" position = { x = 140 y = 367 } spriteType = "GFX_idea_unknown" scale = 0.35 }
+			instantTextboxType = { name = "gv_law_0" position = { x = 170 y = 368 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_0" maxWidth = 354 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_law_1_l" position = { x = 16 y = 392 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_1_L" maxWidth = 120 maxHeight = 22 format = left }
+			iconType = { name = "gv_law_1_pic" position = { x = 140 y = 391 } spriteType = "GFX_idea_unknown" scale = 0.35 }
+			instantTextboxType = { name = "gv_law_1" position = { x = 170 y = 392 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_1" maxWidth = 354 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_law_2_l" position = { x = 16 y = 416 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_2_L" maxWidth = 120 maxHeight = 22 format = left }
+			iconType = { name = "gv_law_2_pic" position = { x = 140 y = 415 } spriteType = "GFX_idea_unknown" scale = 0.35 }
+			instantTextboxType = { name = "gv_law_2" position = { x = 170 y = 416 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_2" maxWidth = 354 maxHeight = 22 format = left fixedsize = yes }
 		}
 		containerWindowType = {
 			name = "gv_parties"
-			position = { x = 14 y = 444 }
-			size = { width = 542 height = 274 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_parties_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_PARTIES_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			iconType = { name = "gv_p_0_pick" position = { x = 8 y = 40 } spriteType = "GFX_1440p_SG_pick_526x54" }
-			iconType = { name = "gv_p_0_icon" position = { x = 14 y = 48 } spriteType = "GFX_ideology_fascism_group" scale = 0.55 }
-			instantTextboxType = { name = "gv_p_0" position = { x = 62 y = 44 } font = "hoi_16mbs" text = "MOD1440_GV_P_0" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_p_0_pop" position = { x = 432 y = 46 } font = "hoi_20b" text = "MOD1440_GV_P_0_POP" maxWidth = 92 maxHeight = 24 format = right }
-			instantTextboxType = { name = "gv_p_0_who" position = { x = 62 y = 62 } font = "hoi_16mbs" text = "MOD1440_GV_P_0_WHO" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			iconType = { name = "gv_p_0_bar" position = { x = 62 y = 82 } spriteType = "GFX_1440p_SG_bar_462" }
-			iconType = { name = "gv_p_1_pick" position = { x = 8 y = 96 } spriteType = "GFX_1440p_SG_pick_526x54" }
-			iconType = { name = "gv_p_1_icon" position = { x = 14 y = 104 } spriteType = "GFX_ideology_democratic_group" scale = 0.55 }
-			instantTextboxType = { name = "gv_p_1" position = { x = 62 y = 100 } font = "hoi_16mbs" text = "MOD1440_GV_P_1" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_p_1_pop" position = { x = 432 y = 102 } font = "hoi_20b" text = "MOD1440_GV_P_1_POP" maxWidth = 92 maxHeight = 24 format = right }
-			instantTextboxType = { name = "gv_p_1_who" position = { x = 62 y = 118 } font = "hoi_16mbs" text = "MOD1440_GV_P_1_WHO" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			iconType = { name = "gv_p_1_bar" position = { x = 62 y = 138 } spriteType = "GFX_1440p_SG_bar_462" }
-			iconType = { name = "gv_p_2_pick" position = { x = 8 y = 152 } spriteType = "GFX_1440p_SG_pick_526x54" }
-			iconType = { name = "gv_p_2_icon" position = { x = 14 y = 160 } spriteType = "GFX_ideology_communism_group" scale = 0.55 }
-			instantTextboxType = { name = "gv_p_2" position = { x = 62 y = 156 } font = "hoi_16mbs" text = "MOD1440_GV_P_2" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_p_2_pop" position = { x = 432 y = 158 } font = "hoi_20b" text = "MOD1440_GV_P_2_POP" maxWidth = 92 maxHeight = 24 format = right }
-			instantTextboxType = { name = "gv_p_2_who" position = { x = 62 y = 174 } font = "hoi_16mbs" text = "MOD1440_GV_P_2_WHO" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			iconType = { name = "gv_p_2_bar" position = { x = 62 y = 194 } spriteType = "GFX_1440p_SG_bar_462" }
-			iconType = { name = "gv_p_3_pick" position = { x = 8 y = 208 } spriteType = "GFX_1440p_SG_pick_526x54" }
-			iconType = { name = "gv_p_3_icon" position = { x = 14 y = 216 } spriteType = "GFX_ideology_neutrality_group" scale = 0.55 }
-			instantTextboxType = { name = "gv_p_3" position = { x = 62 y = 212 } font = "hoi_16mbs" text = "MOD1440_GV_P_3" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_p_3_pop" position = { x = 432 y = 214 } font = "hoi_20b" text = "MOD1440_GV_P_3_POP" maxWidth = 92 maxHeight = 24 format = right }
-			instantTextboxType = { name = "gv_p_3_who" position = { x = 62 y = 230 } font = "hoi_16mbs" text = "MOD1440_GV_P_3_WHO" maxWidth = 370 maxHeight = 22 format = left fixedsize = yes }
-			iconType = { name = "gv_p_3_bar" position = { x = 62 y = 250 } spriteType = "GFX_1440p_SG_bar_462" }
+			position = { x = 560 y = 116 }
+			size = { width = 1106 height = 446 }
+			iconType = { name = "gv_parties_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_parties" }
+			instantTextboxType = { name = "gv_parties_title" position = { x = 12 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_PARTIES_TITLE" maxWidth = 600 maxHeight = 22 format = left fixedsize = yes }
+			buttonType = { name = "gv_range_24" position = { x = 790 y = 5 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_RANGE_24" pdx_tooltip = "MOD1440_GV_RANGE_24_TT" }
+			buttonType = { name = "gv_range_60" position = { x = 894 y = 5 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_RANGE_60" pdx_tooltip = "MOD1440_GV_RANGE_60_TT" }
+			buttonType = { name = "gv_range_120" position = { x = 998 y = 5 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_RANGE_120" pdx_tooltip = "MOD1440_GV_RANGE_120_TT" }
+			iconType = { name = "gv_today_bg" position = { x = 8 y = 46 } spriteType = "GFX_1440p_SG_inset_384x24" }
+			iconType = { name = "gv_today_3_0" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_fascism" pdx_tooltip = "MOD1440_GV_TODAY_0_TT" }
+			iconType = { name = "gv_today_3_1" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_democratic" pdx_tooltip = "MOD1440_GV_TODAY_1_TT" }
+			iconType = { name = "gv_today_3_2" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_communism" pdx_tooltip = "MOD1440_GV_TODAY_2_TT" }
+			iconType = { name = "gv_today_3_3" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_neutrality" pdx_tooltip = "MOD1440_GV_TODAY_3_TT" }
+			iconType = { name = "gv_today_2_0" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_fascism" pdx_tooltip = "MOD1440_GV_TODAY_0_TT" }
+			iconType = { name = "gv_today_2_1" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_democratic" pdx_tooltip = "MOD1440_GV_TODAY_1_TT" }
+			iconType = { name = "gv_today_2_2" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_communism" pdx_tooltip = "MOD1440_GV_TODAY_2_TT" }
+			iconType = { name = "gv_today_2_3" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_neutrality" pdx_tooltip = "MOD1440_GV_TODAY_3_TT" }
+			iconType = { name = "gv_today_1_0" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_fascism" pdx_tooltip = "MOD1440_GV_TODAY_0_TT" }
+			iconType = { name = "gv_today_1_1" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_democratic" pdx_tooltip = "MOD1440_GV_TODAY_1_TT" }
+			iconType = { name = "gv_today_1_2" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_communism" pdx_tooltip = "MOD1440_GV_TODAY_2_TT" }
+			iconType = { name = "gv_today_1_3" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_neutrality" pdx_tooltip = "MOD1440_GV_TODAY_3_TT" }
+			iconType = { name = "gv_today_0_0" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_fascism" pdx_tooltip = "MOD1440_GV_TODAY_0_TT" }
+			iconType = { name = "gv_today_0_1" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_democratic" pdx_tooltip = "MOD1440_GV_TODAY_1_TT" }
+			iconType = { name = "gv_today_0_2" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_communism" pdx_tooltip = "MOD1440_GV_TODAY_2_TT" }
+			iconType = { name = "gv_today_0_3" position = { x = 16 y = 50 } spriteType = "GFX_1440p_GV_share_neutrality" pdx_tooltip = "MOD1440_GV_TODAY_3_TT" }
+			iconType = { name = "gv_pt_head" position = { x = 8 y = 76 } spriteType = "GFX_1440p_SG_head_384x26" }
+			instantTextboxType = { name = "gv_pt_h0" position = { x = 60 y = 78 } font = "hoi_18mbs" text = "MOD1440_GV_PT_H0" maxWidth = 200 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_pt_h1" position = { x = 272 y = 78 } font = "hoi_18mbs" text = "MOD1440_GV_PT_H1" maxWidth = 50 maxHeight = 22 format = right pdx_tooltip = "MOD1440_GV_PT_H1_TT" }
+			instantTextboxType = { name = "gv_pt_h2" position = { x = 328 y = 78 } font = "hoi_18mbs" text = "MOD1440_GV_PT_H2" maxWidth = 56 maxHeight = 22 format = right pdx_tooltip = "MOD1440_GV_PT_H2_TT" }
+			iconType = { name = "gv_pt_band_2" position = { x = 8 y = 150 } spriteType = "GFX_1440p_SG_stripe_384x48" }
+			iconType = { name = "gv_pt_band_4" position = { x = 8 y = 246 } spriteType = "GFX_1440p_SG_stripe_384x48" }
+			iconType = { name = "gv_pt_pick" position = { x = 8 y = 102 } spriteType = "GFX_1440p_SG_pick_384x48" }
+			iconType = { name = "gv_pt_0_sw" position = { x = 8 y = 106 } spriteType = "GFX_1440p_GV_swatch_fascism" }
+			iconType = { name = "gv_pt_0_ic" position = { x = 20 y = 109 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_pt_0_name" position = { x = 60 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_PT_0_NAME" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_0_who" position = { x = 60 y = 126 } font = "hoi_18mbs" text = "MOD1440_GV_PT_0_WHO" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_0_now" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_0_NOW" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_0_nows" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_0_NOWS" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_0_dy" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_PT_0_DY" maxWidth = 56 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_0_dyn" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_DASH" maxWidth = 56 maxHeight = 22 format = right }
+			iconType = { name = "gv_pt_1_sw" position = { x = 8 y = 106 } spriteType = "GFX_1440p_GV_swatch_democratic" }
+			iconType = { name = "gv_pt_1_ic" position = { x = 20 y = 109 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_pt_1_name" position = { x = 60 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_PT_1_NAME" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_1_who" position = { x = 60 y = 126 } font = "hoi_18mbs" text = "MOD1440_GV_PT_1_WHO" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_1_now" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_1_NOW" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_1_nows" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_1_NOWS" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_1_dy" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_PT_1_DY" maxWidth = 56 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_1_dyn" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_DASH" maxWidth = 56 maxHeight = 22 format = right }
+			iconType = { name = "gv_pt_2_sw" position = { x = 8 y = 106 } spriteType = "GFX_1440p_GV_swatch_communism" }
+			iconType = { name = "gv_pt_2_ic" position = { x = 20 y = 109 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_pt_2_name" position = { x = 60 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_PT_2_NAME" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_2_who" position = { x = 60 y = 126 } font = "hoi_18mbs" text = "MOD1440_GV_PT_2_WHO" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_2_now" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_2_NOW" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_2_nows" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_2_NOWS" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_2_dy" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_PT_2_DY" maxWidth = 56 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_2_dyn" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_DASH" maxWidth = 56 maxHeight = 22 format = right }
+			iconType = { name = "gv_pt_3_sw" position = { x = 8 y = 106 } spriteType = "GFX_1440p_GV_swatch_neutrality" }
+			iconType = { name = "gv_pt_3_ic" position = { x = 20 y = 109 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_pt_3_name" position = { x = 60 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_PT_3_NAME" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_3_who" position = { x = 60 y = 126 } font = "hoi_18mbs" text = "MOD1440_GV_PT_3_WHO" maxWidth = 206 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_pt_3_now" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_3_NOW" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_3_nows" position = { x = 272 y = 114 } font = "hoi_20b" text = "MOD1440_GV_PT_3_NOWS" maxWidth = 50 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_3_dy" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_PT_3_DY" maxWidth = 56 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_pt_3_dyn" position = { x = 328 y = 115 } font = "hoi_18mbs" text = "MOD1440_GV_DASH" maxWidth = 56 maxHeight = 22 format = right }
+			iconType = { name = "gv_since_head" position = { x = 8 y = 302 } spriteType = "GFX_1440p_SG_head_384x26" }
+			instantTextboxType = { name = "gv_since_head_t" position = { x = 16 y = 304 } font = "hoi_18mbs" text = "MOD1440_GV_SINCE_HEAD_T" maxWidth = 300 maxHeight = 22 format = left }
+			iconType = { name = "gv_since_band_2" position = { x = 8 y = 352 } spriteType = "GFX_1440p_SG_stripe_384x24" }
+			iconType = { name = "gv_since_band_4" position = { x = 8 y = 400 } spriteType = "GFX_1440p_SG_stripe_384x24" }
+			instantTextboxType = { name = "gv_since_el_l" position = { x = 16 y = 330 } font = "hoi_18mbs" text = "MOD1440_GV_SINCE_EL_L" maxWidth = 210 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SINCE_EL_L_TT" }
+			instantTextboxType = { name = "gv_since_el" position = { x = 228 y = 329 } font = "hoi_20b" text = "MOD1440_GV_SINCE_EL_V" maxWidth = 156 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_since_ch_l" position = { x = 16 y = 354 } font = "hoi_18mbs" text = "MOD1440_GV_SINCE_CH_L" maxWidth = 210 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SINCE_CH_L_TT" }
+			instantTextboxType = { name = "gv_since_ch" position = { x = 228 y = 353 } font = "hoi_20b" text = "MOD1440_GV_SINCE_CH_V" maxWidth = 156 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_since_hi_l" position = { x = 16 y = 378 } font = "hoi_18mbs" text = "MOD1440_GV_SINCE_HI_L" maxWidth = 210 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SINCE_HI_L_TT" }
+			instantTextboxType = { name = "gv_since_hi" position = { x = 228 y = 377 } font = "hoi_20b" text = "MOD1440_GV_SINCE_HI_V" maxWidth = 156 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_since_mo_l" position = { x = 16 y = 402 } font = "hoi_18mbs" text = "MOD1440_GV_SINCE_MO_L" maxWidth = 210 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SINCE_MO_L_TT" }
+			instantTextboxType = { name = "gv_since_mo" position = { x = 228 y = 401 } font = "hoi_20b" text = "MOD1440_GV_SINCE_MO_V" maxWidth = 156 maxHeight = 22 format = right }
+			iconType = { name = "gv_chart_bg" position = { x = 400 y = 44 } spriteType = "GFX_1440p_SG_inset_698x394" }
+			iconType = { name = "gv_quarter_1" position = { x = 450 y = 126 } spriteType = "GFX_1440p_SG_stripe_600x70" }
+			iconType = { name = "gv_quarter_3" position = { x = 450 y = 266 } spriteType = "GFX_1440p_SG_stripe_600x70" }
+			instantTextboxType = { name = "gv_scale_0" position = { x = 404 y = 47 } font = "hoi_18mbs" text = "MOD1440_GV_SCALE_0" maxWidth = 40 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_scale_1" position = { x = 404 y = 117 } font = "hoi_18mbs" text = "MOD1440_GV_SCALE_1" maxWidth = 40 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_scale_2" position = { x = 404 y = 187 } font = "hoi_18mbs" text = "MOD1440_GV_SCALE_2" maxWidth = 40 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_scale_3" position = { x = 404 y = 257 } font = "hoi_18mbs" text = "MOD1440_GV_SCALE_3" maxWidth = 40 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_scale_4" position = { x = 404 y = 327 } font = "hoi_18mbs" text = "MOD1440_GV_SCALE_4" maxWidth = 40 maxHeight = 22 format = right }
+			iconType = { name = "gv_foot" position = { x = 450 y = 336 } spriteType = "GFX_1440p_SG_line_600x2" }
+			containerWindowType = {
+				name = "gv_plot"
+				position = { x = 450 y = 56 }
+				size = { width = 600 height = 290 }
+				gridboxtype = {
+					name = "gv_dots_0_24"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 25 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 24
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_1_24"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 25 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 24
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_2_24"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 25 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 24
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_3_24"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 25 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 24
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_r_24"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 25 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 24
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_0_60"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 10 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 60
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_1_60"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 10 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 60
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_2_60"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 10 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 60
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_3_60"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 10 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 60
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_r_60"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 10 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 60
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_0_120"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 5 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 120
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_1_120"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 5 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 120
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_2_120"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 5 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 120
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_3_120"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 5 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 120
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_dots_r_120"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 290 }
+					slotsize = { width = 5 height = 290 }
+					add_horizontal = yes
+					max_slots_horizontal = 120
+					format = "UPPER_LEFT"
+				}
+			}
+			containerWindowType = {
+				name = "gv_band"
+				position = { x = 450 y = 366 }
+				size = { width = 600 height = 22 }
+				gridboxtype = {
+					name = "gv_band_24"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 22 }
+					slotsize = { width = 25 height = 22 }
+					add_horizontal = yes
+					max_slots_horizontal = 24
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_band_60"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 22 }
+					slotsize = { width = 10 height = 22 }
+					add_horizontal = yes
+					max_slots_horizontal = 60
+					format = "UPPER_LEFT"
+				}
+				gridboxtype = {
+					name = "gv_band_120"
+					position = { x = 0 y = 0 }
+					size = { width = 600 height = 22 }
+					slotsize = { width = 5 height = 22 }
+					add_horizontal = yes
+					max_slots_horizontal = 120
+					format = "UPPER_LEFT"
+				}
+			}
+			iconType = { name = "gv_ymark_0" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_0" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_0" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_1" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_1" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_1" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_2" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_2" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_2" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_3" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_3" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_3" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_4" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_4" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_4" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_5" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_5" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_5" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_6" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_6" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_6" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_7" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_7" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_7" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_8" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_8" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_8" maxWidth = 40 maxHeight = 22 format = centre }
+			iconType = { name = "gv_ymark_9" position = { x = 450 y = 336 } spriteType = "GFX_1440p_GV_tick_2x6" }
+			instantTextboxType = { name = "gv_year_9" position = { x = 450 y = 340 } font = "hoi_18mbs" text = "MOD1440_GV_YEAR_9" maxWidth = 40 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_span_0" position = { x = 456 y = 366 } font = "hoi_18mbs" text = "MOD1440_GV_SPAN_0" maxWidth = 120 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SPAN_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_span_1" position = { x = 456 y = 366 } font = "hoi_18mbs" text = "MOD1440_GV_SPAN_1" maxWidth = 120 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SPAN_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_span_2" position = { x = 456 y = 366 } font = "hoi_18mbs" text = "MOD1440_GV_SPAN_2" maxWidth = 120 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SPAN_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_span_3" position = { x = 456 y = 366 } font = "hoi_18mbs" text = "MOD1440_GV_SPAN_3" maxWidth = 120 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SPAN_3_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_span_4" position = { x = 456 y = 366 } font = "hoi_18mbs" text = "MOD1440_GV_SPAN_4" maxWidth = 120 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SPAN_4_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_span_5" position = { x = 456 y = 366 } font = "hoi_18mbs" text = "MOD1440_GV_SPAN_5" maxWidth = 120 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_SPAN_5_TT" fixedsize = yes }
+			iconType = { name = "gv_tick_0" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_0_TT" }
+			iconType = { name = "gv_tick_1" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_1_TT" }
+			iconType = { name = "gv_tick_2" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_2_TT" }
+			iconType = { name = "gv_tick_3" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_3_TT" }
+			iconType = { name = "gv_tick_4" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_4_TT" }
+			iconType = { name = "gv_tick_5" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_5_TT" }
+			iconType = { name = "gv_tick_6" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_6_TT" }
+			iconType = { name = "gv_tick_7" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_7_TT" }
+			iconType = { name = "gv_tick_8" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_8_TT" }
+			iconType = { name = "gv_tick_9" position = { x = 450 y = 362 } spriteType = "GFX_1440p_GV_tick_2x30" pdx_tooltip = "MOD1440_GV_TICK_9_TT" }
+			iconType = { name = "gv_end_0_sw" position = { x = 1054 y = 56 } spriteType = "GFX_1440p_GV_dot_fascism_6" }
+			instantTextboxType = { name = "gv_end_0" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_0" maxWidth = 38 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_end_0_lt" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_LT" maxWidth = 38 maxHeight = 22 format = left }
+			iconType = { name = "gv_end_1_sw" position = { x = 1054 y = 56 } spriteType = "GFX_1440p_GV_dot_democratic_6" }
+			instantTextboxType = { name = "gv_end_1" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_1" maxWidth = 38 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_end_1_lt" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_LT" maxWidth = 38 maxHeight = 22 format = left }
+			iconType = { name = "gv_end_2_sw" position = { x = 1054 y = 56 } spriteType = "GFX_1440p_GV_dot_communism_6" }
+			instantTextboxType = { name = "gv_end_2" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_2" maxWidth = 38 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_end_2_lt" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_LT" maxWidth = 38 maxHeight = 22 format = left }
+			iconType = { name = "gv_end_3_sw" position = { x = 1054 y = 56 } spriteType = "GFX_1440p_GV_dot_neutrality_6" }
+			instantTextboxType = { name = "gv_end_3" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_3" maxWidth = 38 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_end_3_lt" position = { x = 1063 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_END_LT" maxWidth = 38 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_legend" position = { x = 408 y = 404 } font = "hoi_18mbs" text = "MOD1440_GV_LEGEND" maxWidth = 682 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_legend_bf" position = { x = 408 y = 404 } font = "hoi_18mbs" text = "MOD1440_GV_LEGEND_BF" maxWidth = 682 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_LEGEND_BF_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_chart_none" position = { x = 470 y = 156 } font = "hoi_18mbs" text = "MOD1440_GV_CHART_NONE" maxWidth = 560 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_title" position = { x = 12 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_HD_TITLE" maxWidth = 600 maxHeight = 22 format = left fixedsize = yes }
+			buttonType = { name = "gv_heads_back" position = { x = 958 y = 5 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_HEADS_BACK" pdx_tooltip = "MOD1440_GV_HEADS_BACK_TT" }
+			buttonType = { name = "gv_heads_newer" position = { x = 750 y = 5 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_HEADS_NEWER" pdx_tooltip = "MOD1440_GV_HEADS_NEWER_TT" }
+			buttonType = { name = "gv_heads_older" position = { x = 854 y = 5 } quadTextureSprite = "GFX_sort_button_100x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_HEADS_OLDER" pdx_tooltip = "MOD1440_GV_HEADS_OLDER_TT" }
+			iconType = { name = "gv_hd_head" position = { x = 8 y = 44 } spriteType = "GFX_1440p_SG_head_1090x26" }
+			instantTextboxType = { name = "gv_hd_h_who" position = { x = 56 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_HD_H_WHO" maxWidth = 240 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_h_office" position = { x = 334 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_HD_H_OFFICE" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_h_stab" position = { x = 640 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_HD_H_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_h_ws" position = { x = 780 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_HD_H_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_h_el" position = { x = 920 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_HD_H_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_band_2" position = { x = 8 y = 118 } spriteType = "GFX_1440p_SG_stripe_1090x48" }
+			iconType = { name = "gv_hd_band_4" position = { x = 8 y = 214 } spriteType = "GFX_1440p_SG_stripe_1090x48" }
+			iconType = { name = "gv_hd_band_6" position = { x = 8 y = 310 } spriteType = "GFX_1440p_SG_stripe_1090x48" }
+			iconType = { name = "gv_hd_pick" position = { x = 8 y = 70 } spriteType = "GFX_1440p_SG_pick_1090x48" }
+			iconType = { name = "gv_hd_0_face" position = { x = 14 y = 71 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_0_fb" position = { x = 14 y = 71 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_0_fbg_g1" position = { x = 20 y = 82 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_0_fbg_g2" position = { x = 20 y = 82 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_0_fbg_g3" position = { x = 20 y = 82 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_0_fbg_g4" position = { x = 20 y = 82 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_0" position = { x = 56 y = 72 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_pt1" position = { x = 56 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT0_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_pt2" position = { x = 56 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT0_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_pt3" position = { x = 56 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT0_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_pt4" position = { x = 56 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT0_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_0_gi_g1" position = { x = 290 y = 77 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_0_gi_g2" position = { x = 290 y = 77 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_0_gi_g3" position = { x = 290 y = 77 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_0_gi_g4" position = { x = 290 y = 77 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_0_ta" position = { x = 334 y = 72 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_tb" position = { x = 334 y = 72 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_tc" position = { x = 334 y = 72 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_td" position = { x = 334 y = 72 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_0_days" position = { x = 334 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_0_rec" position = { x = 334 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_0_stab" position = { x = 640 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_0_stab_nr" position = { x = 640 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_0_ws" position = { x = 780 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_HD_0_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_0_ws_nr" position = { x = 780 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_0_el" position = { x = 920 y = 81 } font = "hoi_20b" text = "MOD1440_GV_HD_0_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_1_face" position = { x = 14 y = 119 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_1_fb" position = { x = 14 y = 119 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_1_fbg_g1" position = { x = 20 y = 130 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_1_fbg_g2" position = { x = 20 y = 130 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_1_fbg_g3" position = { x = 20 y = 130 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_1_fbg_g4" position = { x = 20 y = 130 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_1" position = { x = 56 y = 120 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_pt1" position = { x = 56 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT1_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_pt2" position = { x = 56 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT1_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_pt3" position = { x = 56 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT1_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_pt4" position = { x = 56 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT1_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_1_gi_g1" position = { x = 290 y = 125 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_1_gi_g2" position = { x = 290 y = 125 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_1_gi_g3" position = { x = 290 y = 125 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_1_gi_g4" position = { x = 290 y = 125 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_1_ta" position = { x = 334 y = 120 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_tb" position = { x = 334 y = 120 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_tc" position = { x = 334 y = 120 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_td" position = { x = 334 y = 120 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_1_days" position = { x = 334 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_1_rec" position = { x = 334 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_1_stab" position = { x = 640 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_1_stab_nr" position = { x = 640 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_1_ws" position = { x = 780 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_HD_1_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_1_ws_nr" position = { x = 780 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_1_el" position = { x = 920 y = 129 } font = "hoi_20b" text = "MOD1440_GV_HD_1_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_2_face" position = { x = 14 y = 167 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_2_fb" position = { x = 14 y = 167 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_2_fbg_g1" position = { x = 20 y = 178 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_2_fbg_g2" position = { x = 20 y = 178 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_2_fbg_g3" position = { x = 20 y = 178 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_2_fbg_g4" position = { x = 20 y = 178 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_2" position = { x = 56 y = 168 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_pt1" position = { x = 56 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT2_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_pt2" position = { x = 56 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT2_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_pt3" position = { x = 56 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT2_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_pt4" position = { x = 56 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT2_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_2_gi_g1" position = { x = 290 y = 173 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_2_gi_g2" position = { x = 290 y = 173 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_2_gi_g3" position = { x = 290 y = 173 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_2_gi_g4" position = { x = 290 y = 173 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_2_ta" position = { x = 334 y = 168 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_tb" position = { x = 334 y = 168 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_tc" position = { x = 334 y = 168 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_td" position = { x = 334 y = 168 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_2_days" position = { x = 334 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_2_rec" position = { x = 334 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_2_stab" position = { x = 640 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_2_stab_nr" position = { x = 640 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_2_ws" position = { x = 780 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_HD_2_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_2_ws_nr" position = { x = 780 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_2_el" position = { x = 920 y = 177 } font = "hoi_20b" text = "MOD1440_GV_HD_2_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_3_face" position = { x = 14 y = 215 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_3_fb" position = { x = 14 y = 215 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_3_fbg_g1" position = { x = 20 y = 226 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_3_fbg_g2" position = { x = 20 y = 226 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_3_fbg_g3" position = { x = 20 y = 226 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_3_fbg_g4" position = { x = 20 y = 226 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_3" position = { x = 56 y = 216 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_pt1" position = { x = 56 y = 238 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT3_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_pt2" position = { x = 56 y = 238 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT3_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_pt3" position = { x = 56 y = 238 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT3_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_pt4" position = { x = 56 y = 238 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT3_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_3_gi_g1" position = { x = 290 y = 221 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_3_gi_g2" position = { x = 290 y = 221 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_3_gi_g3" position = { x = 290 y = 221 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_3_gi_g4" position = { x = 290 y = 221 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_3_ta" position = { x = 334 y = 216 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_tb" position = { x = 334 y = 216 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_tc" position = { x = 334 y = 216 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_td" position = { x = 334 y = 216 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_3_days" position = { x = 334 y = 238 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_3_rec" position = { x = 334 y = 238 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_3_stab" position = { x = 640 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_3_stab_nr" position = { x = 640 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_3_ws" position = { x = 780 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_HD_3_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_3_ws_nr" position = { x = 780 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_3_el" position = { x = 920 y = 225 } font = "hoi_20b" text = "MOD1440_GV_HD_3_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_4_face" position = { x = 14 y = 263 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_4_fb" position = { x = 14 y = 263 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_4_fbg_g1" position = { x = 20 y = 274 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_4_fbg_g2" position = { x = 20 y = 274 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_4_fbg_g3" position = { x = 20 y = 274 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_4_fbg_g4" position = { x = 20 y = 274 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_4" position = { x = 56 y = 264 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_pt1" position = { x = 56 y = 286 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT4_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_pt2" position = { x = 56 y = 286 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT4_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_pt3" position = { x = 56 y = 286 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT4_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_pt4" position = { x = 56 y = 286 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT4_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_4_gi_g1" position = { x = 290 y = 269 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_4_gi_g2" position = { x = 290 y = 269 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_4_gi_g3" position = { x = 290 y = 269 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_4_gi_g4" position = { x = 290 y = 269 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_4_ta" position = { x = 334 y = 264 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_tb" position = { x = 334 y = 264 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_tc" position = { x = 334 y = 264 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_td" position = { x = 334 y = 264 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_4_days" position = { x = 334 y = 286 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_4_rec" position = { x = 334 y = 286 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_4_stab" position = { x = 640 y = 274 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_4_stab_nr" position = { x = 640 y = 274 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_4_ws" position = { x = 780 y = 274 } font = "hoi_18mbs" text = "MOD1440_GV_HD_4_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_4_ws_nr" position = { x = 780 y = 274 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_4_el" position = { x = 920 y = 273 } font = "hoi_20b" text = "MOD1440_GV_HD_4_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_5_face" position = { x = 14 y = 311 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_5_fb" position = { x = 14 y = 311 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_5_fbg_g1" position = { x = 20 y = 322 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_5_fbg_g2" position = { x = 20 y = 322 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_5_fbg_g3" position = { x = 20 y = 322 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_5_fbg_g4" position = { x = 20 y = 322 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_5" position = { x = 56 y = 312 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_pt1" position = { x = 56 y = 334 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT5_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_pt2" position = { x = 56 y = 334 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT5_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_pt3" position = { x = 56 y = 334 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT5_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_pt4" position = { x = 56 y = 334 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT5_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_5_gi_g1" position = { x = 290 y = 317 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_5_gi_g2" position = { x = 290 y = 317 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_5_gi_g3" position = { x = 290 y = 317 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_5_gi_g4" position = { x = 290 y = 317 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_5_ta" position = { x = 334 y = 312 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_tb" position = { x = 334 y = 312 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_tc" position = { x = 334 y = 312 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_td" position = { x = 334 y = 312 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_5_days" position = { x = 334 y = 334 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_5_rec" position = { x = 334 y = 334 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_5_stab" position = { x = 640 y = 322 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_5_stab_nr" position = { x = 640 y = 322 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_5_ws" position = { x = 780 y = 322 } font = "hoi_18mbs" text = "MOD1440_GV_HD_5_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_5_ws_nr" position = { x = 780 y = 322 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_5_el" position = { x = 920 y = 321 } font = "hoi_20b" text = "MOD1440_GV_HD_5_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			iconType = { name = "gv_hd_6_face" position = { x = 14 y = 359 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hd_6_fb" position = { x = 14 y = 359 } spriteType = "GFX_1440p_SG_inset_34x46" scale = 1.0 pdx_tooltip = "MOD1440_GV_HD_FB_TT" }
+			iconType = { name = "gv_hd_6_fbg_g1" position = { x = 20 y = 370 } spriteType = "GFX_ideology_fascism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_6_fbg_g2" position = { x = 20 y = 370 } spriteType = "GFX_ideology_democratic_group" scale = 0.333 }
+			iconType = { name = "gv_hd_6_fbg_g3" position = { x = 20 y = 370 } spriteType = "GFX_ideology_communism_group" scale = 0.333 }
+			iconType = { name = "gv_hd_6_fbg_g4" position = { x = 20 y = 370 } spriteType = "GFX_ideology_neutrality_group" scale = 0.333 }
+			instantTextboxType = { name = "gv_hd_6" position = { x = 56 y = 360 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_pt1" position = { x = 56 y = 382 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT6_1" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_pt2" position = { x = 56 y = 382 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT6_2" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_pt3" position = { x = 56 y = 382 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT6_3" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_pt4" position = { x = 56 y = 382 } font = "hoi_18mbs" text = "MOD1440_GV_HD_PT6_4" maxWidth = 230 maxHeight = 22 format = left fixedsize = yes }
+			iconType = { name = "gv_hd_6_gi_g1" position = { x = 290 y = 365 } spriteType = "GFX_ideology_fascism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_6_gi_g2" position = { x = 290 y = 365 } spriteType = "GFX_ideology_democratic_group" scale = 0.5 }
+			iconType = { name = "gv_hd_6_gi_g3" position = { x = 290 y = 365 } spriteType = "GFX_ideology_communism_group" scale = 0.5 }
+			iconType = { name = "gv_hd_6_gi_g4" position = { x = 290 y = 365 } spriteType = "GFX_ideology_neutrality_group" scale = 0.5 }
+			instantTextboxType = { name = "gv_hd_6_ta" position = { x = 334 y = 360 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_TA" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_tb" position = { x = 334 y = 360 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_TB" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_tc" position = { x = 334 y = 360 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_TC" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_td" position = { x = 334 y = 360 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_TD" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_hd_6_days" position = { x = 334 y = 382 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_DAYS" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_6_rec" position = { x = 334 y = 382 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_REC" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_hd_6_stab" position = { x = 640 y = 370 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_STAB" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_6_stab_nr" position = { x = 640 y = 370 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_6_ws" position = { x = 780 y = 370 } font = "hoi_18mbs" text = "MOD1440_GV_HD_6_WS" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_6_ws_nr" position = { x = 780 y = 370 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NR" maxWidth = 130 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_6_el" position = { x = 920 y = 369 } font = "hoi_20b" text = "MOD1440_GV_HD_6_EL" maxWidth = 90 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_hd_note" position = { x = 16 y = 414 } font = "hoi_18mbs" text = "MOD1440_GV_HD_NOTE" maxWidth = 1074 maxHeight = 22 format = left fixedsize = yes }
 		}
 		containerWindowType = {
-			name = "gv_laws"
-			position = { x = 14 y = 730 }
-			size = { width = 542 height = 184 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_laws_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_LAWS_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			iconType = { name = "gv_law_0_bg" position = { x = 14 y = 42 } spriteType = "GFX_1440p_SG_tile_166x130" }
-			instantTextboxType = { name = "gv_law_0_l" position = { x = 20 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_LAW_0_L" maxWidth = 154 maxHeight = 20 format = centre }
-			iconType = { name = "gv_law_0_pic" position = { x = 65 y = 70 } spriteType = "GFX_idea_unknown" }
-			instantTextboxType = { name = "gv_law_0" position = { x = 20 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_0" maxWidth = 154 maxHeight = 24 format = centre fixedsize = yes }
-			iconType = { name = "gv_law_1_bg" position = { x = 188 y = 42 } spriteType = "GFX_1440p_SG_tile_166x130" }
-			instantTextboxType = { name = "gv_law_1_l" position = { x = 194 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_LAW_1_L" maxWidth = 154 maxHeight = 20 format = centre }
-			iconType = { name = "gv_law_1_pic" position = { x = 239 y = 70 } spriteType = "GFX_idea_unknown" }
-			instantTextboxType = { name = "gv_law_1" position = { x = 194 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_1" maxWidth = 154 maxHeight = 24 format = centre fixedsize = yes }
-			iconType = { name = "gv_law_2_bg" position = { x = 362 y = 42 } spriteType = "GFX_1440p_SG_tile_166x130" }
-			instantTextboxType = { name = "gv_law_2_l" position = { x = 368 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_LAW_2_L" maxWidth = 154 maxHeight = 20 format = centre }
-			iconType = { name = "gv_law_2_pic" position = { x = 413 y = 70 } spriteType = "GFX_idea_unknown" }
-			instantTextboxType = { name = "gv_law_2" position = { x = 368 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_LAW_2" maxWidth = 154 maxHeight = 24 format = centre fixedsize = yes }
+			name = "gv_cabinet"
+			position = { x = 14 y = 568 }
+			size = { width = 540 height = 280 }
+			iconType = { name = "gv_cabinet_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_cabinet" }
+			instantTextboxType = { name = "gv_cabinet_title" position = { x = 12 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_CABINET_TITLE" maxWidth = 316 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_cabinet_right" position = { x = 328 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_CABINET_RIGHT" maxWidth = 200 maxHeight = 22 format = right }
+			iconType = { name = "gv_cab_band_2" position = { x = 8 y = 80 } spriteType = "GFX_1440p_SG_stripe_524x48" }
+			iconType = { name = "gv_cab_band_4" position = { x = 8 y = 176 } spriteType = "GFX_1440p_SG_stripe_524x48" }
+			iconType = { name = "gv_adv_0_face" position = { x = 10 y = 33 } spriteType = "GFX_idea_unknown" scale = 0.7 }
+			iconType = { name = "gv_adv_0_big" position = { x = 16 y = 33 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_adv_0_none" position = { x = 10 y = 33 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 1.0 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_adv_0_name" position = { x = 64 y = 34 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_0_NAME" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_0_role" position = { x = 64 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_0_ROLE" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_0_since" position = { x = 352 y = 45 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_0_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_adv_0_since_old" position = { x = 352 y = 45 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			iconType = { name = "gv_adv_1_face" position = { x = 10 y = 81 } spriteType = "GFX_idea_unknown" scale = 0.7 }
+			iconType = { name = "gv_adv_1_big" position = { x = 16 y = 81 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_adv_1_none" position = { x = 10 y = 81 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 1.0 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_adv_1_name" position = { x = 64 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_1_NAME" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_1_role" position = { x = 64 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_1_ROLE" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_1_since" position = { x = 352 y = 93 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_1_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_adv_1_since_old" position = { x = 352 y = 93 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			iconType = { name = "gv_adv_2_face" position = { x = 10 y = 129 } spriteType = "GFX_idea_unknown" scale = 0.7 }
+			iconType = { name = "gv_adv_2_big" position = { x = 16 y = 129 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_adv_2_none" position = { x = 10 y = 129 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 1.0 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_adv_2_name" position = { x = 64 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_2_NAME" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_2_role" position = { x = 64 y = 152 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_2_ROLE" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_2_since" position = { x = 352 y = 141 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_2_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_adv_2_since_old" position = { x = 352 y = 141 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			iconType = { name = "gv_adv_3_face" position = { x = 10 y = 177 } spriteType = "GFX_idea_unknown" scale = 0.7 }
+			iconType = { name = "gv_adv_3_big" position = { x = 16 y = 177 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_adv_3_none" position = { x = 10 y = 177 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 1.0 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_adv_3_name" position = { x = 64 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_3_NAME" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_3_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_3_role" position = { x = 64 y = 200 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_3_ROLE" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_3_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_3_since" position = { x = 352 y = 189 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_3_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_adv_3_since_old" position = { x = 352 y = 189 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			iconType = { name = "gv_adv_4_face" position = { x = 10 y = 225 } spriteType = "GFX_idea_unknown" scale = 0.7 }
+			iconType = { name = "gv_adv_4_big" position = { x = 16 y = 225 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_adv_4_none" position = { x = 10 y = 225 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 1.0 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_adv_4_name" position = { x = 64 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_4_NAME" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_4_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_4_role" position = { x = 64 y = 248 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_4_ROLE" maxWidth = 248 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_ADV_4_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_adv_4_since" position = { x = 352 y = 237 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_4_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_adv_4_since_old" position = { x = 352 y = 237 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 174 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_adv_none" position = { x = 16 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_NONE" maxWidth = 500 maxHeight = 22 format = left }
 		}
 		containerWindowType = {
-			name = "gv_heads"
-			position = { x = 14 y = 926 }
-			size = { width = 542 height = 280 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_heads_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_HEADS_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_rul_n" position = { x = 228 y = 14 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_N" maxWidth = 300 maxHeight = 20 format = right }
-			iconType = { name = "gv_rul_0_pick" position = { x = 8 y = 40 } spriteType = "GFX_1440p_SG_pick_526x52" }
-			iconType = { name = "gv_rul_0_face" position = { x = 16 y = 43 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
-			instantTextboxType = { name = "gv_rul_0" position = { x = 60 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_RUL_0" maxWidth = 232 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_0_g1" position = { x = 60 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_G1" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_0_g2" position = { x = 60 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_G2" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_0_g3" position = { x = 60 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_G3" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_0_g4" position = { x = 60 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_G4" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_0_ta" position = { x = 226 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_TA" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_0_tb" position = { x = 226 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_TB" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_0_tc" position = { x = 226 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_TC" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_0_td" position = { x = 226 y = 48 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_0_TD" maxWidth = 300 maxHeight = 22 format = right }
-			iconType = { name = "gv_rul_1_bg" position = { x = 8 y = 94 } spriteType = "GFX_1440p_SG_stripe_526x52" }
-			iconType = { name = "gv_rul_1_face" position = { x = 16 y = 97 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
-			instantTextboxType = { name = "gv_rul_1" position = { x = 60 y = 100 } font = "hoi_18mbs" text = "MOD1440_GV_RUL_1" maxWidth = 232 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_1_g1" position = { x = 60 y = 122 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_G1" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_1_g2" position = { x = 60 y = 122 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_G2" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_1_g3" position = { x = 60 y = 122 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_G3" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_1_g4" position = { x = 60 y = 122 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_G4" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_1_ta" position = { x = 226 y = 102 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_TA" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_1_tb" position = { x = 226 y = 102 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_TB" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_1_tc" position = { x = 226 y = 102 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_TC" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_1_td" position = { x = 226 y = 102 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_1_TD" maxWidth = 300 maxHeight = 22 format = right }
-			iconType = { name = "gv_rul_2_face" position = { x = 16 y = 151 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
-			instantTextboxType = { name = "gv_rul_2" position = { x = 60 y = 154 } font = "hoi_18mbs" text = "MOD1440_GV_RUL_2" maxWidth = 232 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_2_g1" position = { x = 60 y = 176 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_G1" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_2_g2" position = { x = 60 y = 176 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_G2" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_2_g3" position = { x = 60 y = 176 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_G3" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_2_g4" position = { x = 60 y = 176 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_G4" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_2_ta" position = { x = 226 y = 156 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_TA" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_2_tb" position = { x = 226 y = 156 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_TB" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_2_tc" position = { x = 226 y = 156 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_TC" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_2_td" position = { x = 226 y = 156 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_2_TD" maxWidth = 300 maxHeight = 22 format = right }
-			iconType = { name = "gv_rul_3_bg" position = { x = 8 y = 202 } spriteType = "GFX_1440p_SG_stripe_526x52" }
-			iconType = { name = "gv_rul_3_face" position = { x = 16 y = 205 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
-			instantTextboxType = { name = "gv_rul_3" position = { x = 60 y = 208 } font = "hoi_18mbs" text = "MOD1440_GV_RUL_3" maxWidth = 232 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_3_g1" position = { x = 60 y = 230 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_G1" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_3_g2" position = { x = 60 y = 230 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_G2" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_3_g3" position = { x = 60 y = 230 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_G3" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_3_g4" position = { x = 60 y = 230 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_G4" maxWidth = 458 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_rul_3_ta" position = { x = 226 y = 210 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_TA" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_3_tb" position = { x = 226 y = 210 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_TB" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_3_tc" position = { x = 226 y = 210 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_TC" maxWidth = 300 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_rul_3_td" position = { x = 226 y = 210 } font = "hoi_16mbs" text = "MOD1440_GV_RUL_3_TD" maxWidth = 300 maxHeight = 22 format = right }
-		}
-		containerWindowType = {
-			name = "gv_adv"
-			position = { x = 568 y = 116 }
-			size = { width = 542 height = 380 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_adv_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_ADV_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_adv_n" position = { x = 228 y = 14 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_N" maxWidth = 300 maxHeight = 20 format = right }
-			iconType = { name = "gv_adv_0_face" position = { x = 14 y = 46 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_adv_0_big" position = { x = 22 y = 46 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_adv_0_name" position = { x = 92 y = 50 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_0_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_0_role" position = { x = 92 y = 74 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_0_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_0_since" position = { x = 336 y = 52 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_0_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_adv_0_since_old" position = { x = 336 y = 52 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_adv_1_bg" position = { x = 8 y = 118 } spriteType = "GFX_1440p_SG_stripe_526x74" }
-			iconType = { name = "gv_adv_1_face" position = { x = 14 y = 122 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_adv_1_big" position = { x = 22 y = 122 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_adv_1_name" position = { x = 92 y = 126 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_1_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_1_role" position = { x = 92 y = 150 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_1_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_1_since" position = { x = 336 y = 128 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_1_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_adv_1_since_old" position = { x = 336 y = 128 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_adv_2_face" position = { x = 14 y = 198 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_adv_2_big" position = { x = 22 y = 198 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_adv_2_name" position = { x = 92 y = 202 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_2_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_2_role" position = { x = 92 y = 226 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_2_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_2_since" position = { x = 336 y = 204 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_2_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_adv_2_since_old" position = { x = 336 y = 204 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_adv_3_bg" position = { x = 8 y = 270 } spriteType = "GFX_1440p_SG_stripe_526x74" }
-			iconType = { name = "gv_adv_3_face" position = { x = 14 y = 274 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_adv_3_big" position = { x = 22 y = 274 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_adv_3_name" position = { x = 92 y = 278 } font = "hoi_18mbs" text = "MOD1440_GV_ADV_3_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_3_role" position = { x = 92 y = 302 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_3_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_adv_3_since" position = { x = 336 y = 280 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_3_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_adv_3_since_old" position = { x = 336 y = 280 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_adv_none_0" position = { x = 18 y = 52 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_NONE_0" maxWidth = 500 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_adv_none_1" position = { x = 18 y = 128 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_NONE_1" maxWidth = 500 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_adv_none_2" position = { x = 18 y = 204 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_NONE_2" maxWidth = 500 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_adv_none_3" position = { x = 18 y = 280 } font = "hoi_16mbs" text = "MOD1440_GV_ADV_NONE_3" maxWidth = 500 maxHeight = 22 format = left }
-		}
-		containerWindowType = {
-			name = "gv_hc"
-			position = { x = 568 y = 508 }
-			size = { width = 542 height = 698 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_hc_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_HC_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_hc_n" position = { x = 228 y = 14 } font = "hoi_16mbs" text = "MOD1440_GV_HC_N" maxWidth = 300 maxHeight = 20 format = right }
-			instantTextboxType = { name = "gv_of_0_l" position = { x = 92 y = 42 } font = "hoi_16mbs" text = "MOD1440_GV_OF_0_L" maxWidth = 300 maxHeight = 20 format = left }
-			iconType = { name = "gv_of_0_face" position = { x = 14 y = 62 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_of_0_big" position = { x = 22 y = 62 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			name = "gv_high"
+			position = { x = 560 y = 568 }
+			size = { width = 540 height = 376 }
+			iconType = { name = "gv_high_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_high" }
+			instantTextboxType = { name = "gv_high_title" position = { x = 12 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_HIGH_TITLE" maxWidth = 316 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_high_right" position = { x = 328 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_HIGH_RIGHT" maxWidth = 200 maxHeight = 22 format = right }
+			iconType = { name = "gv_hc_band_2" position = { x = 8 y = 80 } spriteType = "GFX_1440p_SG_stripe_524x48" }
+			iconType = { name = "gv_hc_band_4" position = { x = 8 y = 176 } spriteType = "GFX_1440p_SG_stripe_524x48" }
+			iconType = { name = "gv_hc_band_6" position = { x = 8 y = 272 } spriteType = "GFX_1440p_SG_stripe_524x48" }
 			gridboxtype = {
 				name = "gv_of_0_gface_grid"
-				position = { x = 22 y = 62 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 33 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_of_0_name" position = { x = 92 y = 66 } font = "hoi_18mbs" text = "MOD1440_GV_OF_0_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_0_role" position = { x = 92 y = 90 } font = "hoi_16mbs" text = "MOD1440_GV_OF_0_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_0_since" position = { x = 336 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_OF_0_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_of_0_since_old" position = { x = 336 y = 68 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_of_0_none" position = { x = 22 y = 62 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_of_0_vacant" position = { x = 92 y = 76 } font = "hoi_16mbs" text = "MOD1440_GV_VACANT" maxWidth = 300 maxHeight = 22 format = left }
-			iconType = { name = "gv_of_1_bg" position = { x = 8 y = 132 } spriteType = "GFX_1440p_SG_stripe_526x90" }
-			instantTextboxType = { name = "gv_of_1_l" position = { x = 92 y = 134 } font = "hoi_16mbs" text = "MOD1440_GV_OF_1_L" maxWidth = 300 maxHeight = 20 format = left }
-			iconType = { name = "gv_of_1_face" position = { x = 14 y = 154 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_of_1_big" position = { x = 22 y = 154 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			iconType = { name = "gv_of_0_face" position = { x = 12 y = 33 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_of_0_big" position = { x = 14 y = 33 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_of_0_none" position = { x = 12 y = 33 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_of_0_name" position = { x = 56 y = 34 } font = "hoi_18mbs" text = "MOD1440_GV_OF_0_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_0_role" position = { x = 56 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_OF_0_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_0_office" position = { x = 330 y = 34 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_CHIEF_OF_THE_ARMY" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_0_since" position = { x = 330 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_OF_0_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_0_since_old" position = { x = 330 y = 56 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			iconType = { name = "gv_of_0_slot" position = { x = 14 y = 40 } spriteType = "GFX_idea_slot_army_chief" scale = 0.5 }
+			instantTextboxType = { name = "gv_of_0_vacant" position = { x = 56 y = 45 } font = "hoi_18mbs" text = "MOD1440_GV_VACANT" maxWidth = 200 maxHeight = 22 format = left }
 			gridboxtype = {
 				name = "gv_of_1_gface_grid"
-				position = { x = 22 y = 154 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 81 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_of_1_name" position = { x = 92 y = 158 } font = "hoi_18mbs" text = "MOD1440_GV_OF_1_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_1_role" position = { x = 92 y = 182 } font = "hoi_16mbs" text = "MOD1440_GV_OF_1_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_1_since" position = { x = 336 y = 160 } font = "hoi_16mbs" text = "MOD1440_GV_OF_1_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_of_1_since_old" position = { x = 336 y = 160 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_of_1_none" position = { x = 22 y = 154 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_of_1_vacant" position = { x = 92 y = 168 } font = "hoi_16mbs" text = "MOD1440_GV_VACANT" maxWidth = 300 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_of_2_l" position = { x = 92 y = 226 } font = "hoi_16mbs" text = "MOD1440_GV_OF_2_L" maxWidth = 300 maxHeight = 20 format = left }
-			iconType = { name = "gv_of_2_face" position = { x = 14 y = 246 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_of_2_big" position = { x = 22 y = 246 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			iconType = { name = "gv_of_1_face" position = { x = 12 y = 81 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_of_1_big" position = { x = 14 y = 81 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_of_1_none" position = { x = 12 y = 81 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_of_1_name" position = { x = 56 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_OF_1_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_1_role" position = { x = 56 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_OF_1_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_1_office" position = { x = 330 y = 82 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_CHIEF_OF_THE_NAVY" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_1_since" position = { x = 330 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_OF_1_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_1_since_old" position = { x = 330 y = 104 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			iconType = { name = "gv_of_1_slot" position = { x = 14 y = 88 } spriteType = "GFX_idea_slot_navy_chief" scale = 0.5 }
+			instantTextboxType = { name = "gv_of_1_vacant" position = { x = 56 y = 93 } font = "hoi_18mbs" text = "MOD1440_GV_VACANT" maxWidth = 200 maxHeight = 22 format = left }
 			gridboxtype = {
 				name = "gv_of_2_gface_grid"
-				position = { x = 22 y = 246 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 129 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_of_2_name" position = { x = 92 y = 250 } font = "hoi_18mbs" text = "MOD1440_GV_OF_2_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_2_role" position = { x = 92 y = 274 } font = "hoi_16mbs" text = "MOD1440_GV_OF_2_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_2_since" position = { x = 336 y = 252 } font = "hoi_16mbs" text = "MOD1440_GV_OF_2_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_of_2_since_old" position = { x = 336 y = 252 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_of_2_none" position = { x = 22 y = 246 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_of_2_vacant" position = { x = 92 y = 260 } font = "hoi_16mbs" text = "MOD1440_GV_VACANT" maxWidth = 300 maxHeight = 22 format = left }
-			iconType = { name = "gv_of_3_bg" position = { x = 8 y = 316 } spriteType = "GFX_1440p_SG_stripe_526x90" }
-			instantTextboxType = { name = "gv_of_3_l" position = { x = 92 y = 318 } font = "hoi_16mbs" text = "MOD1440_GV_OF_3_L" maxWidth = 300 maxHeight = 20 format = left }
-			iconType = { name = "gv_of_3_face" position = { x = 14 y = 338 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_of_3_big" position = { x = 22 y = 338 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			iconType = { name = "gv_of_2_face" position = { x = 12 y = 129 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_of_2_big" position = { x = 14 y = 129 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_of_2_none" position = { x = 12 y = 129 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_of_2_name" position = { x = 56 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_OF_2_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_2_role" position = { x = 56 y = 152 } font = "hoi_18mbs" text = "MOD1440_GV_OF_2_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_2_office" position = { x = 330 y = 130 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_CHIEF_OF_THE_AIR_FORCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_2_since" position = { x = 330 y = 152 } font = "hoi_18mbs" text = "MOD1440_GV_OF_2_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_2_since_old" position = { x = 330 y = 152 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			iconType = { name = "gv_of_2_slot" position = { x = 14 y = 136 } spriteType = "GFX_idea_slot_air_chief" scale = 0.5 }
+			instantTextboxType = { name = "gv_of_2_vacant" position = { x = 56 y = 141 } font = "hoi_18mbs" text = "MOD1440_GV_VACANT" maxWidth = 200 maxHeight = 22 format = left }
 			gridboxtype = {
 				name = "gv_of_3_gface_grid"
-				position = { x = 22 y = 338 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 177 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_of_3_name" position = { x = 92 y = 342 } font = "hoi_18mbs" text = "MOD1440_GV_OF_3_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_3_role" position = { x = 92 y = 366 } font = "hoi_16mbs" text = "MOD1440_GV_OF_3_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_of_3_since" position = { x = 336 y = 344 } font = "hoi_16mbs" text = "MOD1440_GV_OF_3_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_of_3_since_old" position = { x = 336 y = 344 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_of_3_none" position = { x = 22 y = 338 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
-			instantTextboxType = { name = "gv_of_3_vacant" position = { x = 92 y = 352 } font = "hoi_16mbs" text = "MOD1440_GV_VACANT" maxWidth = 300 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_members_t" position = { x = 14 y = 416 } font = "hoi_24header" text = "MOD1440_GV_MEMBERS_T" maxWidth = 300 maxHeight = 30 format = left }
-			iconType = { name = "gv_hc_0_face" position = { x = 14 y = 456 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_hc_0_big" position = { x = 22 y = 456 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			iconType = { name = "gv_of_3_face" position = { x = 12 y = 177 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_of_3_big" position = { x = 14 y = 177 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_of_3_none" position = { x = 12 y = 177 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_of_3_name" position = { x = 56 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_OF_3_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_3_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_3_role" position = { x = 56 y = 200 } font = "hoi_18mbs" text = "MOD1440_GV_OF_3_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OF_3_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_of_3_office" position = { x = 330 y = 178 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_THEORIST" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_3_since" position = { x = 330 y = 200 } font = "hoi_18mbs" text = "MOD1440_GV_OF_3_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_of_3_since_old" position = { x = 330 y = 200 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			iconType = { name = "gv_of_3_slot" position = { x = 14 y = 184 } spriteType = "GFX_idea_slot_theorist" scale = 0.5 }
+			instantTextboxType = { name = "gv_of_3_vacant" position = { x = 56 y = 189 } font = "hoi_18mbs" text = "MOD1440_GV_VACANT" maxWidth = 200 maxHeight = 22 format = left }
 			gridboxtype = {
 				name = "gv_hc_0_gface_grid"
-				position = { x = 22 y = 456 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 225 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_hc_0_name" position = { x = 92 y = 460 } font = "hoi_18mbs" text = "MOD1440_GV_HC_0_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_hc_0_role" position = { x = 92 y = 484 } font = "hoi_16mbs" text = "MOD1440_GV_HC_0_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_hc_0_since" position = { x = 336 y = 462 } font = "hoi_16mbs" text = "MOD1440_GV_HC_0_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_hc_0_since_old" position = { x = 336 y = 462 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_hc_1_bg" position = { x = 8 y = 528 } spriteType = "GFX_1440p_SG_stripe_526x74" }
-			iconType = { name = "gv_hc_1_face" position = { x = 14 y = 532 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_hc_1_big" position = { x = 22 y = 532 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			iconType = { name = "gv_hc_0_face" position = { x = 12 y = 225 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_hc_0_big" position = { x = 14 y = 225 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hc_0_none" position = { x = 12 y = 225 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_hc_0_name" position = { x = 56 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_HC_0_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_HC_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_hc_0_role" position = { x = 56 y = 248 } font = "hoi_18mbs" text = "MOD1440_GV_HC_0_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_HC_0_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_hc_0_office" position = { x = 330 y = 226 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_HIGH_COMMAND" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_hc_0_since" position = { x = 330 y = 248 } font = "hoi_18mbs" text = "MOD1440_GV_HC_0_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_hc_0_since_old" position = { x = 330 y = 248 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
 			gridboxtype = {
 				name = "gv_hc_1_gface_grid"
-				position = { x = 22 y = 532 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 273 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_hc_1_name" position = { x = 92 y = 536 } font = "hoi_18mbs" text = "MOD1440_GV_HC_1_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_hc_1_role" position = { x = 92 y = 560 } font = "hoi_16mbs" text = "MOD1440_GV_HC_1_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_hc_1_since" position = { x = 336 y = 538 } font = "hoi_16mbs" text = "MOD1440_GV_HC_1_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_hc_1_since_old" position = { x = 336 y = 538 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			iconType = { name = "gv_hc_2_face" position = { x = 14 y = 608 } spriteType = "GFX_idea_unknown" }
-			iconType = { name = "gv_hc_2_big" position = { x = 22 y = 608 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+			iconType = { name = "gv_hc_1_face" position = { x = 12 y = 273 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_hc_1_big" position = { x = 14 y = 273 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hc_1_none" position = { x = 12 y = 273 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_hc_1_name" position = { x = 56 y = 274 } font = "hoi_18mbs" text = "MOD1440_GV_HC_1_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_HC_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_hc_1_role" position = { x = 56 y = 296 } font = "hoi_18mbs" text = "MOD1440_GV_HC_1_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_HC_1_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_hc_1_office" position = { x = 330 y = 274 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_HIGH_COMMAND" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_hc_1_since" position = { x = 330 y = 296 } font = "hoi_18mbs" text = "MOD1440_GV_HC_1_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_hc_1_since_old" position = { x = 330 y = 296 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
 			gridboxtype = {
 				name = "gv_hc_2_gface_grid"
-				position = { x = 22 y = 608 }
-				size = { width = 48 height = 65 }
+				position = { x = 14 y = 321 }
+				size = { width = 34 height = 46 }
 				slotsize = { width = 1 height = 1 }
 				add_horizontal = no
 				format = "UPPER_LEFT"
 			}
-			instantTextboxType = { name = "gv_hc_2_name" position = { x = 92 y = 612 } font = "hoi_18mbs" text = "MOD1440_GV_HC_2_NAME" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_hc_2_role" position = { x = 92 y = 636 } font = "hoi_16mbs" text = "MOD1440_GV_HC_2_ROLE" maxWidth = 426 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_hc_2_since" position = { x = 336 y = 614 } font = "hoi_16mbs" text = "MOD1440_GV_HC_2_SINCE" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_hc_2_since_old" position = { x = 336 y = 614 } font = "hoi_16mbs" text = "MOD1440_GV_BEGAN" maxWidth = 190 maxHeight = 22 format = right }
-			instantTextboxType = { name = "gv_hc_none" position = { x = 18 y = 462 } font = "hoi_16mbs" text = "MOD1440_GV_HC_NONE" maxWidth = 500 maxHeight = 22 format = left }
+			iconType = { name = "gv_hc_2_face" position = { x = 12 y = 321 } spriteType = "GFX_idea_unknown" scale = 0.52 }
+			iconType = { name = "gv_hc_2_big" position = { x = 14 y = 321 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+			iconType = { name = "gv_hc_2_none" position = { x = 12 y = 321 } spriteType = "GFX_1440p_SG_face_none_46x47" scale = 0.72 pdx_tooltip = "MOD1440_GV_FACE_NONE_TT" }
+			instantTextboxType = { name = "gv_hc_2_name" position = { x = 56 y = 322 } font = "hoi_18mbs" text = "MOD1440_GV_HC_2_NAME" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_HC_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_hc_2_role" position = { x = 56 y = 344 } font = "hoi_18mbs" text = "MOD1440_GV_HC_2_ROLE" maxWidth = 230 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_HC_2_TT" fixedsize = yes }
+			instantTextboxType = { name = "gv_hc_2_office" position = { x = 330 y = 322 } font = "hoi_18mbs" text = "MOD1440_GV_OFFICE_HIGH_COMMAND" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_hc_2_since" position = { x = 330 y = 344 } font = "hoi_18mbs" text = "MOD1440_GV_HC_2_SINCE" maxWidth = 196 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_hc_2_since_old" position = { x = 330 y = 344 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_SINCE" maxWidth = 196 maxHeight = 22 format = right }
 		}
 		containerWindowType = {
-			name = "gv_faction"
-			position = { x = 1122 y = 116 }
-			size = { width = 542 height = 440 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_faction_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_FACTION_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_members_n" position = { x = 228 y = 14 } font = "hoi_16mbs" text = "MOD1440_GV_MEMBERS_N" maxWidth = 300 maxHeight = 20 format = right }
-			instantTextboxType = { name = "gv_faction" position = { x = 14 y = 40 } font = "hoi_36header" text = "MOD1440_GV_FACTION" maxWidth = 514 maxHeight = 40 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_faction_none" position = { x = 18 y = 48 } font = "hoi_18mbs" text = "MOD1440_GV_FACTION_NONE" maxWidth = 506 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_faction_lead" position = { x = 18 y = 92 } font = "hoi_18mbs" text = "MOD1440_GV_FACTION_LEAD" maxWidth = 506 maxHeight = 22 format = left fixedsize = yes }
+			name = "gv_diary"
+			position = { x = 560 y = 950 }
+			size = { width = 540 height = 256 }
+			iconType = { name = "gv_diary_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_diary" }
+			instantTextboxType = { name = "gv_diary_title" position = { x = 12 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_DIARY_TITLE" maxWidth = 300 maxHeight = 22 format = left fixedsize = yes }
+			buttonType = { name = "gv_diary_all" position = { x = 392 y = 5 } quadTextureSprite = "GFX_sort_button_140x29" clicksound = click_default buttonFont = "hoi_16mbs" buttonText = "MOD1440_GV_DIARY_ALL" pdx_tooltip = "MOD1440_GV_DIARY_ALL_TT" }
+			iconType = { name = "gv_dl_band_2" position = { x = 8 y = 68 } spriteType = "GFX_1440p_SG_stripe_524x24" }
+			iconType = { name = "gv_dl_band_4" position = { x = 8 y = 116 } spriteType = "GFX_1440p_SG_stripe_524x24" }
+			iconType = { name = "gv_dl_band_6" position = { x = 8 y = 164 } spriteType = "GFX_1440p_SG_stripe_524x24" }
+			iconType = { name = "gv_dl_band_8" position = { x = 8 y = 212 } spriteType = "GFX_1440p_SG_stripe_524x24" }
+			instantTextboxType = { name = "gv_dl_none" position = { x = 16 y = 50 } font = "hoi_18mbs" text = "MOD1440_GV_DL_NONE" maxWidth = 500 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_0_d" position = { x = 16 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_DL_0_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_0_i" position = { x = 130 y = 45 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_0" position = { x = 156 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_DL_0" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_0_a" position = { x = 306 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_DL_0_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_0_b" position = { x = 306 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_DL_0_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_1_d" position = { x = 16 y = 70 } font = "hoi_18mbs" text = "MOD1440_GV_DL_1_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_1_i" position = { x = 130 y = 69 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_1" position = { x = 156 y = 70 } font = "hoi_18mbs" text = "MOD1440_GV_DL_1" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_1_a" position = { x = 306 y = 70 } font = "hoi_18mbs" text = "MOD1440_GV_DL_1_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_1_b" position = { x = 306 y = 70 } font = "hoi_18mbs" text = "MOD1440_GV_DL_1_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_2_d" position = { x = 16 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_DL_2_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_2_i" position = { x = 130 y = 93 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_2" position = { x = 156 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_DL_2" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_2_a" position = { x = 306 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_DL_2_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_2_b" position = { x = 306 y = 94 } font = "hoi_18mbs" text = "MOD1440_GV_DL_2_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_3_d" position = { x = 16 y = 118 } font = "hoi_18mbs" text = "MOD1440_GV_DL_3_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_3_i" position = { x = 130 y = 117 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_3" position = { x = 156 y = 118 } font = "hoi_18mbs" text = "MOD1440_GV_DL_3" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_3_a" position = { x = 306 y = 118 } font = "hoi_18mbs" text = "MOD1440_GV_DL_3_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_3_b" position = { x = 306 y = 118 } font = "hoi_18mbs" text = "MOD1440_GV_DL_3_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_4_d" position = { x = 16 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_DL_4_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_4_i" position = { x = 130 y = 141 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_4" position = { x = 156 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_DL_4" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_4_a" position = { x = 306 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_DL_4_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_4_b" position = { x = 306 y = 142 } font = "hoi_18mbs" text = "MOD1440_GV_DL_4_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_5_d" position = { x = 16 y = 166 } font = "hoi_18mbs" text = "MOD1440_GV_DL_5_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_5_i" position = { x = 130 y = 165 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_5" position = { x = 156 y = 166 } font = "hoi_18mbs" text = "MOD1440_GV_DL_5" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_5_a" position = { x = 306 y = 166 } font = "hoi_18mbs" text = "MOD1440_GV_DL_5_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_5_b" position = { x = 306 y = 166 } font = "hoi_18mbs" text = "MOD1440_GV_DL_5_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_6_d" position = { x = 16 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_DL_6_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_6_i" position = { x = 130 y = 189 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_6" position = { x = 156 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_DL_6" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_6_a" position = { x = 306 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_DL_6_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_6_b" position = { x = 306 y = 190 } font = "hoi_18mbs" text = "MOD1440_GV_DL_6_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_7_d" position = { x = 16 y = 214 } font = "hoi_18mbs" text = "MOD1440_GV_DL_7_D" maxWidth = 112 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_7_i" position = { x = 130 y = 213 } font = "hoi_18mbs" text = "MOD1440_GV_DL_ICON" maxWidth = 26 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_dl_7" position = { x = 156 y = 214 } font = "hoi_18mbs" text = "MOD1440_GV_DL_7" maxWidth = 148 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_7_a" position = { x = 306 y = 214 } font = "hoi_18mbs" text = "MOD1440_GV_DL_7_A" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_dl_7_b" position = { x = 306 y = 214 } font = "hoi_18mbs" text = "MOD1440_GV_DL_7_B" maxWidth = 218 maxHeight = 22 format = left fixedsize = yes }
+		}
+		containerWindowType = {
+			name = "gv_realm"
+			position = { x = 14 y = 854 }
+			size = { width = 540 height = 352 }
+			iconType = { name = "gv_realm_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_realm" }
+			instantTextboxType = { name = "gv_realm_title" position = { x = 12 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_REALM_TITLE" maxWidth = 276 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_realm_right_m1s1" position = { x = 288 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_REALM_RIGHT_M1S1" maxWidth = 240 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_realm_right_m1sn" position = { x = 288 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_REALM_RIGHT_M1SN" maxWidth = 240 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_realm_right_mns1" position = { x = 288 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_REALM_RIGHT_MNS1" maxWidth = 240 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_realm_right_mnsn" position = { x = 288 y = 4 } font = "hoi_18mbs" text = "MOD1440_GV_REALM_RIGHT_MNSN" maxWidth = 240 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_faction" position = { x = 12 y = 32 } font = "hoi_24header" text = "MOD1440_GV_FACTION" maxWidth = 516 maxHeight = 30 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_faction_none" position = { x = 12 y = 38 } font = "hoi_18mbs" text = "MOD1440_GV_FACTION_NONE" maxWidth = 516 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_faction_lead" position = { x = 12 y = 64 } font = "hoi_18mbs" text = "MOD1440_GV_FACTION_LEAD" maxWidth = 516 maxHeight = 22 format = left fixedsize = yes }
 			containerWindowType = {
 				name = "gv_fac_list"
-				position = { x = 14 y = 126 }
-				size = { width = 526 height = 288 }
+				position = { x = 8 y = 94 }
+				size = { width = 522 height = 96 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 96
 				smooth_scrolling = yes
@@ -1153,19 +1653,15 @@ guiTypes = {
 					format = "UPPER_LEFT"
 				}
 			}
-		}
-		containerWindowType = {
-			name = "gv_subjects"
-			position = { x = 1122 y = 568 }
-			size = { width = 542 height = 284 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_subjects_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_SUBJECTS_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_subjects_n" position = { x = 228 y = 14 } font = "hoi_16mbs" text = "MOD1440_GV_SUBJECTS_N" maxWidth = 300 maxHeight = 20 format = right }
-			instantTextboxType = { name = "gv_sub_none" position = { x = 18 y = 46 } font = "hoi_16mbs" text = "MOD1440_GV_SUB_NONE" maxWidth = 400 maxHeight = 22 format = left }
+			iconType = { name = "gv_sub_head" position = { x = 8 y = 196 } spriteType = "GFX_1440p_SG_head_524x26" }
+			instantTextboxType = { name = "gv_sub_head_t" position = { x = 16 y = 198 } font = "hoi_18mbs" text = "MOD1440_GV_SUB_HEAD_T" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_sub_head_r" position = { x = 264 y = 198 } font = "hoi_18mbs" text = "MOD1440_GV_SUB_HEAD_R" maxWidth = 260 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_sub_head_r0" position = { x = 264 y = 198 } font = "hoi_18mbs" text = "MOD1440_GV_SUB_HEAD_R0" maxWidth = 260 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_sub_none" position = { x = 16 y = 236 } font = "hoi_18mbs" text = "MOD1440_GV_SUB_NONE" maxWidth = 400 maxHeight = 22 format = left }
 			containerWindowType = {
 				name = "gv_sub_list"
-				position = { x = 14 y = 42 }
-				size = { width = 526 height = 192 }
+				position = { x = 8 y = 228 }
+				size = { width = 522 height = 96 }
 				verticalScrollbar = "right_vertical_slider"
 				scroll_wheel_factor = 96
 				smooth_scrolling = yes
@@ -1182,43 +1678,277 @@ guiTypes = {
 			}
 		}
 		containerWindowType = {
-			name = "gv_state"
-			position = { x = 1122 y = 864 }
-			size = { width = 542 height = 342 }
-			background = { name = "Background" quadTextureSprite = "GFX_tiled_plain_bg_small" }
-			instantTextboxType = { name = "gv_state_title" position = { x = 14 y = 8 } font = "hoi_24header" text = "MOD1440_GV_STATE_TITLE" maxWidth = 514 maxHeight = 30 format = left }
-			instantTextboxType = { name = "gv_capital_l" position = { x = 18 y = 46 } font = "hoi_16mbs" text = "MOD1440_GV_CAPITAL_L" maxWidth = 140 maxHeight = 22 format = left }
-			instantTextboxType = { name = "gv_capital" position = { x = 160 y = 44 } font = "hoi_18mbs" text = "MOD1440_GV_CAPITAL" maxWidth = 366 maxHeight = 22 format = left fixedsize = yes }
-			instantTextboxType = { name = "gv_agency" position = { x = 14 y = 78 } font = "hoi_24header" text = "MOD1440_GV_AGENCY" maxWidth = 514 maxHeight = 30 format = left fixedsize = yes }
-			iconType = { name = "gv_f_operatives_bg" position = { x = 14 y = 118 } spriteType = "GFX_1440p_SG_tile_166x64" }
-			instantTextboxType = { name = "gv_f_operatives_l" position = { x = 20 y = 125 } font = "hoi_16mbs" text = "MOD1440_GV_F_OPERATIVES_L" maxWidth = 154 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_GV_F_OPERATIVES_TT" }
-			instantTextboxType = { name = "gv_f_operatives" position = { x = 20 y = 148 } font = "hoi_20b" text = "MOD1440_GV_F_OPERATIVES" maxWidth = 154 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_GV_F_OPERATIVES_TT" }
-			iconType = { name = "gv_f_appointed_bg" position = { x = 188 y = 118 } spriteType = "GFX_1440p_SG_tile_166x64" }
-			instantTextboxType = { name = "gv_f_appointed_l" position = { x = 194 y = 125 } font = "hoi_16mbs" text = "MOD1440_GV_F_APPOINTED_L" maxWidth = 154 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_GV_F_APPOINTED_TT" }
-			instantTextboxType = { name = "gv_f_appointed" position = { x = 194 y = 148 } font = "hoi_20b" text = "MOD1440_GV_F_APPOINTED" maxWidth = 154 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_GV_F_APPOINTED_TT" }
-			iconType = { name = "gv_f_heads_bg" position = { x = 362 y = 118 } spriteType = "GFX_1440p_SG_tile_166x64" }
-			instantTextboxType = { name = "gv_f_heads_l" position = { x = 368 y = 125 } font = "hoi_16mbs" text = "MOD1440_GV_F_HEADS_L" maxWidth = 154 maxHeight = 20 format = centre pdx_tooltip = "MOD1440_GV_F_HEADS_TT" }
-			instantTextboxType = { name = "gv_f_heads" position = { x = 368 y = 148 } font = "hoi_20b" text = "MOD1440_GV_F_HEADS" maxWidth = 154 maxHeight = 26 format = centre pdx_tooltip = "MOD1440_GV_F_HEADS_TT" }
+			name = "gv_intel"
+			position = { x = 1106 y = 568 }
+			size = { width = 560 height = 638 }
+			iconType = { name = "gv_intel_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_intel" }
+			instantTextboxType = { name = "gv_ag_name" position = { x = 12 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_AG_NAME" maxWidth = 316 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_ag_none" position = { x = 12 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_AG_NONE" maxWidth = 316 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_ag_since" position = { x = 328 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_AG_SINCE" maxWidth = 220 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_ag_since_old" position = { x = 328 y = 8 } font = "hoi_18mbs" text = "MOD1440_GV_BEGAN_FOUNDED" maxWidth = 220 maxHeight = 22 format = right }
+			iconType = { name = "gv_up_head" position = { x = 8 y = 44 } spriteType = "GFX_1440p_SG_head_544x26" }
+			instantTextboxType = { name = "gv_up_head_t" position = { x = 16 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_UP_HEAD_T" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_up_head_r" position = { x = 244 y = 46 } font = "hoi_18mbs" text = "MOD1440_GV_UP_HEAD_R" maxWidth = 300 maxHeight = 22 format = right }
+			iconType = { name = "gv_up_0" position = { x = 14 y = 76 } spriteType = "GFX_agency_economy_department" scale = 0.647 pdx_tooltip = "upgrade_economy_civilian" }
+			iconType = { name = "gv_up_0_dim" position = { x = 14 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_economy_civilian" }
+			iconType = { name = "gv_up_1" position = { x = 63 y = 76 } spriteType = "GFX_agency_army_department" scale = 0.647 pdx_tooltip = "upgrade_army_department" }
+			iconType = { name = "gv_up_1_dim" position = { x = 63 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_army_department" }
+			iconType = { name = "gv_up_2" position = { x = 112 y = 76 } spriteType = "GFX_agency_naval_department" scale = 0.647 pdx_tooltip = "upgrade_naval_department" }
+			iconType = { name = "gv_up_2_dim" position = { x = 112 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_naval_department" }
+			iconType = { name = "gv_up_3" position = { x = 161 y = 76 } spriteType = "GFX_agency_airforce_department" scale = 0.647 pdx_tooltip = "upgrade_airforce_department" }
+			iconType = { name = "gv_up_3_dim" position = { x = 161 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_airforce_department" }
+			iconType = { name = "gv_up_4" position = { x = 210 y = 76 } spriteType = "GFX_agency_defense_department" scale = 0.647 pdx_tooltip = "upgrade_passive_defense" }
+			iconType = { name = "gv_up_4_dim" position = { x = 210 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_passive_defense" }
+			iconType = { name = "gv_up_5" position = { x = 259 y = 76 } spriteType = "GFX_agency_anti_partisan" scale = 0.647 pdx_tooltip = "upgrade_anti_partisan" }
+			iconType = { name = "gv_up_5_dim" position = { x = 259 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_anti_partisan" }
+			iconType = { name = "gv_up_6" position = { x = 308 y = 76 } spriteType = "GFX_agency_steal_blueprints" scale = 0.647 pdx_tooltip = "upgrade_blueprint_stealing" }
+			iconType = { name = "gv_up_6_dim" position = { x = 308 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_blueprint_stealing" }
+			iconType = { name = "gv_up_7" position = { x = 357 y = 76 } spriteType = "GFX_agency_portable_radios" scale = 0.647 pdx_tooltip = "upgrade_portable_radios" }
+			iconType = { name = "gv_up_7_dim" position = { x = 357 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_portable_radios" }
+			iconType = { name = "gv_up_8" position = { x = 406 y = 76 } spriteType = "GFX_agency_invisible_ink" scale = 0.647 pdx_tooltip = "upgrade_invisible_ink" }
+			iconType = { name = "gv_up_8_dim" position = { x = 406 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_invisible_ink" }
+			iconType = { name = "gv_up_9" position = { x = 455 y = 76 } spriteType = "GFX_agency_plastic_explosives" scale = 0.647 pdx_tooltip = "upgrade_plastic_explosives" }
+			iconType = { name = "gv_up_9_dim" position = { x = 455 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_plastic_explosives" }
+			iconType = { name = "gv_up_10" position = { x = 504 y = 76 } spriteType = "GFX_agency_suicide_pills" scale = 0.647 pdx_tooltip = "upgrade_suicide_pills" }
+			iconType = { name = "gv_up_10_dim" position = { x = 504 y = 76 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_suicide_pills" }
+			iconType = { name = "gv_up_11" position = { x = 14 y = 124 } spriteType = "GFX_agency_localized_training_center" scale = 0.647 pdx_tooltip = "upgrade_training_centers" }
+			iconType = { name = "gv_up_11_dim" position = { x = 14 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_training_centers" }
+			iconType = { name = "gv_up_12" position = { x = 63 y = 124 } spriteType = "GFX_agency_commando_training" scale = 0.647 pdx_tooltip = "upgrade_commando_training" }
+			iconType = { name = "gv_up_12_dim" position = { x = 63 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_commando_training" }
+			iconType = { name = "gv_up_13" position = { x = 112 y = 124 } spriteType = "GFX_agency_interrogation_techniques" scale = 0.647 pdx_tooltip = "upgrade_interrogation_techniques" }
+			iconType = { name = "gv_up_13_dim" position = { x = 112 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_interrogation_techniques" }
+			iconType = { name = "gv_up_14" position = { x = 161 y = 124 } spriteType = "GFX_agency_diplomatic_training" scale = 0.647 pdx_tooltip = "upgrade_diplo_training" }
+			iconType = { name = "gv_up_14_dim" position = { x = 161 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_diplo_training" }
+			iconType = { name = "gv_up_15" position = { x = 210 y = 124 } spriteType = "GFX_agency_psychological_warfare" scale = 0.647 pdx_tooltip = "upgrade_psycho_warfare" }
+			iconType = { name = "gv_up_15_dim" position = { x = 210 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_psycho_warfare" }
+			iconType = { name = "gv_up_16" position = { x = 259 y = 124 } spriteType = "GFX_agency_form_department" scale = 0.647 pdx_tooltip = "upgrade_form_department" }
+			iconType = { name = "gv_up_16_dim" position = { x = 259 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_form_department" }
+			iconType = { name = "gv_up_17" position = { x = 308 y = 124 } spriteType = "GFX_agency_decryption_boost_1" scale = 0.647 pdx_tooltip = "upgrade_decryption_boost" }
+			iconType = { name = "gv_up_17_dim" position = { x = 308 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_decryption_boost" }
+			iconType = { name = "gv_up_18" position = { x = 357 y = 124 } spriteType = "GFX_agency_decryption_boost_2" scale = 0.647 pdx_tooltip = "upgrade_decryption_boost_2" }
+			iconType = { name = "gv_up_18_dim" position = { x = 357 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_decryption_boost_2" }
+			iconType = { name = "gv_up_19" position = { x = 406 y = 124 } spriteType = "GFX_agency_cryptology_1" scale = 0.647 pdx_tooltip = "upgrade_crypto_strength" }
+			iconType = { name = "gv_up_19_dim" position = { x = 406 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_crypto_strength" }
+			iconType = { name = "gv_up_20" position = { x = 455 y = 124 } spriteType = "GFX_agency_cryptology_2" scale = 0.647 pdx_tooltip = "upgrade_crypto_strength_2" }
+			iconType = { name = "gv_up_20_dim" position = { x = 455 y = 124 } spriteType = "GFX_1440p_SG_dim_44" scale = 1.0 pdx_tooltip = "upgrade_crypto_strength_2" }
+			iconType = { name = "gv_op_head" position = { x = 8 y = 174 } spriteType = "GFX_1440p_SG_head_544x26" }
+			instantTextboxType = { name = "gv_op_h0" position = { x = 54 y = 176 } font = "hoi_18mbs" text = "MOD1440_GV_OP_H0" maxWidth = 200 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_op_h1" position = { x = 222 y = 176 } font = "hoi_18mbs" text = "MOD1440_GV_OP_H1" maxWidth = 140 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_op_h2" position = { x = 372 y = 176 } font = "hoi_18mbs" text = "MOD1440_GV_OP_H2" maxWidth = 170 maxHeight = 22 format = left }
+			iconType = { name = "gv_op_band_2" position = { x = 8 y = 248 } spriteType = "GFX_1440p_SG_stripe_544x48" }
+			iconType = { name = "gv_op_band_4" position = { x = 8 y = 344 } spriteType = "GFX_1440p_SG_stripe_544x48" }
+			containerWindowType = {
+				name = "gv_op_list"
+				position = { x = 8 y = 200 }
+				size = { width = 544 height = 192 }
+				verticalScrollbar = "right_vertical_slider"
+				scroll_wheel_factor = 96
+				smooth_scrolling = yes
+				background = { name = "Background" quadTextureSprite = "GFX_tiled_window_transparent" }
+				gridboxtype = {
+					name = "gv_op_grid"
+					position = { x = 0 y = 0 }
+					size = { width = 528 height = 100%% }
+					slotsize = { width = 1 height = 1 }
+					add_horizontal = no
+					format = "UPPER_LEFT"
+				}
+			}
+			instantTextboxType = { name = "gv_op_none" position = { x = 16 y = 214 } font = "hoi_18mbs" text = "MOD1440_GV_OP_NONE" maxWidth = 500 maxHeight = 22 format = left }
+			iconType = { name = "gv_cr_head" position = { x = 8 y = 400 } spriteType = "GFX_1440p_SG_head_544x26" }
+			instantTextboxType = { name = "gv_cr_head_t" position = { x = 16 y = 402 } font = "hoi_18mbs" text = "MOD1440_GV_CR_HEAD_T" maxWidth = 300 maxHeight = 22 format = left }
+			instantTextboxType = { name = "gv_cr_head_r" position = { x = 284 y = 402 } font = "hoi_18mbs" text = "MOD1440_GV_CR_HEAD_R" maxWidth = 260 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_cr_head_r0" position = { x = 284 y = 402 } font = "hoi_18mbs" text = "MOD1440_GV_CR_HEAD_R0" maxWidth = 260 maxHeight = 22 format = right }
+			iconType = { name = "gv_cr_band_2" position = { x = 8 y = 450 } spriteType = "GFX_1440p_SG_stripe_544x24" }
+			iconType = { name = "gv_cr_band_4" position = { x = 8 y = 498 } spriteType = "GFX_1440p_SG_stripe_544x24" }
+			instantTextboxType = { name = "gv_cr_enc_l" position = { x = 16 y = 428 } font = "hoi_18mbs" text = "MOD1440_GV_CR_ENC_L" maxWidth = 280 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_CR_ENC_L_TT" }
+			instantTextboxType = { name = "gv_cr_enc" position = { x = 300 y = 428 } font = "hoi_18mbs" text = "MOD1440_GV_CR_ENC_V" maxWidth = 244 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_cr_def_l" position = { x = 16 y = 452 } font = "hoi_18mbs" text = "MOD1440_GV_CR_DEF_L" maxWidth = 280 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_CR_DEF_L_TT" }
+			instantTextboxType = { name = "gv_cr_def" position = { x = 300 y = 452 } font = "hoi_18mbs" text = "MOD1440_GV_CR_DEF_V" maxWidth = 244 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_cr_dec_l" position = { x = 16 y = 476 } font = "hoi_18mbs" text = "MOD1440_GV_CR_DEC_L" maxWidth = 280 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_CR_DEC_L_TT" }
+			instantTextboxType = { name = "gv_cr_dec" position = { x = 300 y = 476 } font = "hoi_18mbs" text = "MOD1440_GV_CR_DEC_V" maxWidth = 244 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_cr_brk_l" position = { x = 16 y = 500 } font = "hoi_18mbs" text = "MOD1440_GV_CR_BRK_L" maxWidth = 280 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_CR_BRK_L_TT" }
+			instantTextboxType = { name = "gv_cr_brk" position = { x = 300 y = 500 } font = "hoi_18mbs" text = "MOD1440_GV_CR_BRK_V" maxWidth = 244 maxHeight = 22 format = right }
+			instantTextboxType = { name = "gv_cr_dec_none" position = { x = 300 y = 476 } font = "hoi_18mbs" text = "MOD1440_GV_CR_DEC_NONE" maxWidth = 244 maxHeight = 22 format = right }
+			iconType = { name = "gv_kn_head" position = { x = 8 y = 528 } spriteType = "GFX_1440p_SG_head_544x26" }
+			instantTextboxType = { name = "gv_kn_h" position = { x = 16 y = 530 } font = "hoi_18mbs" text = "MOD1440_GV_KN_H" maxWidth = 200 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_KN_H_TT" }
+			instantTextboxType = { name = "gv_kn_h0" position = { x = 268 y = 530 } font = "hoi_18mbs" text = "MOD1440_GV_KN_H0" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_h1" position = { x = 336 y = 530 } font = "hoi_18mbs" text = "MOD1440_GV_KN_H1" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_h2" position = { x = 404 y = 530 } font = "hoi_18mbs" text = "MOD1440_GV_KN_H2" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_h3" position = { x = 472 y = 530 } font = "hoi_18mbs" text = "MOD1440_GV_KN_H3" maxWidth = 68 maxHeight = 22 format = centre }
+			iconType = { name = "gv_kn_band_2" position = { x = 8 y = 578 } spriteType = "GFX_1440p_SG_stripe_544x24" }
+			instantTextboxType = { name = "gv_kn_0" position = { x = 16 y = 556 } font = "hoi_18mbs" text = "MOD1440_GV_KN_0" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_kn_0_c" position = { x = 268 y = 555 } font = "hoi_20b" text = "MOD1440_GV_KN_0_C" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_0_a" position = { x = 336 y = 555 } font = "hoi_20b" text = "MOD1440_GV_KN_0_A" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_0_n" position = { x = 404 y = 555 } font = "hoi_20b" text = "MOD1440_GV_KN_0_N" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_0_i" position = { x = 472 y = 555 } font = "hoi_20b" text = "MOD1440_GV_KN_0_I" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_1" position = { x = 16 y = 580 } font = "hoi_18mbs" text = "MOD1440_GV_KN_1" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_kn_1_c" position = { x = 268 y = 579 } font = "hoi_20b" text = "MOD1440_GV_KN_1_C" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_1_a" position = { x = 336 y = 579 } font = "hoi_20b" text = "MOD1440_GV_KN_1_A" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_1_n" position = { x = 404 y = 579 } font = "hoi_20b" text = "MOD1440_GV_KN_1_N" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_1_i" position = { x = 472 y = 579 } font = "hoi_20b" text = "MOD1440_GV_KN_1_I" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_2" position = { x = 16 y = 604 } font = "hoi_18mbs" text = "MOD1440_GV_KN_2" maxWidth = 240 maxHeight = 22 format = left fixedsize = yes }
+			instantTextboxType = { name = "gv_kn_2_c" position = { x = 268 y = 603 } font = "hoi_20b" text = "MOD1440_GV_KN_2_C" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_2_a" position = { x = 336 y = 603 } font = "hoi_20b" text = "MOD1440_GV_KN_2_A" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_2_n" position = { x = 404 y = 603 } font = "hoi_20b" text = "MOD1440_GV_KN_2_N" maxWidth = 68 maxHeight = 22 format = centre }
+			instantTextboxType = { name = "gv_kn_2_i" position = { x = 472 y = 603 } font = "hoi_20b" text = "MOD1440_GV_KN_2_I" maxWidth = 68 maxHeight = 22 format = centre }
 		}
 	}
 	containerWindowType = {
+		name = "mod1440_records_gv_dot_0_24"
+		size = { width = 25 height = 290 }
+		iconType = { name = "gv_dot0_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_fascism_8" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_1_24"
+		size = { width = 25 height = 290 }
+		iconType = { name = "gv_dot1_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_democratic_8" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_2_24"
+		size = { width = 25 height = 290 }
+		iconType = { name = "gv_dot2_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_communism_8" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_3_24"
+		size = { width = 25 height = 290 }
+		iconType = { name = "gv_dot3_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_neutrality_8" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_r_24"
+		size = { width = 25 height = 290 }
+		iconType = { name = "gv_dotr1_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_fascism_8" alwaystransparent = yes }
+		iconType = { name = "gv_dotr2_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_democratic_8" alwaystransparent = yes }
+		iconType = { name = "gv_dotr3_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_communism_8" alwaystransparent = yes }
+		iconType = { name = "gv_dotr4_24" position = { x = 8 y = 0 } spriteType = "GFX_1440p_GV_dot_neutrality_8" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_0_60"
+		size = { width = 10 height = 290 }
+		iconType = { name = "gv_dot0_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_fascism_6" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_1_60"
+		size = { width = 10 height = 290 }
+		iconType = { name = "gv_dot1_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_democratic_6" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_2_60"
+		size = { width = 10 height = 290 }
+		iconType = { name = "gv_dot2_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_communism_6" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_3_60"
+		size = { width = 10 height = 290 }
+		iconType = { name = "gv_dot3_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_neutrality_6" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_r_60"
+		size = { width = 10 height = 290 }
+		iconType = { name = "gv_dotr1_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_fascism_6" alwaystransparent = yes }
+		iconType = { name = "gv_dotr2_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_democratic_6" alwaystransparent = yes }
+		iconType = { name = "gv_dotr3_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_communism_6" alwaystransparent = yes }
+		iconType = { name = "gv_dotr4_60" position = { x = 2 y = 0 } spriteType = "GFX_1440p_GV_dot_neutrality_6" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_0_120"
+		size = { width = 5 height = 290 }
+		iconType = { name = "gv_dot0_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_fascism_5" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_1_120"
+		size = { width = 5 height = 290 }
+		iconType = { name = "gv_dot1_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_democratic_5" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_2_120"
+		size = { width = 5 height = 290 }
+		iconType = { name = "gv_dot2_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_communism_5" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_3_120"
+		size = { width = 5 height = 290 }
+		iconType = { name = "gv_dot3_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_neutrality_5" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_dot_r_120"
+		size = { width = 5 height = 290 }
+		iconType = { name = "gv_dotr1_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_fascism_5" alwaystransparent = yes }
+		iconType = { name = "gv_dotr2_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_democratic_5" alwaystransparent = yes }
+		iconType = { name = "gv_dotr3_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_communism_5" alwaystransparent = yes }
+		iconType = { name = "gv_dotr4_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_dot_neutrality_5" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_band_24"
+		size = { width = 25 height = 22 }
+		iconType = { name = "gv_cell1_24" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_fascism_25" alwaystransparent = yes }
+		iconType = { name = "gv_cell2_24" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_democratic_25" alwaystransparent = yes }
+		iconType = { name = "gv_cell3_24" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_communism_25" alwaystransparent = yes }
+		iconType = { name = "gv_cell4_24" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_neutrality_25" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_band_60"
+		size = { width = 10 height = 22 }
+		iconType = { name = "gv_cell1_60" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_fascism_10" alwaystransparent = yes }
+		iconType = { name = "gv_cell2_60" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_democratic_10" alwaystransparent = yes }
+		iconType = { name = "gv_cell3_60" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_communism_10" alwaystransparent = yes }
+		iconType = { name = "gv_cell4_60" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_neutrality_10" alwaystransparent = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_band_120"
+		size = { width = 5 height = 22 }
+		iconType = { name = "gv_cell1_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_fascism_5" alwaystransparent = yes }
+		iconType = { name = "gv_cell2_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_democratic_5" alwaystransparent = yes }
+		iconType = { name = "gv_cell3_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_communism_5" alwaystransparent = yes }
+		iconType = { name = "gv_cell4_120" position = { x = 0 y = 0 } spriteType = "GFX_1440p_GV_band_neutrality_5" alwaystransparent = yes }
+	}
+	containerWindowType = {
 		name = "mod1440_records_gv_gface_row"
-		size = { width = 48 height = 65 }
-		iconType = { name = "gv_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.31 }
+		size = { width = 34 height = 46 }
+		iconType = { name = "gv_gface" position = { x = 0 y = 0 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
 	}
 	containerWindowType = {
 		name = "mod1440_records_fac_row"
 		size = { width = 124 height = 96 }
-		iconType = { name = "gv_fac_row_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_tile_122x90" }
-		iconType = { name = "gv_fac_row_flag" position = { x = 20 y = 5 } spriteType = "GFX_shield_medium" }
-		instantTextboxType = { name = "gv_fac_row_name" position = { x = 4 y = 58 } font = "hoi_16mbs" text = "MOD1440_GV_COUNTRY_TILE" maxWidth = 114 maxHeight = 34 format = centre fixedsize = yes }
+		iconType = { name = "gv_fac_row_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_inset_122x90" }
+		iconType = { name = "gv_fac_row_flag" position = { x = 20 y = 9 } spriteType = "GFX_shield_medium" }
+		instantTextboxType = { name = "gv_fac_row_name" position = { x = 8 y = 64 } font = "hoi_16mbs" text = "MOD1440_GV_COUNTRY_TILE" maxWidth = 106 maxHeight = 20 format = centre fixedsize = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_records_sub_row"
 		size = { width = 124 height = 96 }
-		iconType = { name = "gv_sub_row_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_tile_122x90" }
-		iconType = { name = "gv_sub_row_flag" position = { x = 20 y = 5 } spriteType = "GFX_shield_medium" }
-		instantTextboxType = { name = "gv_sub_row_name" position = { x = 4 y = 58 } font = "hoi_16mbs" text = "MOD1440_GV_COUNTRY_TILE" maxWidth = 114 maxHeight = 34 format = centre fixedsize = yes }
+		iconType = { name = "gv_sub_row_bg" position = { x = 0 y = 0 } spriteType = "GFX_1440p_SG_inset_122x90" }
+		iconType = { name = "gv_sub_row_flag" position = { x = 20 y = 9 } spriteType = "GFX_shield_medium" }
+		instantTextboxType = { name = "gv_sub_row_name" position = { x = 8 y = 64 } font = "hoi_16mbs" text = "MOD1440_GV_COUNTRY_TILE" maxWidth = 106 maxHeight = 20 format = centre fixedsize = yes }
+	}
+	containerWindowType = {
+		name = "mod1440_records_gv_op_row"
+		size = { width = 528 height = 48 }
+		iconType = { name = "gv_op_face" position = { x = 4 y = 1 } spriteType = "GFX_portrait_unknown" scale = 0.22 }
+		instantTextboxType = { name = "gv_op_name" position = { x = 46 y = 13 } font = "hoi_18mbs" text = "MOD1440_GV_OP_NAME" maxWidth = 160 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_build_intel_network" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 1 }
+		instantTextboxType = { name = "gv_op_t_build_intel_network" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_BUILD_INTEL_NETWORK_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_quiet_network" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 2 }
+		instantTextboxType = { name = "gv_op_t_quiet_network" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_QUIET_INTEL_NETWORK_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_counter_intelligence" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 3 }
+		instantTextboxType = { name = "gv_op_t_counter_intelligence" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_COUNTER_INTELLIGENCE_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_root_out_resistance" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 4 }
+		instantTextboxType = { name = "gv_op_t_root_out_resistance" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_ROOT_OUT_RESISTANCE_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_boost_ideology" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 5 }
+		instantTextboxType = { name = "gv_op_t_boost_ideology" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_BOOST_IDEOLOGY_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_control_trade" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 6 }
+		instantTextboxType = { name = "gv_op_t_control_trade" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_CONTROL_TRADE_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_diplomatic_pressure" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 7 }
+		instantTextboxType = { name = "gv_op_t_diplomatic_pressure" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_DIPLOMATIC_PRESSURE_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_m_propaganda" position = { x = 214 y = 14 } spriteType = "GFX_operative_mission_icons_small" frame = 8 }
+		instantTextboxType = { name = "gv_op_t_propaganda" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_PROPAGANDA_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		instantTextboxType = { name = "gv_op_t_none" position = { x = 238 y = 13 } font = "hoi_18mbs" text = "OPERATIVE_MISSION_NO_MISSION_TITLE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		iconType = { name = "gv_op_flag" position = { x = 364 y = 11 } spriteType = "GFX_flag_small2" }
+		instantTextboxType = { name = "gv_op_where" position = { x = 410 y = 2 } font = "hoi_18mbs" text = "MOD1440_GV_OP_WHERE" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
+		instantTextboxType = { name = "gv_op_net" position = { x = 410 y = 24 } font = "hoi_18mbs" text = "MOD1440_GV_OP_NET" maxWidth = 118 maxHeight = 22 format = left pdx_tooltip = "MOD1440_GV_OP_NET_TT" }
+		instantTextboxType = { name = "gv_op_home" position = { x = 410 y = 24 } font = "hoi_18mbs" text = "MOD1440_GV_OP_HOME" maxWidth = 118 maxHeight = 22 format = left }
+		instantTextboxType = { name = "gv_op_idle" position = { x = 410 y = 13 } font = "hoi_18mbs" text = "MOD1440_GV_OP_IDLE" maxWidth = 118 maxHeight = 22 format = left }
+		instantTextboxType = { name = "gv_op_country" position = { x = 410 y = 2 } font = "hoi_18mbs" text = "MOD1440_GV_OP_COUNTRY" maxWidth = 118 maxHeight = 22 format = left fixedsize = yes }
 	}
 	containerWindowType = {
 		name = "mod1440_records_wr"

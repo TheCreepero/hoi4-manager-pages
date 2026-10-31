@@ -1246,6 +1246,111 @@ mod1440_chk_e2b_log = {
 """
 # --- end E2b ---
 
+# --- E3 round 2 ---
+# The Government page (scratch/phases/E3): the elements of the political_advisor array (the "German Reich" seat), advisors
+# hired and dismissed, a new head of government, an election, an agency with upgrades and an operative, and made-up months
+# of party support over six years (mod1440_chk_months first: National Figures' 130 months, of which 120 are kept) with a
+# change of the ruling party in the 50th shown month and a head of government of the other party from then on.
+HISTORY += """
+mod1440_chk_gv_phantom = {
+	set_temp_variable = { chk_me = THIS }
+	for_each_loop = {
+		array = political_advisor
+		index = chk_i
+		value = chk_v
+		set_temp_variable = { chk_t = chk_me }
+		var:chk_v = { set_temp_variable = { chk_t = THIS } }
+		set_temp_variable = { chk_root = 0 }
+		if = { limit = { check_variable = { chk_t = chk_me } } set_temp_variable = { chk_root = 1 } }
+		set_temp_variable = { chk_p = 0 }
+		if = { limit = { OR = { check_variable = { chk_v > 5368 } check_variable = { chk_v < -21000 } } } set_temp_variable = { chk_p = 1 } }
+		log = "MOD1440 gv phantom: i [?chk_i] value [?chk_v|5] name [?chk_v.GetName] scope_is_root [?chk_root] person [?chk_p] of [?political_advisor^num]"
+	}
+	log = "MOD1440 gv phantom: the page keeps [?mod1440_gv_adv^num] persons"
+}
+
+mod1440_chk_gv_hire = {
+	mod1440_chk_hire = yes
+}
+
+mod1440_chk_gv_fire = {
+	deactivate_advisor = konstantin_von_neurath
+	deactivate_advisor = todt
+}
+
+mod1440_chk_gv_leader = {
+	retire_country_leader = yes
+}
+
+mod1440_chk_gv_election = {
+	hold_election = ROOT
+	mod1440_gv_election = yes
+}
+
+mod1440_chk_gv_agency = {
+	create_intelligence_agency = yes
+	upgrade_intelligence_agency = upgrade_economy_civilian
+	upgrade_intelligence_agency = upgrade_form_department
+	create_operative_leader = { bypass_recruitment = yes available_to_spy_master = no }
+	set_variable = { mod1440_gv_ag_has = 0 }
+	mod1440_gv_daily = yes
+	log = "MOD1440 gv agency: [?num_of_operatives] operatives, [?agency_upgrade_number] upgrades, done [?mod1440_gv_ag_done], cipher [?encryption_strength], defence [?cryptology_defense_level]"
+}
+
+mod1440_chk_gv_months = {
+	mod1440_chk_gv_clear = yes
+	set_temp_variable = { chk_n = mod1440_h_date^num }
+	set_temp_variable = { chk_cut = chk_n }
+	subtract_from_temp_variable = { chk_cut = 22 }
+	set_temp_variable = { chk_f = 40 }
+	for_loop_effect = {
+		start = 0
+		end = chk_n
+		value = chk_k
+		set_temp_variable = { chk_d = chk_k }
+		multiply_temp_variable = { chk_d = 0.3 }
+		set_temp_variable = { chk_f = 40 }
+		add_to_temp_variable = { chk_f = chk_d }
+		if = {
+			limit = { check_variable = { chk_k > chk_cut } }
+			set_temp_variable = { chk_f = 44 }
+			set_temp_variable = { chk_e = chk_k }
+			subtract_from_temp_variable = { chk_e = chk_cut }
+			subtract_from_temp_variable = { chk_f = chk_e }
+		}
+		set_temp_variable = { chk_dm = 30 }
+		subtract_from_temp_variable = { chk_dm = chk_d }
+		clamp_temp_variable = { var = chk_dm min = 2 max = 40 }
+		set_temp_variable = { chk_co = 5 }
+		set_temp_variable = { chk_ne = 100 }
+		subtract_from_temp_variable = { chk_ne = chk_f }
+		subtract_from_temp_variable = { chk_ne = chk_dm }
+		subtract_from_temp_variable = { chk_ne = chk_co }
+		add_to_array = { mod1440_gv_pp_0 = chk_f }
+		add_to_array = { mod1440_gv_pp_1 = chk_dm }
+		add_to_array = { mod1440_gv_pp_2 = chk_co }
+		add_to_array = { mod1440_gv_pp_3 = chk_ne }
+		if = {
+			limit = { check_variable = { chk_k > chk_cut } }
+			add_to_array = { mod1440_gv_pp_g = 4 }
+			add_to_array = { mod1440_gv_pp_h = mod1440_gv_rul^0 }
+		}
+		else = {
+			add_to_array = { mod1440_gv_pp_g = 1 }
+			add_to_array = { mod1440_gv_pp_h = country_leader }
+		}
+	}
+	mod1440_gv_election = yes
+	set_variable = { mod1440_gv_range = 0 }
+	mod1440_gv_chart = yes
+	log = "MOD1440 gv months: [?mod1440_gv_pp_0^num] months, [?mod1440_gv_pp_n] shown, the change of rule at [?chk_cut], [?mod1440_gv_el^num] elections"
+}
+
+mod1440_chk_gv_clear = {
+""" + "".join("\tclear_array = mod1440_gv_pp_%s\n" % part for part in ("0", "1", "2", "3", "g", "h")) + """}
+"""
+# --- end E3 round 2 ---
+
 # --- E7 probe ---
 # Phase E7 (2026-10-29), step 1: does properties = { <icon> = { image = "portrait" } } draw the scope's unit leader
 # portrait through the game's own portrait code (register SGUI-053, read in hoi4.exe 1.19.3, not yet seen in the game)?

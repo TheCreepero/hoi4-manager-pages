@@ -1073,6 +1073,44 @@ def frame_of(source, count, n):
 # --- end e-diary-wars ---
 
 
+# --- E3 round 2 --- the Government page (scratch/phases/E3/layout.json): the parties' colours as flat tiles cut from the
+# steel bar and recoloured (its grain kept: each pixel the colour times its brightness over the tile's mean), the dark
+# inset with the game's unknown leader outline for an advisor the page has no picture of (decision 2), and the plate that
+# dims an agency upgrade not done.
+GV_IDEOLOGY_COLOURS = {"fascism": (150, 75, 0), "democratic": (0, 0, 255), "communism": (255, 0, 0), "neutrality": (124, 124, 124)}
+GV_DOT_COLOURS = {"fascism": (160, 85, 15), "democratic": (70, 90, 255), "communism": (255, 0, 0), "neutrality": (124, 124, 124)}
+
+
+def recoloured(source, colour, size=16, box=(200, 60)):
+    """A size x size tile of `source` at `box`, in `colour` with the tile's own light and shade."""
+    piece = source.crop((box[0], box[1], box[0] + size, box[1] + size)).convert("L")
+    pixels = list(piece.getdata())
+    mean = max(1.0, sum(pixels) / float(len(pixels)))
+    out = Image.new("RGBA", (size, size))
+    out.putdata([tuple(max(0, min(255, int(c * (0.85 + 0.15 * v / mean)))) for c in colour) + (255,) for v in pixels])
+    return out
+
+
+def band_colour(colour):
+    """The band of who governed: the group's colour darkened, as the design's figures draw it."""
+    return tuple(int(c * 0.55) + 20 for c in colour)
+
+
+def face_none(source, inset):
+    """46x47: the near-black inset (tiled_window_thin_border, border 8) with the unknown leader cut to head and shoulders."""
+    out = tile9(inset, 46, 47, 8)
+    face = source.crop((14, 18, 142, 150)).resize((40, 41), Image.LANCZOS)
+    out.alpha_composite(face, (3, 3))
+    return out
+
+
+def dim_plate(source):
+    """44x44: black at alpha 150 (the black of black_bg_tile.dds), laid over an upgrade not done."""
+    black = source.convert("RGBA").crop((0, 0, 4, 4)).resize((1, 1)).getpixel((0, 0))
+    return Image.new("RGBA", (44, 44), (black[0] // 4, black[1] // 4, black[2] // 4, 150))
+# --- end E3 round 2 ---
+
+
 # --- a2-division-list (redesign build, 2026-10-16) ---
 # The division card of the selected army's list: two frames of 638x48 (fix round 1: 42 -> 48, the row window
 # 44 -> 50, so the markers of line 2 end inside the hatch or green), the card tile of the A9 badge
@@ -1830,6 +1868,21 @@ JOBS = [
                         ("chain", (640, 268, 38)), ("traits", (640, 126, 27)), ("rec", (640, 240, 38)), ("diary", (640, 244, 27)),
                         ("diary_m", (640, 182, 27)), ("award", (640, 490, 38)), ("award_m", (640, 428, 38))]] + [
     # --- end E2 round 2 ---
+] + [
+    # --- E3 round 2 --- the seven steel cards of the Government page (GFX_1440p_GV_<name>, tools/build_records.py's GV_CARDS;
+    # the heads panel stands on the card of Party support), the parties' colours, the fallback face and the dim plate
+    {"source": STEEL_BAR, "output": "gv_%s.dds" % name,
+     "compose": (lambda w, h, head: lambda source: steel_piece(source, "steel", w, h, head, 1.9, 15))(*size)}
+    for name, size in [("hog", (540, 446, 38)), ("parties", (1106, 446, 38)), ("cabinet", (540, 280, 27)), ("realm", (540, 352, 27)),
+                       ("high", (540, 376, 27)), ("diary", (540, 256, 38)), ("intel", (560, 638, 38))]] + [
+    {"source": STEEL_BAR, "output": "gv_%s_%s.dds" % (kind, group), "compose": (lambda colour: lambda source: recoloured(source, colour))(colour)}
+    for group in sorted(GV_IDEOLOGY_COLOURS)
+    for kind, colour in (("colour", GV_IDEOLOGY_COLOURS[group]), ("dot", GV_DOT_COLOURS[group]), ("band", band_colour(GV_IDEOLOGY_COLOURS[group])))] + [
+    {"source": STEEL_BAR, "output": "gv_tick.dds", "compose": lambda source: recoloured(source, (235, 235, 235))},
+    {"source": "gfx/leaders/leader_unknown.dds", "output": "sg_face_none_46x47.dds", "extra": {"inset": "gfx/interface/tiles/tiled_window_thin_border.dds"},
+     "compose": face_none},
+    {"source": "gfx/interface/tiles/black_bg_tile.dds", "output": "sg_dim_44.dds", "compose": dim_plate},
+    # --- end E3 round 2 ---
     # --- d2-readiness ---
     {
         # The picture of mechanized equipment on Army Readiness (GFX_1440p_archetype_mechanized_equipment_medium):

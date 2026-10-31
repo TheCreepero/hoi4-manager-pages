@@ -1216,11 +1216,19 @@ def trait_effect_files():
     trait cache holds beside each trait (mod1440_of_tr_e), in the game's languages: the trait's kind, its effects with
     the game's own names, its description. Another mod's trait holds mod1440_tre_none."""
     effects = trait_effects()
+    leaders = leader_effects()          # E3 round 2: the country_leader traits, the game's and the playset's (decision 4)
     out = {}
     for language in M.LANGUAGES:
         table = effects.get(language) or effects.get("english") or {}
         entries = ' %s:0 "%s"\n' % (TRAIT_NO_EFFECTS, "\u00a7gAnother mod's trait: its effects are in the game's own tooltip.\u00a7!")
         entries += "".join(' mod1440_tre_%s:0 "%s"\n' % (name, "\\n".join(lines)) for name, lines in sorted(table.items()))
+        plain_name = re.compile(r"^[A-Za-z0-9_]+$")
+        entries += "".join(' mod1440_trl_%s:0 "%s"\n' % (name, "\\n".join(lines))
+                           for name, lines in sorted((leaders.get(language) or leaders.get("english") or {}).items()) if plain_name.match(name))
+        # E3 fix round 2: a role's name on one line where the game's breaks its line (mod1440_trn_<trait>)
+        names = leader_names()
+        entries += "".join(' mod1440_trn_%s:0 "%s"\n' % (name, words)
+                           for name, words in sorted((names.get(language) or names.get("english") or {}).items()) if plain_name.match(name))
         out["localisation/%s/mod1440_traits_l_%s.yml" % (language, language)] = "\ufeffl_%s:\n" % language + entries
     return out
 
@@ -2474,6 +2482,9 @@ def places():
             + tmp("rm_lost", 0) + in_variable("mod1440_gv_leader") + offices
             + in_array("mod1440_gv_adv") + in_array("mod1440_gv_hc") + in_array("mod1440_gv_rul")
             + iff("check_variable = { rm_lost > 0 }", setv("mod1440_gv_begun", 0))
+            # E3: the heads of government of each month of the record of party support, the heads panel's copy and the
+            # government's lines of the War Diary (people, kept by place; the last two are made again each day)
+            + in_array("mod1440_gv_pp_h") + in_array("mod1440_gv_rp") + in_array("mod1440_gv_dl_a", "check_variable = { mod1440_gv_dl_sa^rm_i = 1 }")
             # E4 round 2: the heads of government kept on the rows of the wars, at the start and at the end (a head
             # who cannot be found becomes "not recorded")
             + "".join(in_array(name) for name in ("mod1440_wr_lu0", "mod1440_wr_lt0", "mod1440_wr_lt1",
@@ -2506,14 +2517,20 @@ def places():
 
 # ---------------------------------------------------------------- Government (E3)
 
-# The redesign of 2026-10-16 (e-officers-gov): three columns of cards sized to what they hold. Who rules (the
-# head of government at full size, the parties, the laws with their pictures, the heads since the record
-# began), who serves (the cabinet and the high command as fixed slots with each advisor's own small portrait
-# and role) and the realm (the faction and the subjects as flag tiles, the state and the agency).
-GV_COL = (REC_BODY_W - 2 * 12) // 3                 # 542
-GV_X = [REC_BODY_X + n * (GV_COL + 12) for n in range(3)]
-GV_ROW = 26
-GV_IN = GV_COL - 16                                 # a band across a card, 8 from each side
+# --- E3 round 2 --- The redesign of 2026-10-30 (scratch/phases/E3/layout.json, design.json; the user took every
+# recommendation, decisions-final.json). The page in the steel look: on top who rules (the head of government with his
+# traits and the laws) beside Party support, a poll tracker of the four parties over up to ten years with a results bar and
+# a table sorted by support; under it who serves (the cabinet and the high command as banded tables, every person's effects
+# in a tooltip), the realm, the government's own lines of the War Diary and the Intelligence card. The heads of government
+# move into a panel over Party support, opened by a button in the Head of government card.
+#
+# The cards: (x, y, w, h, head band) in the window; each is a bitmap cut from the steel bar (GFX_1440p_GV_<name>,
+# tools/stretch_background.py). The heads panel stands on the card of Party support.
+GV_CARDS = {"hog": (14, 116, 540, 446, 38), "parties": (560, 116, 1106, 446, 38), "cabinet": (14, 568, 540, 280, 27),
+            "realm": (14, 854, 540, 352, 27), "high": (560, 568, 540, 376, 27), "diary": (560, 950, 540, 256, 38),
+            "intel": (1106, 568, 560, 638, 38)}
+GV_STEEL = "GFX_1440p_GV_%s"
+GV_ROW, GV_SEAT = 24, 48                            # a row of a table; a row with a person's portrait and two lines
 OFFICES = [("army_chief", "is_army_chief", "Chief of the army"), ("navy_chief", "is_navy_chief", "Chief of the navy"),
            ("air_chief", "is_air_chief", "Chief of the air force"), ("theorist", "is_theorist", "Theorist")]
 IDEOLOGIES = [("Fascist", "fascism"), ("Democratic", "democratic"), ("Communist", "communism"), ("Neutral", "neutrality")]
@@ -2529,19 +2546,87 @@ LAWS = [
                       "SWI_citizen_militia_2"]),
 ]
 LAW_UNKNOWN = "GFX_idea_unknown"                    # the game's picture of an idea it has none for
-SMALL_UNKNOWN = "GFX_idea_unknown"                  # an advisor whose portrait the table does not know (63x63)
-GV_SMALL_LARGE = 0.31                               # a large portrait in the place of a small one: 48x65
+LAW_SCALE = 0.35                                    # a law's picture (64x64) in a row of 24: 22x22
+SMALL_UNKNOWN = "GFX_idea_unknown"                  # an advisor whose portrait the table does not know
+GV_SMALL = 0.7                                      # an advisor's small portrait (65x67) in a row of 48: 46x47
+GV_FACE = 0.22                                      # a large portrait (156x210) in a row of 48: 34x46
+FACE_NONE = "GFX_1440p_SG_face_none_46x47"          # decision 2: the game's unknown leader outline on the dark inset
+FACE_NONE_TT = "No picture: his portrait is a file of another mod, which only the game's own windows draw."
 BEGAN = "before the record"
 GV_FIGURES = [("elections", "Elections", ("election",), "Elections held since the record began."),
               ("changes", "Changes of rule", ("party", "government"), "Changes of the ruling party or of the government."),
               ("heads", "New heads", ("leader",), "Heads of government who took office."),
-              ("appointed", "Appointments", ("appointed",), "Advisors, chiefs and members of the high command who took office.")]
-CABINET_SLOTS = 4       # political advisors (the game gives a country three)
+              ("appointed", "Appointments", ("appointed",), "Advisors, chiefs and members of the high command who took office."),
+              ("party", "Changes of the ruling party", ("party",), "The ruling party changed.")]       # E3 round 2
+CABINET_SLOTS = 5       # political advisors (the game gives three; Road to 56 gives Germany a fifth)
 MEMBER_SLOTS = 3        # members of the high command (three in the game)
-HEADS_SLOTS = 4         # heads of government the card shows, newest first
+HEADS_SLOTS = 4         # heads of government in the padded copy mod1440_gv_rd (the save keeps its meaning)
+HEADS_ROWS = 7          # rows of the heads panel
 HEADS_KEEP = 100        # heads of government the record keeps
 SLOT_PARTS = ["", "_since", "_old", "_p", "_r", "_b"]       # holder, since, held when the record began, portrait, role, large
+SLOT_NEW = ["_e", "_fb"]                            # E3 round 2: the text key of his role's effects; 1: no picture (the fallback)
 FLAG_TILE = (124, 96)   # a country of the faction or a subject: a plate of 122x90 in a slot of this size
+# The heads of government: the record's arrays (newest first) and the new ones of round 2: the day he came and went
+# (num_days, -1 not known), stability and war support in percent on his first and last day (-1 not recorded), the
+# elections held in his term.
+RUL = ["", "_from", "_old", "_to", "_end", "_p", "_g"]
+RUL_NEW = ["_fd", "_td", "_s0", "_s1", "_w0", "_w1", "_e"]
+RP = RUL + RUL_NEW + ["_days", "_fb"]               # the panel's padded copy mod1440_gv_rp*
+# The record of party support: one value a month per party, aligned with National Figures' mod1440_h_date; the ruling
+# group (1 to 4, 0 not known) and the head of government of each month.
+PP_PARTS = ["_0", "_1", "_2", "_3", "_g", "_h"]
+GV_EL_KEEP = 40         # elections kept (dates and days)
+# The chart: the plot in the window (x, y, w, h), 2.8 px a percent; the ranges (months, slot, dot, caption)
+GV_PLOT = (1010, 172, 600, 280)
+GV_PX = 2.8
+GV_RANGES = [(24, 25, 8, "2 years"), (60, 10, 6, "5 years"), (120, 5, 5, "10 years")]
+GV_YEARS = 10
+GV_SPANS = 6            # heads of government named on the band under the years
+GV_SPAN_NAME = 130      # a span this wide or wider carries the name
+GV_TICKS = 10           # election ticks
+GV_LABEL_X = 1614       # the shares at the lines' ends
+GV_LABEL_GAP = 18
+GV_BAND_Y, GV_BAND_H = 482, 22
+GV_CHART_VER = 3        # mod1440_gv_chart_v: the chart is drawn again once when this build is new
+# The parties' colours (decision 5): the game's (common/ideologies) for the swatches and the results bar; lifted for
+# the chart's dots and end swatches only, so that each reaches 3:1 on the plot (decision 5B)
+PARTY_COLOURS = {"fascism": (150, 75, 0), "democratic": (0, 0, 255), "communism": (255, 0, 0), "neutrality": (124, 124, 124)}
+DOT_COLOURS = {"fascism": (160, 85, 15), "democratic": (70, 90, 255), "communism": (255, 0, 0), "neutrality": (124, 124, 124)}
+GV_TRAITS = 4           # traits of the head of government (the arrays of a save of the first build; nothing shows them)
+# E3 fix round 1 (2026-10-31): no head of government's traits. has_country_leader_with_trait with a trait the loaded game
+# does not define is refused at load ('Invalid trait', error.log) and keeps a null object; evaluated, it crashed the game
+# (ACCESS_VIOLATION in FUN_140bffc50, the user's crash of 31 October, 1.19.4.1 with Road to 56). A mod cannot know the
+# loaded game's traits, so no trigger of this page names a trait (tests/ScriptedGuis.Tests.ps1).
+GV_NO_TRAITS = True
+GV_DIARY = 8            # the government's newest lines of the War Diary
+GV_KNOW = 3             # countries under What we know of
+# The agency's upgrades (common/intelligence_agency_upgrades): 21 in five branches, eleven to a row (deviation: the
+# design drew 17 in rows of nine; the game has 21)
+GV_UPGRADES = [("upgrade_economy_civilian", "GFX_agency_economy_department"), ("upgrade_army_department", "GFX_agency_army_department"),
+               ("upgrade_naval_department", "GFX_agency_naval_department"), ("upgrade_airforce_department", "GFX_agency_airforce_department"),
+               ("upgrade_passive_defense", "GFX_agency_defense_department"), ("upgrade_anti_partisan", "GFX_agency_anti_partisan"),
+               ("upgrade_blueprint_stealing", "GFX_agency_steal_blueprints"), ("upgrade_portable_radios", "GFX_agency_portable_radios"),
+               ("upgrade_invisible_ink", "GFX_agency_invisible_ink"), ("upgrade_plastic_explosives", "GFX_agency_plastic_explosives"),
+               ("upgrade_suicide_pills", "GFX_agency_suicide_pills"), ("upgrade_training_centers", "GFX_agency_localized_training_center"),
+               ("upgrade_commando_training", "GFX_agency_commando_training"),
+               ("upgrade_interrogation_techniques", "GFX_agency_interrogation_techniques"),
+               ("upgrade_diplo_training", "GFX_agency_diplomatic_training"), ("upgrade_psycho_warfare", "GFX_agency_psychological_warfare"),
+               ("upgrade_form_department", "GFX_agency_form_department"), ("upgrade_decryption_boost", "GFX_agency_decryption_boost_1"),
+               ("upgrade_decryption_boost_2", "GFX_agency_decryption_boost_2"), ("upgrade_crypto_strength", "GFX_agency_cryptology_1"),
+               ("upgrade_crypto_strength_2", "GFX_agency_cryptology_2")]
+GV_UP_ROW, GV_UP_STEP, GV_UP_SIZE = 11, 49, 44
+GV_UP_SCALE = 0.647                                  # a picture of 68x68 at 44x44
+# An operative's mission: (the game's name of it, the frame of GFX_operative_mission_icons_small as the game's texts number
+# them, the text key of its title). Fix round 1: the names are the game's own (common/script_enums.txt,
+# script_enum_operative_mission_type, and the operative_leader_mission triggers of the game's files); quiet_intel_network,
+# a text key's word, was refused at load ('Not a valid value', error.log of 2026-10-31): the game calls it quiet_network.
+MISSIONS = [("build_intel_network", 1, "BUILD_INTEL_NETWORK"), ("quiet_network", 2, "QUIET_INTEL_NETWORK"),
+            ("counter_intelligence", 3, "COUNTER_INTELLIGENCE"), ("root_out_resistance", 4, "ROOT_OUT_RESISTANCE"),
+            ("boost_ideology", 5, "BOOST_IDEOLOGY"), ("control_trade", 6, "CONTROL_TRADE"), ("diplomatic_pressure", 7, "DIPLOMATIC_PRESSURE"),
+            ("propaganda", 8, "PROPAGANDA")]
+GV_OP_ROWS = 4
+OP_ROW_W = 528
+# --- end E3 round 2 ---
 
 
 def advisor_table():
@@ -2557,16 +2642,88 @@ def advisor_table():
             if plain_name.match(row[0]) and plain_name.match(row[4] or "x")]
 
 
+# --- E3 round 2 --- the effects of the country_leader traits (tools/make_game_tables.py: trait_effects_table.py's
+# LEADER_EFFECTS, and leader_traits_mods_table.py for the playset's, decision 4), text keys mod1440_trl_<trait>
+def leader_effects():
+    """{language: {trait: lines}}: the game's leader traits, and the playset's the game lacks."""
+    try:
+        from trait_effects_table import LEADER_EFFECTS
+    except ImportError:
+        LEADER_EFFECTS = {}
+    try:
+        from leader_traits_mods_table import LEADER_EFFECTS as others
+    except ImportError:
+        others = {}
+    out = {}
+    for language in set(LEADER_EFFECTS) | set(others):
+        table = dict(others.get(language) or {})
+        table.update(LEADER_EFFECTS.get(language) or {})
+        out[language] = table
+    return out
+
+
+def leader_described():
+    return set((leader_effects().get("english") or {}).keys())
+
+
+def leader_names():
+    """E3 fix round 2: {language: {trait: its name on one line}} for the roles whose own name breaks its line ('Army Drill'
+    over '(Expert)': a row's role is one line, and the break cut the rest off); the game's and the playset's."""
+    try:
+        from trait_effects_table import LEADER_NAMES
+    except ImportError:
+        LEADER_NAMES = {}
+    try:
+        from leader_traits_mods_table import LEADER_NAMES as others
+    except ImportError:
+        others = {}
+    out = {}
+    for language in set(LEADER_NAMES) | set(others):
+        table = dict(others.get(language) or {})
+        table.update(LEADER_NAMES.get(language) or {})
+        out[language] = table
+    return out
+
+
+def role_key(trait, one_line):
+    """The text key a role is written with: its one-line name (mod1440_trn_<trait>), or the trait's own."""
+    return "mod1440_trn_" + trait if trait in one_line else trait
+
+
+def effect_key(trait, described):
+    """The text key of a leader trait's effects, or the one of a trait the tables do not describe."""
+    plain_name = re.compile(r"^[A-Za-z0-9_]+$")
+    return "mod1440_trl_" + trait if trait in described and plain_name.match(trait) else TRAIT_NO_EFFECTS
+
+
+def head_traits():
+    """The traits a head of government can have: the game's and the playset's (LEADER_TRAITS of both tables)."""
+    try:
+        from trait_effects_table import LEADER_TRAITS
+    except ImportError:
+        LEADER_TRAITS = []
+    try:
+        from leader_traits_mods_table import LEADER_TRAITS as others
+    except ImportError:
+        others = []
+    plain_name = re.compile(r"^[A-Za-z0-9_]+$")
+    return sorted(name for name in set(LEADER_TRAITS) | set(others) if plain_name.match(name))
+# --- end E3 round 2 ---
+
+
 def advisor_portraits():
     """The script that finds an advisor's small portrait and the role he holds in a slot: one effect per slot,
     mod1440_p_adv_<slot>, in the advisor's scope with PREV his country. It leaves p_tok (the sprite), p_role
-    (the text key of the role's trait) and p_big (1: the sprite is a large portrait). Returns the script and
-    the version of the table."""
+    (the text key of the role's trait), p_big (1: the sprite is a large portrait) and, E3 round 2, p_eff (the text key
+    of the role's effects, mod1440_trl_<trait>) and p_fb (1: no sprite the page can name, decision 2's fallback).
+    Returns the script and the version of the table."""
     from portraits_table import TAGS
     rows = advisor_table()
-    version = table_version(rows)
-    out = ("\n# Advisors (tools/portraits_table.py, ADVISORS): the small portrait and the role of the advisor in scope,\n"
-           "# PREV his country, for each kind of seat. %d roles.\n" % len(rows))
+    described = leader_described()
+    one_line = set((leader_names().get("english") or {}).keys())
+    version = table_version((rows, sorted(described), "E3", sorted(one_line)))
+    out = ("\n# Advisors (tools/portraits_table.py, ADVISORS): the small portrait, the role and the role's effects of the advisor\n"
+           "# in scope, PREV his country, for each kind of seat. %d roles.\n" % len(rows))
     effects = ""
     for slot in ("political_advisor", "high_command", "army_chief", "navy_chief", "air_chief", "theorist"):
         by_file = {}
@@ -2577,7 +2734,8 @@ def advisor_portraits():
         for source in sorted(by_file):
             body = "".join(iff("PREV = { has_character = %s } is_character = %s" % (name, name),
                                # what is not set stays as the effect set it first: the unknown picture, no role, small
-                               (tmp("p_tok", "token:" + sprite) if sprite else "") + (tmp("p_role", "token:" + trait) if trait else "")
+                               (tmp("p_tok", "token:" + sprite) + tmp("p_fb", 0) if sprite else "")
+                               + (tmp("p_role", "token:" + role_key(trait, one_line)) + tmp("p_eff", "token:" + effect_key(trait, described)) if trait else "")
                                + (tmp("p_big", 1) if large else "") + tmp("p_found", 1), "if" if n == 0 else "else_if")
                            for n, (name, sprite, trait, large) in enumerate(by_file[source]))
             effects += block("mod1440_p_adv_%s_%s" % (slot, source), body)
@@ -2586,290 +2744,677 @@ def advisor_portraits():
                 own += iff("PREV = { original_tag = %s }" % source, call, "else_if" if own else "if")
             others += iff("check_variable = { p_found = 0 }", call)
         out += block("mod1440_p_adv_%s" % slot, tmp("p_tok", "token:" + SMALL_UNKNOWN) + tmp("p_role", BLANK) + tmp("p_big", 0) + tmp("p_found", 0)
+                     + tmp("p_eff", "token:" + TRAIT_NO_EFFECTS) + tmp("p_fb", 1)
                      + own + iff("check_variable = { p_found = 0 }", others))
     return out + "\n" + effects, version
 
 
+def gv_is_person(value):
+    """A trigger: the number <value> (an element of the game's political_advisor or high_command array) holds a
+    character, as a variable holds one (X67): a unit leader by his number (-21474.83648 and up) or a character by his
+    place (5368.70912 and up). The game's political_advisor array can hold an element that scopes to a country (the
+    "German Reich" seat of the user's capture, 2026-10-30): it is left out and never looked up, so no is_character asks a
+    country (the error.log line of E7, 'Open (found 2026-10-30)')."""
+    return "OR = { check_variable = { %s > 5368 } check_variable = { %s < -21000 } }" % (value, value)
+
+
+def gv_person_test(value, flag):
+    """Script for the country in scope (its number in the temporary gv_me): <flag> 1 when the element <value> is a character.
+    E3 fix round 2: the number test alone let the 'German Reich' seat through (the user's save, 31 October: its number is in
+    the range of a place, X67, and the place leads to nobody, so its scope stays the country). The element is entered and must
+    leave the country's scope (the mod1440_chk_gv_phantom pattern); entering a place nobody stands on logs nothing (X67). Asked
+    in the daily round only, never in a drawn trigger; the seat's copy keeps only who passes."""
+    return (tmp(flag, 0) + iff(gv_is_person(value), (
+        tmp("gv_pt", "gv_me") + block("var:" + value, tmp("gv_pt", "THIS"))
+        + iff("NOT = { check_variable = { gv_pt = gv_me } }", tmp(flag, 1)))))
+
+
 def government(portrait_version):
-    adv_version = table_version(advisor_table())    # the portraits and roles of advisors (advisor_portraits())
+    adv_version = table_version((advisor_table(), sorted(leader_described()), "E3", sorted((leader_names().get("english") or {}).keys())))
     from laws_table import LAW_PICTURES
     pictures = dict(LAW_PICTURES)
     body, effects, properties = head("gv", 2, "Who rules and who serves. A date is the day the mod first saw the name in office.")
-    triggers = ""
-    lists = ""
-    extra_gui = ""
-    bottoms = [REC_BODY_Y] * 3
+    vis = {}                # widget -> its conditions, ANDed in its _visible trigger
+    lists, rows_gui = "", ""
+    panel = is_one("mod1440_gv_heads") + "\n"
+    chart_open = "NOT = { %s }\n" % is_one("mod1440_gv_heads")
 
-    def place(column, name, title, inner, height):
-        nonlocal body
-        body += card("gv_" + name, GV_X[column], bottoms[column], GV_COL, height, title, inner)
-        bottoms[column] += height + 12
+    def when(names, cond):
+        for name in ([names] if isinstance(names, str) else names):
+            vis.setdefault(name, [])
+            if cond not in vis[name]:
+                vis[name].append(cond)
 
-    def rest(column):
-        return REC_BODY_Y + REC_BODY_H - bottoms[column]
+    def card(name, inner, key=None):
+        x, y, w, h, band = GV_CARDS[name]
+        return M.box("gv_" + name, x, y, w, h, M.icon("gv_%s_bg" % name, 0, 0, GV_STEEL % (key or name)) + inner)
 
-    def right(name, words, tip=None):
-        """A small text at the right end of a card's title strip."""
-        return M.text(name, GV_COL - 14 - 300, 14, 300, B.key(name, words), M.FONT_SMALL, "right", 20,
-                      tooltip=B.key(name + "_tt", tip) if tip else None)
+    def rel(name, x, y):
+        return x - GV_CARDS[name][0], y - GV_CARDS[name][1]
 
-    def since(name, x, y, date, old, width, fmt="left", word="", when=""):
-        """A date, or the words for an office held when the record began: the widgets and their triggers."""
-        out = M.text(name, x, y, width, B.key(name, "%s[?%s.%s]" % (word, date, LONG)), M.FONT_SMALL, fmt, 22)
-        out += M.text(name + "_old", x, y, width, B.key("gv_began", BEGAN), M.FONT_SMALL, fmt, 22)
-        return out, (block(name + "_visible", when + "check_variable = { %s = 0 }\n" % old)
-                     + block(name + "_old_visible", when + "check_variable = { %s = 1 }\n" % old))
+    def txt(name, x, y, w, words, font=None, fmt="left", h=22, tip=None, fixed=False, key=None):
+        return M.text(name, x, y, w, B.key(key or name, words), font or M.FONT_LABEL, fmt, h,
+                      tooltip=B.key((key or name) + "_tt", tip) if tip else None, fixed=fixed)
 
-    def person(name, x, y, holder, role, began, sprite, big, has, vacant=None, game=False):
-        """A seat: the advisor's own small portrait (a large one smaller where the game declares no small one),
-        name, role and since when; or the unknown portrait and "vacant". holder etc. are variables, has a
-        trigger. Returns the widgets and their triggers. game (E7): a seat that a general or an admiral can hold;
-        while he is a unit leader the game draws his face in the place of the large one (the list <name>_gface_grid
-        over the array mod1440_<name>_ul, which the daily round fills), and the table's portraits are hidden."""
-        nonlocal lists
-        out = M.icon(name + "_face", x + 14, y + 2, SMALL_UNKNOWN)
-        out += scaled(name + "_big", x + 22, y + 2, UNKNOWN, GV_SMALL_LARGE)
-        extra = block(name + "_face", 'image = "[?%s.GetTokenKey]"\n' % sprite) + block(name + "_big", 'image = "[?%s.GetTokenKey]"\n' % sprite)
-        table = ""
-        if game:
-            out += face_grid(name + "_gface_grid", x + 22, y + 2, GV_SMALL_LARGE)
-            lists += face_list(name + "_gface_grid", "mod1440_%s_ul" % name, "gv_gface")
-            table = "check_variable = { mod1440_%s_ul^num < 1 }\n" % name
-        out += M.text(name + "_name", x + 92, y + 6, GV_COL - 92 - 210, B.key(name + "_name", "§Y[?%s.GetName]§!" % holder), M.FONT_LABEL, height=22, fixed=True)
-        out += M.text(name + "_role", x + 92, y + 30, GV_COL - 92 - 24, B.key(name + "_role", "[?%s.GetTokenLocalizedKey]" % role), M.FONT_SMALL, height=22, fixed=True)
-        piece, more = since(name + "_since", GV_COL - 16 - 190, y + 8, began[0], began[1], 190, "right", "since ", has)
-        out += piece
-        trig = (block(name + "_face_visible", has + "check_variable = { %s = 0 }\n" % big + table)
-                + block(name + "_big_visible", has + "check_variable = { %s = 1 }\n" % big + table)
-                + block(name + "_name_visible", has) + block(name + "_role_visible", has) + more)
-        if vacant:
-            out += scaled(name + "_none", x + 22, y + 2, UNKNOWN, GV_SMALL_LARGE)
-            out += M.text(name + "_vacant", x + 92, y + 16, 300, B.key("gv_vacant", "§gvacant§!"), M.FONT_SMALL, height=22)
-            trig += block(name + "_none_visible", vacant) + block(name + "_vacant_visible", vacant)
-        return out, extra, trig
-
-    # ---- column 1: who rules. The name and the flag, the portrait at full size beside the party and the dates
-    inner = M.text("gv_leader", 14, 40, GV_COL - 28 - 100, B.key("gv_leader", "[ROOT.GetLeader]"), M.FONT_TITLE, height=40, fixed=True)
-    inner += flag("gv_flag", GV_COL - 14 - 82, 38)
-    properties += flown("gv_flag", "ROOT")
-    inner += portrait("gv_face", 14, 92)
-    properties += shown("gv_face", "mod1440_gv_p")
-    for ideology, group in IDEOLOGIES:
-        inner += scaled("gv_group_%s" % group, 186, 92, "GFX_ideology_%s_group" % group, 0.6)
-        triggers += block("gv_group_%s_visible" % group, "has_government = %s\n" % group)
-    inner += M.text("gv_party", 234, 94, GV_COL - 250, B.key("gv_party", "§Y[ROOT.GetRulingParty]§!, [ROOT.GetRulingIdeology]"), M.FONT_LABEL, height=22, fixed=True)
-    inner += M.text("gv_party_long", 234, 118, GV_COL - 250, B.key("gv_party_long", "[ROOT.GetRulingPartyLong]"), M.FONT_SMALL, height=22, fixed=True)
-    top = 152
-    inner += M.text("gv_office_l", 188, top, 110, B.key("gv_office_l", "In office"), M.FONT_SMALL, height=22)
-    piece, extra = since("gv_leader_since", 300, top, "mod1440_gv_leader_since", "mod1440_gv_leader_old", GV_COL - 316, word="since ")
-    inner += piece
-    triggers += extra
-    inner += M.text("gv_election_l", 188, top + GV_ROW, 110, B.key("gv_election_l", "Last election"), M.FONT_SMALL, height=22)
-    inner += M.text("gv_election", 300, top + GV_ROW, GV_COL - 316, B.key("gv_election", "[ROOT.GetLastElection]"), M.FONT_SMALL, height=22)
-    inner += M.text("gv_next_l", 188, top + 2 * GV_ROW, 110, B.key("gv_next_l", "Next election"), M.FONT_SMALL, height=22)
-    inner += M.text("gv_next", 300, top + 2 * GV_ROW, GV_COL - 316, B.key("gv_next", "in [?days_until_next_election|0] days"), M.FONT_SMALL, height=22)
-    inner += M.text("gv_next_none", 300, top + 2 * GV_ROW, GV_COL - 316, B.key("gv_next_none", "none"), M.FONT_SMALL, height=22)
-    triggers += block("gv_next_visible", "check_variable = { days_until_next_election > -1 }\n")
-    triggers += block("gv_next_none_visible", "check_variable = { days_until_next_election < 0 }\n")
-    sums = ""
-    figures = {}
-    for name, label, kinds, tip in GV_FIGURES:
-        figures[name] = (label, "[?mod1440_gv_n_%s|0]" % name, tip)
-        sums += count(*kinds) + setv("mod1440_gv_n_" + name, "ct_sum")
-    for n, name in enumerate(("elections", "changes")):
-        piece, extra = tile("gv_f_" + name, 186 + n * 171, 238, figures[name][0], figures[name][1], figures[name][2], width=165)
-        inner += piece
-    place(0, "chief", "Head of government", inner, 316)
-
-    # parties: the group's icon, the name, the leader, the share and a bar as long as it; the ruling party lit
-    inner = ""
-    for n, (ideology, group) in enumerate(IDEOLOGIES):
-        y = 42 + n * 56
-        inner += M.icon("gv_p_%d_pick" % n, 8, y - 2, PICK % (GV_IN, 54))
-        triggers += block("gv_p_%d_pick_visible" % n, "has_government = %s\n" % group)
-        inner += scaled("gv_p_%d_icon" % n, 14, y + 6, "GFX_ideology_%s_group" % group, 0.55)
-        inner += M.text("gv_p_%d" % n, 62, y + 2, GV_COL - 62 - 110, B.key("gv_p_%d" % n, "[ROOT.Get%sParty]" % ideology), M.FONT_SMALL, height=22, fixed=True)
-        inner += M.text("gv_p_%d_pop" % n, GV_COL - 110, y + 4, 92, B.key("gv_p_%d_pop" % n, "[?party_popularity@%s|%%0]" % group), M.FONT_VALUE, "right", 24)
-        inner += M.text("gv_p_%d_who" % n, 62, y + 20, GV_COL - 62 - 110, B.key("gv_p_%d_who" % n, "§Y[ROOT.Get%sLeader]§!" % ideology), M.FONT_SMALL, height=22, fixed=True)
-        inner += M.icon("gv_p_%d_bar" % n, 62, y + 40, M.bar_sprite(GV_COL - 80))
-        properties += block("gv_p_%d_bar" % n, "frame = mod1440_gv_pop_%d\n" % n)
-    place(0, "parties", "Parties", inner, 42 + 4 * 56 + 8)
-
-    # laws: three plates, the kind, the law's own picture, its name
-    inner = ""
-    for n, (label, ideas) in enumerate(LAWS):
-        x = 14 + n * 174
-        inner += M.icon("gv_law_%d_bg" % n, x, 42, M.tile_sprite(166, 130))
-        inner += M.text("gv_law_%d_l" % n, x + 6, 48, 154, B.key("gv_law_%d_l" % n, "§g%s§!" % label), M.FONT_SMALL, "centre", 20)
-        inner += M.icon("gv_law_%d_pic" % n, x + (166 - 64) // 2, 70, LAW_UNKNOWN)
-        properties += block("gv_law_%d_pic" % n, 'image = "[?mod1440_gv_law_%d_gfx.GetTokenKey]"\n' % n)
-        inner += M.text("gv_law_%d" % n, x + 6, 142, 154, B.key("gv_law_%d" % n, "[?mod1440_gv_law_%d.GetTokenLocalizedKey]" % n), M.FONT_LABEL, "centre", 24, fixed=True)
-    place(0, "laws", "Laws", inner, 42 + 130 + 12)
-
-    # the heads of government since the record began, newest first: portrait, name, party, from and to
-    inner = right("gv_rul_n", "[?mod1440_gv_rul^num|0] since the record began")
-    for k in range(HEADS_SLOTS):
-        y = 42 + k * 54
-        more = "check_variable = { mod1440_gv_rul^num > %d }\n" % k
-        if k == 0:
-            inner += M.icon("gv_rul_0_pick", 8, y - 2, PICK % (GV_IN, 52))
-            triggers += block("gv_rul_0_pick_visible", more)
-        elif k % 2:
-            inner += M.icon("gv_rul_%d_bg" % k, 8, y - 2, STRIPE % (GV_IN, 52))
-            triggers += block("gv_rul_%d_bg_visible" % k, more)
-        inner += portrait("gv_rul_%d_face" % k, 16, y + 1, OF_FACE)
-        properties += shown("gv_rul_%d_face" % k, "mod1440_gv_rd_p^%d" % k)
-        inner += M.text("gv_rul_%d" % k, 60, y + 4, GV_COL - 60 - 250, B.key("gv_rul_%d" % k, "§Y[?mod1440_gv_rd^%d.GetName]§!" % k), M.FONT_LABEL, height=22, fixed=True)
-        triggers += block("gv_rul_%d_face_visible" % k, more) + block("gv_rul_%d_visible" % k, more)
-        for g, (ideology, group) in enumerate(IDEOLOGIES, start=1):
-            widget = "gv_rul_%d_g%d" % (k, g)
-            inner += M.text(widget, 60, y + 26, GV_COL - 60 - 24, B.key(widget, "[ROOT.Get%sParty], %s" % (ideology, ideology)), M.FONT_SMALL, height=22, fixed=True)
-            triggers += block(widget + "_visible", more + "check_variable = { mod1440_gv_rd_g^%d = %d }\n" % (k, g))
-        for name, words, condition in (
-                ("a", "[?mod1440_gv_rd_from^%d.%s] - [?mod1440_gv_rd_to^%d.%s]" % (k, LONG, k, LONG), "check_variable = { mod1440_gv_rd_old^%d = 0 } check_variable = { mod1440_gv_rd_end^%d = 1 }"),
-                ("b", "%s - [?mod1440_gv_rd_to^%d.%s]" % (BEGAN, k, LONG), "check_variable = { mod1440_gv_rd_old^%d = 1 } check_variable = { mod1440_gv_rd_end^%d = 1 }"),
-                ("c", "since [?mod1440_gv_rd_from^%d.%s]" % (k, LONG), "check_variable = { mod1440_gv_rd_old^%d = 0 } check_variable = { mod1440_gv_rd_end^%d = 0 }"),
-                ("d", "%s - today" % BEGAN, "check_variable = { mod1440_gv_rd_old^%d = 1 } check_variable = { mod1440_gv_rd_end^%d = 0 }")):
-            widget = "gv_rul_%d_t%s" % (k, name)
-            inner += M.text(widget, GV_COL - 16 - 300, y + 6, 300, B.key(widget, words), M.FONT_SMALL, "right", 22)
-            triggers += block(widget + "_visible", more + (condition % (k, k)) + "\n")
-    place(0, "heads", "Heads of government", inner, rest(0))
-
-    # ---- column 2: who serves. Fixed seats read by written index: an advisor has no scope in a list row (X42)
-    def seats(prefix, count, step, top, game=False):
-        """count seats of the slot arrays mod1440_gv_<prefix>... Returns the widgets."""
-        nonlocal triggers, properties
-        out = ""
-        for k in range(count):
-            y = top + k * step
-            has = "check_variable = { mod1440_gv_%s^num > %d }\n" % (prefix, k)
-            if k % 2:
-                out += M.icon("gv_%s_%d_bg" % (prefix, k), 8, y - 2, STRIPE % (GV_IN, step - 2))
-                triggers += block("gv_%s_%d_bg_visible" % (prefix, k), has)
-            parts = dict((part, "mod1440_gv_%s_d%s^%d" % (prefix, part, k)) for part in SLOT_PARTS)
-            piece, prop, trig = person("gv_%s_%d" % (prefix, k), 0, y, parts[""], parts["_r"], (parts["_since"], parts["_old"]),
-                                       parts["_p"], parts["_b"], has, game=game)
-            out += piece
-            properties += prop
-            triggers += trig
+    def strip(name, x, y, w, words, right=None, right_w=260):
+        out = M.icon(name, x, y, layout.head_sprite(w, 26)) + txt(name + "_t", x + 8, y + 2, 300, words)
+        if right:
+            out += txt(name + "_r", x + w - 8 - right_w, y + 2, right_w, right, fmt="right")
         return out
 
-    inner = right("gv_adv_n", "[?mod1440_gv_adv^num|0] appointed")
-    inner += seats("adv", CABINET_SLOTS, 76, 44)
-    for k in range(CABINET_SLOTS):
-        widget = "gv_adv_none_%d" % k
-        inner += M.text(widget, 18, 44 + k * 76 + 8, 500, B.key(widget, "§gNo %spolitical advisor is hired.§!" % ("other " if k else "")), M.FONT_SMALL, height=22)
-        triggers += block(widget + "_visible", "check_variable = { mod1440_gv_adv^num = %d }\n" % k)
-    place(1, "adv", "Cabinet", inner, 44 + CABINET_SLOTS * 76 + 32)
+    def bands(name, x, y, w, row, rows):
+        return "".join(M.icon("%s_%d" % (name, n), x, y + (n - 1) * row, STRIPE % (w, row)) for n in range(2, rows + 1, 2))
 
-    inner = right("gv_hc_n", "[?mod1440_gv_hc_n|0] appointed")
-    for k, (variable, trigger, label) in enumerate(OFFICES):
-        y = 42 + k * 92
-        holder = "mod1440_gv_of_%d" % k
-        has = is_one(holder + "_has") + "\n"
-        if k % 2:
-            inner += M.icon("gv_of_%d_bg" % k, 8, y - 2, STRIPE % (GV_IN, 90))
-        inner += M.text("gv_of_%d_l" % k, 92, y, 300, B.key("gv_of_%d_l" % k, "§g%s§!" % label), M.FONT_SMALL, height=20)
-        piece, prop, trig = person("gv_of_%d" % k, 0, y + 18, holder, holder + "_r", (holder + "_since", holder + "_old"), holder + "_p", holder + "_b",
-                                   has, "NOT = { %s }\n" % has.strip(), game=True)
+    def head_text(name, words, w=316, right=None, right_w=200, widget=None):
+        """The caption in a card's head band, and a figure at its right end."""
+        band = GV_CARDS[name][4]
+        y = 4 if band == 27 else 8
+        widget = widget or "gv_%s" % name
+        out = txt(widget + "_title", 12, y, w, words, fixed=True)
+        if right:
+            out += txt(widget + "_right", GV_CARDS[name][2] - 12 - right_w, y, right_w, right, fmt="right")
+        return out
+
+    def since(name, x, y, w, date, old, fmt="right", word="since ", cond=""):
+        """A date, or the words for one held when the record began."""
+        out = txt(name, x, y, w, "%s[?%s.%s]" % (word, date, LONG), fmt=fmt)
+        out += M.text(name + "_old", x, y, w, B.key("gv_began_" + word.strip(), BEGAN if word == "since " else word + BEGAN), M.FONT_LABEL, fmt, 22)
+        when(name, cond + "check_variable = { %s = 0 }\n" % old)
+        when(name + "_old", cond + "check_variable = { %s = 1 }\n" % old)
+        return out
+
+    def group_icons(name, x, y, scale, var, cond=""):
+        out = ""
+        for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+            out += scaled("%s_g%d" % (name, g), x, y, "GFX_ideology_%s_group" % group, scale)
+            when("%s_g%d" % (name, g), cond + "check_variable = { %s = %d }\n" % (var, g))
+        return out
+
+    # ================================================================ Head of government
+    c = "hog"
+    inner = head_text(c, "Head of government")
+    inner += M.button("gv_heads_btn", 392, 5, "GFX_sort_button_140x29", B.key("gv_heads_btn", "Heads of government"), tooltip=B.key(
+        "gv_heads_btn_tt", "Every head of government since the record began, with his term, stability and war support, in the place of "
+        "Party support. Click again, or Party support, to go back."))
+    properties += block("gv_heads_btn", "frame = mod1440_gv_heads_f\n")
+    effects += block("gv_heads_btn_click", flip("mod1440_gv_heads") + "mod1440_gv_panel = yes\n")
+    inner += txt("gv_leader", 12, 44, 420, "[ROOT.GetLeader]", M.FONT_CARD, h=30, fixed=True)
+    inner += flag("gv_flag", 450, 44)
+    properties += flown("gv_flag", "ROOT")
+    inner += txt("gv_party", 12, 76, 420, "§Y[ROOT.GetRulingParty]§!, [ROOT.GetRulingIdeology]", fixed=True)
+    # the portrait at full size; a head the game can name no portrait for: the flag on the dark inset with his group's icon (E4)
+    inner += portrait("gv_face", 8, 106)
+    properties += shown("gv_face", "mod1440_gv_p")
+    when("gv_face", "check_variable = { mod1440_gv_pfb = 0 }\n")
+    inner += scaled("gv_face_fb", 8, 106, INSET % (156, 210), 1.0, B.key("gv_face_fb_tt", "No portrait the game can name"))
+    inner += flag("gv_face_fb_flag", 8 + 37, 106 + 40)
+    properties += flown("gv_face_fb_flag", "ROOT")
+    when(["gv_face_fb", "gv_face_fb_flag"], "check_variable = { mod1440_gv_pfb = 1 }\n")
+    for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+        inner += scaled("gv_face_fb_g%d" % g, 8 + 56, 106 + 104, "GFX_ideology_%s_group" % group, IDEOLOGY_LARGE)
+        when("gv_face_fb_g%d" % g, "check_variable = { mod1440_gv_pfb = 1 }\nhas_government = %s\n" % group)
+    # his party and dates as a banded table; E3 fix round 1: in the place of the traits (removed, see GV_NO_TRAITS) three
+    # rows of today's figures, so that the table runs down beside the portrait
+    bx, by = rel(c, 186, 222)
+    inner += bands("gv_hog_band", bx, by, 360, GV_ROW, 8)
+    rows = [("party_long", "Party", None), ("office", "In office", None), ("rec", "On record", None),
+            ("election", "Last election", None), ("next", "Next election", None),
+            ("support", "Party support", None), ("stab", "Stability", None), ("ws", "War support", None)]
+    for n, (name, label, _x) in enumerate(rows):
+        y = by + n * GV_ROW
+        inner += txt("gv_%s_l" % name, bx + 8, y + 2, 110, label)
+    inner += txt("gv_party_long", bx + 122, by + 2, 230, "[ROOT.GetRulingPartyLong]", fixed=True, tip="[ROOT.GetRulingPartyLong]")
+    inner += since("gv_leader_since", bx + 122, by + GV_ROW + 2, 230, "mod1440_gv_leader_since", "mod1440_gv_leader_old", "left")
+    inner += txt("gv_rec", bx + 122, by + 2 * GV_ROW + 2, 230, "[?mod1440_gv_leader_rec|0] days", tip="Days the record has kept him in office.")
+    when("gv_rec", "check_variable = { mod1440_gv_leader_rec > -1 }\n")
+    inner += txt("gv_election", bx + 122, by + 3 * GV_ROW + 2, 230, "[ROOT.GetLastElection]", fixed=True)
+    inner += txt("gv_next", bx + 122, by + 4 * GV_ROW + 2, 230, "in [?days_until_next_election|0] days")
+    inner += txt("gv_next_none", bx + 122, by + 4 * GV_ROW + 2, 230, "none")
+    when("gv_next", "check_variable = { days_until_next_election > -1 }\n")
+    when("gv_next_none", "check_variable = { days_until_next_election < 0 }\n")
+    inner += txt("gv_support", bx + 122, by + 5 * GV_ROW + 2, 230, "[?party_popularity@ruling_party|%1]",
+                 tip="The ruling party's support today, as the politics panel's pie shows it.")
+    inner += txt("gv_stab", bx + 122, by + 6 * GV_ROW + 2, 230, "[?stability|%0]", tip="Stability today, as the top bar shows it.")
+    inner += txt("gv_ws", bx + 122, by + 7 * GV_ROW + 2, 230, "[?has_war_support|%0]", tip="War support today, as the top bar shows it.")
+    # the laws in force: the kind, the law's own picture, its name
+    lx, ly = rel(c, 22, 456)
+    inner += strip("gv_law_head", lx, ly, 524, "Laws in force")
+    inner += bands("gv_law_band", lx, ly + 26, 524, GV_ROW, 3)
+    for n, (label, ideas) in enumerate(LAWS):
+        y = ly + 26 + n * GV_ROW
+        inner += txt("gv_law_%d_l" % n, lx + 8, y + 2, 120, "§g%s§!" % label)
+        inner += scaled("gv_law_%d_pic" % n, lx + 132, y + 1, LAW_UNKNOWN, LAW_SCALE)
+        properties += block("gv_law_%d_pic" % n, 'image = "[?mod1440_gv_law_%d_gfx.GetTokenKey]"\n' % n)
+        inner += txt("gv_law_%d" % n, lx + 162, y + 2, 354, "§Y[?mod1440_gv_law_%d.GetTokenLocalizedKey]§!" % n, fixed=True)
+    body += card(c, inner)
+
+    # ================================================================ Party support, and the heads panel on its card
+    c = "parties"
+    px0, py0 = rel(c, GV_PLOT[0], GV_PLOT[1])          # the plot in the card: 450, 56
+    chart = ""                                          # the widgets of Party support (hidden while the panel is open)
+    chart += head_text(c, "Party support", 600)
+    for k, (span, step, dot, caption) in enumerate(GV_RANGES):
+        name = "gv_range_%d" % span
+        chart += M.button(name, 790 + k * 104, 5, "GFX_sort_button_100x29", B.key(name, caption), tooltip=B.key(name + "_tt", (
+            "The last %s on the chart, a dot a month. Until you pick a range, the chart takes the shortest that holds every month "
+            "written down." % caption)))
+        effects += block(name + "_click", setv("mod1440_gv_range", span) + "mod1440_gv_chart = yes\n")
+        properties += block(name, "frame = mod1440_gv_rf_%d\n" % span)
+    # today's result: one bar split in the parties' colours, the largest share first (four layers of four colours, laid
+    # over each other by the cumulative share; the layer of the last rank under the others)
+    tx, ty = rel(c, 568, 162)
+    chart += M.icon("gv_today_bg", tx, ty, INSET % (384, 24))
+    for r in reversed(range(4)):
+        for p, (word, group) in enumerate(IDEOLOGIES):
+            name = "gv_today_%d_%d" % (r, p)
+            chart += M.icon(name, tx + 8, ty + 4, "GFX_1440p_GV_share_%s" % group).replace(
+                " }\n", ' pdx_tooltip = "%s" }\n' % B.key("gv_today_%d_tt" % p, "[ROOT.Get%sParty]: [?party_popularity@%s|%%1]" % (word, group)))
+            properties += block(name, "frame = mod1440_gv_cum_%d\n" % p)
+            when(name, "check_variable = { mod1440_gv_rank_%d = %d }\n" % (p, r))
+    # the table of the four parties, sorted by support: each row's widgets move to their rank (y by property)
+    hx, hy = rel(c, 568, 192)
+    chart += M.icon("gv_pt_head", hx, hy, layout.head_sprite(384, 26))
+    chart += txt("gv_pt_h0", hx + 52, hy + 2, 200, "Party")
+    chart += txt("gv_pt_h1", hx + 264, hy + 2, 50, "Now", fmt="right", tip="The party's support today, as the politics panel shows it.")
+    chart += txt("gv_pt_h2", hx + 320, hy + 2, 56, "Year", fmt="right", tip="The change in support over the last twelve months written down.")
+    chart += bands("gv_pt_band", hx, hy + 26, 384, GV_SEAT, 4)
+    base = hy + 26                                      # 102: the first row
+    chart += M.icon("gv_pt_pick", hx, base, PICK % (384, GV_SEAT))
+    properties += block("gv_pt_pick", "y = mod1440_gv_py_pick\n")
+    for p, (word, group) in enumerate(IDEOLOGIES):
+        parts = [("sw", 4, M.icon("gv_pt_%d_sw" % p, hx, base + 4, "GFX_1440p_GV_swatch_%s" % group)),
+                 ("ic", 7, scaled("gv_pt_%d_ic" % p, hx + 12, base + 7, "GFX_ideology_%s_group" % group, 0.5)),
+                 ("name", 2, txt("gv_pt_%d_name" % p, hx + 52, base + 2, 206, "[ROOT.Get%sParty]" % word, fixed=True)),
+                 ("who", 24, txt("gv_pt_%d_who" % p, hx + 52, base + 24, 206, "§Y[ROOT.Get%sLeader]§!" % word, fixed=True)),
+                 ("now", 12, txt("gv_pt_%d_now" % p, hx + 264, base + 12, 50, "[?party_popularity@%s|%%0]" % group, M.FONT_VALUE, "right")),
+                 ("nows", 12, txt("gv_pt_%d_nows" % p, hx + 264, base + 12, 50, "[?party_popularity@%s|%%1]" % group, M.FONT_VALUE, "right")),
+                 ("dy", 13, txt("gv_pt_%d_dy" % p, hx + 320, base + 13, 56, "[?mod1440_gv_dy_%d|=1]" % p, fmt="right")),
+                 ("dyn", 13, M.text("gv_pt_%d_dyn" % p, hx + 320, base + 13, 56, B.key("gv_dash", DASH), M.FONT_LABEL, "right", 22))]
+        for part, off, widget in parts:
+            chart += widget
+            properties += block("gv_pt_%d_%s" % (p, part), "y = mod1440_gv_py_%d_%d\n" % (p, off))
+        when("gv_pt_%d_now" % p, "check_variable = { party_popularity@%s > 0.0099 }\n" % group)
+        when("gv_pt_%d_nows" % p, "check_variable = { party_popularity@%s < 0.01 }\n" % group)
+        when("gv_pt_%d_dy" % p, "check_variable = { mod1440_gv_hy_%d = 1 }\n" % p)
+        when("gv_pt_%d_dyn" % p, "check_variable = { mod1440_gv_hy_%d = 0 }\n" % p)
+    # since the record began: four figures
+    fx, fy = rel(c, 568, 418)
+    chart += strip("gv_since_head", fx, fy, 384, "Since the record began")
+    chart += bands("gv_since_band", fx, fy + 26, 384, GV_ROW, 4)
+    for n, (name, label, value, tip) in enumerate((
+            ("el", "Elections held", "[?mod1440_gv_n_elections|0]", "Elections the War Diary wrote since the record began."),
+            ("ch", "Changes of the ruling party", "[?mod1440_gv_n_party|0]", "Times the ruling party changed since the record began."),
+            ("hi", "Ruling party at its highest", "[?mod1440_gv_hi|1]%, [?mod1440_gv_hi_d.GetDateStringNoHour]",
+             "The ruling party's highest month of National Figures' record (series 30), and when."),
+            ("mo", "Months recorded", "[?mod1440_gv_pp_n|0], [?mod1440_gv_pp_full|0] in full",
+             "Months of the record of party support; in full: with all four parties (from this build on)."))):
+        y = fy + 26 + n * GV_ROW
+        chart += txt("gv_since_%s_l" % name, fx + 8, y + 2, 210, label, tip=tip)
+        chart += txt("gv_since_%s" % name, fx + 220, y + 1, 156, value, M.FONT_VALUE, "right", key="gv_since_%s_v" % name)
+    # the chart in its inset: quarter bands, the scale, the plot of dots (one grid per party and range, and the ruling
+    # party's on top), the years, the band of who governed, the election ticks, the shares at the lines' ends, the legend
+    ix, iy = rel(c, 960, 160)
+    chart += M.icon("gv_chart_bg", ix, iy, INSET % (698, 394))
+    chart += "".join(M.icon("gv_quarter_%d" % k, px0, py0 + k * 70, STRIPE % (GV_PLOT[2], 70)) for k in (1, 3))
+    for k, words in enumerate(("100%", "75", "50", "25", "0")):
+        chart += M.text("gv_scale_%d" % k, ix + 4, py0 + k * 70 - 9, 40, B.key("gv_scale_%d" % k, words), M.FONT_LABEL, "right", 22)
+    chart += M.icon("gv_foot", px0, py0 + GV_PLOT[3], "GFX_1440p_SG_line_600x2")
+    plot = ""
+    for span, step, dot, caption in GV_RANGES:
+        for p in [str(n) for n in range(4)] + ["r"]:
+            grid = "gv_dots_%s_%d" % (p, span)
+            plot += ('gridboxtype = {\n\tname = "%s"\n\tposition = { x = 0 y = 0 }\n\tsize = { width = %d height = %d }\n'
+                     '\tslotsize = { width = %d height = %d }\n\tadd_horizontal = yes\n\tmax_slots_horizontal = %d\n\tformat = "UPPER_LEFT"\n}\n'
+                     % (grid, GV_PLOT[2], GV_PLOT[3] + 10, step, GV_PLOT[3] + 10, span))
+            row_name = "mod1440_records_gv_dot_%s_%d" % (p, span)
+            lists += block(grid, 'array = mod1440_gv_pd_%s_%d\nentry_container = "%s"\n' % (p, span, row_name))
+            at = (step - dot) // 2
+            if p == "r":
+                # the ruling party's dots, drawn last: one icon per colour, shown by the month's ruling group
+                cells = ""
+                for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+                    widget = "gv_dotr%d_%d" % (g, span)
+                    cells += through(widget, at, 0, "GFX_1440p_GV_dot_%s_%d" % (group, dot))
+                    properties += block(widget, "y = v\n")
+                    when(widget, "check_variable = { v > -1 }\ncheck_variable = { mod1440_gv_pg_%d^i = %d }\n" % (span, g))
+            else:
+                group = IDEOLOGIES[int(p)][1]
+                widget = "gv_dot%s_%d" % (p, span)
+                cells = through(widget, at, 0, "GFX_1440p_GV_dot_%s_%d" % (group, dot))
+                properties += block(widget, "y = v\n")
+                when(widget, "check_variable = { v > -1 }\n")
+            rows_gui += row(row_name, step, GV_PLOT[3] + 10, cells)
+    chart += M.box("gv_plot", px0, py0, GV_PLOT[2], GV_PLOT[3] + 10, plot)
+    # who governed: a cell a month in the colour of the ruling group
+    _bx, band_y = rel(c, GV_PLOT[0], GV_BAND_Y)
+    cells_box = ""
+    for span, step, dot, caption in GV_RANGES:
+        grid = "gv_band_%d" % span
+        cells_box += ('gridboxtype = {\n\tname = "%s"\n\tposition = { x = 0 y = 0 }\n\tsize = { width = %d height = %d }\n'
+                      '\tslotsize = { width = %d height = %d }\n\tadd_horizontal = yes\n\tmax_slots_horizontal = %d\n\tformat = "UPPER_LEFT"\n}\n'
+                      % (grid, GV_PLOT[2], GV_BAND_H, step, GV_BAND_H, span))
+        row_name = "mod1440_records_gv_band_%d" % span
+        lists += block(grid, 'array = mod1440_gv_pb_%d\nentry_container = "%s"\n' % (span, row_name))
+        cells = ""
+        for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+            widget = "gv_cell%d_%d" % (g, span)
+            cells += through(widget, 0, 0, "GFX_1440p_GV_band_%s_%d" % (group, step))
+            when(widget, "check_variable = { v = %d }\n" % g)
+        rows_gui += row(row_name, step, GV_BAND_H, cells)
+    chart += M.box("gv_band", px0, band_y, GV_PLOT[2], GV_BAND_H, cells_box)
+    # the years under the plot, moved by script (x by property, X4); a mark at the foot of each
+    _yx, years_y = rel(c, 0, 456)
+    for k in range(GV_YEARS):
+        chart += M.icon("gv_ymark_%d" % k, px0, py0 + GV_PLOT[3], "GFX_1440p_GV_tick_2x6")
+        chart += M.text("gv_year_%d" % k, px0, years_y, 40, B.key("gv_year_%d" % k, "[?mod1440_gv_yl_%d|0]" % k), M.FONT_LABEL, "centre", 22)
+        properties += block("gv_ymark_%d" % k, "x = mod1440_gv_tx_%d\n" % k) + block("gv_year_%d" % k, "x = mod1440_gv_yx_%d\n" % k)
+        when(["gv_ymark_%d" % k, "gv_year_%d" % k], "check_variable = { mod1440_gv_yl_%d > 0 }\n" % k)
+    # his name on his span where it fits, his name and dates in its tooltip
+    for s in range(GV_SPANS):
+        name = "gv_span_%d" % s
+        chart += txt(name, px0 + 6, band_y, GV_SPAN_NAME - 10, "[?mod1440_gv_bn_%d.GetName]" % s, fixed=True,
+                     tip="§Y[?mod1440_gv_bn_%d.GetName]§!\\n[?mod1440_gv_bf_%d.%s] to [?mod1440_gv_bt_%d.%s]" % (s, s, LONG, s, LONG))
+        properties += block(name, "x = mod1440_gv_bx_%d\n" % s)
+        when(name, "check_variable = { mod1440_gv_bn_n > %d }\ncheck_variable = { mod1440_gv_bw_%d > %d }\n" % (s, s, GV_SPAN_NAME - 1))
+    for t in range(GV_TICKS):
+        name = "gv_tick_%d" % t
+        chart += M.icon(name, px0, band_y - 4, "GFX_1440p_GV_tick_2x30").replace(
+            " }\n", ' pdx_tooltip = "%s" }\n' % B.key("gv_tick_%d_tt" % t, "An election: [?mod1440_gv_td_%d.%s]" % (t, LONG)))
+        properties += block(name, "x = mod1440_gv_tk_%d\n" % t)
+        when(name, "check_variable = { mod1440_gv_tk_n > %d }\n" % t)
+    # the share at each line's end, pushed apart where two meet (y by property)
+    lx = GV_LABEL_X - GV_CARDS[c][0]
+    for p, (word, group) in enumerate(IDEOLOGIES):
+        chart += M.icon("gv_end_%d_sw" % p, lx, py0, "GFX_1440p_GV_dot_%s_6" % group)
+        chart += txt("gv_end_%d" % p, lx + 9, py0, 38, "[?mod1440_gv_lv_%d|0]%%" % p)
+        chart += M.text("gv_end_%d_lt" % p, lx + 9, py0, 38, B.key("gv_end_lt", "<1%"), M.FONT_LABEL, "left", 22)
+        # at the line's end (x) and at its own height, pushed apart (y), as the design's figures draw them
+        properties += block("gv_end_%d_sw" % p, "x = mod1440_gv_lx_s\ny = mod1440_gv_ly_%d_s\n" % p)
+        properties += (block("gv_end_%d" % p, "x = mod1440_gv_lx_t\ny = mod1440_gv_ly_%d_t\n" % p)
+                       + block("gv_end_%d_lt" % p, "x = mod1440_gv_lx_t\ny = mod1440_gv_ly_%d_t\n" % p))
+        has = "check_variable = { mod1440_gv_lv_%d > -1 }\n" % p
+        when("gv_end_%d_sw" % p, has)
+        when("gv_end_%d" % p, has + "check_variable = { mod1440_gv_lv_%d > 0.99 }\n" % p)
+        when("gv_end_%d_lt" % p, has + "check_variable = { mod1440_gv_lv_%d < 1 }\n" % p)
+    gx, gy = rel(c, 968, 520)
+    chart += txt("gv_legend", gx, gy, 682, "§gA dot: the first of a month.  Under the years: who governed;  | an election.§!", fixed=True)
+    chart += txt("gv_legend_bf", gx, gy, 682, "§gBefore [?mod1440_gv_full_d.%s] the record kept the ruling party only (National Figures, series 30).§!" % LONG,
+                 fixed=True, tip="The months before this build of the mod: the ruling party's support from National Figures' record, the "
+                                 "other parties not recorded. All four are recorded from then on.")
+    when("gv_legend", "check_variable = { mod1440_gv_bf = 0 }\n")
+    when("gv_legend_bf", "check_variable = { mod1440_gv_bf = 1 }\n")
+    chart += txt("gv_chart_none", px0 + 20, py0 + 100, 560, "Nothing is written down yet. The first dots come on the first of next month.")
+    when("gv_chart_none", "check_variable = { mod1440_gv_pp_n < 1 }\n")
+    GS_NAMES["chart"] = re.findall(r'(?:iconType|instantTextboxType|buttonType) = \{ name = "([^"]+)"', chart)
+    for name in GS_NAMES["chart"]:
+        when(name, chart_open)
+    inner = chart
+
+    # ---- the heads panel: the record's heads of government, seven to a page, newest first
+    heads = head_text(c, "Heads of government since the record began", 600, widget="gv_hd")
+    heads += M.button("gv_heads_back", 958, 5, "GFX_sort_button_140x29", B.key("gv_heads_back", "Party support"),
+                      tooltip=B.key("gv_heads_back_tt", "Back to the chart of party support"))
+    effects += block("gv_heads_back_click", setv("mod1440_gv_heads", 0) + "mod1440_gv_panel = yes\n")
+    for name, words, delta, tip in (("gv_heads_newer", "Newer", -HEADS_ROWS, "The seven heads before these"),
+                                    ("gv_heads_older", "Older", HEADS_ROWS, "The seven heads after these")):
+        heads += M.button(name, 750 if delta < 0 else 854, 5, "GFX_sort_button_100x29", B.key(name, words), tooltip=B.key(name + "_tt", tip))
+        effects += block(name + "_click", "add_to_variable = { mod1440_gv_hp = %d }\n" % delta
+                         + "clamp_variable = { var = mod1440_gv_hp min = 0 max = %d }\n" % (HEADS_KEEP - HEADS_ROWS) + "mod1440_gv_heads_copy = yes\n")
+    when("gv_heads_newer", "check_variable = { mod1440_gv_hp > 0 }\n")
+    when("gv_heads_older", "check_variable = { mod1440_gv_rul^num > mod1440_gv_hp_end }\n")
+    hx, hy = rel(c, 568, 160)
+    heads += M.icon("gv_hd_head", hx, hy, layout.head_sprite(1090, 26))
+    for name, x, w, fmt, words in (("who", 56, 240, "left", "Head of government"), ("office", 334, 300, "left", "In office"),
+                                   ("stab", 640, 130, "centre", "Stability"), ("ws", 780, 130, "centre", "War support"),
+                                   ("el", 920, 90, "centre", "Elections")):
+        heads += txt("gv_hd_h_" + name, hx + x - 8, hy + 2, w, words, fmt=fmt)
+    heads += bands("gv_hd_band", hx, hy + 26, 1090, GV_SEAT, HEADS_ROWS)
+    heads += M.icon("gv_hd_pick", hx, hy + 26, PICK % (1090, GV_SEAT))
+    when("gv_hd_pick", "check_variable = { mod1440_gv_hp = 0 }\ncheck_variable = { mod1440_gv_rul^num > 0 }\n")
+    for k in range(HEADS_ROWS):
+        y = hy + 26 + k * GV_SEAT
+        more = "check_variable = { mod1440_gv_rp_n > %d }\n" % k
+        p = "gv_hd_%d" % k
+        heads += portrait(p + "_face", hx + 6, y + 1, GV_FACE)
+        properties += shown(p + "_face", "mod1440_gv_rp_p^%d" % k)
+        when(p + "_face", more + "check_variable = { mod1440_gv_rp_fb^%d = 0 }\n" % k)
+        heads += scaled(p + "_fb", hx + 6, y + 1, INSET % (34, 46), 1.0, B.key("gv_hd_fb_tt", "No portrait the game can name"))
+        when(p + "_fb", more + "check_variable = { mod1440_gv_rp_fb^%d = 1 }\n" % k)
+        heads += group_icons(p + "_fbg", hx + 12, y + 12, IDEOLOGY_SMALL, "mod1440_gv_rp_g^%d" % k, more + "check_variable = { mod1440_gv_rp_fb^%d = 1 }\n" % k)
+        heads += txt(p, hx + 48, y + 2, 230, "§Y[?mod1440_gv_rp^%d.GetName]§!" % k, fixed=True)
+        when(p, more)
+        for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+            widget = "%s_pt%d" % (p, g)
+            heads += txt(widget, hx + 48, y + 24, 230, "[ROOT.Get%sParty], %s" % (word, word), fixed=True, key="gv_hd_pt%d_%d" % (k, g))
+            when(widget, more + "check_variable = { mod1440_gv_rp_g^%d = %d }\n" % (k, g))
+        heads += group_icons(p + "_gi", hx + 282, y + 7, 0.5, "mod1440_gv_rp_g^%d" % k, more)
+        for name, words, condition in (
+                ("a", "[?mod1440_gv_rp_from^%d.%s] – [?mod1440_gv_rp_to^%d.%s]" % (k, LONG, k, LONG), "check_variable = { mod1440_gv_rp_old^%d = 0 } check_variable = { mod1440_gv_rp_end^%d = 1 }"),
+                ("b", "%s – [?mod1440_gv_rp_to^%d.%s]" % (BEGAN, k, LONG), "check_variable = { mod1440_gv_rp_old^%d = 1 } check_variable = { mod1440_gv_rp_end^%d = 1 }"),
+                ("c", "since [?mod1440_gv_rp_from^%d.%s]" % (k, LONG), "check_variable = { mod1440_gv_rp_old^%d = 0 } check_variable = { mod1440_gv_rp_end^%d = 0 }"),
+                ("d", "%s – today" % BEGAN, "check_variable = { mod1440_gv_rp_old^%d = 1 } check_variable = { mod1440_gv_rp_end^%d = 0 }")):
+            widget = "%s_t%s" % (p, name)
+            heads += txt(widget, hx + 326, y + 2, 300, words, fixed=True)
+            when(widget, more + (condition % (k, k)) + "\n")
+        heads += txt(p + "_days", hx + 326, y + 24, 300, "§g[?mod1440_gv_rp_days^%d|0] days§!" % k)
+        heads += txt(p + "_rec", hx + 326, y + 24, 300, "§g[?mod1440_gv_rp_days^%d|0] days on record§!" % k)
+        known = "check_variable = { mod1440_gv_rp_days^%d > -1 }\n" % k
+        when(p + "_days", more + known + "check_variable = { mod1440_gv_rp_old^%d = 0 }\n" % k)
+        when(p + "_rec", more + known + "check_variable = { mod1440_gv_rp_old^%d = 1 }\n" % k)
+        for name, x, a, b in (("stab", 632, "s0", "s1"), ("ws", 772, "w0", "w1")):
+            heads += txt("%s_%s" % (p, name), hx + x, y + 12, 130, "[?mod1440_gv_rp_%s^%d|0]%% to [?mod1440_gv_rp_%s^%d|0]%%" % (a, k, b, k), fmt="centre")
+            heads += M.text("%s_%s_nr" % (p, name), hx + x, y + 12, 130, B.key("gv_hd_nr", "not recorded"), M.FONT_LABEL, "centre", 22)
+            when("%s_%s" % (p, name), more + "check_variable = { mod1440_gv_rp_%s^%d > -1 }\n" % (a, k))
+            when("%s_%s_nr" % (p, name), more + "check_variable = { mod1440_gv_rp_%s^%d < 0 }\n" % (a, k))
+        heads += txt(p + "_el", hx + 912, y + 11, 90, "[?mod1440_gv_rp_e^%d|0]" % k, M.FONT_VALUE, "centre")
+        when(p + "_el", more)
+    heads += txt("gv_hd_note", 16, 414, 1074, "§gNewest first, 7 to a page; the record keeps 100. Stability and war support: on the first and "
+                                              "on the last day in office (recorded from this build on).§!", fixed=True)
+    GS_NAMES["panel"] = re.findall(r'(?:iconType|instantTextboxType|buttonType) = \{ name = "([^"]+)"', heads)
+    for name in GS_NAMES["panel"]:
+        when(name, panel)
+    inner += heads
+    body += card(c, inner)
+
+    # ================================================================ Cabinet and High command
+    def seat(prefix, k, x, y, holder, role, began, sprite, big, fb, eff, has, kind, game=None, office=None):
+        """A row of a person: his portrait (the table's small one, a large one smaller, the game's face while he is a
+        unit leader, or decision 2's fallback), name and role, his office in grey and since when; the effects of his role
+        in the tooltip of his name and role. holder etc. are variables; has a trigger."""
+        nonlocal lists, rows_gui
+        p = "gv_%s_%d" % (prefix, k)
+        out = ""
+        table = ""
+        if game:
+            out += face_grid(p + "_gface_grid", x + 2, y + 1, GV_FACE)
+            lists += face_list(p + "_gface_grid", game, "gv_gface")
+            table = "check_variable = { %s^num < 1 }\n" % game
+        out += scaled(p + "_face", x, y + 1, SMALL_UNKNOWN, GV_SMALL if not game else 0.52)
+        out += scaled(p + "_big", x + (6 if not game else 2), y + 1, UNKNOWN, GV_FACE)
+        properties_add = block(p + "_face", 'image = "[?%s.GetTokenKey]"\n' % sprite) + block(p + "_big", 'image = "[?%s.GetTokenKey]"\n' % sprite)
+        out += scaled(p + "_none", x, y + 1, FACE_NONE, 1.0 if not game else 0.72, B.key("gv_face_none_tt", FACE_NONE_TT))
+        when(p + "_face", has + "check_variable = { %s = 0 }\ncheck_variable = { %s = 0 }\n" % (big, fb) + table)
+        when(p + "_big", has + "check_variable = { %s = 1 }\ncheck_variable = { %s = 0 }\n" % (big, fb) + table)
+        when(p + "_none", has + "check_variable = { %s = 1 }\n" % fb + table)
+        nx = x + (54 if not game else 44)
+        tip = "§Y[?%s.GetName]§!\\n§g%s: [?%s.GetTokenLocalizedKey]§!\\n\\n[?%s.GetTokenLocalizedKey]" % (holder, kind, role, eff)
+        tip_key = B.key(p + "_tt", tip)
+        out += M.text(p + "_name", nx, y + 2, 248 if not game else 230, B.key(p + "_name", "§Y[?%s.GetName]§!" % holder), M.FONT_LABEL, "left", 22,
+                      tooltip=tip_key, fixed=True)
+        out += M.text(p + "_role", nx, y + 24, 248 if not game else 230, B.key(p + "_role", "[?%s.GetTokenLocalizedKey]" % role), M.FONT_LABEL,
+                      "left", 22, tooltip=tip_key, fixed=True)
+        when([p + "_name", p + "_role"], has)
+        right = GV_CARDS["cabinet"][2] - 14 - 174
+        if office:
+            out += txt(p + "_office", 330, y + 2, 196, "§g%s§!" % office, fmt="right", key="gv_office_" + re.sub(r"\W+", "_", office.lower()))
+            when(p + "_office", "always = yes\n")
+            out += since(p + "_since", 330, y + 24, 196, began[0], began[1], cond=has)
+        else:
+            out += since(p + "_since", right, y + 13, 174, began[0], began[1], cond=has)
+        return out, properties_add
+
+    c = "cabinet"
+    inner = head_text(c, "Cabinet", 316, "[?mod1440_gv_adv^num|0] in office")
+    inner += bands("gv_cab_band", 8, 32, 524, GV_SEAT, CABINET_SLOTS)
+    for k in range(CABINET_SLOTS):
+        parts = dict((part, "mod1440_gv_adv_d%s^%d" % (part, k)) for part in SLOT_PARTS + SLOT_NEW)
+        has = "check_variable = { mod1440_gv_adv^num > %d }\n" % k
+        piece, prop = seat("adv", k, 10, 32 + k * GV_SEAT, parts[""], parts["_r"], (parts["_since"], parts["_old"]), parts["_p"], parts["_b"],
+                           parts["_fb"], parts["_e"], has, "Political advisor")
         inner += piece
         properties += prop
-        triggers += trig
-    top = 42 + len(OFFICES) * 92 + 6
-    inner += M.text("gv_members_t", 14, top, 300, B.key("gv_members_t", "Members"), M.FONT_CARD, height=30)
-    inner += seats("hc", MEMBER_SLOTS, 76, top + 38, game=True)
-    inner += M.text("gv_hc_none", 18, top + 46, 500, B.key("gv_hc_none", "§gNobody is appointed.§!"), M.FONT_SMALL, height=22)
-    triggers += block("gv_hc_none_visible", "check_variable = { mod1440_gv_hc^num < 1 }\n")
-    place(1, "hc", "High command", inner, rest(1))
-    # E7: the row of the game's face of a chief or a member who is a unit leader, at the size of the large portrait
-    properties += block("gv_gface", GAME_FACE)
-    extra_gui += game_face("gv_gface", GV_SMALL_LARGE)
+    inner += txt("gv_adv_none", 16, 46, 500, "§gNo political advisor is hired.§!")
+    when("gv_adv_none", "check_variable = { mod1440_gv_adv^num < 1 }\n")
+    body += card(c, inner)
 
-    # ---- column 3: the realm. The faction and the subjects as flag tiles, four to a row
-    def countries(name, array, top, height):
-        nonlocal lists, extra_gui
+    c = "high"
+    inner = head_text(c, "High command", 316, "[?mod1440_gv_hc_n|0] in office")
+    inner += bands("gv_hc_band", 8, 32, 524, GV_SEAT, len(OFFICES) + MEMBER_SLOTS)
+    for k, (variable, trigger, label) in enumerate(OFFICES):
+        holder = "mod1440_gv_of_%d" % k
+        has = is_one(holder + "_has") + "\n"
+        y = 32 + k * GV_SEAT
+        piece, prop = seat("of", k, 12, y, holder, holder + "_r", (holder + "_since", holder + "_old"), holder + "_p", holder + "_b",
+                           holder + "_fb", holder + "_e", has, label, game="mod1440_gv_of_%d_ul" % k, office=label)
+        inner += piece
+        properties += prop
+        # a vacant office: the politics panel's own empty slot and "vacant"
+        inner += scaled("gv_of_%d_slot" % k, 14, y + 8, "GFX_idea_slot_" + variable, 0.5)
+        inner += txt("gv_of_%d_vacant" % k, 56, y + 13, 200, "§gvacant§!", key="gv_vacant")
+        when(["gv_of_%d_slot" % k, "gv_of_%d_vacant" % k], "NOT = { %s }\n" % has.strip())
+    for m in range(MEMBER_SLOTS):
+        k = len(OFFICES) + m
+        parts = dict((part, "mod1440_gv_hc_d%s^%d" % (part, m)) for part in SLOT_PARTS + SLOT_NEW)
+        has = "check_variable = { mod1440_gv_hc^num > %d }\n" % m
+        piece, prop = seat("hc", m, 12, 32 + k * GV_SEAT, parts[""], parts["_r"], (parts["_since"], parts["_old"]), parts["_p"], parts["_b"],
+                           parts["_fb"], parts["_e"], has, "High command", game="mod1440_gv_hc_%d_ul" % m, office="High command")
+        inner += piece
+        properties += prop
+        when("gv_hc_%d_office" % m, has)
+    body += card(c, inner)
+    # E7: the row of the game's face of a chief or a member who is a unit leader (34x46)
+    properties += block("gv_gface", GAME_FACE)
+    rows_gui += game_face("gv_gface", GV_FACE)
+
+    # ================================================================ In the War Diary: the government's newest lines
+    c = "diary"
+    inner = head_text(c, "In the War Diary", 300)
+    inner += M.button("gv_diary_all", 392, 5, "GFX_sort_button_140x29", B.key("gv_diary_all", "All its lines"),
+                      tooltip=B.key("gv_diary_all_tt", "The War Diary with the Government filter: every line about parties, elections, heads of "
+                                                       "government and advisors"))
+    effects += block("gv_diary_all_click", setv("mod1440_wd_filter", 3) + "clear_array = mod1440_wd_back\n" + setv("mod1440_wd_from", 0)
+                     + setv("mod1440_rec_page", 0) + "mod1440_rec_show = yes\n")
+    inner += bands("gv_dl_band", 8, 44, 524, GV_ROW, GV_DIARY)
+    inner += txt("gv_dl_none", 16, 50, 500, "§gNo line of the government's yet.§!")
+    when("gv_dl_none", "check_variable = { mod1440_gv_dl_n < 1 }\n")
+    for k in range(GV_DIARY):
+        y = 44 + k * GV_ROW
+        more = "check_variable = { mod1440_gv_dl_n > %d }\n" % k
+        p = "gv_dl_%d" % k
+        inner += txt(p + "_d", 16, y + 2, 112, "[?mod1440_gv_dl_date^%d.GetDateStringNoHour]" % k)
+        inner += M.text(p + "_i", 130, y + 1, 26, B.key("gv_dl_icon", "£pol_power"), M.FONT_LABEL, "left", 22)
+        inner += txt(p, 156, y + 2, 148, "[?mod1440_gv_dl_kind^%d.GetTokenLocalizedKey]" % k, fixed=True)
+        inner += txt(p + "_a", 306, y + 2, 218, "§Y[?mod1440_gv_dl_a^%d.GetName]§!" % k, fixed=True)
+        inner += txt(p + "_b", 306, y + 2, 218, "§Y[?mod1440_gv_dl_b^%d.GetName]§!" % k, fixed=True)
+        when([p + "_d", p + "_i", p], more)
+        when(p + "_a", more + "check_variable = { mod1440_gv_dl_sa^%d = 1 }\n" % k)
+        when(p + "_b", more + "NOT = { check_variable = { mod1440_gv_dl_sa^%d = 1 } }\ncheck_variable = { mod1440_gv_dl_sb^%d = 1 }\n" % (k, k))
+    body += card(c, inner)
+
+    # ================================================================ Faction and subjects
+    def countries(name, array, x, y):
+        nonlocal lists, rows_gui
         lists += block("gv_%s_grid" % name, 'array = %s\nchange_scope = yes\nentry_container = "mod1440_records_%s_row"\n' % (array, name))
         tile_w, tile_h = FLAG_TILE
-        entry = M.icon("gv_%s_row_bg" % name, 0, 0, M.tile_sprite(tile_w - 2, tile_h - 6))
-        entry += flag("gv_%s_row_flag" % name, (tile_w - 2 - 82) // 2, 5)
-        entry += M.text("gv_%s_row_name" % name, 4, 58, tile_w - 10, B.key("gv_country_tile", "[THIS.GetName]"), M.FONT_SMALL, "centre", 34, fixed=True)
-        extra_gui += row("mod1440_records_%s_row" % name, tile_w, tile_h, entry)
+        entry = M.icon("gv_%s_row_bg" % name, 0, 0, INSET % (tile_w - 2, tile_h - 6))
+        # E3 fix round 2: the flag and the name inside the inset's border of 8 (the user's capture: the flag on the frame's top
+        # edge and a long name over its sides); a name is one line, cut in its fixed box (W28)
+        entry += flag("gv_%s_row_flag" % name, (tile_w - 2 - 82) // 2, 9)
+        entry += M.text("gv_%s_row_name" % name, 8, 64, tile_w - 18, B.key("gv_country_tile", "[THIS.GetName]"), M.FONT_SMALL, "centre", 20, fixed=True)
+        rows_gui += row("mod1440_records_%s_row" % name, tile_w, tile_h, entry)
         grid = ('gridboxtype = {\n\tname = "gv_%s_grid"\n\tposition = { x = 0 y = 0 }\n\tsize = { width = %d height = 100%%%% }\n'
                 '\tslotsize = { width = %d height = %d }\n\tmax_slots_horizontal = 4\n\tadd_horizontal = yes\n\tformat = "UPPER_LEFT"\n}\n'
                 % (name, 4 * tile_w, tile_w, tile_h))
         return ('containerWindowType = {\n\tname = "gv_%s_list"\n\tposition = { x = %d y = %d }\n\tsize = { width = %d height = %d }\n'
                 '\tverticalScrollbar = "right_vertical_slider"\n\tscroll_wheel_factor = %d\n\tsmooth_scrolling = yes\n%s%s}\n'
-                % (name, 14, top, 4 * tile_w + 30, height, tile_h, LIST_BG, M.indent(grid)))
+                % (name, x, y, 4 * tile_w + 26, tile_h, tile_h, LIST_BG, M.indent(grid)))
 
     properties += "".join(block("gv_%s_row_flag" % name, 'image = "[THIS.GetFlag]"\n') for name in ("fac", "sub"))
-    inner = right("gv_members_n", "[?mod1440_gv_fac^num|0] members")
-    inner += M.text("gv_faction", 14, 40, GV_COL - 28, B.key("gv_faction", "[ROOT.GetFactionName]"), M.FONT_TITLE, height=40, fixed=True)
-    inner += M.text("gv_faction_none", 18, 48, GV_COL - 36, B.key("gv_faction_none", "In no faction."), M.FONT_LABEL, height=22)
-    inner += M.text("gv_faction_lead", 18, 92, GV_COL - 36, B.key("gv_faction_lead", "led by §Y[?faction_leader.GetNameWithFlag]§!"), M.FONT_LABEL, height=22, fixed=True)
-    triggers += block("gv_faction_visible", "is_in_faction = yes\n") + block("gv_faction_none_visible", "is_in_faction = no\n")
-    triggers += block("gv_faction_lead_visible", "is_in_faction = yes\n") + block("gv_members_n_visible", "is_in_faction = yes\n")
-    inner += countries("fac", "mod1440_gv_fac", 126, 3 * FLAG_TILE[1])
-    place(2, "faction", "Faction", inner, 126 + 3 * FLAG_TILE[1] + 26)
-    inner = right("gv_subjects_n", "[?mod1440_ev_subjects^num|0]")
-    inner += M.text("gv_sub_none", 18, 46, 400, B.key("gv_sub_none", "§gNo subjects.§!"), M.FONT_SMALL, height=22)
-    triggers += block("gv_sub_none_visible", "check_variable = { mod1440_ev_subjects^num < 1 }\n")
-    inner += countries("sub", "mod1440_ev_subjects", 42, 2 * FLAG_TILE[1])
-    place(2, "subjects", "Subjects", inner, 42 + 2 * FLAG_TILE[1] + 50)
+    c = "realm"
+    inner = head_text(c, "Faction and subjects", 276)
+    # E3 fix round 2: one member, one subject in the singular
+    for m, words_m, cond_m in (("m1", "1 member", "check_variable = { mod1440_gv_fac^num = 1 }"),
+                               ("mn", "[?mod1440_gv_fac^num|0] members", "NOT = { check_variable = { mod1440_gv_fac^num = 1 } }")):
+        for k, words_s, cond_s in (("s1", "1 subject", "check_variable = { mod1440_ev_subjects^num = 1 }"),
+                                   ("sn", "[?mod1440_ev_subjects^num|0] subjects", "NOT = { check_variable = { mod1440_ev_subjects^num = 1 } }")):
+            widget = "gv_realm_right_%s%s" % (m, k)
+            inner += txt(widget, 540 - 12 - 240, 4, 240, "%s, %s" % (words_m, words_s), fmt="right")
+            when(widget, "%s\n%s\n" % (cond_m, cond_s))
+    inner += txt("gv_faction", 12, 32, 516, "[ROOT.GetFactionName]", M.FONT_CARD, h=30, fixed=True)
+    inner += txt("gv_faction_none", 12, 38, 516, "In no faction.")
+    inner += txt("gv_faction_lead", 12, 64, 516, "led by §Y[?faction_leader.GetName]§!", fixed=True)
+    when(["gv_faction", "gv_faction_lead"], "is_in_faction = yes\n")
+    when("gv_faction_none", "is_in_faction = no\n")
+    inner += countries("fac", "mod1440_gv_fac", 8, 94)
+    inner += strip("gv_sub_head", 8, 196, 524, "Subjects", "overlord: §Y[?overlord.GetName]§!")
+    inner += txt("gv_sub_head_r0", 532 - 8 - 260, 198, 260, "overlord: none", fmt="right")
+    when("gv_sub_head_r", "is_subject = yes\n")
+    when("gv_sub_head_r0", "is_subject = no\n")
+    inner += txt("gv_sub_none", 16, 236, 400, "§gNo subjects.§!")
+    when("gv_sub_none", "check_variable = { mod1440_ev_subjects^num < 1 }\n")
+    inner += countries("sub", "mod1440_ev_subjects", 8, 228)
+    body += card(c, inner)
 
-    # the state and the agency: the capital, the agency's name, three figures of the record
-    inner = M.text("gv_capital_l", 18, 46, 140, B.key("gv_capital_l", "Capital"), M.FONT_SMALL, height=22)
-    inner += M.text("gv_capital", 160, 44, GV_COL - 176, B.key("gv_capital", "[ROOT.Capital.GetName]"), M.FONT_LABEL, height=22, fixed=True)
-    inner += M.text("gv_agency", 14, 78, GV_COL - 28, B.key("gv_agency", "[ROOT.GetAgency]"), M.FONT_CARD, height=30, fixed=True)
-    for n, (name, label, value, tip) in enumerate((("operatives", "Operatives", "[?num_of_operatives|0]", "Operatives your agency has today."),
-                                                   ("appointed",) + figures["appointed"], ("heads",) + figures["heads"])):
-        piece, extra = tile("gv_f_" + name, 14 + n * 174, 118, label, value, tip, width=166)
-        inner += piece
-    place(2, "state", "State and intelligence", inner, rest(2))
+    # ================================================================ Intelligence
+    c = "intel"
+    agency = "has_intelligence_agency = yes\n"
+    inner = txt("gv_ag_name", 12, 8, 316, "Intelligence agency: §Y[ROOT.GetAgency]§!", fixed=True)
+    inner += txt("gv_ag_none", 12, 8, 316, "No intelligence agency yet")
+    when("gv_ag_name", agency)
+    when("gv_ag_none", "has_intelligence_agency = no\n")
+    inner += since("gv_ag_since", 328, 8, 220, "mod1440_gv_ag_since", "mod1440_gv_ag_old", word="founded ", cond=agency)
+    inner += strip("gv_up_head", 8, 44, 544, "Upgrades", "[?mod1440_gv_ag_done|0] of %d at their highest level" % len(GV_UPGRADES), 300)
+    for n, (upgrade, sprite) in enumerate(GV_UPGRADES):
+        x, y = 14 + (n % GV_UP_ROW) * GV_UP_STEP, 76 + (n // GV_UP_ROW) * 48
+        inner += scaled("gv_up_%d" % n, x, y, sprite, GV_UP_SCALE, upgrade)
+        inner += scaled("gv_up_%d_dim" % n, x, y, "GFX_1440p_SG_dim_44", 1.0, upgrade)
+        when("gv_up_%d_dim" % n, "NOT = { has_done_agency_upgrade = %s }\n" % upgrade)
+    # operatives: a list over the game's array, the face drawn by the game (an operative is a unit leader, SGUI-053)
+    inner += M.icon("gv_op_head", 8, 174, layout.head_sprite(544, 26))
+    inner += txt("gv_op_h0", 54, 176, 200, "Operatives  [?num_of_operatives|0] of [?num_operative_slots|0]")
+    inner += txt("gv_op_h1", 222, 176, 140, "Mission")
+    inner += txt("gv_op_h2", 372, 176, 170, "Where")
+    inner += bands("gv_op_band", 8, 200, 544, GV_SEAT, GV_OP_ROWS)
+    inner += war_listing("gv_op_list", "gv_op_grid", 8, 200, GV_OP_ROWS * GV_SEAT, OP_ROW_W, 544, GV_SEAT)
+    inner += txt("gv_op_none", 16, 214, 500, "§gNo operative is recruited.§!")
+    when("gv_op_none", "check_variable = { num_of_operatives < 1 }\n")
+    lists += block("gv_op_grid", 'array = operatives\nchange_scope = yes\nentry_container = "mod1440_records_gv_op_row"\n')
+    entry = scaled("gv_op_face", 4, 1, UNKNOWN, GV_FACE)
+    properties += block("gv_op_face", GAME_FACE)
+    # E3 fix round 2: no code name. GetCodeName is a property of the UnitLeader object (loc_objects_documentation.md), and a
+    # row's scope is the Character, which has none: the user's rows read empty quotes. The name stands in the row's middle.
+    entry += M.text("gv_op_name", 46, 13, 160, B.key("gv_op_name", "§Y[THIS.GetName]§!"), M.FONT_LABEL, "left", 22, fixed=True)
+    for mission, frame_n, title in MISSIONS:
+        entry += icon_frame("gv_op_m_%s" % mission, 214, 14, "GFX_operative_mission_icons_small", frame_n)
+        entry += M.text("gv_op_t_%s" % mission, 238, 13, 118, "OPERATIVE_MISSION_%s_TITLE" % title, M.FONT_LABEL, "left", 22, fixed=True)
+        when(["gv_op_m_%s" % mission, "gv_op_t_%s" % mission], "operative_leader_mission = %s\n" % mission)
+    entry += M.text("gv_op_t_none", 238, 13, 118, "OPERATIVE_MISSION_NO_MISSION_TITLE", M.FONT_LABEL, "left", 22, fixed=True)
+    when("gv_op_t_none", "operative_leader_mission = no_mission\n")
+    entry += M.icon("gv_op_flag", 364, 11, FLAG_SMALL)
+    properties += flown("gv_op_flag", "?operation_country")
+    entry += M.text("gv_op_where", 410, 2, 118, B.key("gv_op_where", "§Y[?operation_state.GetName]§!"), M.FONT_LABEL, "left", 22, fixed=True)
+    entry += M.text("gv_op_net", 410, 24, 118, B.key("gv_op_net", "§gnetwork [?mod1440_gv_net|0]%§!"), M.FONT_LABEL, "left", 22,
+                    tooltip=B.key("gv_op_net_tt", "Your intelligence network's national coverage of this country, as the daily round read it."))
+    entry += M.text("gv_op_home", 410, 24, 118, B.key("gv_op_home", "§gat home§!"), M.FONT_LABEL, "left", 22)
+    entry += M.text("gv_op_idle", 410, 13, 118, B.key("gv_op_idle", "§gnot assigned§!"), M.FONT_LABEL, "left", 22)
+    # E3 fix round 2: an operative on a mission in a country (counter-intelligence at home) has no state: the state's name
+    # fell back to the row's scope, his own name. Then the country's name stands there.
+    entry += M.text("gv_op_country", 410, 2, 118, B.key("gv_op_country", "§Y[?operation_country.GetName]§!"), M.FONT_LABEL, "left", 22, fixed=True)
+    assigned = "check_variable = { operation_country > 0 }\n"
+    when("gv_op_flag", assigned)
+    when("gv_op_where", assigned + "check_variable = { operation_state > 0 }\n")
+    when("gv_op_country", assigned + "NOT = { check_variable = { operation_state > 0 } }\n")
+    when("gv_op_net", assigned + "check_variable = { mod1440_gv_home = 0 }\n")
+    when("gv_op_home", assigned + "check_variable = { mod1440_gv_home = 1 }\n")
+    when("gv_op_idle", "NOT = { %s }\n" % assigned.strip())
+    rows_gui += row("mod1440_records_gv_op_row", OP_ROW_W, GV_SEAT, entry)
+    # cryptology
+    inner += strip("gv_cr_head", 8, 400, 544, "Cryptology", "department active")
+    inner += txt("gv_cr_head_r0", 552 - 8 - 260, 402, 260, "no department", fmt="right")
+    when("gv_cr_head_r", "is_cryptology_department_active = yes\n")
+    when("gv_cr_head_r0", "is_cryptology_department_active = no\n")
+    inner += bands("gv_cr_band", 8, 426, 544, GV_ROW, 4)
+    for n, (name, label, value, tip) in enumerate((
+            ("enc", "Our cipher strength", "[?encryption_strength|0]", "Your cipher strength in the game's own units, as the cryptology view shows it: 12000, and 4250 for each level of cryptology (NDefines CRYPTO_BASE_CRYPTO_LEVEL, CRYPTO_CRYPTO_LEVEL_PER_CRYPTO_UPGRADE)."),
+            ("def", "Cryptology defence level", "[?cryptology_defense_level|0]", "Your cryptology defence level, as the agency view shows it."),
+            ("dec", "Decrypting", "§Y[?mod1440_gv_dc.GetName]§!  [?mod1440_gv_dc_p|0]%", "The cipher you are breaking and how far (the cryptology tab's bar)."),
+            ("brk", "Ciphers broken since the record began", "[?mod1440_ct^%d|0]" % NUMBER["cipher"], "The 'Broke the cipher of' lines of the War Diary."))):
+        y = 426 + n * GV_ROW
+        inner += txt("gv_cr_%s_l" % name, 16, y + 2, 280, label, tip=tip)
+        inner += txt("gv_cr_%s" % name, 300, y + 2, 244, value, fmt="right", key="gv_cr_%s_v" % name)
+    inner += txt("gv_cr_dec_none", 300, 426 + 2 * GV_ROW + 2, 244, "§gnothing§!", fmt="right")
+    when("gv_cr_dec", "check_variable = { mod1440_gv_dc_has = 1 }\n")
+    when("gv_cr_dec_none", "check_variable = { mod1440_gv_dc_has = 0 }\n")
+    # what we know of: the enemies at war first, then the majors
+    inner += M.icon("gv_kn_head", 8, 528, layout.head_sprite(544, 26))
+    inner += txt("gv_kn_h", 16, 530, 200, "What we know of", tip="Your intel on each country, as the intelligence ledger shows it: enemies at war first, then the major powers.")
+    for n, words in enumerate(("Civilian", "Army", "Navy", "Air")):
+        inner += txt("gv_kn_h%d" % n, 268 + n * 68, 530, 68, words, fmt="centre")
+    inner += bands("gv_kn_band", 8, 554, 544, GV_ROW, GV_KNOW)
+    for k in range(GV_KNOW):
+        y = 554 + k * GV_ROW
+        more = "check_variable = { mod1440_gv_kn_n > %d }\n" % k
+        inner += txt("gv_kn_%d" % k, 16, y + 2, 240, "§Y[?mod1440_gv_kn^%d.GetName]§!" % k, fixed=True)
+        names = ["gv_kn_%d" % k]
+        for n, part in enumerate(("c", "a", "n", "i")):
+            inner += txt("gv_kn_%d_%s" % (k, part), 268 + n * 68, y + 1, 68, "[?mod1440_gv_kn_%s^%d|0]%%" % (part, k), M.FONT_VALUE, "centre")
+            names.append("gv_kn_%d_%s" % (k, part))
+        when(names, more)
+    body += card(c, inner)
 
+    triggers = "".join(block(name + "_visible", "".join(conds)) for name, conds in vis.items())
     gui, script = page_gui("gv", 2, body, lists=lists, effects=effects, triggers=triggers, properties=properties)
-    gui += extra_gui
+    gui += rows_gui
+    return gui, script, government_script(adv_version, portrait_version, pictures), government_hooks()
 
-    # ---- script: the daily comparison of offices
+
+def gv_slot(var, count, body, start=0):
+    """Script: body(n) for the n that the temporary variable <var> holds, n from start to count - 1 (a chain)."""
+    return "".join(iff("check_variable = { %s = %d }" % (var, n), body(n), "if" if n == start else "else_if") for n in range(start, count))
+
+
+def government_script(adv_version, portrait_version, pictures):
+    """E3 round 2: the daily round of the Government page, the monthly record of party support and its chart, the panel
+    of the heads of government, the government's lines of the War Diary and the agency's figures."""
     begun = is_one("mod1440_gv_begun")
+    unknown_small = "token:" + SMALL_UNKNOWN
+    no_effects = "token:" + TRAIT_NO_EFFECTS
+    all_parts = SLOT_PARTS + SLOT_NEW
 
     def office_array(game, copy, slot):
         """The daily comparison of one array of seats with its copy. A new holder gets today's date, a line in the
-        War Diary, and his portrait and role looked up once; a holder kept keeps all three."""
-        news = ["mod1440_gv_new" + part for part in SLOT_PARTS]
-        lookup = block("var:gv_c", "mod1440_p_adv_%s = yes\n" % slot) + tmp("gv_p", "p_tok") + tmp("gv_r", "p_role") + tmp("gv_b", "p_big")
+        War Diary, and his portrait, role and its effects looked up once; a holder kept keeps them. An element that is
+        no character is left out (gv_is_person)."""
+        news = ["mod1440_gv_new" + part for part in all_parts]
+        lookup = (block("var:gv_c", "mod1440_p_adv_%s = yes\n" % slot) + tmp("gv_p", "p_tok") + tmp("gv_r", "p_role") + tmp("gv_b", "p_big")
+                  + tmp("gv_e", "p_eff") + tmp("gv_fb", "p_fb"))
         return (
             "".join("clear_array = %s\n" % n for n in news)
-            + block("for_each_loop", (
-                "array = %s\nvalue = gv_c\n" % game + tmp("gv_since", "global.date") + tmp("gv_old", 1) + iff(begun, tmp("gv_old", 0)) + tmp("gv_found", 0)
+            + tmp("gv_me", "THIS")
+            + block("for_each_loop", "array = %s\nvalue = gv_c\n" % game + gv_person_test("gv_c", "gv_isp") + iff("check_variable = { gv_isp = 1 }", (
+                tmp("gv_since", "global.date") + tmp("gv_old", 1) + iff(begun, tmp("gv_old", 0)) + tmp("gv_found", 0)
+                + tmp("gv_e", no_effects) + tmp("gv_fb", 0)
                 + block("for_each_loop", "array = %s\nvalue = gv_o\nindex = gv_j\n" % copy + iff(
                     "check_variable = { gv_o = gv_c }", tmp("gv_found", 1) + tmp("gv_since", "%s_since^gv_j" % copy) + tmp("gv_old", "%s_old^gv_j" % copy)
-                    + tmp("gv_p", "%s_p^gv_j" % copy) + tmp("gv_r", "%s_r^gv_j" % copy) + tmp("gv_b", "%s_b^gv_j" % copy)))
+                    + tmp("gv_p", "%s_p^gv_j" % copy) + tmp("gv_r", "%s_r^gv_j" % copy) + tmp("gv_b", "%s_b^gv_j" % copy)
+                    + tmp("gv_e", "%s_e^gv_j" % copy) + tmp("gv_fb", "%s_fb^gv_j" % copy)))
                 + iff("check_variable = { gv_found = 0 } " + begun, line("appointed", a="gv_c"))
-                # a copy of a game saved before the portraits were kept has no portrait: it is looked up now
+                # a copy of a game saved before the portraits (or, E3 round 2, the effects) were kept: looked up now
                 + iff("OR = { check_variable = { gv_found = 0 } check_variable = { gv_stale = 1 } }", lookup)
-                + "".join("add_to_array = { %s = %s }\n" % (n, v) for n, v in zip(news, ("gv_c", "gv_since", "gv_old", "gv_p", "gv_r", "gv_b")))))
+                + "".join("add_to_array = { %s = %s }\n" % (n, v) for n, v in zip(news, ("gv_c", "gv_since", "gv_old", "gv_p", "gv_r", "gv_b", "gv_e", "gv_fb"))))))
             + block("for_each_loop", "array = %s\nvalue = gv_o\n" % copy + iff(
                 "NOT = { is_in_array = { array = %s value = gv_o } } %s" % (game, begun), line("dismissed", a="gv_o")))
             + "".join("clear_array = %s%s\n" % (copy, part) + block(
                 "for_each_loop", "array = mod1440_gv_new%s\nvalue = gv_o\nadd_to_array = { %s%s = gv_o }\n" % (part, copy, part))
-                for part in SLOT_PARTS))
+                for part in all_parts))
 
     def shown_seats(prefix, count):
         """The copy the seats of the page read: the first <count> holders, padded so that a hidden seat reads
         an element that is there."""
         source, target = "mod1440_gv_" + prefix, "mod1440_gv_%s_d" % prefix
-        pads = {"": 0, "_since": 0, "_old": 0, "_p": "token:" + SMALL_UNKNOWN, "_r": BLANK, "_b": 0}
-        return ("".join("clear_array = %s%s\n" % (target, part) for part in SLOT_PARTS)
+        pads = {"": 0, "_since": 0, "_old": 0, "_p": unknown_small, "_r": BLANK, "_b": 0, "_e": no_effects, "_fb": 0}
+        return ("".join("clear_array = %s%s\n" % (target, part) for part in all_parts)
                 + block("for_each_loop", "array = %s\nvalue = gv_v\nindex = gv_i\n" % source + iff(
                     "check_variable = { gv_i < %d }" % count,
-                    "".join("add_to_array = { %s%s = %s%s^gv_i }\n" % (target, part, source, part) for part in SLOT_PARTS)))
-                + pad([(target + part, pads[part]) for part in SLOT_PARTS], count))
+                    "".join("add_to_array = { %s%s = %s%s^gv_i }\n" % (target, part, source, part) for part in all_parts)))
+                + pad([(target + part, pads[part]) for part in all_parts], count))
 
     offices = ""
     for k, (variable, trigger, label) in enumerate(OFFICES):
         holder = "mod1440_gv_of_%d" % k
         lookup = (tmp("gv_c", holder) + block("var:gv_c", "mod1440_p_adv_%s = yes\n" % variable)
-                  + setv(holder + "_p", "p_tok") + setv(holder + "_r", "p_role") + setv(holder + "_b", "p_big"))
+                  + setv(holder + "_p", "p_tok") + setv(holder + "_r", "p_role") + setv(holder + "_b", "p_big")
+                  + setv(holder + "_e", "p_eff") + setv(holder + "_fb", "p_fb"))
         # NOT with two conditions inside means "neither": the test "not this holder already" is written as an OR
         offices += iff("any_character = { %s = yes }" % trigger, iff(
             "OR = { NOT = { %s } NOT = { check_variable = { %s = %s } } }" % (is_one(holder + "_has"), holder, variable), (
@@ -2884,53 +3429,398 @@ def government(portrait_version):
         laws += "".join(iff("has_idea = %s" % idea, setv("mod1440_gv_law_%d" % n, "token:" + idea)
                             + setv("mod1440_gv_law_%d_gfx" % n, "token:" + (pictures.get(idea) or LAW_UNKNOWN))) for idea in ideas)
     support = "".join(setv("mod1440_gv_pop_%d" % n, "party_popularity_100@" + group) for n, (ideology, group) in enumerate(IDEOLOGIES))
-    # the leader's portrait: looked up when another leader rules, and when the game's list of characters has changed
-    face = leader_portrait("THIS", "mod1440_gv_p", portrait_version)
-    # the portraits of the heads since the record began, looked up again when the numbers of text keys have moved
+    # the leader's portrait: looked up when another leader rules, and when the game's list of characters has changed;
+    # E3 round 2: whether the game can name one (else the flag on the dark inset, E4's fallback)
+    face = (leader_portrait("THIS", "mod1440_gv_p", portrait_version) + tmp("gv_unk", "token:" + UNKNOWN) + setv("mod1440_gv_pfb", 0)
+            + iff("check_variable = { mod1440_gv_p = gv_unk }", setv("mod1440_gv_pfb", 1)))
     rulers_again = block("for_each_loop", "array = mod1440_gv_rul\nvalue = gv_v\nindex = gv_i\n" + iff(
         "check_variable = { gv_i < mod1440_gv_rul_p^num } NOT = { check_variable = { gv_v = 0 } }",
         tmp("p_tok", "token:" + UNKNOWN) + block("var:gv_v", "mod1440_p_leader = yes\n") + setv("mod1440_gv_rul_p^gv_i", "p_tok")))
-    # the heads of government since the record began: a row when another one rules, newest first
     group = tmp("gv_g", 0) + "".join(iff("has_government = %s" % g, tmp("gv_g", n)) for n, (ideology, g) in enumerate(IDEOLOGIES, start=1))
-    rul = ["", "_from", "_old", "_to", "_end", "_p", "_g"]
+    stab = tmp("gv_st", "stability") + "multiply_temp_variable = { gv_st = 100 }\n" + tmp("gv_ws", "has_war_support") + "multiply_temp_variable = { gv_ws = 100 }\n"
+    # the heads of government since the record began: a row when another one rules, newest first (E3 round 2: the days he
+    # came and went, stability and war support on his first and last day, the elections in his term)
     new_head = (
-        iff("check_variable = { mod1440_gv_rul^num > 0 }", setv("mod1440_gv_rul_to^0", "global.date") + setv("mod1440_gv_rul_end^0", 1))
-        + group + tmp("gv_cl", "country_leader")
+        iff("check_variable = { mod1440_gv_rul^num > 0 }", setv("mod1440_gv_rul_to^0", "global.date") + setv("mod1440_gv_rul_end^0", 1)
+            + setv("mod1440_gv_rul_td^0", "global.num_days"))
+        + group + tmp("gv_cl", "country_leader") + stab
         + "".join("add_to_array = { array = mod1440_gv_rul%s value = %s index = 0 }\n" % (part, value) for part, value in zip(
-            rul, ("gv_cl", "mod1440_gv_leader_since", "mod1440_gv_leader_old", 0, 0, "mod1440_gv_p", "gv_g")))
+            RUL + RUL_NEW, ("gv_cl", "mod1440_gv_leader_since", "mod1440_gv_leader_old", 0, 0, "mod1440_gv_p", "gv_g",
+                            "global.num_days", -1, "gv_st", "gv_st", "gv_ws", "gv_ws", 0)))
         + iff("check_variable = { mod1440_gv_rul^num > %d }" % HEADS_KEEP, tmp("gv_last", "mod1440_gv_rul^num") + "subtract_from_temp_variable = { gv_last = 1 }\n"
-              + "".join("remove_from_array = { array = mod1440_gv_rul%s index = gv_last }\n" % part for part in rul)))
-    heads_shown = ("".join("clear_array = mod1440_gv_rd%s\n" % part for part in rul)
+              + "".join("remove_from_array = { array = mod1440_gv_rul%s index = gv_last }\n" % part for part in RUL + RUL_NEW)))
+    heads_shown = ("".join("clear_array = mod1440_gv_rd%s\n" % part for part in RUL)
                    + block("for_each_loop", "array = mod1440_gv_rul\nvalue = gv_v\nindex = gv_i\n" + iff(
                        "check_variable = { gv_i < %d }" % HEADS_SLOTS,
-                       "".join("add_to_array = { mod1440_gv_rd%s = mod1440_gv_rul%s^gv_i }\n" % (part, part) for part in rul)))
+                       "".join("add_to_array = { mod1440_gv_rd%s = mod1440_gv_rul%s^gv_i }\n" % (part, part) for part in RUL)))
                    + pad([("mod1440_gv_rd", 0), ("mod1440_gv_rd_from", 0), ("mod1440_gv_rd_old", 0), ("mod1440_gv_rd_to", 0),
                           ("mod1440_gv_rd_end", 0), ("mod1440_gv_rd_p", "token:" + UNKNOWN), ("mod1440_gv_rd_g", 0)], HEADS_SLOTS))
-    script_effects = (
+    sums = ""
+    for name, label, kinds, tip in GV_FIGURES:
+        sums += count(*kinds) + setv("mod1440_gv_n_" + name, "ct_sum")
+
+    # ---- the migration of a save of the build before round 2 (once): the new parts of the heads, the elections from the
+    # log's election lines, the elections of each head's term (dates compared as numbers, as the Wars page does)
+    rul_pads = {"_fd": -1, "_td": -1, "_s0": -1, "_s1": -1, "_w0": -1, "_w1": -1, "_e": 0}
+    migrate = ""
+    for part in RUL_NEW:
+        value = rul_pads[part]
+        body = tmp("gv_mv", value)
+        if part == "_fd":
+            body += iff("check_variable = { mod1440_gv_rul_old^gv_mi = 1 }", tmp("gv_mv", "mod1440_ev_since_day"))
+        migrate += block("for_loop_effect", "start = 0\nend = mod1440_gv_rul^num\nvalue = gv_mi\n" + iff(
+            "check_variable = { mod1440_gv_rul%s^num < mod1440_gv_rul^num }" % part, tmp("gv_mi", "mod1440_gv_rul%s^num" % part) + body
+            + "add_to_array = { mod1440_gv_rul%s = gv_mv }\n" % part))
+    migrate += (tmp("gv_tk", "token:mod1440_ev_election") + "clear_array = mod1440_gv_el\nclear_array = mod1440_gv_el_d\n"
+                + block("for_each_loop", "array = mod1440_ev_kind\nvalue = gv_mk\nindex = gv_mi\n" + iff(
+                    "check_variable = { gv_mk = gv_tk }", "add_to_array = { mod1440_gv_el = mod1440_ev_date^gv_mi }\nadd_to_array = { mod1440_gv_el_d = mod1440_ev_day^gv_mi }\n"))
+                + block("while_loop_effect", "limit = { check_variable = { mod1440_gv_el^num > %d } }\n" % GV_EL_KEEP
+                        + "remove_from_array = { array = mod1440_gv_el index = 0 }\nremove_from_array = { array = mod1440_gv_el_d index = 0 }\n")
+                + block("for_each_loop", "array = mod1440_gv_el\nvalue = gv_md\n" + tmp("gv_mb", 0) + block(
+                    "for_each_loop", "array = mod1440_gv_rul\nindex = gv_mk\nvalue = gv_mv\nbreak = gv_mb\n" + iff(
+                        "OR = { check_variable = { mod1440_gv_rul_old^gv_mk = 1 } NOT = { check_variable = { mod1440_gv_rul_from^gv_mk > gv_md } } }",
+                        "add_to_variable = { mod1440_gv_rul_e^gv_mk = 1 }\n" + tmp("gv_mb", 1)))))
+    migration = iff("NOT = { check_variable = { mod1440_gv_v3 = 1 } }", setv("mod1440_gv_v3", 1) + migrate
+                    + 'log = "MOD1440 government: the heads of government of [This.GetTag] got their days, stability and war support (not recorded), '
+                      '[?mod1440_gv_el^num] elections from the log"\n')
+
+    # ---- the heads panel's copy: seven rows from the page offset mod1440_gv_hp, with the days in office and the fallback
+    pads = {"": 0, "_from": 0, "_old": 0, "_to": 0, "_end": 0, "_p": "token:" + UNKNOWN, "_g": 0, "_fd": -1, "_td": -1, "_s0": -1, "_s1": -1,
+            "_w0": -1, "_w1": -1, "_e": 0, "_days": -1, "_fb": 0}
+    heads_copy = (
+        "".join("clear_array = mod1440_gv_rp%s\n" % part for part in RP)
+        + tmp("gv_unk", "token:" + UNKNOWN) + tmp("gv_hn", 0)
+        + block("for_loop_effect", "start = 0\nend = %d\nvalue = gv_hk\n" % HEADS_ROWS + tmp("gv_hi", "mod1440_gv_hp") + "add_to_temp_variable = { gv_hi = gv_hk }\n"
+                + iff("check_variable = { gv_hi < mod1440_gv_rul^num }", (
+                    "".join("add_to_array = { mod1440_gv_rp%s = mod1440_gv_rul%s^gv_hi }\n" % (part, part) for part in RUL + RUL_NEW)
+                    + tmp("gv_hd", -1) + tmp("gv_hf", "mod1440_gv_rul_fd^gv_hi")
+                    + iff("check_variable = { gv_hf > -1 }", (
+                        iff("check_variable = { mod1440_gv_rul_end^gv_hi = 0 }", tmp("gv_hd", "global.num_days") + "subtract_from_temp_variable = { gv_hd = gv_hf }\n")
+                        + iff("check_variable = { mod1440_gv_rul_td^gv_hi > -1 }", tmp("gv_hd", "mod1440_gv_rul_td^gv_hi")
+                              + "subtract_from_temp_variable = { gv_hd = gv_hf }\n", "else_if")))
+                    + "add_to_array = { mod1440_gv_rp_days = gv_hd }\n"
+                    + tmp("gv_hb", 0) + iff("check_variable = { mod1440_gv_rul_p^gv_hi = gv_unk }", tmp("gv_hb", 1))
+                    + "add_to_array = { mod1440_gv_rp_fb = gv_hb }\n" + "add_to_temp_variable = { gv_hn = 1 }\n")))
+        + setv("mod1440_gv_rp_n", "gv_hn") + setv("mod1440_gv_hp_end", "mod1440_gv_hp") + "add_to_variable = { mod1440_gv_hp_end = %d }\n" % HEADS_ROWS
+        + pad([("mod1440_gv_rp" + part, pads[part]) for part in RP], HEADS_ROWS))
+
+    # ---- the head of government's traits: none (GV_NO_TRAITS, fix round 1). The arrays mod1440_gv_tr and _tr_e a save of
+    # the first build holds stay as they are, unread.
+
+    # ---- the parties of today: their ranks by support, the results bar's layers and the table's rows (y by property)
+    base = GV_CARDS["parties"][1]
+    first_row = 218 - base                              # 102: the table's first row in the card
+    parties = "".join(tmp("gv_v%d" % p, "party_popularity_100@" + g) for p, (w, g) in enumerate(IDEOLOGIES))
+    for p in range(4):
+        parties += tmp("gv_r%d" % p, 0)
+        for q in range(4):
+            if q == p:
+                continue
+            parties += iff("check_variable = { gv_v%d > gv_v%d }" % (q, p), "add_to_temp_variable = { gv_r%d = 1 }\n" % p)
+            if q < p:
+                parties += iff("check_variable = { gv_v%d = gv_v%d }" % (q, p), "add_to_temp_variable = { gv_r%d = 1 }\n" % p, "else_if")
+        parties += setv("mod1440_gv_rank_%d" % p, "gv_r%d" % p)
+    for p in range(4):
+        parties += tmp("gv_cu", 0) + "".join(iff("NOT = { check_variable = { gv_r%d > gv_r%d } }" % (q, p), "add_to_temp_variable = { gv_cu = gv_v%d }\n" % q)
+                                             for q in range(4))
+        parties += "clamp_temp_variable = { var = gv_cu min = 0 max = 100 }\n" + setv("mod1440_gv_cum_%d" % p, "gv_cu")
+        parties += tmp("gv_y", "gv_r%d" % p) + "multiply_temp_variable = { gv_y = %d }\nadd_to_temp_variable = { gv_y = %d }\n" % (GV_SEAT, first_row)
+        for off in (4, 7, 2, 24, 12, 13):
+            parties += setv("mod1440_gv_py_%d_%d" % (p, off), "gv_y") + "add_to_variable = { mod1440_gv_py_%d_%d = %d }\n" % (p, off, off)
+    parties += setv("mod1440_gv_py_pick", first_row) + "".join(
+        iff("has_government = %s" % g, setv("mod1440_gv_py_pick", "gv_r%d" % p) + "multiply_variable = { mod1440_gv_py_pick = %d }\n" % GV_SEAT
+            + "add_to_variable = { mod1440_gv_py_pick = %d }\n" % first_row) for p, (w, g) in enumerate(IDEOLOGIES))
+
+    # ---- the record of party support, aligned with National Figures' months (mod1440_h_date)
+    def back_fill(target):
+        """Script: the arrays of the record trimmed or filled at their front to <target> months. A month before the
+        record kept all four: the ruling party's support from series 30 (decision 7), by the ruling group and head of the
+        head of government in office then (dates compared as numbers); the others -1."""
+        dates = "mod1440_h_date"
+        find_head = (tmp("gv_bg", "gv_g") + tmp("gv_bh", "country_leader") + tmp("gv_bd", "%s^gv_bj" % dates)
+                     + block("for_loop_effect", "start = mod1440_gv_rul^num\nend = 0\ncompare = greater_than\nadd = -1\nvalue = gv_bk\n"
+                             + tmp("gv_bi", "gv_bk") + "subtract_from_temp_variable = { gv_bi = 1 }\n"
+                             + iff("OR = { check_variable = { mod1440_gv_rul_old^gv_bi = 1 } NOT = { check_variable = { mod1440_gv_rul_from^gv_bi > gv_bd } } }",
+                                   tmp("gv_bg", "mod1440_gv_rul_g^gv_bi") + tmp("gv_bh", "mod1440_gv_rul^gv_bi"))))
+        # series 30 of a save whose padding National Figures has not written yet stands shorter: read by its own index
+        value = (tmp("gv_bv", -1) + tmp("gv_b30", "gv_bj") + "subtract_from_temp_variable = { gv_b30 = mod1440_h_date^num }\n"
+                 + "add_to_temp_variable = { gv_b30 = mod1440_h_30^num }\n"
+                 + iff("check_variable = { gv_b30 > -1 }", tmp("gv_bv", "mod1440_h_30^gv_b30")))
+        insert = "".join(tmp("gv_b%d" % p, -1) + iff("check_variable = { gv_bg = %d }" % (p + 1), tmp("gv_b%d" % p, "gv_bv")) for p in range(4))
+        insert += "".join("add_to_array = { array = mod1440_gv_pp_%d value = gv_b%d index = 0 }\n" % (p, p) for p in range(4))
+        insert += "add_to_array = { array = mod1440_gv_pp_g value = gv_bg index = 0 }\nadd_to_array = { array = mod1440_gv_pp_h value = gv_bh index = 0 }\n"
+        return (group + tmp("gv_bt", target)
+                + block("while_loop_effect", "limit = { check_variable = { mod1440_gv_pp_0^num > gv_bt } }\n"
+                        + "".join("remove_from_array = { array = mod1440_gv_pp%s index = 0 }\n" % part for part in PP_PARTS))
+                # the parts written in step: a part shorter than the first is filled up to it at its front
+                + "".join(block("while_loop_effect", "limit = { check_variable = { mod1440_gv_pp%s^num < mod1440_gv_pp_0^num } }\n" % part
+                                + "add_to_array = { array = mod1440_gv_pp%s value = %s index = 0 }\n" % (part, -1 if part != "_h" else "country_leader"))
+                          for part in PP_PARTS[1:])
+                + iff("check_variable = { mod1440_gv_pp_0^num < gv_bt }", (
+                    tmp("gv_bm", "gv_bt") + "subtract_from_temp_variable = { gv_bm = mod1440_gv_pp_0^num }\n"
+                    + block("for_loop_effect", "start = gv_bm\nend = 0\ncompare = greater_than\nadd = -1\nvalue = gv_bk\n"
+                            + tmp("gv_bj", "gv_bk") + "subtract_from_temp_variable = { gv_bj = 1 }\n"
+                            + value
+                            + find_head + insert))))
+
+    record = (
+        "\n# Government (E3 round 2): the record of party support, written by National Figures' monthly round after its series\n"
+        "# (mod1440_h_record): today's support of the four parties, the ruling group and the head of government, aligned with\n"
+        "# mod1440_h_date (%d months). A save of an earlier build fills the months before at the front (back_fill).\n" % M.H_KEEP
+        + block("mod1440_gv_pp_record", (
+            tmp("gv_rt", "mod1440_h_date^num") + "subtract_from_temp_variable = { gv_rt = 1 }\n"
+            + back_fill("gv_rt")
+            + "".join("add_to_array = { mod1440_gv_pp_%d = party_popularity_100@%s }\n" % (p, g) for p, (w, g) in enumerate(IDEOLOGIES))
+            + group + "add_to_array = { mod1440_gv_pp_g = gv_g }\nadd_to_array = { mod1440_gv_pp_h = country_leader }\n"
+            + iff("is_ai = no", "mod1440_gv_chart = yes\n")))
+        + "\n# Government: the record of party support filled at its front to National Figures' months (a save of an earlier\n"
+        "# build, the first day it is played with this one).\n"
+        + block("mod1440_gv_pp_fill", tmp("gv_rt", "mod1440_h_date^num") + back_fill("gv_rt")))
+
+    # ---- the chart: the months of the range as y pixels of dots, the ruling party's apart and drawn last, the band
+    pd_arrays = ["mod1440_gv_pd_%s_%d" % (p, span) for span, s, d, c in GV_RANGES for p in ("0", "1", "2", "3", "r")]
+    other_arrays = ["mod1440_gv_pg_%d" % span for span, s, d, c in GV_RANGES] + ["mod1440_gv_pb_%d" % span for span, s, d, c in GV_RANGES]
+    clear_chart = "".join("clear_array = %s\n" % a for a in pd_arrays + other_arrays)
+    px0 = GV_PLOT[0] - GV_CARDS["parties"][0]
+    py0 = GV_PLOT[1] - GV_CARDS["parties"][1]
+    foot = py0 + GV_PLOT[3]
+
+    def months(span, step, dot):
+        top = GV_PLOT[3] - dot // 2                 # the dot of 0%: its top this far down the plot
+        body = (tmp("gv_j", "gv_from") + "add_to_temp_variable = { gv_j = gv_k }\n" + tmp("gv_g", "mod1440_gv_pp_g^gv_j") + tmp("gv_yr", -1))
+        for p in range(4):
+            body += (tmp("gv_y", -1) + tmp("gv_v", "mod1440_gv_pp_%d^gv_j" % p)
+                     + iff("check_variable = { gv_v > -1 }", tmp("gv_y", "gv_v") + "multiply_temp_variable = { gv_y = %s }\n" % GV_PX
+                           + "multiply_temp_variable = { gv_y = -1 }\nadd_to_temp_variable = { gv_y = %d }\n" % top
+                           + iff("check_variable = { gv_g = %d }" % (p + 1), tmp("gv_yr", "gv_y") + tmp("gv_y", -1)))
+                     + "add_to_array = { mod1440_gv_pd_%d_%d = gv_y }\n" % (p, span))
+        body += "add_to_array = { mod1440_gv_pd_r_%d = gv_yr }\nadd_to_array = { mod1440_gv_pg_%d = gv_g }\nadd_to_array = { mod1440_gv_pb_%d = gv_g }\n" % (span, span, span)
+        return block("for_loop_effect", "start = 0\nend = gv_cnt\nvalue = gv_k\n" + body)
+
+    spans = "".join(iff("check_variable = { gv_span = %d }" % span, tmp("gv_step", step) + setv("mod1440_gv_rf_%d" % span, 2) + months(span, step, dot)
+                        # the shares stand after the last month's dot
+                        + setv("mod1440_gv_lx_s", "gv_cnt") + "multiply_variable = { mod1440_gv_lx_s = %d }\n" % step
+                        + "add_to_variable = { mod1440_gv_lx_s = %d }\n" % (px0 + step // 2 + dot // 2 + 6 - step)
+                        + setv("mod1440_gv_lx_t", "mod1440_gv_lx_s") + "add_to_variable = { mod1440_gv_lx_t = 9 }\n",
+                        "if" if k == 0 else "else_if") for k, (span, step, dot, caption) in enumerate(GV_RANGES))
+    # the years: a mark under the first month of each new year
+    years = ("".join(setv("mod1440_gv_yl_%d" % k, 0) for k in range(GV_YEARS)) + tmp("gv_before", 0) + tmp("gv_slot", 0)
+             + tmp("gv_yoff", "mod1440_h_date^num") + "subtract_from_temp_variable = { gv_yoff = mod1440_h_year^num }\n"
+             + block("for_loop_effect", "start = 0\nend = gv_cnt\nvalue = gv_k\n" + (
+                 tmp("gv_yi", "gv_from") + "add_to_temp_variable = { gv_yi = gv_k }\nsubtract_from_temp_variable = { gv_yi = gv_yoff }\n"
+                 + tmp("gv_yv", 0) + iff("check_variable = { gv_yi > -1 }", tmp("gv_yv", "mod1440_h_year^gv_yi"))
+                 + iff("check_variable = { gv_k > 0 } check_variable = { gv_yv > 0 } NOT = { check_variable = { gv_yv = gv_before } } check_variable = { gv_slot < %d }" % GV_YEARS, (
+                     tmp("gv_x", "gv_k") + "multiply_temp_variable = { gv_x = gv_step }\nadd_to_temp_variable = { gv_x = %d }\n" % px0
+                     + gv_slot("gv_slot", GV_YEARS, lambda n: setv("mod1440_gv_yl_%d" % n, "gv_yv") + setv("mod1440_gv_tx_%d" % n, "gv_x")
+                               + setv("mod1440_gv_yx_%d" % n, "gv_x") + "subtract_from_variable = { mod1440_gv_yx_%d = 20 }\n" % n)
+                     + "add_to_temp_variable = { gv_slot = 1 }\n"))
+                 + tmp("gv_before", "gv_yv"))))
+    # who governed: a span per head of government, his name where it fits
+    close_span = iff("check_variable = { gv_open = 1 }", tmp("gv_open", 0) + gv_slot("gv_sn", GV_SPANS + 1, lambda n: (
+        setv("mod1440_gv_bw_%d" % (n - 1), "gv_k") + "subtract_from_variable = { mod1440_gv_bw_%d = gv_bs }\n" % (n - 1)
+        + "multiply_variable = { mod1440_gv_bw_%d = gv_step }\n" % (n - 1) + setv("mod1440_gv_bt_%d" % (n - 1), "gv_bl")), 1))
+    heads_band = (tmp("gv_sn", 0) + tmp("gv_ph", -1) + tmp("gv_bs", 0) + tmp("gv_bl", "global.date") + tmp("gv_open", 0)
+                  + block("for_loop_effect", "start = 0\nend = gv_cnt\nvalue = gv_k\n" + (
+                      tmp("gv_j", "gv_from") + "add_to_temp_variable = { gv_j = gv_k }\n" + tmp("gv_hv", "mod1440_gv_pp_h^gv_j")
+                      + iff("OR = { check_variable = { gv_k = 0 } NOT = { check_variable = { gv_hv = gv_ph } } }", (
+                          close_span
+                          + iff("check_variable = { gv_sn < %d }" % GV_SPANS, (
+                              tmp("gv_x", "gv_k") + "multiply_temp_variable = { gv_x = gv_step }\nadd_to_temp_variable = { gv_x = %d }\n" % (px0 + 6)
+                              + gv_slot("gv_sn", GV_SPANS, lambda n: setv("mod1440_gv_bn_%d" % n, "gv_hv") + setv("mod1440_gv_bx_%d" % n, "gv_x")
+                                        + setv("mod1440_gv_bf_%d" % n, "mod1440_h_date^gv_j"))
+                              + tmp("gv_bs", "gv_k") + tmp("gv_open", 1) + "add_to_temp_variable = { gv_sn = 1 }\n"))
+                          + tmp("gv_ph", "gv_hv")))
+                      + tmp("gv_bl", "mod1440_h_date^gv_j")))
+                  + tmp("gv_k", "gv_cnt") + close_span + setv("mod1440_gv_bn_n", "gv_sn"))
+    # an election a tick at the boundary of its month (both lists by date, a pointer each)
+    tick = lambda at: iff("check_variable = { gv_tn < %d }" % GV_TICKS, (
+        tmp("gv_x", at) + "multiply_temp_variable = { gv_x = gv_step }\nadd_to_temp_variable = { gv_x = %d }\n" % (px0 - 1)
+        + gv_slot("gv_tn", GV_TICKS, lambda n: setv("mod1440_gv_tk_%d" % n, "gv_x") + setv("mod1440_gv_td_%d" % n, "mod1440_gv_el^gv_e"))
+        + "add_to_temp_variable = { gv_tn = 1 }\n"))
+    ticks = (tmp("gv_e", 0) + tmp("gv_tn", 0) + tmp("gv_en", "mod1440_gv_el^num") + tmp("gv_d0", "mod1440_h_date^gv_from") + tmp("gv_wb", 0)
+             + block("while_loop_effect", "limit = { check_variable = { gv_e < gv_en } }\nbreak = gv_wb\n"
+                     + iff("check_variable = { mod1440_gv_el^gv_e < gv_d0 }", "add_to_temp_variable = { gv_e = 1 }\n") + els(tmp("gv_wb", 1)))
+             + block("for_loop_effect", "start = 1\nend = gv_cnt\nvalue = gv_k\n" + (
+                 tmp("gv_j", "gv_from") + "add_to_temp_variable = { gv_j = gv_k }\n" + tmp("gv_dj", "mod1440_h_date^gv_j") + tmp("gv_wb", 0)
+                 + block("while_loop_effect", "limit = { check_variable = { gv_e < gv_en } }\nbreak = gv_wb\n"
+                         + iff("check_variable = { mod1440_gv_el^gv_e < gv_dj }", tick("gv_k") + "add_to_temp_variable = { gv_e = 1 }\n") + els(tmp("gv_wb", 1)))))
+             + block("while_loop_effect", "limit = { check_variable = { gv_e < gv_en } }\n" + tick("gv_cnt") + "add_to_temp_variable = { gv_e = 1 }\n")
+             + setv("mod1440_gv_tk_n", "gv_tn"))
+    # the share at each line's end, the lowest first, each at least 18 px above the one under it
+    ends = tmp("gv_last", "gv_n") + "subtract_from_temp_variable = { gv_last = 1 }\n"
+    for p in range(4):
+        ends += (setv("mod1440_gv_lv_%d" % p, -1) + tmp("gv_c%d" % p, 0) + tmp("gv_pl%d" % p, 0)
+                 + iff("check_variable = { gv_n > 0 }", setv("mod1440_gv_lv_%d" % p, "mod1440_gv_pp_%d^gv_last" % p))
+                 + iff("check_variable = { mod1440_gv_lv_%d > -1 }" % p, tmp("gv_c%d" % p, "mod1440_gv_lv_%d" % p)
+                       + "multiply_temp_variable = { gv_c%d = %s }\nmultiply_temp_variable = { gv_c%d = -1 }\nadd_to_temp_variable = { gv_c%d = %d }\n"
+                       % (p, GV_PX, p, p, foot)))
+    ends += tmp("gv_low", foot + 4)
+    for r in range(4):
+        ends += tmp("gv_best", -1000) + tmp("gv_bi", -1)
+        for p in range(4):
+            ends += iff("check_variable = { gv_pl%d = 0 } check_variable = { mod1440_gv_lv_%d > -1 } check_variable = { gv_c%d > gv_best }" % (p, p, p),
+                        tmp("gv_best", "gv_c%d" % p) + tmp("gv_bi", p))
+        ends += iff("check_variable = { gv_bi > -1 }", (
+            iff("check_variable = { gv_best > gv_low }", tmp("gv_best", "gv_low"))
+            + gv_slot("gv_bi", 4, lambda p: tmp("gv_c%d" % p, "gv_best") + tmp("gv_pl%d" % p, 1))
+            + tmp("gv_low", "gv_best") + "subtract_from_temp_variable = { gv_low = %d }\n" % GV_LABEL_GAP))
+    for p in range(4):
+        ends += (setv("mod1440_gv_ly_%d_s" % p, "gv_c%d" % p) + "subtract_from_variable = { mod1440_gv_ly_%d_s = 3 }\n" % p
+                 + setv("mod1440_gv_ly_%d_t" % p, "gv_c%d" % p) + "subtract_from_variable = { mod1440_gv_ly_%d_t = 11 }\n" % p)
+    # the change in a year, the ruling party at its highest, the months recorded and how many in full
+    figures = ""
+    for p in range(4):
+        figures += (setv("mod1440_gv_hy_%d" % p, 0) + iff("check_variable = { gv_n > 12 }", (
+            tmp("gv_a", "mod1440_gv_pp_%d^gv_last" % p) + tmp("gv_i13", "gv_n") + "subtract_from_temp_variable = { gv_i13 = 13 }\n"
+            + tmp("gv_b", "mod1440_gv_pp_%d^gv_i13" % p)
+            + iff("check_variable = { gv_a > -1 } check_variable = { gv_b > -1 }", setv("mod1440_gv_dy_%d" % p, "gv_a")
+                  + "subtract_from_variable = { mod1440_gv_dy_%d = gv_b }\n" % p + setv("mod1440_gv_hy_%d" % p, 1)))))
+    figures += (setv("mod1440_gv_hi", 0) + setv("mod1440_gv_hi_d", "global.date") + iff("check_variable = { mod1440_h_30^num > 0 }", (
+        tmp("gv_hi", 0) + tmp("gv_hat", 0) + block("find_highest_in_array", "array = mod1440_h_30\nvalue = gv_hi\nindex = gv_hat\n")
+        + setv("mod1440_gv_hi", "gv_hi") + setv("mod1440_gv_hi_d", "mod1440_h_date^gv_hat"))))
+    figures += (tmp("gv_full", 0) + tmp("gv_ff", -1)
+                + block("for_loop_effect", "start = 0\nend = gv_n\nvalue = gv_k\n" + iff(
+                    " ".join("check_variable = { mod1440_gv_pp_%d^gv_k > -1 }" % p for p in range(4)),
+                    "add_to_temp_variable = { gv_full = 1 }\n" + iff("check_variable = { gv_ff < 0 }", tmp("gv_ff", "gv_k"))))
+                + setv("mod1440_gv_pp_full", "gv_full") + setv("mod1440_gv_full_d", "global.date")
+                + iff("check_variable = { gv_ff > -1 }", setv("mod1440_gv_full_d", "mod1440_h_date^gv_ff"))
+                + setv("mod1440_gv_bf", 0) + iff("OR = { check_variable = { gv_ff > gv_from } check_variable = { gv_ff < 0 } } check_variable = { gv_n > 0 }",
+                                                  setv("mod1440_gv_bf", 1)))
+    chart = (
+        "\n# Government: the chart of party support for the range chosen (or the shortest that holds every month): the y of\n"
+        "# each party's dot in each month (-1: none), the ruling party's apart (drawn last), the band of who governed, the\n"
+        "# years, the election ticks and the shares at the lines' ends. Run on a range click, on the first of the month and\n"
+        "# when the panel of the heads closes (rule 5); while the panel is open the arrays stay empty.\n"
+        + block("mod1440_gv_chart", (
+            clear_chart + "".join(setv("mod1440_gv_rf_%d" % span, 1) for span, s, d, c in GV_RANGES)
+            + tmp("gv_n", "mod1440_gv_pp_0^num") + setv("mod1440_gv_pp_n", "gv_n") + setv("mod1440_gv_chart_v", GV_CHART_VER)
+            + iff("NOT = { %s }" % is_one("mod1440_gv_heads"), (
+                tmp("gv_span", "mod1440_gv_range")
+                + iff("check_variable = { gv_span = 0 }", tmp("gv_span", GV_RANGES[0][0])
+                      + "".join(iff("check_variable = { gv_n > %d }" % GV_RANGES[k - 1][0], tmp("gv_span", GV_RANGES[k][0])) for k in range(1, len(GV_RANGES))))
+                + tmp("gv_from", "gv_n") + "subtract_from_temp_variable = { gv_from = gv_span }\n"
+                + iff("check_variable = { gv_from < 0 }", tmp("gv_from", 0))
+                + tmp("gv_cnt", "gv_n") + "subtract_from_temp_variable = { gv_cnt = gv_from }\n"
+                + tmp("gv_step", GV_RANGES[0][1]) + spans + years + heads_band + ticks + ends + figures)))))
+
+    panel = (
+        "\n# Government: the heads panel opened or closed (mod1440_gv_heads): its button's frame, its copy, the chart.\n"
+        + block("mod1440_gv_panel", setv("mod1440_gv_heads_f", 1) + iff(is_one("mod1440_gv_heads"), setv("mod1440_gv_heads_f", 2) + "mod1440_gv_heads_copy = yes\n")
+                + "mod1440_gv_chart = yes\n")
+        + block("mod1440_gv_heads_copy", heads_copy)
+        + "\n# Government: an election (on_new_term_election): its date and day, kept %d, and one more in the term of today's head.\n" % GV_EL_KEEP
+        + block("mod1440_gv_election", "add_to_array = { mod1440_gv_el = global.date }\nadd_to_array = { mod1440_gv_el_d = global.num_days }\n"
+                + iff("check_variable = { mod1440_gv_el^num > %d }" % GV_EL_KEEP,
+                      "remove_from_array = { array = mod1440_gv_el index = 0 }\nremove_from_array = { array = mod1440_gv_el_d index = 0 }\n")
+                + iff("check_variable = { mod1440_gv_rul_e^num > 0 }", "add_to_variable = { mod1440_gv_rul_e^0 = 1 }\n")))
+
+    # ---- the government's lines of the War Diary: the newest eight of family 3, made again when the log has grown or the
+    # numbers of the text keys moved
+    diary_parts = [("date", "date"), ("kind", "kind"), ("a", "a"), ("sa", "sa"), ("b", "b"), ("sb", "sb")]
+    diary = iff("OR = { NOT = { check_variable = { mod1440_gv_dl_seen = mod1440_ln_next } } %s NOT = { check_variable = { mod1440_gv_dl_v = 2 } } }" % stale("mod1440_gv_dl"), (
+        "".join("clear_array = mod1440_gv_dl_%s\n" % name for name, part in diary_parts) + tmp("gv_df", 0) + tmp("gv_db", 0)
+        + tmp("gv_ds", "mod1440_ev_date^num") + "subtract_from_temp_variable = { gv_ds = 1 }\n"
+        + tmp("gv_me", "THIS")
+        + block("for_loop_effect", "start = gv_ds\nend = 0\ncompare = greater_than_or_equals\nadd = -1\nvalue = gv_di\nbreak = gv_db\n" + iff(
+            "check_variable = { mod1440_ev_fam^gv_di = 3 }",
+            # E3 fix round 2: a line about a person whose subject is no character (the 'Appointed German Reich' line an earlier
+            # build wrote for the phantom seat) is left off the card; the log keeps it
+            tmp("gv_dok", 1) + iff("check_variable = { mod1440_ev_sa^gv_di = 1 }", tmp("gv_da", "mod1440_ev_a^gv_di") + gv_person_test("gv_da", "gv_dok"))
+            + iff("check_variable = { gv_dok = 1 }",
+                  "".join("add_to_array = { mod1440_gv_dl_%s = mod1440_ev_%s^gv_di }\n" % (name, part) for name, part in diary_parts)
+                  + "add_to_temp_variable = { gv_df = 1 }\n" + iff("check_variable = { gv_df > %d }" % (GV_DIARY - 1), tmp("gv_db", 1)))))
+        + setv("mod1440_gv_dl_n", "gv_df")
+        + pad([("mod1440_gv_dl_date", "global.date"), ("mod1440_gv_dl_kind", BLANK), ("mod1440_gv_dl_a", 0), ("mod1440_gv_dl_sa", 0),
+               ("mod1440_gv_dl_b", "THIS"), ("mod1440_gv_dl_sb", 0)], GV_DIARY)
+        + setv("mod1440_gv_dl_seen", "mod1440_ln_next") + setv("mod1440_gv_dl_v", 2) + stamped("mod1440_gv_dl")))
+
+    # ---- the agency: when it was founded, its upgrades at their highest level, each operative's network, the cipher
+    # being broken, what we know of three countries (the @<country> forms with a country held in a variable: see the
+    # game check; fallback in build.json)
+    # E3 fix round 2: the first run of the agency's record (mod1440_gv_ag_v) takes an agency that is there already as founded
+    # before the record; and a save that ran the first build of round 2, which wrote that day as the founding (the user's
+    # 'founded 24 August, 1940'), gets 'before the record' when no month of the record of party support before it is kept in
+    # full (that record and the agency's began with the same build)
+    agency_first = iff("NOT = { check_variable = { mod1440_gv_ag_v = 1 } }", (
+        iff("%s check_variable = { mod1440_gv_ag_old = 0 }" % is_one("mod1440_gv_ag_has"), (
+            tmp("gv_aff", -1) + tmp("gv_ab", 0)
+            + block("for_loop_effect", "start = 0\nend = mod1440_gv_pp_0^num\nvalue = gv_ak\nbreak = gv_ab\n" + iff(
+                " ".join("check_variable = { mod1440_gv_pp_%d^gv_ak > -1 }" % p for p in range(4)), tmp("gv_aff", "gv_ak") + tmp("gv_ab", 1)))
+            + tmp("gv_ad", "global.date") + iff("check_variable = { gv_aff > -1 }", tmp("gv_ad", "mod1440_h_date^gv_aff"))
+            + iff("OR = { check_variable = { gv_aff < 0 } check_variable = { gv_ad > mod1440_gv_ag_since } }", setv("mod1440_gv_ag_old", 1))))
+        + iff("has_intelligence_agency = yes NOT = { %s }" % is_one("mod1440_gv_ag_has"),
+              setv("mod1440_gv_ag_has", 1) + setv("mod1440_gv_ag_since", "global.date") + setv("mod1440_gv_ag_old", 1))
+        + setv("mod1440_gv_ag_v", 1)))
+    intel = agency_first + (iff("has_intelligence_agency = yes NOT = { %s }" % is_one("mod1440_gv_ag_has"), (
+        setv("mod1440_gv_ag_has", 1) + setv("mod1440_gv_ag_since", "global.date") + setv("mod1440_gv_ag_old", 1) + iff(begun, setv("mod1440_gv_ag_old", 0))))
+        + tmp("gv_ud", 0) + "".join(iff("has_done_agency_upgrade = %s" % upgrade, "add_to_temp_variable = { gv_ud = 1 }\n") for upgrade, sprite in GV_UPGRADES)
+        + setv("mod1440_gv_ag_done", "gv_ud")
+        + block("every_operative", (
+            tmp("gv_oc", "operation_country") + setv("mod1440_gv_home", 0) + setv("mod1440_gv_net", 0)
+            + iff("check_variable = { gv_oc > 0 }", (
+                block("PREV", tmp("gv_me", "THIS") + tmp("gv_nc", "network_national_coverage@var:gv_oc"))
+                + iff("check_variable = { gv_oc = gv_me }", setv("mod1440_gv_home", 1))
+                + els(setv("mod1440_gv_net", "gv_nc") + "multiply_variable = { mod1440_gv_net = 100 }\n")))))
+        + setv("mod1440_gv_dc_has", 0)
+        + iff("is_cryptology_department_active = yes", (
+            tmp("gv_dct", 0)
+            + block("every_country", "limit = { OR = { is_major = yes has_war_with = ROOT } ROOT = { is_decrypting = PREV } }\n" + tmp("gv_dct", "THIS"))
+            + iff("NOT = { check_variable = { gv_dct = 0 } }", setv("mod1440_gv_dc", "gv_dct") + setv("mod1440_gv_dc_has", 1)
+                  + tmp("gv_dp", "decryption_progress@var:gv_dct") + setv("mod1440_gv_dc_p", "gv_dp") + "multiply_variable = { mod1440_gv_dc_p = 100 }\n")))
+        + "clear_temp_array = gv_kt\n" + tmp("gv_kb", 0)
+        + block("for_each_loop", "array = enemies\nvalue = gv_kc\nbreak = gv_kb\n" + iff(
+            "check_variable = { gv_kt^num < %d }" % GV_KNOW, "add_to_temp_array = { gv_kt = gv_kc }\n") + els(tmp("gv_kb", 1)))
+        + block("every_country", "limit = { is_major = yes NOT = { tag = ROOT } }\n" + tmp("gv_kc", "THIS") + iff(
+            "check_variable = { gv_kt^num < %d } NOT = { is_in_array = { array = gv_kt value = gv_kc } }" % GV_KNOW, "add_to_temp_array = { gv_kt = gv_kc }\n"))
+        + "".join("clear_array = mod1440_gv_kn%s\n" % part for part in ("", "_c", "_a", "_n", "_i"))
+        + block("for_each_loop", "array = gv_kt\nvalue = gv_kc\n" + "add_to_array = { mod1440_gv_kn = gv_kc }\n" + "".join(
+            # E3 fix round 2: the value is already in percent points, the sum of the intel sources, which can pass 100 (the
+            # user's United Kingdom read 108.14, shown as 10814%); the intelligence ledger shows it clamped to 100%
+            tmp("gv_kv", "%s_intel@var:gv_kc" % kind) + "clamp_temp_variable = { var = gv_kv min = 0 max = 100 }\nadd_to_array = { mod1440_gv_kn_%s = gv_kv }\n" % part
+            for part, kind in (("c", "civilian"), ("a", "army"), ("n", "navy"), ("i", "air"))))
+        + setv("mod1440_gv_kn_n", "mod1440_gv_kn^num")
+        + pad([("mod1440_gv_kn", "THIS"), ("mod1440_gv_kn_c", 0), ("mod1440_gv_kn_a", 0), ("mod1440_gv_kn_n", 0), ("mod1440_gv_kn_i", 0)], GV_KNOW))
+
+    return (
         "\n# Government: compares who holds each office with yesterday's copy. A new name gets today's date, a line\n"
-        "# in the War Diary, and his portrait and role; a name that is gone a line. The first run only takes the copy.\n"
-        "# Then the heads of government since the record began, the laws in force and their pictures, the length\n"
-        "# of the parties' bars, the leader's portrait, the seats the page shows and the figures of the record.\n"
+        "# in the War Diary, and his portrait, role and its effects; a name that is gone a line. The first run only takes the\n"
+        "# copy. Then the heads of government since the record began, the laws in force and their pictures, the parties of\n"
+        "# today, the leader's portrait and traits, the seats the page shows, the government's lines of the War Diary, the\n"
+        "# agency, and the figures of the record. E3 round 2: an element of the advisor arrays that is no character is left out.\n"
         + block("mod1440_gv_daily", (
-            tmp("gv_stale", 0) + iff(stale("mod1440_gv_adv_ver", adv_version), tmp("gv_stale", 1) + rulers_again)
+            migration
+            + tmp("gv_stale", 0) + iff(stale("mod1440_gv_adv_ver", adv_version), tmp("gv_stale", 1) + rulers_again)
             + iff("NOT = { check_variable = { mod1440_gv_leader = country_leader } }", (
                 setv("mod1440_gv_leader", "country_leader") + setv("mod1440_gv_leader_since", "global.date") + setv("mod1440_gv_leader_old", 1)
                 + iff(begun, setv("mod1440_gv_leader_old", 0) + line("leader", a="country_leader"))))
             + face
             + iff("OR = { check_variable = { mod1440_gv_rul^num < 1 } NOT = { check_variable = { mod1440_gv_rul^0 = country_leader } } }", new_head)
+            # today's head: stability and war support of his last day so far, the days the record has kept him
+            + iff("check_variable = { mod1440_gv_rul^num > 0 }", stab + setv("mod1440_gv_rul_s1^0", "gv_st") + setv("mod1440_gv_rul_w1^0", "gv_ws")
+                  + setv("mod1440_gv_leader_rec", -1) + iff("check_variable = { mod1440_gv_rul_fd^0 > -1 }", setv("mod1440_gv_leader_rec", "global.num_days")
+                                                            + "subtract_from_variable = { mod1440_gv_leader_rec = mod1440_gv_rul_fd^0 }\n"))
             + tmp("gv_hc_n", 0) + offices
             + office_array("political_advisor", "mod1440_gv_adv", "political_advisor") + office_array("high_command", "mod1440_gv_hc", "high_command")
             + "add_to_temp_variable = { gv_hc_n = mod1440_gv_hc^num }\n" + setv("mod1440_gv_hc_n", "gv_hc_n")
-            + shown_seats("adv", CABINET_SLOTS) + shown_seats("hc", MEMBER_SLOTS) + heads_shown
+            + shown_seats("adv", CABINET_SLOTS) + shown_seats("hc", MEMBER_SLOTS) + heads_shown + "mod1440_gv_heads_copy = yes\n"
             # E7: the chiefs and the members of the high command who are unit leaders: the game draws their faces
             + "".join("clear_array = mod1440_gv_of_%d_ul\n" % k + iff(is_one("mod1440_gv_of_%d_has" % k), unit_leader_into(
                 "mod1440_gv_of_%d" % k, "mod1440_gv_of_%d_ul" % k, "gv_ul")) for k in range(len(OFFICES)))
             + "".join("clear_array = mod1440_gv_hc_%d_ul\n" % k + iff("check_variable = { mod1440_gv_hc^num > %d }" % k, unit_leader_into(
                 "mod1440_gv_hc_d^%d" % k, "mod1440_gv_hc_%d_ul" % k, "gv_ul")) for k in range(MEMBER_SLOTS))
-            + laws + support + pad([("mod1440_ct", 0)], len(KINDS) + 8) + sums + setv("mod1440_gv_begun", 1)
+            + laws + support + parties + diary + intel
+            + pad([("mod1440_ct", 0)], len(KINDS) + 8) + sums + setv("mod1440_gv_begun", 1)
             + stamped("mod1440_gv_adv_ver", adv_version)
-            + "mod1440_gv_marks = yes\n")))
-    return gui, script, script_effects
+            # the record of party support of a save of an earlier build, and the chart once for this build
+            + iff("check_variable = { mod1440_gv_pp_0^num < mod1440_h_date^num }", "mod1440_gv_pp_fill = yes\n" + setv("mod1440_gv_chart_v", 0))
+            + iff("NOT = { check_variable = { mod1440_gv_chart_v = %d } }" % GV_CHART_VER, setv("mod1440_gv_heads_f", 1) + "mod1440_gv_chart = yes\n")
+            + "mod1440_gv_marks = yes\n"))
+        + record + chart + panel)
+
+
+def government_hooks():
+    """E3 round 2: the election's date for the chart and the heads panel, beside E1's line (frame(), unchanged)."""
+    return {"on_new_term_election": iff("is_ai = no", "mod1440_gv_election = yes\n")}
 
 
 # ---------------------------------------------------------------- Wars (E4), with the counters of the air war (E5)
@@ -5027,42 +5917,483 @@ OFFICERS_CHECKLIST = [
 # --- end E2 round 2 ---
 
 
-def government_scene_hide():
-    """What script hides in the government scene (the sample state of E3 check 1)."""
-    hide = ["gv_leader_since", "gv_next", "gv_faction_none", "gv_sub_none", "gv_hc_none"]
-    hide += ["gv_group_%s" % g for i, g in IDEOLOGIES if g != "fascism"] + ["gv_p_%d_pick" % n for n in range(1, 4)]
-    hide += ["gv_rul_0_g%d" % g for g in (2, 3, 4)] + ["gv_rul_0_t%s" % t for t in "abc"]
-    for k in range(1, HEADS_SLOTS):
-        hide += ["gv_rul_%d%s" % (k, part) for part in ("", "_face", "_bg")] + ["gv_rul_%d_g%d" % (k, g) for g in range(1, 5)]
-        hide += ["gv_rul_%d_t%s" % (k, t) for t in "abcd"]
-    seat = ("_face", "_big", "_name", "_role", "_since", "_since_old")
+# --- E3 round 2 --- the Government page's scene: the user's campaign on the day the build comes (Germany, 24 November 1939,
+# party support back-filled from National Figures' series 30), a new game on 1 May 1943 after a change of the ruling party at
+# ten years (state "later"), and the heads panel open over it (state "panel"), as the design's figures draw them
+# (scratch/phases/E3/work/make_layout.py: the same made-up support).
+GS_KEYS = [(0, 40, 35, 10, 15), (8, 52, 22, 6, 20), (16, 63, 6, 2, 29), (28, 70, 0.4, 0.3, 29.3), (46, 72.4, 0.3, 0.2, 27.1),
+           (66, 76, 0.4, 0.3, 23.3), (78, 54, 1, 1, 44), (80, 44, 3, 1, 52), (88, 38, 9, 3, 50)]
+GS_GROUPS = [group for word, group in IDEOLOGIES]
 
-    def seats(prefix, filled, count):
-        out = []
-        for k in range(count):
-            if k < filled:
-                out += ["gv_%s_%d_big" % (prefix, k), "gv_%s_%d_since_old" % (prefix, k)]
+
+def gs_series(n, keys, seed=11):
+    """Made-up party support from January 1936, month by month, summing to 100 (the design's figures)."""
+    import random
+    rng = random.Random(seed)
+    out = dict((g, []) for g in GS_GROUPS)
+    for i in range(n):
+        for (m0, *a), (m1, *b) in zip(keys, keys[1:]):
+            if m0 <= i <= m1:
+                t = (i - m0) / float(m1 - m0 or 1)
+                t = t * t * (3 - 2 * t)
+                vals = [x + (y - x) * t for x, y in zip(a, b)]
+                break
+        vals = [max(0.0, v + rng.uniform(-1.2, 1.2) * (v > 3)) for v in vals]
+        s = sum(vals)
+        for g, v in zip(GS_GROUPS, vals):
+            out[g].append(round(100 * v / s, 1))
+    return out
+
+
+def gs_states():
+    page = gs_series(47, GS_KEYS[:5])
+    page["fascism"][-1], page["neutrality"][-1], page["democratic"][-1], page["communism"][-1] = 72.4, 27.1, 0.3, 0.2
+    later = gs_series(89, GS_KEYS)
+    return {
+        "page": {"n": 47, "span": 60, "series": page, "full_from": 46, "ruling": ["fascism"] * 47, "heads": [(0, 47, "Adolf Hitler")],
+                 "elections": [], "start_year": 1936},
+        "later": {"n": 89, "span": 120, "series": later, "full_from": 0, "ruling": ["fascism"] * 80 + ["neutrality"] * 9,
+                  "heads": [(0, 79, "Adolf Hitler"), (79, 80, "Ludwig Beck"), (80, 89, "Kurt von Hammerstein-Equord")], "elections": [87],
+                  "start_year": 1936},
+    }
+
+
+def gs_chart(st):
+    """The chart of state st as script draws it: rows, only, place and hide of the dots, the band, the years, the spans,
+    the ticks and the shares at the lines' ends (the card's coordinates, mod1440_gv_chart)."""
+    span, n = st["span"], st["n"]
+    step, dot = dict((s, (p, d)) for s, p, d, c in GV_RANGES)[span]
+    first = max(0, n - span)
+    shown = n - first
+    px0, py0 = GV_PLOT[0] - GV_CARDS["parties"][0], GV_PLOT[1] - GV_CARDS["parties"][1]
+    top = GV_PLOT[3] - dot // 2
+    at = (step - dot) // 2
+    rows, only, place, hide, windows = {}, {}, {}, [], []
+    for s, p_, d_, c_ in GV_RANGES:
+        for p in ["0", "1", "2", "3", "r"]:
+            rows["gv_dots_%s_%d" % (p, s)] = shown if s == span else 0
+        rows["gv_band_%d" % s] = shown if s == span else 0
+    for p, g in enumerate(GS_GROUPS):
+        row = "mod1440_records_gv_dot_%d_%d" % (p, span)
+        drawn, pos = [], []
+        for k in range(shown):
+            i = first + k
+            if i < st["full_from"] and g != st["ruling"][i]:
+                continue
+            if g == st["ruling"][i]:
+                continue
+            drawn.append(k)
+            pos.append([at, round(top - st["series"][g][i] * GV_PX)])
+        only[row] = {"gv_dot%d_%d" % (p, span): drawn}
+        place[row] = {"gv_dot%d_%d" % (p, span): pos}
+    row = "mod1440_records_gv_dot_r_%d" % span
+    only[row], place[row] = {}, {}
+    for gi, g in enumerate(GS_GROUPS, start=1):
+        widget = "gv_dotr%d_%d" % (gi, span)
+        ks = [k for k in range(shown) if st["ruling"][first + k] == g]
+        only[row][widget] = ks
+        place[row][widget] = [[at, round(top - st["series"][g][first + k] * GV_PX)] for k in ks]
+    row = "mod1440_records_gv_band_%d" % span
+    only[row] = dict(("gv_cell%d_%d" % (gi, span), [k for k in range(shown) if st["ruling"][first + k] == g]) for gi, g in enumerate(GS_GROUPS, start=1))
+    windows += [{"name": "mod1440_records_gv_dot_%s_%d" % (p, s), "skip": True} for s, a, b, c in GV_RANGES for p in ("0", "1", "2", "3", "r")]
+    windows += [{"name": "mod1440_records_gv_band_%d" % s, "skip": True} for s, a, b, c in GV_RANGES]
+    card_place, samples = {}, {}
+    # the years
+    slot = 0
+    for k in range(1, shown):
+        i = first + k
+        if i % 12 == 0 and slot < GV_YEARS:
+            card_place["gv_year_%d" % slot] = [px0 + k * step - 20, 456 - GV_CARDS["parties"][1]]
+            card_place["gv_ymark_%d" % slot] = [px0 + k * step, py0 + GV_PLOT[3]]
+            samples["gv_year_%d" % slot] = str(st["start_year"] + i // 12)
+            slot += 1
+    hide += ["gv_year_%d" % k for k in range(slot, GV_YEARS)] + ["gv_ymark_%d" % k for k in range(slot, GV_YEARS)]
+    # who governed: his name where the span is wide enough
+    s = 0
+    for start, end, name in st["heads"]:
+        a, b = max(start, first) - first, min(end, n) - first
+        if b <= 0:
+            continue
+        card_place["gv_span_%d" % s] = [px0 + 6 + a * step, GV_BAND_Y - GV_CARDS["parties"][1]]
+        if (b - a) * step < GV_SPAN_NAME:
+            hide.append("gv_span_%d" % s)
+        else:
+            samples["gv_span_%d" % s] = name
+        s += 1
+    hide += ["gv_span_%d" % k for k in range(s, GV_SPANS)]
+    # the elections
+    t = 0
+    for e in st["elections"]:
+        if e > first:
+            card_place["gv_tick_%d" % t] = [px0 - 1 + (e - first) * step, GV_BAND_Y - GV_CARDS["parties"][1] - 4]
+            t += 1
+    hide += ["gv_tick_%d" % k for k in range(t, GV_TICKS)]
+    # the shares at the lines' ends, pushed apart
+    foot = py0 + GV_PLOT[3]
+    last = dict((g, st["series"][g][n - 1]) for g in GS_GROUPS)
+    centre = dict((g, foot - v * GV_PX) for g, v in last.items())
+    low = foot + 4
+    for g in sorted(GS_GROUPS, key=lambda g: -centre[g]):
+        y = min(centre[g], low)
+        centre[g] = y
+        low = y - GV_LABEL_GAP
+    lx = px0 + shown * step + step // 2 + dot // 2 + 6 - step
+    for p, g in enumerate(GS_GROUPS):
+        card_place["gv_end_%d_sw" % p] = [lx, round(centre[g] - 3)]
+        card_place["gv_end_%d" % p] = [lx + 9, round(centre[g] - 11)]
+        card_place["gv_end_%d_lt" % p] = [lx + 9, round(centre[g] - 11)]
+        samples["gv_end_%d" % p] = "%d%%" % last[g]
+        hide.append("gv_end_%d" % p if last[g] < 1 else "gv_end_%d_lt" % p)
+    return rows, only, place, hide, card_place, samples, windows
+
+
+def gs_parties(st):
+    """The table and the results bar: the rows moved to their ranks, the bar's layers, today's shares and the change in a year."""
+    n = st["n"]
+    now = dict((g, st["series"][g][n - 1]) for g in GS_GROUPS)
+    order = sorted(GS_GROUPS, key=lambda g: (-now[g], GS_GROUPS.index(g)))
+    rank = dict((g, r) for r, g in enumerate(order))
+    first_row = 218 - GV_CARDS["parties"][1]
+    hx = 568 - GV_CARDS["parties"][0]
+    place, hide, fills, samples = {}, [], {}, {}
+    xs = {"sw": hx, "ic": hx + 12, "name": hx + 52, "who": hx + 52, "now": hx + 264, "nows": hx + 264, "dy": hx + 320, "dyn": hx + 320}
+    offs = {"sw": 4, "ic": 7, "name": 2, "who": 24, "now": 12, "nows": 12, "dy": 13, "dyn": 13}
+    names = {"fascism": ("Nationalsozialistische Deutsche Arbeiterpartei", "Adolf Hitler"),
+             "democratic": ("Deutsche Zentrumspartei - Sozialdemokratische Partei Deutschlands", "Konrad Adenauer"),
+             "communism": ("Kommunistische Partei Deutschlands - Kommunistische Partei Opposition", "Wilhelm Pieck"),
+             "neutrality": ("Deutschnationale Volkspartei", "Kurt von Hammerstein-Equord")}
+    for p, g in enumerate(GS_GROUPS):
+        y = first_row + GV_SEAT * rank[g]
+        for part, x in xs.items():
+            place["gv_pt_%d_%s" % (p, part)] = [x, y + offs[part]]
+        samples["gv_pt_%d_name" % p] = names[g][0]
+        samples["gv_pt_%d_who" % p] = "§Y%s§!" % names[g][1]
+        samples["gv_pt_%d_now" % p] = "%d%%" % round(now[g])
+        samples["gv_pt_%d_nows" % p] = "%.1f%%" % now[g]
+        hide.append("gv_pt_%d_%s" % (p, "nows" if now[g] >= 1 else "now"))
+        back = st["series"][g][n - 13] if n > 12 and (n - 13) >= st["full_from"] else None
+        if back is None:
+            hide.append("gv_pt_%d_dy" % p)
+        else:
+            samples["gv_pt_%d_dy" % p] = "%+.1f" % (now[g] - back)
+            hide.append("gv_pt_%d_dyn" % p)
+        cum = sum(now[h] for h in GS_GROUPS if rank[h] <= rank[g])
+        for r in range(4):
+            name = "gv_today_%d_%d" % (r, p)
+            if r != rank[g]:
+                hide.append(name)
             else:
-                out += ["gv_%s_%d%s" % (prefix, k, part) for part in seat] + ["gv_%s_%d_bg" % (prefix, k)]
-        return out
+                fills[name] = [min(1.0, cum / 100.0)]
+    place["gv_pt_pick"] = [hx, first_row + GV_SEAT * rank[st["ruling"][-1]]]
+    return place, hide, fills, samples
 
-    hide += seats("adv", 2, CABINET_SLOTS) + seats("hc", 1, MEMBER_SLOTS)
-    # E7: Fritsch (chief of the army) and Rundstedt (high command) are generals: the game draws their faces in the
-    # place of the large portrait, and the table's small one is hidden
-    hide += ["gv_of_0_face", "gv_hc_0_face"]
-    hide += ["gv_adv_none_%d" % k for k in range(CABINET_SLOTS) if k != 2]
-    hide += ["gv_of_0_none", "gv_of_0_vacant", "gv_of_0_big", "gv_of_0_since_old"]
-    for k in range(1, len(OFFICES)):
-        hide += ["gv_of_%d%s" % (k, part) for part in seat]
+
+GS_CABINET = [("Martin Heidegger", "Post-Metaphysical Philosopher", "6 July, 1936", None),
+              ("Ludwig Mueller", "Reichsbischof", "5 February, 1936", None),
+              ("Walther Funk", "Reich Minister of Economy", "15 April, 1936", "GFX_idea_walther_funk"),
+              ("Fritz Todt", "Reich Engineer", "2 March, 1937", "GFX_portrait_GER_fritz_todt_small"),
+              ("Konstantin von Neurath", "Reich Minister of Foreign Affairs", "1 January, 1936", "GFX_portrait_GER_konstantin_von_neurath_small")]
+GS_HIGH = [("Wilhelm Keitel", "Army Drill (Expert)", "4 March, 1936", UNKNOWN),
+           ("Erich Raeder", "Decisive Battle (Expert)", "8 August, 1936", "GFX_portrait_GER_erich_raeder"),
+           ("Albert Kesselring", "Air Reformer (Expert)", "12 May, 1936", "GFX_portrait_GER_albert_kesselring"),
+           ("Heinz Guderian", "Blitzkrieg Theorist", "9 December, 1938", "GFX_portrait_GER_heinz_guderian"),
+           ("Hugo Sperrle", "Close Air Support (Expert)", "20 October, 1939", UNKNOWN),
+           ("Ferdinand Schörner", "Infantry (Expert)", "8 July, 1937", UNKNOWN),
+           ("Erwin Rommel", "Armor (Genius)", "9 April, 1939", "GFX_portrait_GER_erwin_rommel")]
+GS_DIARY = [("1939.10.20", "Appointed", "Hugo Sperrle"), ("1939.4.9", "Appointed", "Erwin Rommel"), ("1938.12.9", "Appointed", "Heinz Guderian"),
+            ("1937.7.8", "Appointed", "Ferdinand Schörner"), ("1937.3.2", "Appointed", "Fritz Todt"), ("1937.3.2", "Left office", "Hjalmar Schacht"),
+            ("1936.8.8", "Appointed", "Erich Raeder"), ("1936.7.6", "Appointed", "Martin Heidegger")]
+GS_UPGRADES_DONE = {0, 1, 6, 7, 11, 16}
+GS_OPERATIVES = [("Erwin Lahousen", "Wotan", "build_intel_network", "Kent", "ENG", "network 41%"),
+                 ("Nikolaus Ritter", "Dr. Rantzau", "build_intel_network", "Ile de France", "FRA", "network 64%"),
+                 ("Hermann Giskes", "Falke", "counter_intelligence", "German Reich", "GER", None),
+                 ("Paul Thümmel", "Holm", "propaganda", "Muntenia", "ROM", "network 18%")]
+GS_KNOW = [("United Kingdom", "34%", "22%", "18%", "25%"), ("France", "41%", "36%", "12%", "28%"), ("Soviet Union", "9%", "6%", "3%", "4%")]
+GS_HEADS = [("Kurt von Hammerstein-Equord", 4, "c", "since 3 September, 1942", "240 days", "38% to 61%", "71% to 44%", "1", True),
+            ("Ludwig Beck", 4, "a", "12 August, 1942 – 3 September, 1942", "22 days", "29% to 38%", "78% to 71%", "0", True),
+            ("Adolf Hitler", 1, "b", "before the record – 12 August, 1942", "2415 days on record", None, None, "0", False)]
+
+
+def gs_panel_names():
+    """Every widget of the heads panel and of Party support's chart, as government() names them (from the written page)."""
+    return GS_NAMES
+
+
+GS_NAMES = {"panel": [], "chart": []}
+
+
+def government_scene_hide(state="page"):
+    """What script hides in the government scene's state: page (24 November 1939), later (1 May 1943), panel."""
+    st = gs_states()["later" if state in ("later", "panel") else "page"]
+    hide = []
+    later = state != "page"
+    # the head of government
+    hide += ["gv_face_fb", "gv_face_fb_flag"] + ["gv_face_fb_g%d" % g for g in range(1, 5)] if not later else ["gv_face"] + [
+        "gv_face_fb_g%d" % g for g in (1, 2, 3)]
+    hide += ["gv_leader_since"] if not later else ["gv_leader_since_old"]
+    hide += ["gv_next"] if not later else ["gv_next_none"]
+    if state == "panel":
+        hide += GS_NAMES["chart"]
+    else:
+        hide += GS_NAMES["panel"]
+        _rows, _only, _place, chart_hide, _cp, _s, _w = gs_chart(st)
+        hide += chart_hide
+        hide += ["gv_legend_bf" if later else "gv_legend", "gv_chart_none"]
+        _p, party_hide, _f, _s2 = gs_parties(st)
+        hide += party_hide
+    if state == "panel":
+        hide += ["gv_heads_newer", "gv_heads_older"]
+        for k in range(HEADS_ROWS):
+            p = "gv_hd_%d" % k
+            every = [p, p + "_face", p + "_fb", p + "_days", p + "_rec", p + "_el"] + ["%s_t%s" % (p, t) for t in "abcd"]
+            every += ["%s_pt%d" % (p, g) for g in range(1, 5)] + ["%s_gi_g%d" % (p, g) for g in range(1, 5)] + ["%s_fbg_g%d" % (p, g) for g in range(1, 5)]
+            every += ["%s_%s%s" % (p, name, s) for name in ("stab", "ws") for s in ("", "_nr")]
+            if k >= len(GS_HEADS):
+                hide += every
+                continue
+            name, g, t, words, days, stab, ws, el, fb = GS_HEADS[k]
+            keep = {p, p + "_el", "%s_t%s" % (p, t), "%s_pt%d" % (p, g), "%s_gi_g%d" % (p, g)}
+            keep |= {p + "_fb", "%s_fbg_g%d" % (p, g)} if fb else {p + "_face"}
+            keep.add(p + ("_rec" if t == "b" else "_days"))
+            keep |= {"%s_stab_nr" % p, "%s_ws_nr" % p} if stab is None else {"%s_stab" % p, "%s_ws" % p}
+            hide += [w for w in every if w not in keep]
+    # the cabinet: Heidegger and Mueller without a picture (decision 2), Funk, Todt and Neurath by their small portraits
+    for k, (name, role, since, sprite) in enumerate(GS_CABINET):
+        hide += ["gv_adv_%d_big" % k, "gv_adv_%d_since_old" % k] + (["gv_adv_%d_face" % k] if sprite is None else ["gv_adv_%d_none" % k])
+    hide.append("gv_adv_none")
+    # the high command: every chief and member a general or an admiral, so the game draws their faces
+    for k in range(len(OFFICES)):
+        hide += ["gv_of_%d_%s" % (k, part) for part in ("face", "big", "none", "since_old", "slot", "vacant")]
+    for m in range(MEMBER_SLOTS):
+        hide += ["gv_hc_%d_%s" % (m, part) for part in ("face", "big", "none", "since_old")]
+    # the diary: every line names a person
+    hide += ["gv_dl_none"] + ["gv_dl_%d_b" % k for k in range(GV_DIARY)]
+    # the realm: in the Axis, two subjects, no overlord
+    hide += ["gv_faction_none", "gv_sub_none", "gv_sub_head_r", "gv_realm_right_m1s1", "gv_realm_right_m1sn", "gv_realm_right_mns1"]
+    # the agency: founded during the record; six upgrades at their highest level; the department active, decrypting
+    hide += ["gv_ag_none", "gv_ag_since_old", "gv_op_none", "gv_cr_head_r0", "gv_cr_dec_none"]
+    hide += ["gv_up_%d_dim" % n for n in GS_UPGRADES_DONE]
     return hide
 
 
 def government_face_rows():
-    """E7: the rows of the lists of the game's faces in the government scene: the chief of the army and the first
-    member of the high command are generals (Fritsch, Rundstedt)."""
-    rows = dict(("gv_of_%d_gface_grid" % k, 1 if k == 0 else 0) for k in range(len(OFFICES)))
-    rows.update(("gv_hc_%d_gface_grid" % k, 1 if k == 0 else 0) for k in range(MEMBER_SLOTS))
+    """E7: the rows of the lists of the game's faces: every chief and member of the sample is a unit leader."""
+    rows = dict(("gv_of_%d_gface_grid" % k, 1) for k in range(len(OFFICES)))
+    rows.update(("gv_hc_%d_gface_grid" % k, 1) for k in range(MEMBER_SLOTS))
     return rows
+
+
+def government_samples(state="page"):
+    """The texts of the page in a state, by widget."""
+    later = state != "page"
+    st = gs_states()["later" if later else "page"]
+    out = {"gv_leader": "Adolf Hitler" if not later else "Kurt von Hammerstein-Equord",
+           "gv_party": "§YNSDAP§!, Nazism" if not later else "§YDNVP§!, Conservatism",
+           "gv_party_long": "Nationalsozialistische Deutsche Arbeiterpartei" if not later else "Deutschnationale Volkspartei",
+           "gv_leader_since": "since 3 September, 1942", "gv_rec": "1422 days" if not later else "240 days",
+           "gv_election": "1:00, 5 March, 1933" if not later else "1:00, 7 March, 1943", "gv_next": "in 1407 days",
+           "gv_support": "72.4%" if not later else "50.0%", "gv_stab": "71%" if not later else "61%", "gv_ws": "62%" if not later else "44%"}
+    laws = [("War Economy", "Limited Exports", "Limited Conscription"), ("Partial Mobilisation", "Export Focus", "Limited Conscription")][later]
+    for n, words in enumerate(laws):
+        out["gv_law_%d" % n] = "§Y%s§!" % words
+    if state != "panel":
+        _rows, _only, _place, _hide, _cp, samples, _w = gs_chart(st)
+        out.update(samples)
+        _p, _h, _f, samples = gs_parties(st)
+        out.update(samples)
+        out.update({"gv_since_el": "0" if not later else "1", "gv_since_ch": "0" if not later else "1",
+                    "gv_since_hi": "74.1%, 1939.6.1" if not later else "77.0%, 1941.6.1", "gv_since_mo": "47, 1 in full" if not later else "89, 89 in full",
+                    "gv_legend_bf": "§gBefore 1 November, 1939 the record kept the ruling party only (National Figures, series 30).§!"})
+    else:
+        for k, (name, g, t, words, days, stab, ws, el, fb) in enumerate(GS_HEADS):
+            p = "gv_hd_%d" % k
+            out[p] = "§Y%s§!" % name
+            out["%s_pt%d" % (p, g)] = ["NSDAP, Fascist", "DNVP, Conservatism"][g == 4]
+            out["%s_t%s" % (p, t)] = words
+            out[p + ("_rec" if t == "b" else "_days")] = "§g%s§!" % days
+            if stab:
+                out[p + "_stab"], out[p + "_ws"] = stab, ws
+            out[p + "_el"] = el
+    for k, (name, role, since, sprite) in enumerate(GS_CABINET):
+        out.update({"gv_adv_%d_name" % k: "§Y%s§!" % name, "gv_adv_%d_role" % k: role, "gv_adv_%d_since" % k: "since " + since})
+    out["gv_cabinet_right"] = "5 in office"
+    # the heads panel's party lines and the band's names: as the game writes them for a head (short party name), whose
+    # rows the panel draws only where the record has one
+    for k in range(HEADS_ROWS):
+        for g, (word, group) in enumerate(IDEOLOGIES, start=1):
+            out.setdefault("gv_hd_%d_pt%d" % (k, g), "DNVP, %s" % word)
+    for s in range(GV_SPANS):
+        out.setdefault("gv_span_%d" % s, "Adolf Hitler")
+    for k, (name, role, since, sprite) in enumerate(GS_HIGH):
+        p = "gv_of_%d" % k if k < len(OFFICES) else "gv_hc_%d" % (k - len(OFFICES))
+        out.update({p + "_name": "§Y%s§!" % name, p + "_role": role, p + "_since": "since " + since})
+    out["gv_high_right"] = "7 in office"
+    for k, (date, words, who) in enumerate(GS_DIARY):
+        out.update({"gv_dl_%d_d" % k: date, "gv_dl_%d" % k: words, "gv_dl_%d_a" % k: "§Y%s§!" % who})
+    out.update({"gv_realm_right_mnsn": "3 members, 2 subjects", "gv_faction": "Axis", "gv_faction_lead": "led by §YThe German Reich§!",
+                "gv_ag_name": "Intelligence agency: §YAbwehr§!", "gv_ag_since": "founded 12 March, 1937",
+                "gv_up_head_r": "%d of %d at their highest level" % (len(GS_UPGRADES_DONE), len(GV_UPGRADES)),
+                "gv_op_h0": "Operatives  4 of 5", "gv_cr_enc": "50250", "gv_cr_def": "9", "gv_cr_dec": "§YUnited Kingdom§!  64%", "gv_cr_brk": "1"})
+    for k, (name, c, a, nv, ai) in enumerate(GS_KNOW):
+        out.update({"gv_kn_%d" % k: "§Y%s§!" % name, "gv_kn_%d_c" % k: c, "gv_kn_%d_a" % k: a, "gv_kn_%d_n" % k: nv, "gv_kn_%d_i" % k: ai})
+    return out
+
+
+def government_scene(place, crop, shot, back, setup):
+    window = "mod1440_records_gv"
+    face_rows = government_face_rows()
+    states = {}
+    for state in ("page", "later", "panel"):
+        st = gs_states()["later" if state != "page" else "page"]
+        rows = dict({"gv_fac_grid": 3, "gv_sub_grid": 2, "gv_op_grid": len(GS_OPERATIVES)}, **face_rows)
+        only, row_place, card_place, fills, windows = {}, {}, {}, {}, []
+        if state != "panel":
+            chart_rows, only, row_place, _h, card_place, _s, windows = gs_chart(st)
+            rows.update(chart_rows)
+            party_place, _h2, fills, _s2 = gs_parties(st)
+            card_place.update(party_place)
+        else:
+            rows.update(("gv_dots_%s_%d" % (p, s), 0) for s, a, b, c in GV_RANGES for p in ("0", "1", "2", "3", "r"))
+            rows.update(("gv_band_%d" % s, 0) for s, a, b, c in GV_RANGES)
+            windows = [{"name": "mod1440_records_gv_dot_%s_%d" % (p, s), "skip": True} for s, a, b, c in GV_RANGES for p in ("0", "1", "2", "3", "r")]
+            windows += [{"name": "mod1440_records_gv_band_%d" % s, "skip": True} for s, a, b, c in GV_RANGES]
+        frames = {"gv_heads_btn": 2 if state == "panel" else 1}
+        frames.update(("gv_range_%d" % s, 2 if s == st["span"] else 1) for s, a, b, c in GV_RANGES)
+        images = {"gv_face": "GFX_portrait_GER_adolf_hitler"}
+        for k, (name, role, since, sprite) in enumerate(GS_CABINET):
+            if sprite:
+                images["gv_adv_%d_face" % k] = sprite
+        for n, sprite in enumerate([("GFX_idea_war_economy", "GFX_idea_limited_exports", "GFX_idea_limited_conscription"),
+                                    ("GFX_idea_partial_economic_mobilisation", "GFX_idea_export_focus", "GFX_idea_limited_conscription")][state != "page"]):
+            images["gv_law_%d_pic" % n] = sprite
+        op_only = {"gv_op_home": [2], "gv_op_net": [0, 1, 3], "gv_op_idle": [], "gv_op_where": [0, 1, 3], "gv_op_country": [2]}
+        for mission, frame_n, title in MISSIONS:
+            ks = [k for k, o in enumerate(GS_OPERATIVES) if o[2] == mission]
+            op_only["gv_op_m_" + mission] = ks
+            op_only["gv_op_t_" + mission] = ks
+        op_only["gv_op_t_none"] = []
+        states[state] = {"rows": rows, "only": dict(only, mod1440_records_gv_op_row=op_only), "place": dict(row_place, **{window: card_place}),
+                         "hide": {window: government_scene_hide(state)}, "fills": {window: fills}, "frames": {window: frames},
+                         "images": {window: images,
+                                    "mod1440_records_gv_gface_row": {"gv_gface": [sprite for name, role, since, sprite in GS_HIGH]},
+                                    "mod1440_records_gv_op_row": {"gv_op_face": ["GFX_portrait_unknown"] * 4}},
+                         "samples": {window: government_samples(state),
+                                     "mod1440_records_gv_op_row": {
+                                         "gv_op_name": ["§Y%s§!" % o[0] for o in GS_OPERATIVES], "gv_op_country": ["§Y%s§!" % o[3] for o in GS_OPERATIVES if not o[5]],
+                                         "gv_op_where": ["§Y%s§!" % o[3] for o in GS_OPERATIVES if o[5]],
+                                         "gv_op_net": ["§g%s§!" % o[5] for o in GS_OPERATIVES if o[5]]},
+                                     "mod1440_records_fac_row": {"gv_fac_row_name": ["German Reich", "German East Indies", "Gau Luxemburg"]},
+                                     "mod1440_records_sub_row": {"gv_sub_row_name": ["Gau Luxemburg", "German East Indies"]}}}
+        if state == "page":
+            states[state]["windows"] = windows
+    default = states["page"]
+    rows_windows = [{"name": "mod1440_records_%s_row" % n, "skip": True} for n in ("fac", "sub", "gv_op")]
+    rows_windows.append({"name": "mod1440_records_gv_gface_row", "skip": True, "images": default["images"]["mod1440_records_gv_gface_row"]})
+    return {
+        "phase": "E3", "file": "mod1440_records.gui", "screenshot": shot,
+        "windows": [dict(place, name=window, rows=default["rows"],
+                         listRows=dict({"gv_fac_grid": "mod1440_records_fac_row", "gv_sub_grid": "mod1440_records_sub_row", "gv_op_grid": "mod1440_records_gv_op_row"},
+                                       **dict(dict((grid, "mod1440_records_gv_gface_row") for grid in face_rows),
+                                              **dict(("gv_dots_%s_%d" % (p, s), "mod1440_records_gv_dot_%s_%d" % (p, s)) for s, a, b, c in GV_RANGES
+                                                     for p in ("0", "1", "2", "3", "r")),
+                                              **dict(("gv_band_%d" % s, "mod1440_records_gv_band_%d" % s) for s, a, b, c in GV_RANGES))),
+                         hide=default["hide"][window], place=default["place"][window], fills=default["fills"][window],
+                         frames=default["frames"][window], images=default["images"][window],
+                         _note="Germany on 24 November 1939, the day the build comes to the user's save: party support back-filled from "
+                               "National Figures' series 30 (the months before November 1939 hold the ruling party only), Heidegger and "
+                               "Mueller without a picture (decision 2), every chief and member a general or an admiral, six upgrades done.")]
+                   + [dict(w, **{k: v for k, v in (("only", default["only"].get(w["name"])), ("place", default["place"].get(w["name"]))) if v})
+                      for w in default["windows"]]
+                   + [dict(w, only=default["only"]["mod1440_records_gv_op_row"]) if w["name"] == "mod1440_records_gv_op_row" else w for w in rows_windows],
+        "samples": default["samples"],
+        "states": [dict(dict((k, v) for k, v in states[name].items() if k != "windows"), name=name, _note=note) for name, note in (
+            ("later", "A new game on 1 May 1943 at ten years: the conservatives took power in August 1942 (Beck, then Hammerstein-Equord); "
+                      "an election in March 1943 (the tick); the head of government without a portrait (E4's flag box)."),
+            ("panel", "The same day with the heads panel open over Party support: three terms, Hitler's not recorded before the build."))],
+        "setup": setup,
+        "teardown": [{"clickWidget": "mod1440_records_gv/gv_tab_0", "wait": 0.8}] + back,
+        "expect": ["mod1440_records_gv/gv_close", "mod1440_records_gv/gv_heads_btn"],
+        "crop": crop,
+        # the long names of the parties are cut in their fixed boxes (W28; design.json H10: the full name in the politics panel)
+        "knownCuts": [{"widget": "%s/%s" % (window, widget), "text": text} for widget, text in (
+            ("gv_party_long", "Nationalsozialistische Deutsche Arbeiterpartei"), ("gv_pt_0_name", "Nationalsozialistische Deutsche Arbeiterpartei"),
+            ("gv_pt_1_name", "Deutsche Zentrumspartei - Sozialdemokratische Partei Deutschlands"),
+            ("gv_pt_2_name", "Kommunistische Partei Deutschlands - Kommunistische Partei Opposition"))]
+        # ... and the game's titles of the operatives' missions in theirs (the design's "Build Intel Net...")
+        + [{"widget": "mod1440_records_gv_op_row/gv_op_t_%s" % mission, "text": words} for mission, words in (
+            ("build_intel_network", "Build Intel Network"), ("quiet_network", "Quiet Intel Network"),
+            ("counter_intelligence", "Counter Intelligence"), ("root_out_resistance", "Root Out Resistance"),
+            ("diplomatic_pressure", "Diplomatic Pressure"), ("control_trade", "Control Trade"), ("boost_ideology", "Boost Ideology"))]
+        # ... and a long country name under its flag, one line inside the tile's border (fix round 2)
+        + [{"widget": "mod1440_records_%s_row/gv_%s_row_name" % (n, n), "text": "German East Indies"} for n in ("fac", "sub")],
+        "manual": ["Several years of play with a change of ruling party and an election (the chart's band and tick, the heads panel's terms); "
+                   "the user's own save of 24 November 1939 for the back-fill"],
+        "checklist": GOVERNMENT_CHECKLIST,
+    }
+
+
+GOVERNMENT_CHECKLIST = [
+    "The page in the steel look: seven steel cards (Head of government 540x446 and Party support 1106x446 on top, Cabinet 540x280, "
+    "Faction and subjects 540x352, High command 540x376, In the War Diary 540x256, Intelligence 560x638), 6 apart; the window's ground, "
+    "title strip and tabs unchanged",
+    "Head of government: name in hoi_24header, the flag, party and ideology, the portrait at full size (a head with no portrait the game "
+    "can name: the flag on the dark inset with the group's icon); the banded table of eight rows: Party / In office / On record / Last "
+    "election / Next election against the politics panel, Party support against its pie, Stability and War support against the top bar. "
+    "Fix round 1: no Traits strip (the head of government's traits are not shown)",
+    "Fix round 1, the crash: open the Records on the user's save of 24 August 1940 (Road to 56) and click every tab and the Heads of "
+    "government button: no crash; error.log has no 'Invalid trait ... mod1440_records.txt' and no 'Not a valid value ... mod1440_records.txt' "
+    "line (the operatives' mission quiet_network is accepted)",
+    "Laws in force: each kind with the law's own picture at 22x22 and its name, as the politics panel's law slots",
+    "Party support, the table: the four parties sorted by support, the ruling party on the lighter plate, Now as the politics panel's pie "
+    "(hover it), Year a dash until twelve months are recorded; the results bar above it in the parties' colours, largest first, its "
+    "lengths as the shares (hover each colour)",
+    "The chart, 5 years on the user's save of 24 November 1939 (or a save of the build before, one day played with this build): the "
+    "ruling party's dots back to January 1936 from National Figures' series 30 (compare the dots' heights with National Figures' graph of "
+    "'Ruling party popularity'), the other three only from the first month with this build; the legend 'Before ... the record kept the "
+    "ruling party only'",
+    "Effect mod1440_chk_gv_months (tools/check_effects.py): made-up months of party support over six years with a change of ruling party "
+    "and an election; open the page: dots in the parties' colours (democratic blue 70,90,255, fascist brown 160,85,15 on the chart), the "
+    "ruling party's dots on top, the shares at the lines' ends pushed apart, the years under the plot, the band in the ruling group's "
+    "colour with the head's name where it fits (hover: name and dates), a white tick at the election; click 2 years, 5 years, 10 years: "
+    "each redraws at once (the dots move by their y property in list rows: are they at their heights?), the chosen button gold; no "
+    "stutter while the page is open (fifteen grids of up to 120 dots)",
+    "Heads of government (the button in the Head of government card, frame 2 while open): the panel over Party support, newest first, "
+    "today's head on the lighter plate, In office with days, Stability and War support 'from to' (compare today's head's second number "
+    "with the top bar's stability and war support), 'not recorded' for terms before the build, Elections per term; Party support (or the "
+    "button again) goes back to the chart; effect mod1440_chk_gv_leader: a new row the next day",
+    "Cabinet: five seats of 48, each with portrait, name in yellow, role and 'since'; Heidegger and Mueller (Road to 56) with the unknown "
+    "leader outline on the dark inset, its tooltip 'No picture...'; hover a name: the role and its effects with the game's names and values "
+    "(compare with the advisor's own tooltip in the politics panel; Heidegger: Research Speed +5.00%, Daily Fascism Support +0.03, "
+    "Construction Speed +2.50%)",
+    "The German Reich seat is gone: '5 in office' on the user's save (persons only); effect mod1440_chk_gv_phantom logs every element of "
+    "political_advisor ('MOD1440 gv phantom: ...'): write down what the country element is (its number, name, whether it is ROOT); "
+    "error.log has no 'is_character: Invalid Scope' line in mod1440_p_adv_political_advisor_GER after a day",
+    "Hire and dismiss (mod1440_chk_gv_hire, a day, then mod1440_chk_gv_fire, a day): the seat fills with his portrait, role and date, the "
+    "War Diary card gets 'Appointed' and 'Left office' lines at its top",
+    "High command: seven rows of 48, the four offices then the members; the game's face of each general or admiral (34x46); a vacant office "
+    "shows the politics panel's own empty slot picture and 'vacant'; hover: the chief's trait and its effects",
+    "In the War Diary: the government's eight newest lines (date, icon, words, person); All its lines opens the War Diary on the Government filter",
+    "Faction and subjects: the faction's name, led by, member flags (four to a row, scrolls), Subjects with the overlord or 'none' "
+    "(mod1440_chk_puppet: Denmark as a tile)",
+    "Intelligence (mod1440_chk_gv_agency: an agency, two upgrades, an operative): the agency's name and 'founded <date>'; the 21 upgrade "
+    "pictures, lit at their highest level and dimmed otherwise (compare with the agency's upgrade window; has_done_agency_upgrade of an "
+    "upgrade with levels is true only at the highest); 'N of 21 at their highest level'",
+    "Operatives: a row per operative with the game's face (image = portrait in a list row with change_scope over the game's operatives "
+    "array: is it his face, as in the agency's operatives view?), name, code name, the mission's own icon and title, the flag and state of "
+    "his operation and 'network N%' (compare with the map's intel network coverage of that country); 'at home' for counter-intelligence "
+    "at home; 'not assigned' without a mission",
+    "Cryptology: 'department active' or 'no department'; Our cipher strength and Cryptology defence level against the agency view "
+    "(agency_crypto_defense_level, agency_decrypt_strength); Decrypting: the country and its progress against the cryptology tab's bar; "
+    "Ciphers broken: the War Diary's cipher lines",
+    "What we know of: the enemies at war first, then the majors; Civilian, Army, Navy and Air against the intelligence ledger's values for "
+    "each (write down whether they read as percent)",
+    "The @<country> forms with a country held in a variable (network_national_coverage@var:, decryption_progress@var:, *_intel@var:): "
+    "error.log has no line about them after a daily round, and the numbers are not 0 where the game shows some (else the fallback of build.json)",
+    "error.log: no line that names the mod, no 'Could not find sprite type' (GFX_1440p_GV_*, GFX_1440p_SG_face_none_46x47, "
+    "GFX_1440p_SG_dim_44, GFX_idea_slot_*), no unknown trigger or effect has_done_agency_upgrade (or an 'Invalid' line naming an "
+    "upgrade, an idea or a mission), is_cryptology_department_active, is_decrypting, operative_leader_mission, is_major, every_operative, is_subject",
+]
+# --- end E3 round 2 ---
 
 
 # The War Diary's scene (E1 review): a campaign like the design's (the United States in 1943) drawn row by row. Each
@@ -5676,35 +7007,7 @@ def scenes():
     return {
         "war_diary": diary_scene(place, crop, shot, back),
         "officers": officer_scene(place, crop, shot, back, tab(1)),     # E2 round 2
-        "government": {
-            "phase": "E3", "file": "mod1440_records.gui", "screenshot": shot,
-            "windows": [dict(place, name="mod1440_records_gv", rows=dict({"gv_fac_grid": 1, "gv_sub_grid": 1}, **government_face_rows()),
-                             listRows=dict({"gv_fac_grid": "mod1440_records_fac_row", "gv_sub_grid": "mod1440_records_sub_row"},
-                                           **dict((grid, "mod1440_records_gv_gface_row") for grid in government_face_rows())),
-                             hide=government_scene_hide(),
-                             _note="The sample state of E3 check 1: Todt and Neurath hired, Fritsch chief of the army, Rundstedt in the high command, Denmark a subject; script hides the empty seats, the twins of the dates and the other ideologies.")]
-                       + [{"name": "mod1440_records_%s_row" % n, "skip": True} for n in ("fac", "sub", "gv_gface")],
-            "setup": tab(2),
-            "teardown": [{"clickWidget": "mod1440_records_gv/gv_tab_0", "wait": 0.8}] + back,
-            "expect": ["mod1440_records_gv/gv_close"],
-            "crop": crop,
-            "manual": ["Operatives; an election; a new head of government (a row of the heads card with from and to)"],
-            "checklist": [
-                "The flag, the portrait at full size and the ideology icon of the head of government",
-                "Parties: the ruling party's row is lit; the bars are as long as the shares",
-                "Laws: each kind shows the law's own picture and name",
-                "Hire an advisor (console: effect mod1440_chk_hire, tools/check_effects.py): the next day the Cabinet shows his own small portrait, his role and the date",
-                "High command: Fritsch as chief of the army with his portrait and \"Oberkommando des Heeres\"; the vacant offices with the unknown portrait",
-                "Faction members and subjects as flag tiles, four to a row (puppet Denmark: effect mod1440_chk_puppet)",
-                "Heads of government: Hitler, \"before the record began - today\"",
-                "error.log: no line about is_character, has_character or a sprite of an advisor",
-                # --- E7 ---
-                "E7 with Road to 56, after mod1440_chk_hire and one day: the chief of the army and a member of the high command who are generals "
-                "(Fritsch if the DLC lets him be hired, Rundstedt) show their army portrait at 48x65 in the place of the advisor's small one, the "
-                "same face as in the game's commander picker; mod1440_chk_e7_log: 'chiefs 1 ...' and 'members 1 ...'",
-                "E7: a political advisor (Neurath, Todt) and a theorist keep the advisor's small portrait; the head of government and the heads "
-                "of the record keep their portraits (or the flag box); no unknown man anywhere on the page"],
-        },
+        "government": government_scene(place, crop, shot, back, tab(2)),     # E3 round 2
         "wars": wars_scene(place, crop, shot, back, tab(3)),     # E4 round 2
     }
 

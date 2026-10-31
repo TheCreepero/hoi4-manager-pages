@@ -9209,6 +9209,33 @@ mod1440_ch_remap = {
 	}
 	for_loop_effect = {
 		start = 0
+		end = mod1440_gv_pp_h^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_gv_pp_h^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_gv_pp_h^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_gv_rp^num
+		value = rm_i
+		set_temp_variable = { rm_v = mod1440_gv_rp^rm_i }
+		mod1440_ch_place = yes
+		set_variable = { mod1440_gv_rp^rm_i = rm_to }
+	}
+	for_loop_effect = {
+		start = 0
+		end = mod1440_gv_dl_a^num
+		value = rm_i
+		if = {
+			limit = { check_variable = { mod1440_gv_dl_sa^rm_i = 1 } }
+			set_temp_variable = { rm_v = mod1440_gv_dl_a^rm_i }
+			mod1440_ch_place = yes
+			set_variable = { mod1440_gv_dl_a^rm_i = rm_to }
+		}
+	}
+	for_loop_effect = {
+		start = 0
 		end = mod1440_wr_lu0^num
 		value = rm_i
 		set_temp_variable = { rm_v = mod1440_wr_lu0^rm_i }
@@ -13849,13 +13876,134 @@ mod1440_md_takeback = {
 
 
 # Government: compares who holds each office with yesterday's copy. A new name gets today's date, a line
-# in the War Diary, and his portrait and role; a name that is gone a line. The first run only takes the copy.
-# Then the heads of government since the record began, the laws in force and their pictures, the length
-# of the parties' bars, the leader's portrait, the seats the page shows and the figures of the record.
+# in the War Diary, and his portrait, role and its effects; a name that is gone a line. The first run only takes the
+# copy. Then the heads of government since the record began, the laws in force and their pictures, the parties of
+# today, the leader's portrait and traits, the seats the page shows, the government's lines of the War Diary, the
+# agency, and the figures of the record. E3 round 2: an element of the advisor arrays that is no character is left out.
 mod1440_gv_daily = {
+	if = {
+		limit = { NOT = { check_variable = { mod1440_gv_v3 = 1 } } }
+		set_variable = { mod1440_gv_v3 = 1 }
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_fd^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_fd^num }
+				set_temp_variable = { gv_mv = -1 }
+				if = {
+					limit = { check_variable = { mod1440_gv_rul_old^gv_mi = 1 } }
+					set_temp_variable = { gv_mv = mod1440_ev_since_day }
+				}
+				add_to_array = { mod1440_gv_rul_fd = gv_mv }
+			}
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_td^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_td^num }
+				set_temp_variable = { gv_mv = -1 }
+				add_to_array = { mod1440_gv_rul_td = gv_mv }
+			}
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_s0^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_s0^num }
+				set_temp_variable = { gv_mv = -1 }
+				add_to_array = { mod1440_gv_rul_s0 = gv_mv }
+			}
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_s1^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_s1^num }
+				set_temp_variable = { gv_mv = -1 }
+				add_to_array = { mod1440_gv_rul_s1 = gv_mv }
+			}
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_w0^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_w0^num }
+				set_temp_variable = { gv_mv = -1 }
+				add_to_array = { mod1440_gv_rul_w0 = gv_mv }
+			}
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_w1^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_w1^num }
+				set_temp_variable = { gv_mv = -1 }
+				add_to_array = { mod1440_gv_rul_w1 = gv_mv }
+			}
+		}
+		for_loop_effect = {
+			start = 0
+			end = mod1440_gv_rul^num
+			value = gv_mi
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_e^num < mod1440_gv_rul^num } }
+				set_temp_variable = { gv_mi = mod1440_gv_rul_e^num }
+				set_temp_variable = { gv_mv = 0 }
+				add_to_array = { mod1440_gv_rul_e = gv_mv }
+			}
+		}
+		set_temp_variable = { gv_tk = token:mod1440_ev_election }
+		clear_array = mod1440_gv_el
+		clear_array = mod1440_gv_el_d
+		for_each_loop = {
+			array = mod1440_ev_kind
+			value = gv_mk
+			index = gv_mi
+			if = {
+				limit = { check_variable = { gv_mk = gv_tk } }
+				add_to_array = { mod1440_gv_el = mod1440_ev_date^gv_mi }
+				add_to_array = { mod1440_gv_el_d = mod1440_ev_day^gv_mi }
+			}
+		}
+		while_loop_effect = {
+			limit = { check_variable = { mod1440_gv_el^num > 40 } }
+			remove_from_array = { array = mod1440_gv_el index = 0 }
+			remove_from_array = { array = mod1440_gv_el_d index = 0 }
+		}
+		for_each_loop = {
+			array = mod1440_gv_el
+			value = gv_md
+			set_temp_variable = { gv_mb = 0 }
+			for_each_loop = {
+				array = mod1440_gv_rul
+				index = gv_mk
+				value = gv_mv
+				break = gv_mb
+				if = {
+					limit = { OR = { check_variable = { mod1440_gv_rul_old^gv_mk = 1 } NOT = { check_variable = { mod1440_gv_rul_from^gv_mk > gv_md } } } }
+					add_to_variable = { mod1440_gv_rul_e^gv_mk = 1 }
+					set_temp_variable = { gv_mb = 1 }
+				}
+			}
+		}
+		log = "MOD1440 government: the heads of government of [This.GetTag] got their days, stability and war support (not recorded), [?mod1440_gv_el^num] elections from the log"
+	}
 	set_temp_variable = { gv_stale = 0 }
 	if = {
-		limit = { OR = { NOT = { check_variable = { mod1440_gv_adv_ver = 453881 } } NOT = { check_variable = { mod1440_gv_adv_ver_ep = global.mod1440_tk_ep } } } }
+		limit = { OR = { NOT = { check_variable = { mod1440_gv_adv_ver = 804159 } } NOT = { check_variable = { mod1440_gv_adv_ver_ep = global.mod1440_tk_ep } } } }
 		set_temp_variable = { gv_stale = 1 }
 		for_each_loop = {
 			array = mod1440_gv_rul
@@ -13908,12 +14056,19 @@ mod1440_gv_daily = {
 	}
 	set_temp_variable = { p_face = mod1440_ld_p }
 	set_variable = { mod1440_gv_p = p_face }
+	set_temp_variable = { gv_unk = token:GFX_portrait_unknown }
+	set_variable = { mod1440_gv_pfb = 0 }
+	if = {
+		limit = { check_variable = { mod1440_gv_p = gv_unk } }
+		set_variable = { mod1440_gv_pfb = 1 }
+	}
 	if = {
 		limit = { OR = { check_variable = { mod1440_gv_rul^num < 1 } NOT = { check_variable = { mod1440_gv_rul^0 = country_leader } } } }
 		if = {
 			limit = { check_variable = { mod1440_gv_rul^num > 0 } }
 			set_variable = { mod1440_gv_rul_to^0 = global.date }
 			set_variable = { mod1440_gv_rul_end^0 = 1 }
+			set_variable = { mod1440_gv_rul_td^0 = global.num_days }
 		}
 		set_temp_variable = { gv_g = 0 }
 		if = {
@@ -13933,6 +14088,10 @@ mod1440_gv_daily = {
 			set_temp_variable = { gv_g = 4 }
 		}
 		set_temp_variable = { gv_cl = country_leader }
+		set_temp_variable = { gv_st = stability }
+		multiply_temp_variable = { gv_st = 100 }
+		set_temp_variable = { gv_ws = has_war_support }
+		multiply_temp_variable = { gv_ws = 100 }
 		add_to_array = { array = mod1440_gv_rul value = gv_cl index = 0 }
 		add_to_array = { array = mod1440_gv_rul_from value = mod1440_gv_leader_since index = 0 }
 		add_to_array = { array = mod1440_gv_rul_old value = mod1440_gv_leader_old index = 0 }
@@ -13940,6 +14099,13 @@ mod1440_gv_daily = {
 		add_to_array = { array = mod1440_gv_rul_end value = 0 index = 0 }
 		add_to_array = { array = mod1440_gv_rul_p value = mod1440_gv_p index = 0 }
 		add_to_array = { array = mod1440_gv_rul_g value = gv_g index = 0 }
+		add_to_array = { array = mod1440_gv_rul_fd value = global.num_days index = 0 }
+		add_to_array = { array = mod1440_gv_rul_td value = -1 index = 0 }
+		add_to_array = { array = mod1440_gv_rul_s0 value = gv_st index = 0 }
+		add_to_array = { array = mod1440_gv_rul_s1 value = gv_st index = 0 }
+		add_to_array = { array = mod1440_gv_rul_w0 value = gv_ws index = 0 }
+		add_to_array = { array = mod1440_gv_rul_w1 value = gv_ws index = 0 }
+		add_to_array = { array = mod1440_gv_rul_e value = 0 index = 0 }
 		if = {
 			limit = { check_variable = { mod1440_gv_rul^num > 100 } }
 			set_temp_variable = { gv_last = mod1440_gv_rul^num }
@@ -13951,6 +14117,28 @@ mod1440_gv_daily = {
 			remove_from_array = { array = mod1440_gv_rul_end index = gv_last }
 			remove_from_array = { array = mod1440_gv_rul_p index = gv_last }
 			remove_from_array = { array = mod1440_gv_rul_g index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_fd index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_td index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_s0 index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_s1 index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_w0 index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_w1 index = gv_last }
+			remove_from_array = { array = mod1440_gv_rul_e index = gv_last }
+		}
+	}
+	if = {
+		limit = { check_variable = { mod1440_gv_rul^num > 0 } }
+		set_temp_variable = { gv_st = stability }
+		multiply_temp_variable = { gv_st = 100 }
+		set_temp_variable = { gv_ws = has_war_support }
+		multiply_temp_variable = { gv_ws = 100 }
+		set_variable = { mod1440_gv_rul_s1^0 = gv_st }
+		set_variable = { mod1440_gv_rul_w1^0 = gv_ws }
+		set_variable = { mod1440_gv_leader_rec = -1 }
+		if = {
+			limit = { check_variable = { mod1440_gv_rul_fd^0 > -1 } }
+			set_variable = { mod1440_gv_leader_rec = global.num_days }
+			subtract_from_variable = { mod1440_gv_leader_rec = mod1440_gv_rul_fd^0 }
 		}
 	}
 	set_temp_variable = { gv_hc_n = 0 }
@@ -13986,6 +14174,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_0_p = p_tok }
 			set_variable = { mod1440_gv_of_0_r = p_role }
 			set_variable = { mod1440_gv_of_0_b = p_big }
+			set_variable = { mod1440_gv_of_0_e = p_eff }
+			set_variable = { mod1440_gv_of_0_fb = p_fb }
 		}
 		else_if = {
 			limit = { check_variable = { gv_stale = 1 } }
@@ -13996,6 +14186,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_0_p = p_tok }
 			set_variable = { mod1440_gv_of_0_r = p_role }
 			set_variable = { mod1440_gv_of_0_b = p_big }
+			set_variable = { mod1440_gv_of_0_e = p_eff }
+			set_variable = { mod1440_gv_of_0_fb = p_fb }
 		}
 	}
 	else = {
@@ -14056,6 +14248,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_1_p = p_tok }
 			set_variable = { mod1440_gv_of_1_r = p_role }
 			set_variable = { mod1440_gv_of_1_b = p_big }
+			set_variable = { mod1440_gv_of_1_e = p_eff }
+			set_variable = { mod1440_gv_of_1_fb = p_fb }
 		}
 		else_if = {
 			limit = { check_variable = { gv_stale = 1 } }
@@ -14066,6 +14260,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_1_p = p_tok }
 			set_variable = { mod1440_gv_of_1_r = p_role }
 			set_variable = { mod1440_gv_of_1_b = p_big }
+			set_variable = { mod1440_gv_of_1_e = p_eff }
+			set_variable = { mod1440_gv_of_1_fb = p_fb }
 		}
 	}
 	else = {
@@ -14126,6 +14322,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_2_p = p_tok }
 			set_variable = { mod1440_gv_of_2_r = p_role }
 			set_variable = { mod1440_gv_of_2_b = p_big }
+			set_variable = { mod1440_gv_of_2_e = p_eff }
+			set_variable = { mod1440_gv_of_2_fb = p_fb }
 		}
 		else_if = {
 			limit = { check_variable = { gv_stale = 1 } }
@@ -14136,6 +14334,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_2_p = p_tok }
 			set_variable = { mod1440_gv_of_2_r = p_role }
 			set_variable = { mod1440_gv_of_2_b = p_big }
+			set_variable = { mod1440_gv_of_2_e = p_eff }
+			set_variable = { mod1440_gv_of_2_fb = p_fb }
 		}
 	}
 	else = {
@@ -14196,6 +14396,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_3_p = p_tok }
 			set_variable = { mod1440_gv_of_3_r = p_role }
 			set_variable = { mod1440_gv_of_3_b = p_big }
+			set_variable = { mod1440_gv_of_3_e = p_eff }
+			set_variable = { mod1440_gv_of_3_fb = p_fb }
 		}
 		else_if = {
 			limit = { check_variable = { gv_stale = 1 } }
@@ -14206,6 +14408,8 @@ mod1440_gv_daily = {
 			set_variable = { mod1440_gv_of_3_p = p_tok }
 			set_variable = { mod1440_gv_of_3_r = p_role }
 			set_variable = { mod1440_gv_of_3_b = p_big }
+			set_variable = { mod1440_gv_of_3_e = p_eff }
+			set_variable = { mod1440_gv_of_3_fb = p_fb }
 		}
 	}
 	else = {
@@ -14240,61 +14444,87 @@ mod1440_gv_daily = {
 	clear_array = mod1440_gv_new_p
 	clear_array = mod1440_gv_new_r
 	clear_array = mod1440_gv_new_b
+	clear_array = mod1440_gv_new_e
+	clear_array = mod1440_gv_new_fb
+	set_temp_variable = { gv_me = THIS }
 	for_each_loop = {
 		array = political_advisor
 		value = gv_c
-		set_temp_variable = { gv_since = global.date }
-		set_temp_variable = { gv_old = 1 }
+		set_temp_variable = { gv_isp = 0 }
 		if = {
-			limit = { check_variable = { mod1440_gv_begun = 1 } }
-			set_temp_variable = { gv_old = 0 }
-		}
-		set_temp_variable = { gv_found = 0 }
-		for_each_loop = {
-			array = mod1440_gv_adv
-			value = gv_o
-			index = gv_j
-			if = {
-				limit = { check_variable = { gv_o = gv_c } }
-				set_temp_variable = { gv_found = 1 }
-				set_temp_variable = { gv_since = mod1440_gv_adv_since^gv_j }
-				set_temp_variable = { gv_old = mod1440_gv_adv_old^gv_j }
-				set_temp_variable = { gv_p = mod1440_gv_adv_p^gv_j }
-				set_temp_variable = { gv_r = mod1440_gv_adv_r^gv_j }
-				set_temp_variable = { gv_b = mod1440_gv_adv_b^gv_j }
-			}
-		}
-		if = {
-			limit = { check_variable = { gv_found = 0 } check_variable = { mod1440_gv_begun = 1 } }
-			set_temp_variable = { ev_kind = token:mod1440_ev_appointed }
-			set_temp_variable = { ev_fam = 3 }
-			set_temp_variable = { ev_kid = 25 }
-			set_temp_variable = { ev_sa = 1 }
-			set_temp_variable = { ev_a = gv_c }
-			set_temp_variable = { ev_sb = 0 }
-			set_temp_variable = { ev_b = 0 }
-			set_temp_variable = { ev_so = 0 }
-			set_temp_variable = { ev_o = 0 }
-			set_temp_variable = { ev_p = 0 }
-			set_temp_variable = { ev_x = 0 }
-			set_temp_variable = { ev_n = 0 }
-			mod1440_ev_add = yes
-		}
-		if = {
-			limit = { OR = { check_variable = { gv_found = 0 } check_variable = { gv_stale = 1 } } }
+			limit = { OR = { check_variable = { gv_c > 5368 } check_variable = { gv_c < -21000 } } }
+			set_temp_variable = { gv_pt = gv_me }
 			var:gv_c = {
-				mod1440_p_adv_political_advisor = yes
+				set_temp_variable = { gv_pt = THIS }
 			}
-			set_temp_variable = { gv_p = p_tok }
-			set_temp_variable = { gv_r = p_role }
-			set_temp_variable = { gv_b = p_big }
+			if = {
+				limit = { NOT = { check_variable = { gv_pt = gv_me } } }
+				set_temp_variable = { gv_isp = 1 }
+			}
 		}
-		add_to_array = { mod1440_gv_new = gv_c }
-		add_to_array = { mod1440_gv_new_since = gv_since }
-		add_to_array = { mod1440_gv_new_old = gv_old }
-		add_to_array = { mod1440_gv_new_p = gv_p }
-		add_to_array = { mod1440_gv_new_r = gv_r }
-		add_to_array = { mod1440_gv_new_b = gv_b }
+		if = {
+			limit = { check_variable = { gv_isp = 1 } }
+			set_temp_variable = { gv_since = global.date }
+			set_temp_variable = { gv_old = 1 }
+			if = {
+				limit = { check_variable = { mod1440_gv_begun = 1 } }
+				set_temp_variable = { gv_old = 0 }
+			}
+			set_temp_variable = { gv_found = 0 }
+			set_temp_variable = { gv_e = token:mod1440_tre_none }
+			set_temp_variable = { gv_fb = 0 }
+			for_each_loop = {
+				array = mod1440_gv_adv
+				value = gv_o
+				index = gv_j
+				if = {
+					limit = { check_variable = { gv_o = gv_c } }
+					set_temp_variable = { gv_found = 1 }
+					set_temp_variable = { gv_since = mod1440_gv_adv_since^gv_j }
+					set_temp_variable = { gv_old = mod1440_gv_adv_old^gv_j }
+					set_temp_variable = { gv_p = mod1440_gv_adv_p^gv_j }
+					set_temp_variable = { gv_r = mod1440_gv_adv_r^gv_j }
+					set_temp_variable = { gv_b = mod1440_gv_adv_b^gv_j }
+					set_temp_variable = { gv_e = mod1440_gv_adv_e^gv_j }
+					set_temp_variable = { gv_fb = mod1440_gv_adv_fb^gv_j }
+				}
+			}
+			if = {
+				limit = { check_variable = { gv_found = 0 } check_variable = { mod1440_gv_begun = 1 } }
+				set_temp_variable = { ev_kind = token:mod1440_ev_appointed }
+				set_temp_variable = { ev_fam = 3 }
+				set_temp_variable = { ev_kid = 25 }
+				set_temp_variable = { ev_sa = 1 }
+				set_temp_variable = { ev_a = gv_c }
+				set_temp_variable = { ev_sb = 0 }
+				set_temp_variable = { ev_b = 0 }
+				set_temp_variable = { ev_so = 0 }
+				set_temp_variable = { ev_o = 0 }
+				set_temp_variable = { ev_p = 0 }
+				set_temp_variable = { ev_x = 0 }
+				set_temp_variable = { ev_n = 0 }
+				mod1440_ev_add = yes
+			}
+			if = {
+				limit = { OR = { check_variable = { gv_found = 0 } check_variable = { gv_stale = 1 } } }
+				var:gv_c = {
+					mod1440_p_adv_political_advisor = yes
+				}
+				set_temp_variable = { gv_p = p_tok }
+				set_temp_variable = { gv_r = p_role }
+				set_temp_variable = { gv_b = p_big }
+				set_temp_variable = { gv_e = p_eff }
+				set_temp_variable = { gv_fb = p_fb }
+			}
+			add_to_array = { mod1440_gv_new = gv_c }
+			add_to_array = { mod1440_gv_new_since = gv_since }
+			add_to_array = { mod1440_gv_new_old = gv_old }
+			add_to_array = { mod1440_gv_new_p = gv_p }
+			add_to_array = { mod1440_gv_new_r = gv_r }
+			add_to_array = { mod1440_gv_new_b = gv_b }
+			add_to_array = { mod1440_gv_new_e = gv_e }
+			add_to_array = { mod1440_gv_new_fb = gv_fb }
+		}
 	}
 	for_each_loop = {
 		array = mod1440_gv_adv
@@ -14352,67 +14582,105 @@ mod1440_gv_daily = {
 		value = gv_o
 		add_to_array = { mod1440_gv_adv_b = gv_o }
 	}
+	clear_array = mod1440_gv_adv_e
+	for_each_loop = {
+		array = mod1440_gv_new_e
+		value = gv_o
+		add_to_array = { mod1440_gv_adv_e = gv_o }
+	}
+	clear_array = mod1440_gv_adv_fb
+	for_each_loop = {
+		array = mod1440_gv_new_fb
+		value = gv_o
+		add_to_array = { mod1440_gv_adv_fb = gv_o }
+	}
 	clear_array = mod1440_gv_new
 	clear_array = mod1440_gv_new_since
 	clear_array = mod1440_gv_new_old
 	clear_array = mod1440_gv_new_p
 	clear_array = mod1440_gv_new_r
 	clear_array = mod1440_gv_new_b
+	clear_array = mod1440_gv_new_e
+	clear_array = mod1440_gv_new_fb
+	set_temp_variable = { gv_me = THIS }
 	for_each_loop = {
 		array = high_command
 		value = gv_c
-		set_temp_variable = { gv_since = global.date }
-		set_temp_variable = { gv_old = 1 }
+		set_temp_variable = { gv_isp = 0 }
 		if = {
-			limit = { check_variable = { mod1440_gv_begun = 1 } }
-			set_temp_variable = { gv_old = 0 }
-		}
-		set_temp_variable = { gv_found = 0 }
-		for_each_loop = {
-			array = mod1440_gv_hc
-			value = gv_o
-			index = gv_j
-			if = {
-				limit = { check_variable = { gv_o = gv_c } }
-				set_temp_variable = { gv_found = 1 }
-				set_temp_variable = { gv_since = mod1440_gv_hc_since^gv_j }
-				set_temp_variable = { gv_old = mod1440_gv_hc_old^gv_j }
-				set_temp_variable = { gv_p = mod1440_gv_hc_p^gv_j }
-				set_temp_variable = { gv_r = mod1440_gv_hc_r^gv_j }
-				set_temp_variable = { gv_b = mod1440_gv_hc_b^gv_j }
-			}
-		}
-		if = {
-			limit = { check_variable = { gv_found = 0 } check_variable = { mod1440_gv_begun = 1 } }
-			set_temp_variable = { ev_kind = token:mod1440_ev_appointed }
-			set_temp_variable = { ev_fam = 3 }
-			set_temp_variable = { ev_kid = 25 }
-			set_temp_variable = { ev_sa = 1 }
-			set_temp_variable = { ev_a = gv_c }
-			set_temp_variable = { ev_sb = 0 }
-			set_temp_variable = { ev_b = 0 }
-			set_temp_variable = { ev_so = 0 }
-			set_temp_variable = { ev_o = 0 }
-			set_temp_variable = { ev_p = 0 }
-			set_temp_variable = { ev_x = 0 }
-			set_temp_variable = { ev_n = 0 }
-			mod1440_ev_add = yes
-		}
-		if = {
-			limit = { OR = { check_variable = { gv_found = 0 } check_variable = { gv_stale = 1 } } }
+			limit = { OR = { check_variable = { gv_c > 5368 } check_variable = { gv_c < -21000 } } }
+			set_temp_variable = { gv_pt = gv_me }
 			var:gv_c = {
-				mod1440_p_adv_high_command = yes
+				set_temp_variable = { gv_pt = THIS }
 			}
-			set_temp_variable = { gv_p = p_tok }
-			set_temp_variable = { gv_r = p_role }
-			set_temp_variable = { gv_b = p_big }
+			if = {
+				limit = { NOT = { check_variable = { gv_pt = gv_me } } }
+				set_temp_variable = { gv_isp = 1 }
+			}
 		}
-		add_to_array = { mod1440_gv_new = gv_c }
-		add_to_array = { mod1440_gv_new_since = gv_since }
-		add_to_array = { mod1440_gv_new_old = gv_old }
-		add_to_array = { mod1440_gv_new_p = gv_p }
-		add_to_array = { mod1440_gv_new_r = gv_r }
-		add_to_array = { mod1440_gv_new_b = gv_b }
+		if = {
+			limit = { check_variable = { gv_isp = 1 } }
+			set_temp_variable = { gv_since = global.date }
+			set_temp_variable = { gv_old = 1 }
+			if = {
+				limit = { check_variable = { mod1440_gv_begun = 1 } }
+				set_temp_variable = { gv_old = 0 }
+			}
+			set_temp_variable = { gv_found = 0 }
+			set_temp_variable = { gv_e = token:mod1440_tre_none }
+			set_temp_variable = { gv_fb = 0 }
+			for_each_loop = {
+				array = mod1440_gv_hc
+				value = gv_o
+				index = gv_j
+				if = {
+					limit = { check_variable = { gv_o = gv_c } }
+					set_temp_variable = { gv_found = 1 }
+					set_temp_variable = { gv_since = mod1440_gv_hc_since^gv_j }
+					set_temp_variable = { gv_old = mod1440_gv_hc_old^gv_j }
+					set_temp_variable = { gv_p = mod1440_gv_hc_p^gv_j }
+					set_temp_variable = { gv_r = mod1440_gv_hc_r^gv_j }
+					set_temp_variable = { gv_b = mod1440_gv_hc_b^gv_j }
+					set_temp_variable = { gv_e = mod1440_gv_hc_e^gv_j }
+					set_temp_variable = { gv_fb = mod1440_gv_hc_fb^gv_j }
+				}
+			}
+			if = {
+				limit = { check_variable = { gv_found = 0 } check_variable = { mod1440_gv_begun = 1 } }
+				set_temp_variable = { ev_kind = token:mod1440_ev_appointed }
+				set_temp_variable = { ev_fam = 3 }
+				set_temp_variable = { ev_kid = 25 }
+				set_temp_variable = { ev_sa = 1 }
+				set_temp_variable = { ev_a = gv_c }
+				set_temp_variable = { ev_sb = 0 }
+				set_temp_variable = { ev_b = 0 }
+				set_temp_variable = { ev_so = 0 }
+				set_temp_variable = { ev_o = 0 }
+				set_temp_variable = { ev_p = 0 }
+				set_temp_variable = { ev_x = 0 }
+				set_temp_variable = { ev_n = 0 }
+				mod1440_ev_add = yes
+			}
+			if = {
+				limit = { OR = { check_variable = { gv_found = 0 } check_variable = { gv_stale = 1 } } }
+				var:gv_c = {
+					mod1440_p_adv_high_command = yes
+				}
+				set_temp_variable = { gv_p = p_tok }
+				set_temp_variable = { gv_r = p_role }
+				set_temp_variable = { gv_b = p_big }
+				set_temp_variable = { gv_e = p_eff }
+				set_temp_variable = { gv_fb = p_fb }
+			}
+			add_to_array = { mod1440_gv_new = gv_c }
+			add_to_array = { mod1440_gv_new_since = gv_since }
+			add_to_array = { mod1440_gv_new_old = gv_old }
+			add_to_array = { mod1440_gv_new_p = gv_p }
+			add_to_array = { mod1440_gv_new_r = gv_r }
+			add_to_array = { mod1440_gv_new_b = gv_b }
+			add_to_array = { mod1440_gv_new_e = gv_e }
+			add_to_array = { mod1440_gv_new_fb = gv_fb }
+		}
 	}
 	for_each_loop = {
 		array = mod1440_gv_hc
@@ -14470,6 +14738,18 @@ mod1440_gv_daily = {
 		value = gv_o
 		add_to_array = { mod1440_gv_hc_b = gv_o }
 	}
+	clear_array = mod1440_gv_hc_e
+	for_each_loop = {
+		array = mod1440_gv_new_e
+		value = gv_o
+		add_to_array = { mod1440_gv_hc_e = gv_o }
+	}
+	clear_array = mod1440_gv_hc_fb
+	for_each_loop = {
+		array = mod1440_gv_new_fb
+		value = gv_o
+		add_to_array = { mod1440_gv_hc_fb = gv_o }
+	}
 	add_to_temp_variable = { gv_hc_n = mod1440_gv_hc^num }
 	set_variable = { mod1440_gv_hc_n = gv_hc_n }
 	clear_array = mod1440_gv_adv_d
@@ -14478,32 +14758,38 @@ mod1440_gv_daily = {
 	clear_array = mod1440_gv_adv_d_p
 	clear_array = mod1440_gv_adv_d_r
 	clear_array = mod1440_gv_adv_d_b
+	clear_array = mod1440_gv_adv_d_e
+	clear_array = mod1440_gv_adv_d_fb
 	for_each_loop = {
 		array = mod1440_gv_adv
 		value = gv_v
 		index = gv_i
 		if = {
-			limit = { check_variable = { gv_i < 4 } }
+			limit = { check_variable = { gv_i < 5 } }
 			add_to_array = { mod1440_gv_adv_d = mod1440_gv_adv^gv_i }
 			add_to_array = { mod1440_gv_adv_d_since = mod1440_gv_adv_since^gv_i }
 			add_to_array = { mod1440_gv_adv_d_old = mod1440_gv_adv_old^gv_i }
 			add_to_array = { mod1440_gv_adv_d_p = mod1440_gv_adv_p^gv_i }
 			add_to_array = { mod1440_gv_adv_d_r = mod1440_gv_adv_r^gv_i }
 			add_to_array = { mod1440_gv_adv_d_b = mod1440_gv_adv_b^gv_i }
+			add_to_array = { mod1440_gv_adv_d_e = mod1440_gv_adv_e^gv_i }
+			add_to_array = { mod1440_gv_adv_d_fb = mod1440_gv_adv_fb^gv_i }
 		}
 	}
 	for_loop_effect = {
 		start = 0
-		end = 4
+		end = 5
 		value = pad_n
 		if = {
-			limit = { check_variable = { mod1440_gv_adv_d^num < 4 } }
+			limit = { check_variable = { mod1440_gv_adv_d^num < 5 } }
 			add_to_array = { mod1440_gv_adv_d = 0 }
 			add_to_array = { mod1440_gv_adv_d_since = 0 }
 			add_to_array = { mod1440_gv_adv_d_old = 0 }
 			add_to_array = { mod1440_gv_adv_d_p = token:GFX_idea_unknown }
 			add_to_array = { mod1440_gv_adv_d_r = token:mod1440_blank }
 			add_to_array = { mod1440_gv_adv_d_b = 0 }
+			add_to_array = { mod1440_gv_adv_d_e = token:mod1440_tre_none }
+			add_to_array = { mod1440_gv_adv_d_fb = 0 }
 		}
 	}
 	clear_array = mod1440_gv_hc_d
@@ -14512,6 +14798,8 @@ mod1440_gv_daily = {
 	clear_array = mod1440_gv_hc_d_p
 	clear_array = mod1440_gv_hc_d_r
 	clear_array = mod1440_gv_hc_d_b
+	clear_array = mod1440_gv_hc_d_e
+	clear_array = mod1440_gv_hc_d_fb
 	for_each_loop = {
 		array = mod1440_gv_hc
 		value = gv_v
@@ -14524,6 +14812,8 @@ mod1440_gv_daily = {
 			add_to_array = { mod1440_gv_hc_d_p = mod1440_gv_hc_p^gv_i }
 			add_to_array = { mod1440_gv_hc_d_r = mod1440_gv_hc_r^gv_i }
 			add_to_array = { mod1440_gv_hc_d_b = mod1440_gv_hc_b^gv_i }
+			add_to_array = { mod1440_gv_hc_d_e = mod1440_gv_hc_e^gv_i }
+			add_to_array = { mod1440_gv_hc_d_fb = mod1440_gv_hc_fb^gv_i }
 		}
 	}
 	for_loop_effect = {
@@ -14538,6 +14828,8 @@ mod1440_gv_daily = {
 			add_to_array = { mod1440_gv_hc_d_p = token:GFX_idea_unknown }
 			add_to_array = { mod1440_gv_hc_d_r = token:mod1440_blank }
 			add_to_array = { mod1440_gv_hc_d_b = 0 }
+			add_to_array = { mod1440_gv_hc_d_e = token:mod1440_tre_none }
+			add_to_array = { mod1440_gv_hc_d_fb = 0 }
 		}
 	}
 	clear_array = mod1440_gv_rd
@@ -14577,6 +14869,7 @@ mod1440_gv_daily = {
 			add_to_array = { mod1440_gv_rd_g = 0 }
 		}
 	}
+	mod1440_gv_heads_copy = yes
 	clear_array = mod1440_gv_of_0_ul
 	if = {
 		limit = { check_variable = { mod1440_gv_of_0_has = 1 } }
@@ -14871,6 +15164,551 @@ mod1440_gv_daily = {
 	set_variable = { mod1440_gv_pop_1 = party_popularity_100@democratic }
 	set_variable = { mod1440_gv_pop_2 = party_popularity_100@communism }
 	set_variable = { mod1440_gv_pop_3 = party_popularity_100@neutrality }
+	set_temp_variable = { gv_v0 = party_popularity_100@fascism }
+	set_temp_variable = { gv_v1 = party_popularity_100@democratic }
+	set_temp_variable = { gv_v2 = party_popularity_100@communism }
+	set_temp_variable = { gv_v3 = party_popularity_100@neutrality }
+	set_temp_variable = { gv_r0 = 0 }
+	if = {
+		limit = { check_variable = { gv_v1 > gv_v0 } }
+		add_to_temp_variable = { gv_r0 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v2 > gv_v0 } }
+		add_to_temp_variable = { gv_r0 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v3 > gv_v0 } }
+		add_to_temp_variable = { gv_r0 = 1 }
+	}
+	set_variable = { mod1440_gv_rank_0 = gv_r0 }
+	set_temp_variable = { gv_r1 = 0 }
+	if = {
+		limit = { check_variable = { gv_v0 > gv_v1 } }
+		add_to_temp_variable = { gv_r1 = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { gv_v0 = gv_v1 } }
+		add_to_temp_variable = { gv_r1 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v2 > gv_v1 } }
+		add_to_temp_variable = { gv_r1 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v3 > gv_v1 } }
+		add_to_temp_variable = { gv_r1 = 1 }
+	}
+	set_variable = { mod1440_gv_rank_1 = gv_r1 }
+	set_temp_variable = { gv_r2 = 0 }
+	if = {
+		limit = { check_variable = { gv_v0 > gv_v2 } }
+		add_to_temp_variable = { gv_r2 = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { gv_v0 = gv_v2 } }
+		add_to_temp_variable = { gv_r2 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v1 > gv_v2 } }
+		add_to_temp_variable = { gv_r2 = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { gv_v1 = gv_v2 } }
+		add_to_temp_variable = { gv_r2 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v3 > gv_v2 } }
+		add_to_temp_variable = { gv_r2 = 1 }
+	}
+	set_variable = { mod1440_gv_rank_2 = gv_r2 }
+	set_temp_variable = { gv_r3 = 0 }
+	if = {
+		limit = { check_variable = { gv_v0 > gv_v3 } }
+		add_to_temp_variable = { gv_r3 = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { gv_v0 = gv_v3 } }
+		add_to_temp_variable = { gv_r3 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v1 > gv_v3 } }
+		add_to_temp_variable = { gv_r3 = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { gv_v1 = gv_v3 } }
+		add_to_temp_variable = { gv_r3 = 1 }
+	}
+	if = {
+		limit = { check_variable = { gv_v2 > gv_v3 } }
+		add_to_temp_variable = { gv_r3 = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { gv_v2 = gv_v3 } }
+		add_to_temp_variable = { gv_r3 = 1 }
+	}
+	set_variable = { mod1440_gv_rank_3 = gv_r3 }
+	set_temp_variable = { gv_cu = 0 }
+	if = {
+		limit = { NOT = { check_variable = { gv_r0 > gv_r0 } } }
+		add_to_temp_variable = { gv_cu = gv_v0 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r1 > gv_r0 } } }
+		add_to_temp_variable = { gv_cu = gv_v1 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r2 > gv_r0 } } }
+		add_to_temp_variable = { gv_cu = gv_v2 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r3 > gv_r0 } } }
+		add_to_temp_variable = { gv_cu = gv_v3 }
+	}
+	clamp_temp_variable = { var = gv_cu min = 0 max = 100 }
+	set_variable = { mod1440_gv_cum_0 = gv_cu }
+	set_temp_variable = { gv_y = gv_r0 }
+	multiply_temp_variable = { gv_y = 48 }
+	add_to_temp_variable = { gv_y = 102 }
+	set_variable = { mod1440_gv_py_0_4 = gv_y }
+	add_to_variable = { mod1440_gv_py_0_4 = 4 }
+	set_variable = { mod1440_gv_py_0_7 = gv_y }
+	add_to_variable = { mod1440_gv_py_0_7 = 7 }
+	set_variable = { mod1440_gv_py_0_2 = gv_y }
+	add_to_variable = { mod1440_gv_py_0_2 = 2 }
+	set_variable = { mod1440_gv_py_0_24 = gv_y }
+	add_to_variable = { mod1440_gv_py_0_24 = 24 }
+	set_variable = { mod1440_gv_py_0_12 = gv_y }
+	add_to_variable = { mod1440_gv_py_0_12 = 12 }
+	set_variable = { mod1440_gv_py_0_13 = gv_y }
+	add_to_variable = { mod1440_gv_py_0_13 = 13 }
+	set_temp_variable = { gv_cu = 0 }
+	if = {
+		limit = { NOT = { check_variable = { gv_r0 > gv_r1 } } }
+		add_to_temp_variable = { gv_cu = gv_v0 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r1 > gv_r1 } } }
+		add_to_temp_variable = { gv_cu = gv_v1 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r2 > gv_r1 } } }
+		add_to_temp_variable = { gv_cu = gv_v2 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r3 > gv_r1 } } }
+		add_to_temp_variable = { gv_cu = gv_v3 }
+	}
+	clamp_temp_variable = { var = gv_cu min = 0 max = 100 }
+	set_variable = { mod1440_gv_cum_1 = gv_cu }
+	set_temp_variable = { gv_y = gv_r1 }
+	multiply_temp_variable = { gv_y = 48 }
+	add_to_temp_variable = { gv_y = 102 }
+	set_variable = { mod1440_gv_py_1_4 = gv_y }
+	add_to_variable = { mod1440_gv_py_1_4 = 4 }
+	set_variable = { mod1440_gv_py_1_7 = gv_y }
+	add_to_variable = { mod1440_gv_py_1_7 = 7 }
+	set_variable = { mod1440_gv_py_1_2 = gv_y }
+	add_to_variable = { mod1440_gv_py_1_2 = 2 }
+	set_variable = { mod1440_gv_py_1_24 = gv_y }
+	add_to_variable = { mod1440_gv_py_1_24 = 24 }
+	set_variable = { mod1440_gv_py_1_12 = gv_y }
+	add_to_variable = { mod1440_gv_py_1_12 = 12 }
+	set_variable = { mod1440_gv_py_1_13 = gv_y }
+	add_to_variable = { mod1440_gv_py_1_13 = 13 }
+	set_temp_variable = { gv_cu = 0 }
+	if = {
+		limit = { NOT = { check_variable = { gv_r0 > gv_r2 } } }
+		add_to_temp_variable = { gv_cu = gv_v0 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r1 > gv_r2 } } }
+		add_to_temp_variable = { gv_cu = gv_v1 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r2 > gv_r2 } } }
+		add_to_temp_variable = { gv_cu = gv_v2 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r3 > gv_r2 } } }
+		add_to_temp_variable = { gv_cu = gv_v3 }
+	}
+	clamp_temp_variable = { var = gv_cu min = 0 max = 100 }
+	set_variable = { mod1440_gv_cum_2 = gv_cu }
+	set_temp_variable = { gv_y = gv_r2 }
+	multiply_temp_variable = { gv_y = 48 }
+	add_to_temp_variable = { gv_y = 102 }
+	set_variable = { mod1440_gv_py_2_4 = gv_y }
+	add_to_variable = { mod1440_gv_py_2_4 = 4 }
+	set_variable = { mod1440_gv_py_2_7 = gv_y }
+	add_to_variable = { mod1440_gv_py_2_7 = 7 }
+	set_variable = { mod1440_gv_py_2_2 = gv_y }
+	add_to_variable = { mod1440_gv_py_2_2 = 2 }
+	set_variable = { mod1440_gv_py_2_24 = gv_y }
+	add_to_variable = { mod1440_gv_py_2_24 = 24 }
+	set_variable = { mod1440_gv_py_2_12 = gv_y }
+	add_to_variable = { mod1440_gv_py_2_12 = 12 }
+	set_variable = { mod1440_gv_py_2_13 = gv_y }
+	add_to_variable = { mod1440_gv_py_2_13 = 13 }
+	set_temp_variable = { gv_cu = 0 }
+	if = {
+		limit = { NOT = { check_variable = { gv_r0 > gv_r3 } } }
+		add_to_temp_variable = { gv_cu = gv_v0 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r1 > gv_r3 } } }
+		add_to_temp_variable = { gv_cu = gv_v1 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r2 > gv_r3 } } }
+		add_to_temp_variable = { gv_cu = gv_v2 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { gv_r3 > gv_r3 } } }
+		add_to_temp_variable = { gv_cu = gv_v3 }
+	}
+	clamp_temp_variable = { var = gv_cu min = 0 max = 100 }
+	set_variable = { mod1440_gv_cum_3 = gv_cu }
+	set_temp_variable = { gv_y = gv_r3 }
+	multiply_temp_variable = { gv_y = 48 }
+	add_to_temp_variable = { gv_y = 102 }
+	set_variable = { mod1440_gv_py_3_4 = gv_y }
+	add_to_variable = { mod1440_gv_py_3_4 = 4 }
+	set_variable = { mod1440_gv_py_3_7 = gv_y }
+	add_to_variable = { mod1440_gv_py_3_7 = 7 }
+	set_variable = { mod1440_gv_py_3_2 = gv_y }
+	add_to_variable = { mod1440_gv_py_3_2 = 2 }
+	set_variable = { mod1440_gv_py_3_24 = gv_y }
+	add_to_variable = { mod1440_gv_py_3_24 = 24 }
+	set_variable = { mod1440_gv_py_3_12 = gv_y }
+	add_to_variable = { mod1440_gv_py_3_12 = 12 }
+	set_variable = { mod1440_gv_py_3_13 = gv_y }
+	add_to_variable = { mod1440_gv_py_3_13 = 13 }
+	set_variable = { mod1440_gv_py_pick = 102 }
+	if = {
+		limit = { has_government = fascism }
+		set_variable = { mod1440_gv_py_pick = gv_r0 }
+		multiply_variable = { mod1440_gv_py_pick = 48 }
+		add_to_variable = { mod1440_gv_py_pick = 102 }
+	}
+	if = {
+		limit = { has_government = democratic }
+		set_variable = { mod1440_gv_py_pick = gv_r1 }
+		multiply_variable = { mod1440_gv_py_pick = 48 }
+		add_to_variable = { mod1440_gv_py_pick = 102 }
+	}
+	if = {
+		limit = { has_government = communism }
+		set_variable = { mod1440_gv_py_pick = gv_r2 }
+		multiply_variable = { mod1440_gv_py_pick = 48 }
+		add_to_variable = { mod1440_gv_py_pick = 102 }
+	}
+	if = {
+		limit = { has_government = neutrality }
+		set_variable = { mod1440_gv_py_pick = gv_r3 }
+		multiply_variable = { mod1440_gv_py_pick = 48 }
+		add_to_variable = { mod1440_gv_py_pick = 102 }
+	}
+	if = {
+		limit = { OR = { NOT = { check_variable = { mod1440_gv_dl_seen = mod1440_ln_next } } NOT = { check_variable = { mod1440_gv_dl_ep = global.mod1440_tk_ep } } NOT = { check_variable = { mod1440_gv_dl_v = 2 } } } }
+		clear_array = mod1440_gv_dl_date
+		clear_array = mod1440_gv_dl_kind
+		clear_array = mod1440_gv_dl_a
+		clear_array = mod1440_gv_dl_sa
+		clear_array = mod1440_gv_dl_b
+		clear_array = mod1440_gv_dl_sb
+		set_temp_variable = { gv_df = 0 }
+		set_temp_variable = { gv_db = 0 }
+		set_temp_variable = { gv_ds = mod1440_ev_date^num }
+		subtract_from_temp_variable = { gv_ds = 1 }
+		set_temp_variable = { gv_me = THIS }
+		for_loop_effect = {
+			start = gv_ds
+			end = 0
+			compare = greater_than_or_equals
+			add = -1
+			value = gv_di
+			break = gv_db
+			if = {
+				limit = { check_variable = { mod1440_ev_fam^gv_di = 3 } }
+				set_temp_variable = { gv_dok = 1 }
+				if = {
+					limit = { check_variable = { mod1440_ev_sa^gv_di = 1 } }
+					set_temp_variable = { gv_da = mod1440_ev_a^gv_di }
+					set_temp_variable = { gv_dok = 0 }
+					if = {
+						limit = { OR = { check_variable = { gv_da > 5368 } check_variable = { gv_da < -21000 } } }
+						set_temp_variable = { gv_pt = gv_me }
+						var:gv_da = {
+							set_temp_variable = { gv_pt = THIS }
+						}
+						if = {
+							limit = { NOT = { check_variable = { gv_pt = gv_me } } }
+							set_temp_variable = { gv_dok = 1 }
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { gv_dok = 1 } }
+					add_to_array = { mod1440_gv_dl_date = mod1440_ev_date^gv_di }
+					add_to_array = { mod1440_gv_dl_kind = mod1440_ev_kind^gv_di }
+					add_to_array = { mod1440_gv_dl_a = mod1440_ev_a^gv_di }
+					add_to_array = { mod1440_gv_dl_sa = mod1440_ev_sa^gv_di }
+					add_to_array = { mod1440_gv_dl_b = mod1440_ev_b^gv_di }
+					add_to_array = { mod1440_gv_dl_sb = mod1440_ev_sb^gv_di }
+					add_to_temp_variable = { gv_df = 1 }
+					if = {
+						limit = { check_variable = { gv_df > 7 } }
+						set_temp_variable = { gv_db = 1 }
+					}
+				}
+			}
+		}
+		set_variable = { mod1440_gv_dl_n = gv_df }
+		for_loop_effect = {
+			start = 0
+			end = 8
+			value = pad_n
+			if = {
+				limit = { check_variable = { mod1440_gv_dl_date^num < 8 } }
+				add_to_array = { mod1440_gv_dl_date = global.date }
+				add_to_array = { mod1440_gv_dl_kind = token:mod1440_blank }
+				add_to_array = { mod1440_gv_dl_a = 0 }
+				add_to_array = { mod1440_gv_dl_sa = 0 }
+				add_to_array = { mod1440_gv_dl_b = THIS }
+				add_to_array = { mod1440_gv_dl_sb = 0 }
+			}
+		}
+		set_variable = { mod1440_gv_dl_seen = mod1440_ln_next }
+		set_variable = { mod1440_gv_dl_v = 2 }
+		set_variable = { mod1440_gv_dl_ep = global.mod1440_tk_ep }
+	}
+	if = {
+		limit = { NOT = { check_variable = { mod1440_gv_ag_v = 1 } } }
+		if = {
+			limit = { check_variable = { mod1440_gv_ag_has = 1 } check_variable = { mod1440_gv_ag_old = 0 } }
+			set_temp_variable = { gv_aff = -1 }
+			set_temp_variable = { gv_ab = 0 }
+			for_loop_effect = {
+				start = 0
+				end = mod1440_gv_pp_0^num
+				value = gv_ak
+				break = gv_ab
+				if = {
+					limit = { check_variable = { mod1440_gv_pp_0^gv_ak > -1 } check_variable = { mod1440_gv_pp_1^gv_ak > -1 } check_variable = { mod1440_gv_pp_2^gv_ak > -1 } check_variable = { mod1440_gv_pp_3^gv_ak > -1 } }
+					set_temp_variable = { gv_aff = gv_ak }
+					set_temp_variable = { gv_ab = 1 }
+				}
+			}
+			set_temp_variable = { gv_ad = global.date }
+			if = {
+				limit = { check_variable = { gv_aff > -1 } }
+				set_temp_variable = { gv_ad = mod1440_h_date^gv_aff }
+			}
+			if = {
+				limit = { OR = { check_variable = { gv_aff < 0 } check_variable = { gv_ad > mod1440_gv_ag_since } } }
+				set_variable = { mod1440_gv_ag_old = 1 }
+			}
+		}
+		if = {
+			limit = { has_intelligence_agency = yes NOT = { check_variable = { mod1440_gv_ag_has = 1 } } }
+			set_variable = { mod1440_gv_ag_has = 1 }
+			set_variable = { mod1440_gv_ag_since = global.date }
+			set_variable = { mod1440_gv_ag_old = 1 }
+		}
+		set_variable = { mod1440_gv_ag_v = 1 }
+	}
+	if = {
+		limit = { has_intelligence_agency = yes NOT = { check_variable = { mod1440_gv_ag_has = 1 } } }
+		set_variable = { mod1440_gv_ag_has = 1 }
+		set_variable = { mod1440_gv_ag_since = global.date }
+		set_variable = { mod1440_gv_ag_old = 1 }
+		if = {
+			limit = { check_variable = { mod1440_gv_begun = 1 } }
+			set_variable = { mod1440_gv_ag_old = 0 }
+		}
+	}
+	set_temp_variable = { gv_ud = 0 }
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_economy_civilian }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_army_department }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_naval_department }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_airforce_department }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_passive_defense }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_anti_partisan }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_blueprint_stealing }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_portable_radios }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_invisible_ink }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_plastic_explosives }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_suicide_pills }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_training_centers }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_commando_training }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_interrogation_techniques }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_diplo_training }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_psycho_warfare }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_form_department }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_decryption_boost }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_decryption_boost_2 }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_crypto_strength }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	if = {
+		limit = { has_done_agency_upgrade = upgrade_crypto_strength_2 }
+		add_to_temp_variable = { gv_ud = 1 }
+	}
+	set_variable = { mod1440_gv_ag_done = gv_ud }
+	every_operative = {
+		set_temp_variable = { gv_oc = operation_country }
+		set_variable = { mod1440_gv_home = 0 }
+		set_variable = { mod1440_gv_net = 0 }
+		if = {
+			limit = { check_variable = { gv_oc > 0 } }
+			PREV = {
+				set_temp_variable = { gv_me = THIS }
+				set_temp_variable = { gv_nc = network_national_coverage@var:gv_oc }
+			}
+			if = {
+				limit = { check_variable = { gv_oc = gv_me } }
+				set_variable = { mod1440_gv_home = 1 }
+			}
+			else = {
+				set_variable = { mod1440_gv_net = gv_nc }
+				multiply_variable = { mod1440_gv_net = 100 }
+			}
+		}
+	}
+	set_variable = { mod1440_gv_dc_has = 0 }
+	if = {
+		limit = { is_cryptology_department_active = yes }
+		set_temp_variable = { gv_dct = 0 }
+		every_country = {
+			limit = { OR = { is_major = yes has_war_with = ROOT } ROOT = { is_decrypting = PREV } }
+			set_temp_variable = { gv_dct = THIS }
+		}
+		if = {
+			limit = { NOT = { check_variable = { gv_dct = 0 } } }
+			set_variable = { mod1440_gv_dc = gv_dct }
+			set_variable = { mod1440_gv_dc_has = 1 }
+			set_temp_variable = { gv_dp = decryption_progress@var:gv_dct }
+			set_variable = { mod1440_gv_dc_p = gv_dp }
+			multiply_variable = { mod1440_gv_dc_p = 100 }
+		}
+	}
+	clear_temp_array = gv_kt
+	set_temp_variable = { gv_kb = 0 }
+	for_each_loop = {
+		array = enemies
+		value = gv_kc
+		break = gv_kb
+		if = {
+			limit = { check_variable = { gv_kt^num < 3 } }
+			add_to_temp_array = { gv_kt = gv_kc }
+		}
+		else = {
+			set_temp_variable = { gv_kb = 1 }
+		}
+	}
+	every_country = {
+		limit = { is_major = yes NOT = { tag = ROOT } }
+		set_temp_variable = { gv_kc = THIS }
+		if = {
+			limit = { check_variable = { gv_kt^num < 3 } NOT = { is_in_array = { array = gv_kt value = gv_kc } } }
+			add_to_temp_array = { gv_kt = gv_kc }
+		}
+	}
+	clear_array = mod1440_gv_kn
+	clear_array = mod1440_gv_kn_c
+	clear_array = mod1440_gv_kn_a
+	clear_array = mod1440_gv_kn_n
+	clear_array = mod1440_gv_kn_i
+	for_each_loop = {
+		array = gv_kt
+		value = gv_kc
+		add_to_array = { mod1440_gv_kn = gv_kc }
+		set_temp_variable = { gv_kv = civilian_intel@var:gv_kc }
+		clamp_temp_variable = { var = gv_kv min = 0 max = 100 }
+		add_to_array = { mod1440_gv_kn_c = gv_kv }
+		set_temp_variable = { gv_kv = army_intel@var:gv_kc }
+		clamp_temp_variable = { var = gv_kv min = 0 max = 100 }
+		add_to_array = { mod1440_gv_kn_a = gv_kv }
+		set_temp_variable = { gv_kv = navy_intel@var:gv_kc }
+		clamp_temp_variable = { var = gv_kv min = 0 max = 100 }
+		add_to_array = { mod1440_gv_kn_n = gv_kv }
+		set_temp_variable = { gv_kv = air_intel@var:gv_kc }
+		clamp_temp_variable = { var = gv_kv min = 0 max = 100 }
+		add_to_array = { mod1440_gv_kn_i = gv_kv }
+	}
+	set_variable = { mod1440_gv_kn_n = mod1440_gv_kn^num }
+	for_loop_effect = {
+		start = 0
+		end = 3
+		value = pad_n
+		if = {
+			limit = { check_variable = { mod1440_gv_kn^num < 3 } }
+			add_to_array = { mod1440_gv_kn = THIS }
+			add_to_array = { mod1440_gv_kn_c = 0 }
+			add_to_array = { mod1440_gv_kn_a = 0 }
+			add_to_array = { mod1440_gv_kn_n = 0 }
+			add_to_array = { mod1440_gv_kn_i = 0 }
+		}
+	}
 	for_loop_effect = {
 		start = 0
 		end = 60
@@ -14893,10 +15731,1505 @@ mod1440_gv_daily = {
 	set_temp_variable = { ct_sum = 0 }
 	add_to_temp_variable = { ct_sum = mod1440_ct^25 }
 	set_variable = { mod1440_gv_n_appointed = ct_sum }
+	set_temp_variable = { ct_sum = 0 }
+	add_to_temp_variable = { ct_sum = mod1440_ct^21 }
+	set_variable = { mod1440_gv_n_party = ct_sum }
 	set_variable = { mod1440_gv_begun = 1 }
-	set_variable = { mod1440_gv_adv_ver = 453881 }
+	set_variable = { mod1440_gv_adv_ver = 804159 }
 	set_variable = { mod1440_gv_adv_ver_ep = global.mod1440_tk_ep }
+	if = {
+		limit = { check_variable = { mod1440_gv_pp_0^num < mod1440_h_date^num } }
+		mod1440_gv_pp_fill = yes
+		set_variable = { mod1440_gv_chart_v = 0 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { mod1440_gv_chart_v = 3 } } }
+		set_variable = { mod1440_gv_heads_f = 1 }
+		mod1440_gv_chart = yes
+	}
 	mod1440_gv_marks = yes
+}
+
+# Government (E3 round 2): the record of party support, written by National Figures' monthly round after its series
+# (mod1440_h_record): today's support of the four parties, the ruling group and the head of government, aligned with
+# mod1440_h_date (120 months). A save of an earlier build fills the months before at the front (back_fill).
+mod1440_gv_pp_record = {
+	set_temp_variable = { gv_rt = mod1440_h_date^num }
+	subtract_from_temp_variable = { gv_rt = 1 }
+	set_temp_variable = { gv_g = 0 }
+	if = {
+		limit = { has_government = fascism }
+		set_temp_variable = { gv_g = 1 }
+	}
+	if = {
+		limit = { has_government = democratic }
+		set_temp_variable = { gv_g = 2 }
+	}
+	if = {
+		limit = { has_government = communism }
+		set_temp_variable = { gv_g = 3 }
+	}
+	if = {
+		limit = { has_government = neutrality }
+		set_temp_variable = { gv_g = 4 }
+	}
+	set_temp_variable = { gv_bt = gv_rt }
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_0^num > gv_bt } }
+		remove_from_array = { array = mod1440_gv_pp_0 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_1 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_2 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_3 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_g index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_h index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_1^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_1 value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_2^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_2 value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_3^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_3 value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_g^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_g value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_h^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_h value = country_leader index = 0 }
+	}
+	if = {
+		limit = { check_variable = { mod1440_gv_pp_0^num < gv_bt } }
+		set_temp_variable = { gv_bm = gv_bt }
+		subtract_from_temp_variable = { gv_bm = mod1440_gv_pp_0^num }
+		for_loop_effect = {
+			start = gv_bm
+			end = 0
+			compare = greater_than
+			add = -1
+			value = gv_bk
+			set_temp_variable = { gv_bj = gv_bk }
+			subtract_from_temp_variable = { gv_bj = 1 }
+			set_temp_variable = { gv_bv = -1 }
+			set_temp_variable = { gv_b30 = gv_bj }
+			subtract_from_temp_variable = { gv_b30 = mod1440_h_date^num }
+			add_to_temp_variable = { gv_b30 = mod1440_h_30^num }
+			if = {
+				limit = { check_variable = { gv_b30 > -1 } }
+				set_temp_variable = { gv_bv = mod1440_h_30^gv_b30 }
+			}
+			set_temp_variable = { gv_bg = gv_g }
+			set_temp_variable = { gv_bh = country_leader }
+			set_temp_variable = { gv_bd = mod1440_h_date^gv_bj }
+			for_loop_effect = {
+				start = mod1440_gv_rul^num
+				end = 0
+				compare = greater_than
+				add = -1
+				value = gv_bk
+				set_temp_variable = { gv_bi = gv_bk }
+				subtract_from_temp_variable = { gv_bi = 1 }
+				if = {
+					limit = { OR = { check_variable = { mod1440_gv_rul_old^gv_bi = 1 } NOT = { check_variable = { mod1440_gv_rul_from^gv_bi > gv_bd } } } }
+					set_temp_variable = { gv_bg = mod1440_gv_rul_g^gv_bi }
+					set_temp_variable = { gv_bh = mod1440_gv_rul^gv_bi }
+				}
+			}
+			set_temp_variable = { gv_b0 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 1 } }
+				set_temp_variable = { gv_b0 = gv_bv }
+			}
+			set_temp_variable = { gv_b1 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 2 } }
+				set_temp_variable = { gv_b1 = gv_bv }
+			}
+			set_temp_variable = { gv_b2 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 3 } }
+				set_temp_variable = { gv_b2 = gv_bv }
+			}
+			set_temp_variable = { gv_b3 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 4 } }
+				set_temp_variable = { gv_b3 = gv_bv }
+			}
+			add_to_array = { array = mod1440_gv_pp_0 value = gv_b0 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_1 value = gv_b1 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_2 value = gv_b2 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_3 value = gv_b3 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_g value = gv_bg index = 0 }
+			add_to_array = { array = mod1440_gv_pp_h value = gv_bh index = 0 }
+		}
+	}
+	add_to_array = { mod1440_gv_pp_0 = party_popularity_100@fascism }
+	add_to_array = { mod1440_gv_pp_1 = party_popularity_100@democratic }
+	add_to_array = { mod1440_gv_pp_2 = party_popularity_100@communism }
+	add_to_array = { mod1440_gv_pp_3 = party_popularity_100@neutrality }
+	set_temp_variable = { gv_g = 0 }
+	if = {
+		limit = { has_government = fascism }
+		set_temp_variable = { gv_g = 1 }
+	}
+	if = {
+		limit = { has_government = democratic }
+		set_temp_variable = { gv_g = 2 }
+	}
+	if = {
+		limit = { has_government = communism }
+		set_temp_variable = { gv_g = 3 }
+	}
+	if = {
+		limit = { has_government = neutrality }
+		set_temp_variable = { gv_g = 4 }
+	}
+	add_to_array = { mod1440_gv_pp_g = gv_g }
+	add_to_array = { mod1440_gv_pp_h = country_leader }
+	if = {
+		limit = { is_ai = no }
+		mod1440_gv_chart = yes
+	}
+}
+
+# Government: the record of party support filled at its front to National Figures' months (a save of an earlier
+# build, the first day it is played with this one).
+mod1440_gv_pp_fill = {
+	set_temp_variable = { gv_rt = mod1440_h_date^num }
+	set_temp_variable = { gv_g = 0 }
+	if = {
+		limit = { has_government = fascism }
+		set_temp_variable = { gv_g = 1 }
+	}
+	if = {
+		limit = { has_government = democratic }
+		set_temp_variable = { gv_g = 2 }
+	}
+	if = {
+		limit = { has_government = communism }
+		set_temp_variable = { gv_g = 3 }
+	}
+	if = {
+		limit = { has_government = neutrality }
+		set_temp_variable = { gv_g = 4 }
+	}
+	set_temp_variable = { gv_bt = gv_rt }
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_0^num > gv_bt } }
+		remove_from_array = { array = mod1440_gv_pp_0 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_1 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_2 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_3 index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_g index = 0 }
+		remove_from_array = { array = mod1440_gv_pp_h index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_1^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_1 value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_2^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_2 value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_3^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_3 value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_g^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_g value = -1 index = 0 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { mod1440_gv_pp_h^num < mod1440_gv_pp_0^num } }
+		add_to_array = { array = mod1440_gv_pp_h value = country_leader index = 0 }
+	}
+	if = {
+		limit = { check_variable = { mod1440_gv_pp_0^num < gv_bt } }
+		set_temp_variable = { gv_bm = gv_bt }
+		subtract_from_temp_variable = { gv_bm = mod1440_gv_pp_0^num }
+		for_loop_effect = {
+			start = gv_bm
+			end = 0
+			compare = greater_than
+			add = -1
+			value = gv_bk
+			set_temp_variable = { gv_bj = gv_bk }
+			subtract_from_temp_variable = { gv_bj = 1 }
+			set_temp_variable = { gv_bv = -1 }
+			set_temp_variable = { gv_b30 = gv_bj }
+			subtract_from_temp_variable = { gv_b30 = mod1440_h_date^num }
+			add_to_temp_variable = { gv_b30 = mod1440_h_30^num }
+			if = {
+				limit = { check_variable = { gv_b30 > -1 } }
+				set_temp_variable = { gv_bv = mod1440_h_30^gv_b30 }
+			}
+			set_temp_variable = { gv_bg = gv_g }
+			set_temp_variable = { gv_bh = country_leader }
+			set_temp_variable = { gv_bd = mod1440_h_date^gv_bj }
+			for_loop_effect = {
+				start = mod1440_gv_rul^num
+				end = 0
+				compare = greater_than
+				add = -1
+				value = gv_bk
+				set_temp_variable = { gv_bi = gv_bk }
+				subtract_from_temp_variable = { gv_bi = 1 }
+				if = {
+					limit = { OR = { check_variable = { mod1440_gv_rul_old^gv_bi = 1 } NOT = { check_variable = { mod1440_gv_rul_from^gv_bi > gv_bd } } } }
+					set_temp_variable = { gv_bg = mod1440_gv_rul_g^gv_bi }
+					set_temp_variable = { gv_bh = mod1440_gv_rul^gv_bi }
+				}
+			}
+			set_temp_variable = { gv_b0 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 1 } }
+				set_temp_variable = { gv_b0 = gv_bv }
+			}
+			set_temp_variable = { gv_b1 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 2 } }
+				set_temp_variable = { gv_b1 = gv_bv }
+			}
+			set_temp_variable = { gv_b2 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 3 } }
+				set_temp_variable = { gv_b2 = gv_bv }
+			}
+			set_temp_variable = { gv_b3 = -1 }
+			if = {
+				limit = { check_variable = { gv_bg = 4 } }
+				set_temp_variable = { gv_b3 = gv_bv }
+			}
+			add_to_array = { array = mod1440_gv_pp_0 value = gv_b0 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_1 value = gv_b1 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_2 value = gv_b2 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_3 value = gv_b3 index = 0 }
+			add_to_array = { array = mod1440_gv_pp_g value = gv_bg index = 0 }
+			add_to_array = { array = mod1440_gv_pp_h value = gv_bh index = 0 }
+		}
+	}
+}
+
+# Government: the chart of party support for the range chosen (or the shortest that holds every month): the y of
+# each party's dot in each month (-1: none), the ruling party's apart (drawn last), the band of who governed, the
+# years, the election ticks and the shares at the lines' ends. Run on a range click, on the first of the month and
+# when the panel of the heads closes (rule 5); while the panel is open the arrays stay empty.
+mod1440_gv_chart = {
+	clear_array = mod1440_gv_pd_0_24
+	clear_array = mod1440_gv_pd_1_24
+	clear_array = mod1440_gv_pd_2_24
+	clear_array = mod1440_gv_pd_3_24
+	clear_array = mod1440_gv_pd_r_24
+	clear_array = mod1440_gv_pd_0_60
+	clear_array = mod1440_gv_pd_1_60
+	clear_array = mod1440_gv_pd_2_60
+	clear_array = mod1440_gv_pd_3_60
+	clear_array = mod1440_gv_pd_r_60
+	clear_array = mod1440_gv_pd_0_120
+	clear_array = mod1440_gv_pd_1_120
+	clear_array = mod1440_gv_pd_2_120
+	clear_array = mod1440_gv_pd_3_120
+	clear_array = mod1440_gv_pd_r_120
+	clear_array = mod1440_gv_pg_24
+	clear_array = mod1440_gv_pg_60
+	clear_array = mod1440_gv_pg_120
+	clear_array = mod1440_gv_pb_24
+	clear_array = mod1440_gv_pb_60
+	clear_array = mod1440_gv_pb_120
+	set_variable = { mod1440_gv_rf_24 = 1 }
+	set_variable = { mod1440_gv_rf_60 = 1 }
+	set_variable = { mod1440_gv_rf_120 = 1 }
+	set_temp_variable = { gv_n = mod1440_gv_pp_0^num }
+	set_variable = { mod1440_gv_pp_n = gv_n }
+	set_variable = { mod1440_gv_chart_v = 3 }
+	if = {
+		limit = { NOT = { check_variable = { mod1440_gv_heads = 1 } } }
+		set_temp_variable = { gv_span = mod1440_gv_range }
+		if = {
+			limit = { check_variable = { gv_span = 0 } }
+			set_temp_variable = { gv_span = 24 }
+			if = {
+				limit = { check_variable = { gv_n > 24 } }
+				set_temp_variable = { gv_span = 60 }
+			}
+			if = {
+				limit = { check_variable = { gv_n > 60 } }
+				set_temp_variable = { gv_span = 120 }
+			}
+		}
+		set_temp_variable = { gv_from = gv_n }
+		subtract_from_temp_variable = { gv_from = gv_span }
+		if = {
+			limit = { check_variable = { gv_from < 0 } }
+			set_temp_variable = { gv_from = 0 }
+		}
+		set_temp_variable = { gv_cnt = gv_n }
+		subtract_from_temp_variable = { gv_cnt = gv_from }
+		set_temp_variable = { gv_step = 25 }
+		if = {
+			limit = { check_variable = { gv_span = 24 } }
+			set_temp_variable = { gv_step = 25 }
+			set_variable = { mod1440_gv_rf_24 = 2 }
+			for_loop_effect = {
+				start = 0
+				end = gv_cnt
+				value = gv_k
+				set_temp_variable = { gv_j = gv_from }
+				add_to_temp_variable = { gv_j = gv_k }
+				set_temp_variable = { gv_g = mod1440_gv_pp_g^gv_j }
+				set_temp_variable = { gv_yr = -1 }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_0^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 276 }
+					if = {
+						limit = { check_variable = { gv_g = 1 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_0_24 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_1^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 276 }
+					if = {
+						limit = { check_variable = { gv_g = 2 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_1_24 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_2^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 276 }
+					if = {
+						limit = { check_variable = { gv_g = 3 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_2_24 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_3^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 276 }
+					if = {
+						limit = { check_variable = { gv_g = 4 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_3_24 = gv_y }
+				add_to_array = { mod1440_gv_pd_r_24 = gv_yr }
+				add_to_array = { mod1440_gv_pg_24 = gv_g }
+				add_to_array = { mod1440_gv_pb_24 = gv_g }
+			}
+			set_variable = { mod1440_gv_lx_s = gv_cnt }
+			multiply_variable = { mod1440_gv_lx_s = 25 }
+			add_to_variable = { mod1440_gv_lx_s = 447 }
+			set_variable = { mod1440_gv_lx_t = mod1440_gv_lx_s }
+			add_to_variable = { mod1440_gv_lx_t = 9 }
+		}
+		else_if = {
+			limit = { check_variable = { gv_span = 60 } }
+			set_temp_variable = { gv_step = 10 }
+			set_variable = { mod1440_gv_rf_60 = 2 }
+			for_loop_effect = {
+				start = 0
+				end = gv_cnt
+				value = gv_k
+				set_temp_variable = { gv_j = gv_from }
+				add_to_temp_variable = { gv_j = gv_k }
+				set_temp_variable = { gv_g = mod1440_gv_pp_g^gv_j }
+				set_temp_variable = { gv_yr = -1 }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_0^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 277 }
+					if = {
+						limit = { check_variable = { gv_g = 1 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_0_60 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_1^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 277 }
+					if = {
+						limit = { check_variable = { gv_g = 2 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_1_60 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_2^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 277 }
+					if = {
+						limit = { check_variable = { gv_g = 3 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_2_60 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_3^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 277 }
+					if = {
+						limit = { check_variable = { gv_g = 4 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_3_60 = gv_y }
+				add_to_array = { mod1440_gv_pd_r_60 = gv_yr }
+				add_to_array = { mod1440_gv_pg_60 = gv_g }
+				add_to_array = { mod1440_gv_pb_60 = gv_g }
+			}
+			set_variable = { mod1440_gv_lx_s = gv_cnt }
+			multiply_variable = { mod1440_gv_lx_s = 10 }
+			add_to_variable = { mod1440_gv_lx_s = 454 }
+			set_variable = { mod1440_gv_lx_t = mod1440_gv_lx_s }
+			add_to_variable = { mod1440_gv_lx_t = 9 }
+		}
+		else_if = {
+			limit = { check_variable = { gv_span = 120 } }
+			set_temp_variable = { gv_step = 5 }
+			set_variable = { mod1440_gv_rf_120 = 2 }
+			for_loop_effect = {
+				start = 0
+				end = gv_cnt
+				value = gv_k
+				set_temp_variable = { gv_j = gv_from }
+				add_to_temp_variable = { gv_j = gv_k }
+				set_temp_variable = { gv_g = mod1440_gv_pp_g^gv_j }
+				set_temp_variable = { gv_yr = -1 }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_0^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 278 }
+					if = {
+						limit = { check_variable = { gv_g = 1 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_0_120 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_1^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 278 }
+					if = {
+						limit = { check_variable = { gv_g = 2 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_1_120 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_2^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 278 }
+					if = {
+						limit = { check_variable = { gv_g = 3 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_2_120 = gv_y }
+				set_temp_variable = { gv_y = -1 }
+				set_temp_variable = { gv_v = mod1440_gv_pp_3^gv_j }
+				if = {
+					limit = { check_variable = { gv_v > -1 } }
+					set_temp_variable = { gv_y = gv_v }
+					multiply_temp_variable = { gv_y = 2.8 }
+					multiply_temp_variable = { gv_y = -1 }
+					add_to_temp_variable = { gv_y = 278 }
+					if = {
+						limit = { check_variable = { gv_g = 4 } }
+						set_temp_variable = { gv_yr = gv_y }
+						set_temp_variable = { gv_y = -1 }
+					}
+				}
+				add_to_array = { mod1440_gv_pd_3_120 = gv_y }
+				add_to_array = { mod1440_gv_pd_r_120 = gv_yr }
+				add_to_array = { mod1440_gv_pg_120 = gv_g }
+				add_to_array = { mod1440_gv_pb_120 = gv_g }
+			}
+			set_variable = { mod1440_gv_lx_s = gv_cnt }
+			multiply_variable = { mod1440_gv_lx_s = 5 }
+			add_to_variable = { mod1440_gv_lx_s = 455 }
+			set_variable = { mod1440_gv_lx_t = mod1440_gv_lx_s }
+			add_to_variable = { mod1440_gv_lx_t = 9 }
+		}
+		set_variable = { mod1440_gv_yl_0 = 0 }
+		set_variable = { mod1440_gv_yl_1 = 0 }
+		set_variable = { mod1440_gv_yl_2 = 0 }
+		set_variable = { mod1440_gv_yl_3 = 0 }
+		set_variable = { mod1440_gv_yl_4 = 0 }
+		set_variable = { mod1440_gv_yl_5 = 0 }
+		set_variable = { mod1440_gv_yl_6 = 0 }
+		set_variable = { mod1440_gv_yl_7 = 0 }
+		set_variable = { mod1440_gv_yl_8 = 0 }
+		set_variable = { mod1440_gv_yl_9 = 0 }
+		set_temp_variable = { gv_before = 0 }
+		set_temp_variable = { gv_slot = 0 }
+		set_temp_variable = { gv_yoff = mod1440_h_date^num }
+		subtract_from_temp_variable = { gv_yoff = mod1440_h_year^num }
+		for_loop_effect = {
+			start = 0
+			end = gv_cnt
+			value = gv_k
+			set_temp_variable = { gv_yi = gv_from }
+			add_to_temp_variable = { gv_yi = gv_k }
+			subtract_from_temp_variable = { gv_yi = gv_yoff }
+			set_temp_variable = { gv_yv = 0 }
+			if = {
+				limit = { check_variable = { gv_yi > -1 } }
+				set_temp_variable = { gv_yv = mod1440_h_year^gv_yi }
+			}
+			if = {
+				limit = { check_variable = { gv_k > 0 } check_variable = { gv_yv > 0 } NOT = { check_variable = { gv_yv = gv_before } } check_variable = { gv_slot < 10 } }
+				set_temp_variable = { gv_x = gv_k }
+				multiply_temp_variable = { gv_x = gv_step }
+				add_to_temp_variable = { gv_x = 450 }
+				if = {
+					limit = { check_variable = { gv_slot = 0 } }
+					set_variable = { mod1440_gv_yl_0 = gv_yv }
+					set_variable = { mod1440_gv_tx_0 = gv_x }
+					set_variable = { mod1440_gv_yx_0 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_0 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 1 } }
+					set_variable = { mod1440_gv_yl_1 = gv_yv }
+					set_variable = { mod1440_gv_tx_1 = gv_x }
+					set_variable = { mod1440_gv_yx_1 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_1 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 2 } }
+					set_variable = { mod1440_gv_yl_2 = gv_yv }
+					set_variable = { mod1440_gv_tx_2 = gv_x }
+					set_variable = { mod1440_gv_yx_2 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_2 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 3 } }
+					set_variable = { mod1440_gv_yl_3 = gv_yv }
+					set_variable = { mod1440_gv_tx_3 = gv_x }
+					set_variable = { mod1440_gv_yx_3 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_3 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 4 } }
+					set_variable = { mod1440_gv_yl_4 = gv_yv }
+					set_variable = { mod1440_gv_tx_4 = gv_x }
+					set_variable = { mod1440_gv_yx_4 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_4 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 5 } }
+					set_variable = { mod1440_gv_yl_5 = gv_yv }
+					set_variable = { mod1440_gv_tx_5 = gv_x }
+					set_variable = { mod1440_gv_yx_5 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_5 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 6 } }
+					set_variable = { mod1440_gv_yl_6 = gv_yv }
+					set_variable = { mod1440_gv_tx_6 = gv_x }
+					set_variable = { mod1440_gv_yx_6 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_6 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 7 } }
+					set_variable = { mod1440_gv_yl_7 = gv_yv }
+					set_variable = { mod1440_gv_tx_7 = gv_x }
+					set_variable = { mod1440_gv_yx_7 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_7 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 8 } }
+					set_variable = { mod1440_gv_yl_8 = gv_yv }
+					set_variable = { mod1440_gv_tx_8 = gv_x }
+					set_variable = { mod1440_gv_yx_8 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_8 = 20 }
+				}
+				else_if = {
+					limit = { check_variable = { gv_slot = 9 } }
+					set_variable = { mod1440_gv_yl_9 = gv_yv }
+					set_variable = { mod1440_gv_tx_9 = gv_x }
+					set_variable = { mod1440_gv_yx_9 = gv_x }
+					subtract_from_variable = { mod1440_gv_yx_9 = 20 }
+				}
+				add_to_temp_variable = { gv_slot = 1 }
+			}
+			set_temp_variable = { gv_before = gv_yv }
+		}
+		set_temp_variable = { gv_sn = 0 }
+		set_temp_variable = { gv_ph = -1 }
+		set_temp_variable = { gv_bs = 0 }
+		set_temp_variable = { gv_bl = global.date }
+		set_temp_variable = { gv_open = 0 }
+		for_loop_effect = {
+			start = 0
+			end = gv_cnt
+			value = gv_k
+			set_temp_variable = { gv_j = gv_from }
+			add_to_temp_variable = { gv_j = gv_k }
+			set_temp_variable = { gv_hv = mod1440_gv_pp_h^gv_j }
+			if = {
+				limit = { OR = { check_variable = { gv_k = 0 } NOT = { check_variable = { gv_hv = gv_ph } } } }
+				if = {
+					limit = { check_variable = { gv_open = 1 } }
+					set_temp_variable = { gv_open = 0 }
+					if = {
+						limit = { check_variable = { gv_sn = 1 } }
+						set_variable = { mod1440_gv_bw_0 = gv_k }
+						subtract_from_variable = { mod1440_gv_bw_0 = gv_bs }
+						multiply_variable = { mod1440_gv_bw_0 = gv_step }
+						set_variable = { mod1440_gv_bt_0 = gv_bl }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 2 } }
+						set_variable = { mod1440_gv_bw_1 = gv_k }
+						subtract_from_variable = { mod1440_gv_bw_1 = gv_bs }
+						multiply_variable = { mod1440_gv_bw_1 = gv_step }
+						set_variable = { mod1440_gv_bt_1 = gv_bl }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 3 } }
+						set_variable = { mod1440_gv_bw_2 = gv_k }
+						subtract_from_variable = { mod1440_gv_bw_2 = gv_bs }
+						multiply_variable = { mod1440_gv_bw_2 = gv_step }
+						set_variable = { mod1440_gv_bt_2 = gv_bl }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 4 } }
+						set_variable = { mod1440_gv_bw_3 = gv_k }
+						subtract_from_variable = { mod1440_gv_bw_3 = gv_bs }
+						multiply_variable = { mod1440_gv_bw_3 = gv_step }
+						set_variable = { mod1440_gv_bt_3 = gv_bl }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 5 } }
+						set_variable = { mod1440_gv_bw_4 = gv_k }
+						subtract_from_variable = { mod1440_gv_bw_4 = gv_bs }
+						multiply_variable = { mod1440_gv_bw_4 = gv_step }
+						set_variable = { mod1440_gv_bt_4 = gv_bl }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 6 } }
+						set_variable = { mod1440_gv_bw_5 = gv_k }
+						subtract_from_variable = { mod1440_gv_bw_5 = gv_bs }
+						multiply_variable = { mod1440_gv_bw_5 = gv_step }
+						set_variable = { mod1440_gv_bt_5 = gv_bl }
+					}
+				}
+				if = {
+					limit = { check_variable = { gv_sn < 6 } }
+					set_temp_variable = { gv_x = gv_k }
+					multiply_temp_variable = { gv_x = gv_step }
+					add_to_temp_variable = { gv_x = 456 }
+					if = {
+						limit = { check_variable = { gv_sn = 0 } }
+						set_variable = { mod1440_gv_bn_0 = gv_hv }
+						set_variable = { mod1440_gv_bx_0 = gv_x }
+						set_variable = { mod1440_gv_bf_0 = mod1440_h_date^gv_j }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 1 } }
+						set_variable = { mod1440_gv_bn_1 = gv_hv }
+						set_variable = { mod1440_gv_bx_1 = gv_x }
+						set_variable = { mod1440_gv_bf_1 = mod1440_h_date^gv_j }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 2 } }
+						set_variable = { mod1440_gv_bn_2 = gv_hv }
+						set_variable = { mod1440_gv_bx_2 = gv_x }
+						set_variable = { mod1440_gv_bf_2 = mod1440_h_date^gv_j }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 3 } }
+						set_variable = { mod1440_gv_bn_3 = gv_hv }
+						set_variable = { mod1440_gv_bx_3 = gv_x }
+						set_variable = { mod1440_gv_bf_3 = mod1440_h_date^gv_j }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 4 } }
+						set_variable = { mod1440_gv_bn_4 = gv_hv }
+						set_variable = { mod1440_gv_bx_4 = gv_x }
+						set_variable = { mod1440_gv_bf_4 = mod1440_h_date^gv_j }
+					}
+					else_if = {
+						limit = { check_variable = { gv_sn = 5 } }
+						set_variable = { mod1440_gv_bn_5 = gv_hv }
+						set_variable = { mod1440_gv_bx_5 = gv_x }
+						set_variable = { mod1440_gv_bf_5 = mod1440_h_date^gv_j }
+					}
+					set_temp_variable = { gv_bs = gv_k }
+					set_temp_variable = { gv_open = 1 }
+					add_to_temp_variable = { gv_sn = 1 }
+				}
+				set_temp_variable = { gv_ph = gv_hv }
+			}
+			set_temp_variable = { gv_bl = mod1440_h_date^gv_j }
+		}
+		set_temp_variable = { gv_k = gv_cnt }
+		if = {
+			limit = { check_variable = { gv_open = 1 } }
+			set_temp_variable = { gv_open = 0 }
+			if = {
+				limit = { check_variable = { gv_sn = 1 } }
+				set_variable = { mod1440_gv_bw_0 = gv_k }
+				subtract_from_variable = { mod1440_gv_bw_0 = gv_bs }
+				multiply_variable = { mod1440_gv_bw_0 = gv_step }
+				set_variable = { mod1440_gv_bt_0 = gv_bl }
+			}
+			else_if = {
+				limit = { check_variable = { gv_sn = 2 } }
+				set_variable = { mod1440_gv_bw_1 = gv_k }
+				subtract_from_variable = { mod1440_gv_bw_1 = gv_bs }
+				multiply_variable = { mod1440_gv_bw_1 = gv_step }
+				set_variable = { mod1440_gv_bt_1 = gv_bl }
+			}
+			else_if = {
+				limit = { check_variable = { gv_sn = 3 } }
+				set_variable = { mod1440_gv_bw_2 = gv_k }
+				subtract_from_variable = { mod1440_gv_bw_2 = gv_bs }
+				multiply_variable = { mod1440_gv_bw_2 = gv_step }
+				set_variable = { mod1440_gv_bt_2 = gv_bl }
+			}
+			else_if = {
+				limit = { check_variable = { gv_sn = 4 } }
+				set_variable = { mod1440_gv_bw_3 = gv_k }
+				subtract_from_variable = { mod1440_gv_bw_3 = gv_bs }
+				multiply_variable = { mod1440_gv_bw_3 = gv_step }
+				set_variable = { mod1440_gv_bt_3 = gv_bl }
+			}
+			else_if = {
+				limit = { check_variable = { gv_sn = 5 } }
+				set_variable = { mod1440_gv_bw_4 = gv_k }
+				subtract_from_variable = { mod1440_gv_bw_4 = gv_bs }
+				multiply_variable = { mod1440_gv_bw_4 = gv_step }
+				set_variable = { mod1440_gv_bt_4 = gv_bl }
+			}
+			else_if = {
+				limit = { check_variable = { gv_sn = 6 } }
+				set_variable = { mod1440_gv_bw_5 = gv_k }
+				subtract_from_variable = { mod1440_gv_bw_5 = gv_bs }
+				multiply_variable = { mod1440_gv_bw_5 = gv_step }
+				set_variable = { mod1440_gv_bt_5 = gv_bl }
+			}
+		}
+		set_variable = { mod1440_gv_bn_n = gv_sn }
+		set_temp_variable = { gv_e = 0 }
+		set_temp_variable = { gv_tn = 0 }
+		set_temp_variable = { gv_en = mod1440_gv_el^num }
+		set_temp_variable = { gv_d0 = mod1440_h_date^gv_from }
+		set_temp_variable = { gv_wb = 0 }
+		while_loop_effect = {
+			limit = { check_variable = { gv_e < gv_en } }
+			break = gv_wb
+			if = {
+				limit = { check_variable = { mod1440_gv_el^gv_e < gv_d0 } }
+				add_to_temp_variable = { gv_e = 1 }
+			}
+			else = {
+				set_temp_variable = { gv_wb = 1 }
+			}
+		}
+		for_loop_effect = {
+			start = 1
+			end = gv_cnt
+			value = gv_k
+			set_temp_variable = { gv_j = gv_from }
+			add_to_temp_variable = { gv_j = gv_k }
+			set_temp_variable = { gv_dj = mod1440_h_date^gv_j }
+			set_temp_variable = { gv_wb = 0 }
+			while_loop_effect = {
+				limit = { check_variable = { gv_e < gv_en } }
+				break = gv_wb
+				if = {
+					limit = { check_variable = { mod1440_gv_el^gv_e < gv_dj } }
+					if = {
+						limit = { check_variable = { gv_tn < 10 } }
+						set_temp_variable = { gv_x = gv_k }
+						multiply_temp_variable = { gv_x = gv_step }
+						add_to_temp_variable = { gv_x = 449 }
+						if = {
+							limit = { check_variable = { gv_tn = 0 } }
+							set_variable = { mod1440_gv_tk_0 = gv_x }
+							set_variable = { mod1440_gv_td_0 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 1 } }
+							set_variable = { mod1440_gv_tk_1 = gv_x }
+							set_variable = { mod1440_gv_td_1 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 2 } }
+							set_variable = { mod1440_gv_tk_2 = gv_x }
+							set_variable = { mod1440_gv_td_2 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 3 } }
+							set_variable = { mod1440_gv_tk_3 = gv_x }
+							set_variable = { mod1440_gv_td_3 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 4 } }
+							set_variable = { mod1440_gv_tk_4 = gv_x }
+							set_variable = { mod1440_gv_td_4 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 5 } }
+							set_variable = { mod1440_gv_tk_5 = gv_x }
+							set_variable = { mod1440_gv_td_5 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 6 } }
+							set_variable = { mod1440_gv_tk_6 = gv_x }
+							set_variable = { mod1440_gv_td_6 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 7 } }
+							set_variable = { mod1440_gv_tk_7 = gv_x }
+							set_variable = { mod1440_gv_td_7 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 8 } }
+							set_variable = { mod1440_gv_tk_8 = gv_x }
+							set_variable = { mod1440_gv_td_8 = mod1440_gv_el^gv_e }
+						}
+						else_if = {
+							limit = { check_variable = { gv_tn = 9 } }
+							set_variable = { mod1440_gv_tk_9 = gv_x }
+							set_variable = { mod1440_gv_td_9 = mod1440_gv_el^gv_e }
+						}
+						add_to_temp_variable = { gv_tn = 1 }
+					}
+					add_to_temp_variable = { gv_e = 1 }
+				}
+				else = {
+					set_temp_variable = { gv_wb = 1 }
+				}
+			}
+		}
+		while_loop_effect = {
+			limit = { check_variable = { gv_e < gv_en } }
+			if = {
+				limit = { check_variable = { gv_tn < 10 } }
+				set_temp_variable = { gv_x = gv_cnt }
+				multiply_temp_variable = { gv_x = gv_step }
+				add_to_temp_variable = { gv_x = 449 }
+				if = {
+					limit = { check_variable = { gv_tn = 0 } }
+					set_variable = { mod1440_gv_tk_0 = gv_x }
+					set_variable = { mod1440_gv_td_0 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 1 } }
+					set_variable = { mod1440_gv_tk_1 = gv_x }
+					set_variable = { mod1440_gv_td_1 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 2 } }
+					set_variable = { mod1440_gv_tk_2 = gv_x }
+					set_variable = { mod1440_gv_td_2 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 3 } }
+					set_variable = { mod1440_gv_tk_3 = gv_x }
+					set_variable = { mod1440_gv_td_3 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 4 } }
+					set_variable = { mod1440_gv_tk_4 = gv_x }
+					set_variable = { mod1440_gv_td_4 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 5 } }
+					set_variable = { mod1440_gv_tk_5 = gv_x }
+					set_variable = { mod1440_gv_td_5 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 6 } }
+					set_variable = { mod1440_gv_tk_6 = gv_x }
+					set_variable = { mod1440_gv_td_6 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 7 } }
+					set_variable = { mod1440_gv_tk_7 = gv_x }
+					set_variable = { mod1440_gv_td_7 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 8 } }
+					set_variable = { mod1440_gv_tk_8 = gv_x }
+					set_variable = { mod1440_gv_td_8 = mod1440_gv_el^gv_e }
+				}
+				else_if = {
+					limit = { check_variable = { gv_tn = 9 } }
+					set_variable = { mod1440_gv_tk_9 = gv_x }
+					set_variable = { mod1440_gv_td_9 = mod1440_gv_el^gv_e }
+				}
+				add_to_temp_variable = { gv_tn = 1 }
+			}
+			add_to_temp_variable = { gv_e = 1 }
+		}
+		set_variable = { mod1440_gv_tk_n = gv_tn }
+		set_temp_variable = { gv_last = gv_n }
+		subtract_from_temp_variable = { gv_last = 1 }
+		set_variable = { mod1440_gv_lv_0 = -1 }
+		set_temp_variable = { gv_c0 = 0 }
+		set_temp_variable = { gv_pl0 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 0 } }
+			set_variable = { mod1440_gv_lv_0 = mod1440_gv_pp_0^gv_last }
+		}
+		if = {
+			limit = { check_variable = { mod1440_gv_lv_0 > -1 } }
+			set_temp_variable = { gv_c0 = mod1440_gv_lv_0 }
+			multiply_temp_variable = { gv_c0 = 2.8 }
+			multiply_temp_variable = { gv_c0 = -1 }
+			add_to_temp_variable = { gv_c0 = 336 }
+		}
+		set_variable = { mod1440_gv_lv_1 = -1 }
+		set_temp_variable = { gv_c1 = 0 }
+		set_temp_variable = { gv_pl1 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 0 } }
+			set_variable = { mod1440_gv_lv_1 = mod1440_gv_pp_1^gv_last }
+		}
+		if = {
+			limit = { check_variable = { mod1440_gv_lv_1 > -1 } }
+			set_temp_variable = { gv_c1 = mod1440_gv_lv_1 }
+			multiply_temp_variable = { gv_c1 = 2.8 }
+			multiply_temp_variable = { gv_c1 = -1 }
+			add_to_temp_variable = { gv_c1 = 336 }
+		}
+		set_variable = { mod1440_gv_lv_2 = -1 }
+		set_temp_variable = { gv_c2 = 0 }
+		set_temp_variable = { gv_pl2 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 0 } }
+			set_variable = { mod1440_gv_lv_2 = mod1440_gv_pp_2^gv_last }
+		}
+		if = {
+			limit = { check_variable = { mod1440_gv_lv_2 > -1 } }
+			set_temp_variable = { gv_c2 = mod1440_gv_lv_2 }
+			multiply_temp_variable = { gv_c2 = 2.8 }
+			multiply_temp_variable = { gv_c2 = -1 }
+			add_to_temp_variable = { gv_c2 = 336 }
+		}
+		set_variable = { mod1440_gv_lv_3 = -1 }
+		set_temp_variable = { gv_c3 = 0 }
+		set_temp_variable = { gv_pl3 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 0 } }
+			set_variable = { mod1440_gv_lv_3 = mod1440_gv_pp_3^gv_last }
+		}
+		if = {
+			limit = { check_variable = { mod1440_gv_lv_3 > -1 } }
+			set_temp_variable = { gv_c3 = mod1440_gv_lv_3 }
+			multiply_temp_variable = { gv_c3 = 2.8 }
+			multiply_temp_variable = { gv_c3 = -1 }
+			add_to_temp_variable = { gv_c3 = 336 }
+		}
+		set_temp_variable = { gv_low = 340 }
+		set_temp_variable = { gv_best = -1000 }
+		set_temp_variable = { gv_bi = -1 }
+		if = {
+			limit = { check_variable = { gv_pl0 = 0 } check_variable = { mod1440_gv_lv_0 > -1 } check_variable = { gv_c0 > gv_best } }
+			set_temp_variable = { gv_best = gv_c0 }
+			set_temp_variable = { gv_bi = 0 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl1 = 0 } check_variable = { mod1440_gv_lv_1 > -1 } check_variable = { gv_c1 > gv_best } }
+			set_temp_variable = { gv_best = gv_c1 }
+			set_temp_variable = { gv_bi = 1 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl2 = 0 } check_variable = { mod1440_gv_lv_2 > -1 } check_variable = { gv_c2 > gv_best } }
+			set_temp_variable = { gv_best = gv_c2 }
+			set_temp_variable = { gv_bi = 2 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl3 = 0 } check_variable = { mod1440_gv_lv_3 > -1 } check_variable = { gv_c3 > gv_best } }
+			set_temp_variable = { gv_best = gv_c3 }
+			set_temp_variable = { gv_bi = 3 }
+		}
+		if = {
+			limit = { check_variable = { gv_bi > -1 } }
+			if = {
+				limit = { check_variable = { gv_best > gv_low } }
+				set_temp_variable = { gv_best = gv_low }
+			}
+			if = {
+				limit = { check_variable = { gv_bi = 0 } }
+				set_temp_variable = { gv_c0 = gv_best }
+				set_temp_variable = { gv_pl0 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 1 } }
+				set_temp_variable = { gv_c1 = gv_best }
+				set_temp_variable = { gv_pl1 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 2 } }
+				set_temp_variable = { gv_c2 = gv_best }
+				set_temp_variable = { gv_pl2 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 3 } }
+				set_temp_variable = { gv_c3 = gv_best }
+				set_temp_variable = { gv_pl3 = 1 }
+			}
+			set_temp_variable = { gv_low = gv_best }
+			subtract_from_temp_variable = { gv_low = 18 }
+		}
+		set_temp_variable = { gv_best = -1000 }
+		set_temp_variable = { gv_bi = -1 }
+		if = {
+			limit = { check_variable = { gv_pl0 = 0 } check_variable = { mod1440_gv_lv_0 > -1 } check_variable = { gv_c0 > gv_best } }
+			set_temp_variable = { gv_best = gv_c0 }
+			set_temp_variable = { gv_bi = 0 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl1 = 0 } check_variable = { mod1440_gv_lv_1 > -1 } check_variable = { gv_c1 > gv_best } }
+			set_temp_variable = { gv_best = gv_c1 }
+			set_temp_variable = { gv_bi = 1 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl2 = 0 } check_variable = { mod1440_gv_lv_2 > -1 } check_variable = { gv_c2 > gv_best } }
+			set_temp_variable = { gv_best = gv_c2 }
+			set_temp_variable = { gv_bi = 2 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl3 = 0 } check_variable = { mod1440_gv_lv_3 > -1 } check_variable = { gv_c3 > gv_best } }
+			set_temp_variable = { gv_best = gv_c3 }
+			set_temp_variable = { gv_bi = 3 }
+		}
+		if = {
+			limit = { check_variable = { gv_bi > -1 } }
+			if = {
+				limit = { check_variable = { gv_best > gv_low } }
+				set_temp_variable = { gv_best = gv_low }
+			}
+			if = {
+				limit = { check_variable = { gv_bi = 0 } }
+				set_temp_variable = { gv_c0 = gv_best }
+				set_temp_variable = { gv_pl0 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 1 } }
+				set_temp_variable = { gv_c1 = gv_best }
+				set_temp_variable = { gv_pl1 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 2 } }
+				set_temp_variable = { gv_c2 = gv_best }
+				set_temp_variable = { gv_pl2 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 3 } }
+				set_temp_variable = { gv_c3 = gv_best }
+				set_temp_variable = { gv_pl3 = 1 }
+			}
+			set_temp_variable = { gv_low = gv_best }
+			subtract_from_temp_variable = { gv_low = 18 }
+		}
+		set_temp_variable = { gv_best = -1000 }
+		set_temp_variable = { gv_bi = -1 }
+		if = {
+			limit = { check_variable = { gv_pl0 = 0 } check_variable = { mod1440_gv_lv_0 > -1 } check_variable = { gv_c0 > gv_best } }
+			set_temp_variable = { gv_best = gv_c0 }
+			set_temp_variable = { gv_bi = 0 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl1 = 0 } check_variable = { mod1440_gv_lv_1 > -1 } check_variable = { gv_c1 > gv_best } }
+			set_temp_variable = { gv_best = gv_c1 }
+			set_temp_variable = { gv_bi = 1 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl2 = 0 } check_variable = { mod1440_gv_lv_2 > -1 } check_variable = { gv_c2 > gv_best } }
+			set_temp_variable = { gv_best = gv_c2 }
+			set_temp_variable = { gv_bi = 2 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl3 = 0 } check_variable = { mod1440_gv_lv_3 > -1 } check_variable = { gv_c3 > gv_best } }
+			set_temp_variable = { gv_best = gv_c3 }
+			set_temp_variable = { gv_bi = 3 }
+		}
+		if = {
+			limit = { check_variable = { gv_bi > -1 } }
+			if = {
+				limit = { check_variable = { gv_best > gv_low } }
+				set_temp_variable = { gv_best = gv_low }
+			}
+			if = {
+				limit = { check_variable = { gv_bi = 0 } }
+				set_temp_variable = { gv_c0 = gv_best }
+				set_temp_variable = { gv_pl0 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 1 } }
+				set_temp_variable = { gv_c1 = gv_best }
+				set_temp_variable = { gv_pl1 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 2 } }
+				set_temp_variable = { gv_c2 = gv_best }
+				set_temp_variable = { gv_pl2 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 3 } }
+				set_temp_variable = { gv_c3 = gv_best }
+				set_temp_variable = { gv_pl3 = 1 }
+			}
+			set_temp_variable = { gv_low = gv_best }
+			subtract_from_temp_variable = { gv_low = 18 }
+		}
+		set_temp_variable = { gv_best = -1000 }
+		set_temp_variable = { gv_bi = -1 }
+		if = {
+			limit = { check_variable = { gv_pl0 = 0 } check_variable = { mod1440_gv_lv_0 > -1 } check_variable = { gv_c0 > gv_best } }
+			set_temp_variable = { gv_best = gv_c0 }
+			set_temp_variable = { gv_bi = 0 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl1 = 0 } check_variable = { mod1440_gv_lv_1 > -1 } check_variable = { gv_c1 > gv_best } }
+			set_temp_variable = { gv_best = gv_c1 }
+			set_temp_variable = { gv_bi = 1 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl2 = 0 } check_variable = { mod1440_gv_lv_2 > -1 } check_variable = { gv_c2 > gv_best } }
+			set_temp_variable = { gv_best = gv_c2 }
+			set_temp_variable = { gv_bi = 2 }
+		}
+		if = {
+			limit = { check_variable = { gv_pl3 = 0 } check_variable = { mod1440_gv_lv_3 > -1 } check_variable = { gv_c3 > gv_best } }
+			set_temp_variable = { gv_best = gv_c3 }
+			set_temp_variable = { gv_bi = 3 }
+		}
+		if = {
+			limit = { check_variable = { gv_bi > -1 } }
+			if = {
+				limit = { check_variable = { gv_best > gv_low } }
+				set_temp_variable = { gv_best = gv_low }
+			}
+			if = {
+				limit = { check_variable = { gv_bi = 0 } }
+				set_temp_variable = { gv_c0 = gv_best }
+				set_temp_variable = { gv_pl0 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 1 } }
+				set_temp_variable = { gv_c1 = gv_best }
+				set_temp_variable = { gv_pl1 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 2 } }
+				set_temp_variable = { gv_c2 = gv_best }
+				set_temp_variable = { gv_pl2 = 1 }
+			}
+			else_if = {
+				limit = { check_variable = { gv_bi = 3 } }
+				set_temp_variable = { gv_c3 = gv_best }
+				set_temp_variable = { gv_pl3 = 1 }
+			}
+			set_temp_variable = { gv_low = gv_best }
+			subtract_from_temp_variable = { gv_low = 18 }
+		}
+		set_variable = { mod1440_gv_ly_0_s = gv_c0 }
+		subtract_from_variable = { mod1440_gv_ly_0_s = 3 }
+		set_variable = { mod1440_gv_ly_0_t = gv_c0 }
+		subtract_from_variable = { mod1440_gv_ly_0_t = 11 }
+		set_variable = { mod1440_gv_ly_1_s = gv_c1 }
+		subtract_from_variable = { mod1440_gv_ly_1_s = 3 }
+		set_variable = { mod1440_gv_ly_1_t = gv_c1 }
+		subtract_from_variable = { mod1440_gv_ly_1_t = 11 }
+		set_variable = { mod1440_gv_ly_2_s = gv_c2 }
+		subtract_from_variable = { mod1440_gv_ly_2_s = 3 }
+		set_variable = { mod1440_gv_ly_2_t = gv_c2 }
+		subtract_from_variable = { mod1440_gv_ly_2_t = 11 }
+		set_variable = { mod1440_gv_ly_3_s = gv_c3 }
+		subtract_from_variable = { mod1440_gv_ly_3_s = 3 }
+		set_variable = { mod1440_gv_ly_3_t = gv_c3 }
+		subtract_from_variable = { mod1440_gv_ly_3_t = 11 }
+		set_variable = { mod1440_gv_hy_0 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 12 } }
+			set_temp_variable = { gv_a = mod1440_gv_pp_0^gv_last }
+			set_temp_variable = { gv_i13 = gv_n }
+			subtract_from_temp_variable = { gv_i13 = 13 }
+			set_temp_variable = { gv_b = mod1440_gv_pp_0^gv_i13 }
+			if = {
+				limit = { check_variable = { gv_a > -1 } check_variable = { gv_b > -1 } }
+				set_variable = { mod1440_gv_dy_0 = gv_a }
+				subtract_from_variable = { mod1440_gv_dy_0 = gv_b }
+				set_variable = { mod1440_gv_hy_0 = 1 }
+			}
+		}
+		set_variable = { mod1440_gv_hy_1 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 12 } }
+			set_temp_variable = { gv_a = mod1440_gv_pp_1^gv_last }
+			set_temp_variable = { gv_i13 = gv_n }
+			subtract_from_temp_variable = { gv_i13 = 13 }
+			set_temp_variable = { gv_b = mod1440_gv_pp_1^gv_i13 }
+			if = {
+				limit = { check_variable = { gv_a > -1 } check_variable = { gv_b > -1 } }
+				set_variable = { mod1440_gv_dy_1 = gv_a }
+				subtract_from_variable = { mod1440_gv_dy_1 = gv_b }
+				set_variable = { mod1440_gv_hy_1 = 1 }
+			}
+		}
+		set_variable = { mod1440_gv_hy_2 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 12 } }
+			set_temp_variable = { gv_a = mod1440_gv_pp_2^gv_last }
+			set_temp_variable = { gv_i13 = gv_n }
+			subtract_from_temp_variable = { gv_i13 = 13 }
+			set_temp_variable = { gv_b = mod1440_gv_pp_2^gv_i13 }
+			if = {
+				limit = { check_variable = { gv_a > -1 } check_variable = { gv_b > -1 } }
+				set_variable = { mod1440_gv_dy_2 = gv_a }
+				subtract_from_variable = { mod1440_gv_dy_2 = gv_b }
+				set_variable = { mod1440_gv_hy_2 = 1 }
+			}
+		}
+		set_variable = { mod1440_gv_hy_3 = 0 }
+		if = {
+			limit = { check_variable = { gv_n > 12 } }
+			set_temp_variable = { gv_a = mod1440_gv_pp_3^gv_last }
+			set_temp_variable = { gv_i13 = gv_n }
+			subtract_from_temp_variable = { gv_i13 = 13 }
+			set_temp_variable = { gv_b = mod1440_gv_pp_3^gv_i13 }
+			if = {
+				limit = { check_variable = { gv_a > -1 } check_variable = { gv_b > -1 } }
+				set_variable = { mod1440_gv_dy_3 = gv_a }
+				subtract_from_variable = { mod1440_gv_dy_3 = gv_b }
+				set_variable = { mod1440_gv_hy_3 = 1 }
+			}
+		}
+		set_variable = { mod1440_gv_hi = 0 }
+		set_variable = { mod1440_gv_hi_d = global.date }
+		if = {
+			limit = { check_variable = { mod1440_h_30^num > 0 } }
+			set_temp_variable = { gv_hi = 0 }
+			set_temp_variable = { gv_hat = 0 }
+			find_highest_in_array = {
+				array = mod1440_h_30
+				value = gv_hi
+				index = gv_hat
+			}
+			set_variable = { mod1440_gv_hi = gv_hi }
+			set_variable = { mod1440_gv_hi_d = mod1440_h_date^gv_hat }
+		}
+		set_temp_variable = { gv_full = 0 }
+		set_temp_variable = { gv_ff = -1 }
+		for_loop_effect = {
+			start = 0
+			end = gv_n
+			value = gv_k
+			if = {
+				limit = { check_variable = { mod1440_gv_pp_0^gv_k > -1 } check_variable = { mod1440_gv_pp_1^gv_k > -1 } check_variable = { mod1440_gv_pp_2^gv_k > -1 } check_variable = { mod1440_gv_pp_3^gv_k > -1 } }
+				add_to_temp_variable = { gv_full = 1 }
+				if = {
+					limit = { check_variable = { gv_ff < 0 } }
+					set_temp_variable = { gv_ff = gv_k }
+				}
+			}
+		}
+		set_variable = { mod1440_gv_pp_full = gv_full }
+		set_variable = { mod1440_gv_full_d = global.date }
+		if = {
+			limit = { check_variable = { gv_ff > -1 } }
+			set_variable = { mod1440_gv_full_d = mod1440_h_date^gv_ff }
+		}
+		set_variable = { mod1440_gv_bf = 0 }
+		if = {
+			limit = { OR = { check_variable = { gv_ff > gv_from } check_variable = { gv_ff < 0 } } check_variable = { gv_n > 0 } }
+			set_variable = { mod1440_gv_bf = 1 }
+		}
+	}
+}
+
+# Government: the heads panel opened or closed (mod1440_gv_heads): its button's frame, its copy, the chart.
+mod1440_gv_panel = {
+	set_variable = { mod1440_gv_heads_f = 1 }
+	if = {
+		limit = { check_variable = { mod1440_gv_heads = 1 } }
+		set_variable = { mod1440_gv_heads_f = 2 }
+		mod1440_gv_heads_copy = yes
+	}
+	mod1440_gv_chart = yes
+}
+mod1440_gv_heads_copy = {
+	clear_array = mod1440_gv_rp
+	clear_array = mod1440_gv_rp_from
+	clear_array = mod1440_gv_rp_old
+	clear_array = mod1440_gv_rp_to
+	clear_array = mod1440_gv_rp_end
+	clear_array = mod1440_gv_rp_p
+	clear_array = mod1440_gv_rp_g
+	clear_array = mod1440_gv_rp_fd
+	clear_array = mod1440_gv_rp_td
+	clear_array = mod1440_gv_rp_s0
+	clear_array = mod1440_gv_rp_s1
+	clear_array = mod1440_gv_rp_w0
+	clear_array = mod1440_gv_rp_w1
+	clear_array = mod1440_gv_rp_e
+	clear_array = mod1440_gv_rp_days
+	clear_array = mod1440_gv_rp_fb
+	set_temp_variable = { gv_unk = token:GFX_portrait_unknown }
+	set_temp_variable = { gv_hn = 0 }
+	for_loop_effect = {
+		start = 0
+		end = 7
+		value = gv_hk
+		set_temp_variable = { gv_hi = mod1440_gv_hp }
+		add_to_temp_variable = { gv_hi = gv_hk }
+		if = {
+			limit = { check_variable = { gv_hi < mod1440_gv_rul^num } }
+			add_to_array = { mod1440_gv_rp = mod1440_gv_rul^gv_hi }
+			add_to_array = { mod1440_gv_rp_from = mod1440_gv_rul_from^gv_hi }
+			add_to_array = { mod1440_gv_rp_old = mod1440_gv_rul_old^gv_hi }
+			add_to_array = { mod1440_gv_rp_to = mod1440_gv_rul_to^gv_hi }
+			add_to_array = { mod1440_gv_rp_end = mod1440_gv_rul_end^gv_hi }
+			add_to_array = { mod1440_gv_rp_p = mod1440_gv_rul_p^gv_hi }
+			add_to_array = { mod1440_gv_rp_g = mod1440_gv_rul_g^gv_hi }
+			add_to_array = { mod1440_gv_rp_fd = mod1440_gv_rul_fd^gv_hi }
+			add_to_array = { mod1440_gv_rp_td = mod1440_gv_rul_td^gv_hi }
+			add_to_array = { mod1440_gv_rp_s0 = mod1440_gv_rul_s0^gv_hi }
+			add_to_array = { mod1440_gv_rp_s1 = mod1440_gv_rul_s1^gv_hi }
+			add_to_array = { mod1440_gv_rp_w0 = mod1440_gv_rul_w0^gv_hi }
+			add_to_array = { mod1440_gv_rp_w1 = mod1440_gv_rul_w1^gv_hi }
+			add_to_array = { mod1440_gv_rp_e = mod1440_gv_rul_e^gv_hi }
+			set_temp_variable = { gv_hd = -1 }
+			set_temp_variable = { gv_hf = mod1440_gv_rul_fd^gv_hi }
+			if = {
+				limit = { check_variable = { gv_hf > -1 } }
+				if = {
+					limit = { check_variable = { mod1440_gv_rul_end^gv_hi = 0 } }
+					set_temp_variable = { gv_hd = global.num_days }
+					subtract_from_temp_variable = { gv_hd = gv_hf }
+				}
+				else_if = {
+					limit = { check_variable = { mod1440_gv_rul_td^gv_hi > -1 } }
+					set_temp_variable = { gv_hd = mod1440_gv_rul_td^gv_hi }
+					subtract_from_temp_variable = { gv_hd = gv_hf }
+				}
+			}
+			add_to_array = { mod1440_gv_rp_days = gv_hd }
+			set_temp_variable = { gv_hb = 0 }
+			if = {
+				limit = { check_variable = { mod1440_gv_rul_p^gv_hi = gv_unk } }
+				set_temp_variable = { gv_hb = 1 }
+			}
+			add_to_array = { mod1440_gv_rp_fb = gv_hb }
+			add_to_temp_variable = { gv_hn = 1 }
+		}
+	}
+	set_variable = { mod1440_gv_rp_n = gv_hn }
+	set_variable = { mod1440_gv_hp_end = mod1440_gv_hp }
+	add_to_variable = { mod1440_gv_hp_end = 7 }
+	for_loop_effect = {
+		start = 0
+		end = 7
+		value = pad_n
+		if = {
+			limit = { check_variable = { mod1440_gv_rp^num < 7 } }
+			add_to_array = { mod1440_gv_rp = 0 }
+			add_to_array = { mod1440_gv_rp_from = 0 }
+			add_to_array = { mod1440_gv_rp_old = 0 }
+			add_to_array = { mod1440_gv_rp_to = 0 }
+			add_to_array = { mod1440_gv_rp_end = 0 }
+			add_to_array = { mod1440_gv_rp_p = token:GFX_portrait_unknown }
+			add_to_array = { mod1440_gv_rp_g = 0 }
+			add_to_array = { mod1440_gv_rp_fd = -1 }
+			add_to_array = { mod1440_gv_rp_td = -1 }
+			add_to_array = { mod1440_gv_rp_s0 = -1 }
+			add_to_array = { mod1440_gv_rp_s1 = -1 }
+			add_to_array = { mod1440_gv_rp_w0 = -1 }
+			add_to_array = { mod1440_gv_rp_w1 = -1 }
+			add_to_array = { mod1440_gv_rp_e = 0 }
+			add_to_array = { mod1440_gv_rp_days = -1 }
+			add_to_array = { mod1440_gv_rp_fb = 0 }
+		}
+	}
+}
+
+# Government: an election (on_new_term_election): its date and day, kept 40, and one more in the term of today's head.
+mod1440_gv_election = {
+	add_to_array = { mod1440_gv_el = global.date }
+	add_to_array = { mod1440_gv_el_d = global.num_days }
+	if = {
+		limit = { check_variable = { mod1440_gv_el^num > 40 } }
+		remove_from_array = { array = mod1440_gv_el index = 0 }
+		remove_from_array = { array = mod1440_gv_el_d index = 0 }
+	}
+	if = {
+		limit = { check_variable = { mod1440_gv_rul_e^num > 0 } }
+		add_to_variable = { mod1440_gv_rul_e^0 = 1 }
+	}
 }
 
 # Wars: a row for the enemy in wr_c, from today (wr_old = 1: the war ran when the record began; wr_how: 1 we

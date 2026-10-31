@@ -8,6 +8,9 @@
                                                    tools/victory_points_mods_table.py (the victory points of a
                                                    playset whose states are not the game's) and
                                                    tools/equipment_kinds_mods_table.py (its kinds of land equipment)
+                                                   and tools/leader_traits_mods_table.py (E3 round 2)
+    python -I tools/make_game_tables.py --mods-leaders   write tools/leader_traits_mods_table.py alone: the playset's
+                                                   country_leader traits with their effects (E3 round 2)
 
 To be run again after a game update: tools/build_managers.py reads the tables, not the game.
 
@@ -718,8 +721,207 @@ def trait_effects_table(game, made):
             '%d traits, %d described fully, %d in part."""\n\nEFFECTS = {\n%s}\n'
             % (made, len(rows), described, partial,
                "".join("    %r: {\n%s    },\n" % (language, "".join("        %r: %r,\n" % (name, effects[language][name]) for name, _w, _s in rows))
-                       for language in TRAIT_LANGUAGES)))
+                       for language in TRAIT_LANGUAGES))
+            + leader_effects_text(game, view, mods))       # E3 round 2
 # --- end E2 round 2 ---
+
+
+# --- E3 round 2 --- the effects of the country_leader traits (advisor roles, chiefs, theorists, the high command and the
+# heads of government), for the Government page's tooltips (scratch/phases/E3/design.json, "Effects of each person").
+# A country_leader trait writes its modifiers at the top level of its block (and some in modifier = { }), with values that
+# may name a constant of its file (@army_chief_factor_1). The lines take the same shape as the officers' traits; the text
+# keys are mod1440_trl_<trait> (one name, dive_bomber, is a trait of both kinds). LEADER_TRAITS: every trait a head of
+# government can have, as the characters' country_leader roles list them and add_country_leader_trait gives them.
+LEADER_QUIET = {"random", "ai_will_do", "sprite", "allowed", "visible", "name", "cost", "command_cap_increase", "ai_strategy",
+                "specialist_advisor_trait", "expert_advisor_trait", "genius_advisor_trait", "type", "slot", "available"}
+LEADER_TRAIT_DIRS = ("common", "events", "history")
+
+
+def leader_trait_blocks(files):
+    """trait -> body with its file's @constants put in, for the leader_traits blocks of the files given (path list)."""
+    out = {}
+    for path in files:
+        text = without_comments(guiparse.read_text(path))
+        consts = dict(re.findall(r"^\s*(@[A-Za-z0-9_]+)\s*=\s*(-?[0-9.]+)", text, re.M))
+        for top, body in blocks(text):
+            if top != "leader_traits":
+                continue
+            for name, inner in blocks(body):
+                out[name] = re.sub(r"@[A-Za-z0-9_]+", lambda m: consts.get(m.group(0), m.group(0)), inner)
+    return out
+
+
+# Modifiers the game makes per ideology, idea group, building, resource or sub-unit when it loads them (the report's
+# templates): (pattern, localisation key, value type, colour, decimals), taken when the game has the key's text.
+LEADER_TEMPLATES = [
+    (r"^(fascism|democratic|communism|neutrality)_drift$", "%s", "number", "neutral", 2),
+    (r"^(fascism|democratic|communism|neutrality)_acceptance$", "%s", "number", "good", 0),
+    (r"^[a-z_]+_cost_factor$", "%s", "percentage", "bad", 0),
+    (r"^production_speed_[a-z_]+_factor$", "modifier_%s", "percentage", "good", 0),
+    (r"^country_resource_[a-z]+$", "%s", "number", "good", 0),
+    (r"^modifier_army_sub_unit_[a-z_]+_factor$", "%s", "percentage", "good", 0),
+]
+
+
+def _leader_known(mods, english, name):
+    """Whether a modifier can be written: the report's, or a template's whose text the game has (added to mods)."""
+    if name in mods:
+        return True
+    for pattern, key, kind, colour, decimals in LEADER_TEMPLATES:
+        if re.match(pattern, name) and (key % name) in english:
+            mods[name] = (key % name, kind, colour, decimals)
+            return True
+    return False
+
+
+def leader_trait_lines(body, mods, loc, english):
+    """The effect lines of one country_leader trait, and how many of its keys no line describes."""
+    lines, unknown = [], 0
+    for key, val in re.findall(r"^\s*([A-Za-z_0-9]+)\s*=\s*(-?[0-9.]+)\s*$", _top_level(body), re.M):
+        if key in LEADER_QUIET or key.startswith("ai_"):
+            continue
+        if _leader_known(mods, english, key):
+            lines.append(_modifier_line(mods, loc, english, key, val))
+        else:
+            unknown += 1
+    for key, inner in blocks(body):
+        if key in ("modifier", "non_shared_modifier"):
+            for name, val in re.findall(r"^\s*([A-Za-z_0-9]+)\s*=\s*(-?[0-9.]+)", _top_level(inner), re.M):
+                if name.startswith("ai_"):
+                    continue
+                if _leader_known(mods, english, name):
+                    lines.append(_modifier_line(mods, loc, english, name, val))
+                else:
+                    unknown += 1
+        elif key not in LEADER_QUIET and not key.startswith("ai_"):
+            unknown += 1
+    return lines, unknown
+
+
+def leader_lines(name, body, mods, loc, english):
+    lines, unknown = leader_trait_lines(body, mods, loc, english)
+    out = list(lines)
+    if unknown:
+        out.append("§gand %s the game's own tooltip names§!" % ("one effect" if unknown == 1 else "%d effects" % unknown))
+    if not lines and not unknown:
+        out.append("§gNo effect of its own.§!")
+    desc = loc.get(name + "_desc") or english.get(name + "_desc")
+    if desc and desc.strip():
+        out += ["", desc.strip()]
+    return out
+
+
+def head_traits(folders):
+    """The traits a head of government can have: the characters' country_leader roles, and add_country_leader_trait."""
+    names = set()
+    for folder in folders:
+        for path in sorted(glob.glob(os.path.join(folder, "common", "characters", "*.txt"))):
+            text = without_comments(guiparse.read_text(path))
+            for top, body in blocks(text):
+                if top != "characters":
+                    continue
+                for _who, character in blocks(body):
+                    for role, inner in blocks(character):
+                        if role == "country_leader":
+                            listed = re.search(r"\btraits\s*=\s*\{([^}]*)\}", inner)
+                            names.update(re.findall(r"[A-Za-z0-9_]+", listed.group(1)) if listed else [])
+        for sub in LEADER_TRAIT_DIRS:
+            for path in glob.glob(os.path.join(folder, sub, "**", "*.txt"), recursive=True):
+                names.update(re.findall(r"\badd_country_leader_trait\s*=\s*([A-Za-z0-9_]+)", without_comments(guiparse.read_text(path))))
+    return names
+
+
+def leader_effects(view, mods, languages, loc_of, only=None):
+    """{language: {trait: lines}} for the leader traits the view loads (only: these names)."""
+    files = [full for _key, (_layer, full, _rel) in sorted(view.files("common/country_leader", ".txt").items())]
+    bodies = leader_trait_blocks(files)
+    english = loc_of("english")
+    out = {}
+    for language in languages:
+        loc = english if language == "english" else loc_of(language)
+        out[language] = dict((name, leader_lines(name, body, mods, loc, english)) for name, body in sorted(bodies.items())
+                             if only is None or name in only)
+    return out, bodies
+
+
+def leader_names(names, languages, loc_of):
+    """E3 fix round 2: {language: {trait: name on one line}} for the traits whose own name breaks its line ('Army Drill\\n(Expert)'):
+    a role in a row of 48 is one line, and the game's break cut the rest off."""
+    english = loc_of("english")
+    out = {}
+    for language in languages:
+        loc = english if language == "english" else loc_of(language)
+        table = {}
+        for name in names:
+            words = loc.get(name) or english.get(name) or ""
+            if "\\n" in words:
+                table[name] = re.sub(r"\s+", " ", words.replace("\\n", " ")).strip()
+        out[language] = table
+    return out
+
+
+def names_text(names):
+    return "".join("    %r: {\n%s    },\n" % (language, "".join("        %r: %r,\n" % item for item in sorted(names[language].items())))
+                   for language in TRAIT_LANGUAGES)
+
+
+def leader_effects_text(game, view, mods):
+    nowhere = os.path.join(ROOT, "scratch", "no-such-mod")
+    loc_of = lambda language: guiparse.load_localisation(game, nowhere, language)      # noqa: E731
+    effects, bodies = leader_effects(view, mods, TRAIT_LANGUAGES, loc_of)
+    heads = sorted(head_traits([game]) & set(bodies))
+    names = leader_names(sorted(bodies), TRAIT_LANGUAGES, loc_of)
+    print("leader traits: %d described, %d a head of government can have, %d names on one line" % (len(bodies), len(heads), len(names["english"])))
+    return ("\n# E3 round 2: LEADER_EFFECTS[language][trait], the lines of a country_leader trait's tooltip on the Government page\n"
+            "# (text keys mod1440_trl_<trait>); LEADER_TRAITS, the traits a head of government can have. %d traits, %d of a head.\n"
+            "# E3 fix round 2: LEADER_NAMES[language][trait], the name of a trait whose own name breaks its line, on one line\n"
+            "# (text keys mod1440_trn_<trait>).\n"
+            "LEADER_TRAITS = %r\n\nLEADER_EFFECTS = {\n%s}\n\nLEADER_NAMES = {\n%s}\n"
+            % (len(bodies), len(heads), heads,
+               "".join("    %r: {\n%s    },\n" % (language, "".join("        %r: %r,\n" % (name, lines) for name, lines in sorted(effects[language].items())))
+                       for language in TRAIT_LANGUAGES), names_text(names)))
+
+
+def mod_localisation(game, folders, language):
+    """The game's texts in a language with those of the playset's mods over them, in load order."""
+    out = guiparse.load_localisation(game, os.path.join(ROOT, "scratch", "no-such-mod"), language)
+    for folder in folders:
+        out.update(guiparse.load_localisation(None, folder, language))
+    return out
+
+
+def write_mod_leader_traits(game, user):
+    """tools/leader_traits_mods_table.py: the country_leader traits of the playset that the game lacks, with their lines
+    (decision 4 of 2026-10-30: described from the mods' own files as the game's are), and the heads' traits it adds."""
+    mods = modifier_report()
+    if mods is None:
+        print("no %s: tools/leader_traits_mods_table.py left as it is" % MODIFIERS_REPORT)
+        return
+    from check_playset import playset as layers_of
+    layers, _unread, _source = layers_of(user)
+    view = game_view(game, layers)
+    own_view = game_view(game)
+    own = set(leader_trait_blocks([full for _k, (_l, full, _r) in own_view.files("common/country_leader", ".txt").items()]))
+    folders = [folder for _name, folder in playset(user)]
+    effects, bodies = leader_effects(view, mods, TRAIT_LANGUAGES, lambda language: mod_localisation(game, folders, language),
+                                     only=None)
+    new = sorted(set(bodies) - own)
+    effects = dict((language, dict((name, table[name]) for name in new)) for language, table in effects.items())
+    names = leader_names(new, TRAIT_LANGUAGES, lambda language: mod_localisation(game, folders, language))     # E3 fix round 2
+    heads = sorted((head_traits(folders) - head_traits([game])) & set(bodies))
+    used = sorted(set(layer.name for layer, _full, _rel in view.files("common/country_leader", ".txt").values() if layer is not view.game))
+    content = (
+        '"""Made by tools/make_game_tables.py --mods from the mods of the launcher\'s playset: run it again when the\n'
+        "playset changes. Delete this file for a build that knows the game's own leader traits only.\n\n"
+        "LEADER_EFFECTS: the lines of the country_leader traits the playset has and the game lacks, as in trait_effects_table.py.\n"
+        "LEADER_TRAITS: the traits a head of government can have that only the playset gives.\n"
+        '%d traits, %d of a head."""\n\nMODS = %r\n\nLEADER_TRAITS = %r\n\nLEADER_EFFECTS = {\n%s}\n\nLEADER_NAMES = {\n%s}\n'
+        % (len(new), len(heads), used, heads,
+           "".join("    %r: {\n%s    },\n" % (language, "".join("        %r: %r,\n" % (name, lines) for name, lines in sorted(effects[language].items())))
+                   for language in TRAIT_LANGUAGES), names_text(names)))
+    io.open(os.path.join(ROOT, "tools", "leader_traits_mods_table.py"), "w", encoding="utf-8", newline="\n").write(content)
+    print("wrote tools/leader_traits_mods_table.py: %d leader traits of %s, %d of a head" % (len(new), ", ".join(used) or "no mod", len(heads)))
+# --- end E3 round 2 ---
 
 
 def version(game):
@@ -735,8 +937,12 @@ def main(argv):
     if not game or not os.path.isdir(game):
         print("game folder not found: the tables on disk stay as they are")
         return 2
+    if "--mods-leaders" in argv:       # E3 round 2: only the playset's leader traits (part of --mods)
+        write_mod_leader_traits(game, os.path.join(os.path.expanduser("~"), "Documents", "Paradox Interactive", "Hearts of Iron IV"))
+        return 0
     if "--mods" in argv:
         user = os.path.join(os.path.expanduser("~"), "Documents", "Paradox Interactive", "Hearts of Iron IV")
+        write_mod_leader_traits(game, user)             # E3 round 2
         rows, used = mod_portraits(game, user)
         content = (
             '"""Made by tools/make_game_tables.py --mods from the mods of the launcher\'s playset: run it again when the\n'

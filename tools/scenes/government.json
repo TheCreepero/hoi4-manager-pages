@@ -14,141 +14,1065 @@
       "freeWindow": true,
       "name": "mod1440_records_gv",
       "rows": {
-        "gv_fac_grid": 1,
-        "gv_sub_grid": 1,
+        "gv_fac_grid": 3,
+        "gv_sub_grid": 2,
+        "gv_op_grid": 4,
         "gv_of_0_gface_grid": 1,
-        "gv_of_1_gface_grid": 0,
-        "gv_of_2_gface_grid": 0,
-        "gv_of_3_gface_grid": 0,
+        "gv_of_1_gface_grid": 1,
+        "gv_of_2_gface_grid": 1,
+        "gv_of_3_gface_grid": 1,
         "gv_hc_0_gface_grid": 1,
-        "gv_hc_1_gface_grid": 0,
-        "gv_hc_2_gface_grid": 0
+        "gv_hc_1_gface_grid": 1,
+        "gv_hc_2_gface_grid": 1,
+        "gv_dots_0_24": 0,
+        "gv_dots_1_24": 0,
+        "gv_dots_2_24": 0,
+        "gv_dots_3_24": 0,
+        "gv_dots_r_24": 0,
+        "gv_band_24": 0,
+        "gv_dots_0_60": 47,
+        "gv_dots_1_60": 47,
+        "gv_dots_2_60": 47,
+        "gv_dots_3_60": 47,
+        "gv_dots_r_60": 47,
+        "gv_band_60": 47,
+        "gv_dots_0_120": 0,
+        "gv_dots_1_120": 0,
+        "gv_dots_2_120": 0,
+        "gv_dots_3_120": 0,
+        "gv_dots_r_120": 0,
+        "gv_band_120": 0
       },
       "listRows": {
         "gv_fac_grid": "mod1440_records_fac_row",
         "gv_sub_grid": "mod1440_records_sub_row",
+        "gv_op_grid": "mod1440_records_gv_op_row",
         "gv_of_0_gface_grid": "mod1440_records_gv_gface_row",
         "gv_of_1_gface_grid": "mod1440_records_gv_gface_row",
         "gv_of_2_gface_grid": "mod1440_records_gv_gface_row",
         "gv_of_3_gface_grid": "mod1440_records_gv_gface_row",
         "gv_hc_0_gface_grid": "mod1440_records_gv_gface_row",
         "gv_hc_1_gface_grid": "mod1440_records_gv_gface_row",
-        "gv_hc_2_gface_grid": "mod1440_records_gv_gface_row"
+        "gv_hc_2_gface_grid": "mod1440_records_gv_gface_row",
+        "gv_dots_0_24": "mod1440_records_gv_dot_0_24",
+        "gv_dots_1_24": "mod1440_records_gv_dot_1_24",
+        "gv_dots_2_24": "mod1440_records_gv_dot_2_24",
+        "gv_dots_3_24": "mod1440_records_gv_dot_3_24",
+        "gv_dots_r_24": "mod1440_records_gv_dot_r_24",
+        "gv_dots_0_60": "mod1440_records_gv_dot_0_60",
+        "gv_dots_1_60": "mod1440_records_gv_dot_1_60",
+        "gv_dots_2_60": "mod1440_records_gv_dot_2_60",
+        "gv_dots_3_60": "mod1440_records_gv_dot_3_60",
+        "gv_dots_r_60": "mod1440_records_gv_dot_r_60",
+        "gv_dots_0_120": "mod1440_records_gv_dot_0_120",
+        "gv_dots_1_120": "mod1440_records_gv_dot_1_120",
+        "gv_dots_2_120": "mod1440_records_gv_dot_2_120",
+        "gv_dots_3_120": "mod1440_records_gv_dot_3_120",
+        "gv_dots_r_120": "mod1440_records_gv_dot_r_120",
+        "gv_band_24": "mod1440_records_gv_band_24",
+        "gv_band_60": "mod1440_records_gv_band_60",
+        "gv_band_120": "mod1440_records_gv_band_120"
       },
       "hide": [
+        "gv_face_fb",
+        "gv_face_fb_flag",
+        "gv_face_fb_g1",
+        "gv_face_fb_g2",
+        "gv_face_fb_g3",
+        "gv_face_fb_g4",
         "gv_leader_since",
         "gv_next",
-        "gv_faction_none",
-        "gv_sub_none",
-        "gv_hc_none",
-        "gv_group_democratic",
-        "gv_group_communism",
-        "gv_group_neutrality",
-        "gv_p_1_pick",
-        "gv_p_2_pick",
-        "gv_p_3_pick",
-        "gv_rul_0_g2",
-        "gv_rul_0_g3",
-        "gv_rul_0_g4",
-        "gv_rul_0_ta",
-        "gv_rul_0_tb",
-        "gv_rul_0_tc",
-        "gv_rul_1",
-        "gv_rul_1_face",
-        "gv_rul_1_bg",
-        "gv_rul_1_g1",
-        "gv_rul_1_g2",
-        "gv_rul_1_g3",
-        "gv_rul_1_g4",
-        "gv_rul_1_ta",
-        "gv_rul_1_tb",
-        "gv_rul_1_tc",
-        "gv_rul_1_td",
-        "gv_rul_2",
-        "gv_rul_2_face",
-        "gv_rul_2_bg",
-        "gv_rul_2_g1",
-        "gv_rul_2_g2",
-        "gv_rul_2_g3",
-        "gv_rul_2_g4",
-        "gv_rul_2_ta",
-        "gv_rul_2_tb",
-        "gv_rul_2_tc",
-        "gv_rul_2_td",
-        "gv_rul_3",
-        "gv_rul_3_face",
-        "gv_rul_3_bg",
-        "gv_rul_3_g1",
-        "gv_rul_3_g2",
-        "gv_rul_3_g3",
-        "gv_rul_3_g4",
-        "gv_rul_3_ta",
-        "gv_rul_3_tb",
-        "gv_rul_3_tc",
-        "gv_rul_3_td",
+        "gv_hd_title",
+        "gv_heads_back",
+        "gv_heads_newer",
+        "gv_heads_older",
+        "gv_hd_head",
+        "gv_hd_h_who",
+        "gv_hd_h_office",
+        "gv_hd_h_stab",
+        "gv_hd_h_ws",
+        "gv_hd_h_el",
+        "gv_hd_band_2",
+        "gv_hd_band_4",
+        "gv_hd_band_6",
+        "gv_hd_pick",
+        "gv_hd_0_face",
+        "gv_hd_0_fb",
+        "gv_hd_0_fbg_g1",
+        "gv_hd_0_fbg_g2",
+        "gv_hd_0_fbg_g3",
+        "gv_hd_0_fbg_g4",
+        "gv_hd_0",
+        "gv_hd_0_pt1",
+        "gv_hd_0_pt2",
+        "gv_hd_0_pt3",
+        "gv_hd_0_pt4",
+        "gv_hd_0_gi_g1",
+        "gv_hd_0_gi_g2",
+        "gv_hd_0_gi_g3",
+        "gv_hd_0_gi_g4",
+        "gv_hd_0_ta",
+        "gv_hd_0_tb",
+        "gv_hd_0_tc",
+        "gv_hd_0_td",
+        "gv_hd_0_days",
+        "gv_hd_0_rec",
+        "gv_hd_0_stab",
+        "gv_hd_0_stab_nr",
+        "gv_hd_0_ws",
+        "gv_hd_0_ws_nr",
+        "gv_hd_0_el",
+        "gv_hd_1_face",
+        "gv_hd_1_fb",
+        "gv_hd_1_fbg_g1",
+        "gv_hd_1_fbg_g2",
+        "gv_hd_1_fbg_g3",
+        "gv_hd_1_fbg_g4",
+        "gv_hd_1",
+        "gv_hd_1_pt1",
+        "gv_hd_1_pt2",
+        "gv_hd_1_pt3",
+        "gv_hd_1_pt4",
+        "gv_hd_1_gi_g1",
+        "gv_hd_1_gi_g2",
+        "gv_hd_1_gi_g3",
+        "gv_hd_1_gi_g4",
+        "gv_hd_1_ta",
+        "gv_hd_1_tb",
+        "gv_hd_1_tc",
+        "gv_hd_1_td",
+        "gv_hd_1_days",
+        "gv_hd_1_rec",
+        "gv_hd_1_stab",
+        "gv_hd_1_stab_nr",
+        "gv_hd_1_ws",
+        "gv_hd_1_ws_nr",
+        "gv_hd_1_el",
+        "gv_hd_2_face",
+        "gv_hd_2_fb",
+        "gv_hd_2_fbg_g1",
+        "gv_hd_2_fbg_g2",
+        "gv_hd_2_fbg_g3",
+        "gv_hd_2_fbg_g4",
+        "gv_hd_2",
+        "gv_hd_2_pt1",
+        "gv_hd_2_pt2",
+        "gv_hd_2_pt3",
+        "gv_hd_2_pt4",
+        "gv_hd_2_gi_g1",
+        "gv_hd_2_gi_g2",
+        "gv_hd_2_gi_g3",
+        "gv_hd_2_gi_g4",
+        "gv_hd_2_ta",
+        "gv_hd_2_tb",
+        "gv_hd_2_tc",
+        "gv_hd_2_td",
+        "gv_hd_2_days",
+        "gv_hd_2_rec",
+        "gv_hd_2_stab",
+        "gv_hd_2_stab_nr",
+        "gv_hd_2_ws",
+        "gv_hd_2_ws_nr",
+        "gv_hd_2_el",
+        "gv_hd_3_face",
+        "gv_hd_3_fb",
+        "gv_hd_3_fbg_g1",
+        "gv_hd_3_fbg_g2",
+        "gv_hd_3_fbg_g3",
+        "gv_hd_3_fbg_g4",
+        "gv_hd_3",
+        "gv_hd_3_pt1",
+        "gv_hd_3_pt2",
+        "gv_hd_3_pt3",
+        "gv_hd_3_pt4",
+        "gv_hd_3_gi_g1",
+        "gv_hd_3_gi_g2",
+        "gv_hd_3_gi_g3",
+        "gv_hd_3_gi_g4",
+        "gv_hd_3_ta",
+        "gv_hd_3_tb",
+        "gv_hd_3_tc",
+        "gv_hd_3_td",
+        "gv_hd_3_days",
+        "gv_hd_3_rec",
+        "gv_hd_3_stab",
+        "gv_hd_3_stab_nr",
+        "gv_hd_3_ws",
+        "gv_hd_3_ws_nr",
+        "gv_hd_3_el",
+        "gv_hd_4_face",
+        "gv_hd_4_fb",
+        "gv_hd_4_fbg_g1",
+        "gv_hd_4_fbg_g2",
+        "gv_hd_4_fbg_g3",
+        "gv_hd_4_fbg_g4",
+        "gv_hd_4",
+        "gv_hd_4_pt1",
+        "gv_hd_4_pt2",
+        "gv_hd_4_pt3",
+        "gv_hd_4_pt4",
+        "gv_hd_4_gi_g1",
+        "gv_hd_4_gi_g2",
+        "gv_hd_4_gi_g3",
+        "gv_hd_4_gi_g4",
+        "gv_hd_4_ta",
+        "gv_hd_4_tb",
+        "gv_hd_4_tc",
+        "gv_hd_4_td",
+        "gv_hd_4_days",
+        "gv_hd_4_rec",
+        "gv_hd_4_stab",
+        "gv_hd_4_stab_nr",
+        "gv_hd_4_ws",
+        "gv_hd_4_ws_nr",
+        "gv_hd_4_el",
+        "gv_hd_5_face",
+        "gv_hd_5_fb",
+        "gv_hd_5_fbg_g1",
+        "gv_hd_5_fbg_g2",
+        "gv_hd_5_fbg_g3",
+        "gv_hd_5_fbg_g4",
+        "gv_hd_5",
+        "gv_hd_5_pt1",
+        "gv_hd_5_pt2",
+        "gv_hd_5_pt3",
+        "gv_hd_5_pt4",
+        "gv_hd_5_gi_g1",
+        "gv_hd_5_gi_g2",
+        "gv_hd_5_gi_g3",
+        "gv_hd_5_gi_g4",
+        "gv_hd_5_ta",
+        "gv_hd_5_tb",
+        "gv_hd_5_tc",
+        "gv_hd_5_td",
+        "gv_hd_5_days",
+        "gv_hd_5_rec",
+        "gv_hd_5_stab",
+        "gv_hd_5_stab_nr",
+        "gv_hd_5_ws",
+        "gv_hd_5_ws_nr",
+        "gv_hd_5_el",
+        "gv_hd_6_face",
+        "gv_hd_6_fb",
+        "gv_hd_6_fbg_g1",
+        "gv_hd_6_fbg_g2",
+        "gv_hd_6_fbg_g3",
+        "gv_hd_6_fbg_g4",
+        "gv_hd_6",
+        "gv_hd_6_pt1",
+        "gv_hd_6_pt2",
+        "gv_hd_6_pt3",
+        "gv_hd_6_pt4",
+        "gv_hd_6_gi_g1",
+        "gv_hd_6_gi_g2",
+        "gv_hd_6_gi_g3",
+        "gv_hd_6_gi_g4",
+        "gv_hd_6_ta",
+        "gv_hd_6_tb",
+        "gv_hd_6_tc",
+        "gv_hd_6_td",
+        "gv_hd_6_days",
+        "gv_hd_6_rec",
+        "gv_hd_6_stab",
+        "gv_hd_6_stab_nr",
+        "gv_hd_6_ws",
+        "gv_hd_6_ws_nr",
+        "gv_hd_6_el",
+        "gv_hd_note",
+        "gv_year_3",
+        "gv_year_4",
+        "gv_year_5",
+        "gv_year_6",
+        "gv_year_7",
+        "gv_year_8",
+        "gv_year_9",
+        "gv_ymark_3",
+        "gv_ymark_4",
+        "gv_ymark_5",
+        "gv_ymark_6",
+        "gv_ymark_7",
+        "gv_ymark_8",
+        "gv_ymark_9",
+        "gv_span_1",
+        "gv_span_2",
+        "gv_span_3",
+        "gv_span_4",
+        "gv_span_5",
+        "gv_tick_0",
+        "gv_tick_1",
+        "gv_tick_2",
+        "gv_tick_3",
+        "gv_tick_4",
+        "gv_tick_5",
+        "gv_tick_6",
+        "gv_tick_7",
+        "gv_tick_8",
+        "gv_tick_9",
+        "gv_end_0_lt",
+        "gv_end_1",
+        "gv_end_2",
+        "gv_end_3_lt",
+        "gv_legend",
+        "gv_chart_none",
+        "gv_pt_0_nows",
+        "gv_pt_0_dy",
+        "gv_today_1_0",
+        "gv_today_2_0",
+        "gv_today_3_0",
+        "gv_pt_1_now",
+        "gv_pt_1_dy",
+        "gv_today_0_1",
+        "gv_today_1_1",
+        "gv_today_3_1",
+        "gv_pt_2_now",
+        "gv_pt_2_dy",
+        "gv_today_0_2",
+        "gv_today_1_2",
+        "gv_today_2_2",
+        "gv_pt_3_nows",
+        "gv_pt_3_dy",
+        "gv_today_0_3",
+        "gv_today_2_3",
+        "gv_today_3_3",
         "gv_adv_0_big",
         "gv_adv_0_since_old",
+        "gv_adv_0_face",
         "gv_adv_1_big",
         "gv_adv_1_since_old",
-        "gv_adv_2_face",
+        "gv_adv_1_face",
         "gv_adv_2_big",
-        "gv_adv_2_name",
-        "gv_adv_2_role",
-        "gv_adv_2_since",
         "gv_adv_2_since_old",
-        "gv_adv_2_bg",
-        "gv_adv_3_face",
+        "gv_adv_2_none",
         "gv_adv_3_big",
-        "gv_adv_3_name",
-        "gv_adv_3_role",
-        "gv_adv_3_since",
         "gv_adv_3_since_old",
-        "gv_adv_3_bg",
+        "gv_adv_3_none",
+        "gv_adv_4_big",
+        "gv_adv_4_since_old",
+        "gv_adv_4_none",
+        "gv_adv_none",
+        "gv_of_0_face",
+        "gv_of_0_big",
+        "gv_of_0_none",
+        "gv_of_0_since_old",
+        "gv_of_0_slot",
+        "gv_of_0_vacant",
+        "gv_of_1_face",
+        "gv_of_1_big",
+        "gv_of_1_none",
+        "gv_of_1_since_old",
+        "gv_of_1_slot",
+        "gv_of_1_vacant",
+        "gv_of_2_face",
+        "gv_of_2_big",
+        "gv_of_2_none",
+        "gv_of_2_since_old",
+        "gv_of_2_slot",
+        "gv_of_2_vacant",
+        "gv_of_3_face",
+        "gv_of_3_big",
+        "gv_of_3_none",
+        "gv_of_3_since_old",
+        "gv_of_3_slot",
+        "gv_of_3_vacant",
+        "gv_hc_0_face",
         "gv_hc_0_big",
+        "gv_hc_0_none",
         "gv_hc_0_since_old",
         "gv_hc_1_face",
         "gv_hc_1_big",
-        "gv_hc_1_name",
-        "gv_hc_1_role",
-        "gv_hc_1_since",
+        "gv_hc_1_none",
         "gv_hc_1_since_old",
-        "gv_hc_1_bg",
         "gv_hc_2_face",
         "gv_hc_2_big",
-        "gv_hc_2_name",
-        "gv_hc_2_role",
-        "gv_hc_2_since",
+        "gv_hc_2_none",
         "gv_hc_2_since_old",
-        "gv_hc_2_bg",
-        "gv_of_0_face",
-        "gv_hc_0_face",
-        "gv_adv_none_0",
-        "gv_adv_none_1",
-        "gv_adv_none_3",
-        "gv_of_0_none",
-        "gv_of_0_vacant",
-        "gv_of_0_big",
-        "gv_of_0_since_old",
-        "gv_of_1_face",
-        "gv_of_1_big",
-        "gv_of_1_name",
-        "gv_of_1_role",
-        "gv_of_1_since",
-        "gv_of_1_since_old",
-        "gv_of_2_face",
-        "gv_of_2_big",
-        "gv_of_2_name",
-        "gv_of_2_role",
-        "gv_of_2_since",
-        "gv_of_2_since_old",
-        "gv_of_3_face",
-        "gv_of_3_big",
-        "gv_of_3_name",
-        "gv_of_3_role",
-        "gv_of_3_since",
-        "gv_of_3_since_old"
+        "gv_dl_none",
+        "gv_dl_0_b",
+        "gv_dl_1_b",
+        "gv_dl_2_b",
+        "gv_dl_3_b",
+        "gv_dl_4_b",
+        "gv_dl_5_b",
+        "gv_dl_6_b",
+        "gv_dl_7_b",
+        "gv_faction_none",
+        "gv_sub_none",
+        "gv_sub_head_r",
+        "gv_realm_right_m1s1",
+        "gv_realm_right_m1sn",
+        "gv_realm_right_mns1",
+        "gv_ag_none",
+        "gv_ag_since_old",
+        "gv_op_none",
+        "gv_cr_head_r0",
+        "gv_cr_dec_none",
+        "gv_up_0_dim",
+        "gv_up_1_dim",
+        "gv_up_16_dim",
+        "gv_up_6_dim",
+        "gv_up_7_dim",
+        "gv_up_11_dim"
       ],
-      "_note": "The sample state of E3 check 1: Todt and Neurath hired, Fritsch chief of the army, Rundstedt in the high command, Denmark a subject; script hides the empty seats, the twins of the dates and the other ideologies."
+      "place": {
+        "gv_year_0": [
+          550,
+          340
+        ],
+        "gv_ymark_0": [
+          570,
+          336
+        ],
+        "gv_year_1": [
+          670,
+          340
+        ],
+        "gv_ymark_1": [
+          690,
+          336
+        ],
+        "gv_year_2": [
+          790,
+          340
+        ],
+        "gv_ymark_2": [
+          810,
+          336
+        ],
+        "gv_span_0": [
+          456,
+          366
+        ],
+        "gv_end_0_sw": [
+          924,
+          130
+        ],
+        "gv_end_0": [
+          933,
+          122
+        ],
+        "gv_end_0_lt": [
+          933,
+          122
+        ],
+        "gv_end_1_sw": [
+          924,
+          314
+        ],
+        "gv_end_1": [
+          933,
+          306
+        ],
+        "gv_end_1_lt": [
+          933,
+          306
+        ],
+        "gv_end_2_sw": [
+          924,
+          332
+        ],
+        "gv_end_2": [
+          933,
+          324
+        ],
+        "gv_end_2_lt": [
+          933,
+          324
+        ],
+        "gv_end_3_sw": [
+          924,
+          257
+        ],
+        "gv_end_3": [
+          933,
+          249
+        ],
+        "gv_end_3_lt": [
+          933,
+          249
+        ],
+        "gv_pt_0_sw": [
+          8,
+          106
+        ],
+        "gv_pt_0_ic": [
+          20,
+          109
+        ],
+        "gv_pt_0_name": [
+          60,
+          104
+        ],
+        "gv_pt_0_who": [
+          60,
+          126
+        ],
+        "gv_pt_0_now": [
+          272,
+          114
+        ],
+        "gv_pt_0_nows": [
+          272,
+          114
+        ],
+        "gv_pt_0_dy": [
+          328,
+          115
+        ],
+        "gv_pt_0_dyn": [
+          328,
+          115
+        ],
+        "gv_pt_1_sw": [
+          8,
+          202
+        ],
+        "gv_pt_1_ic": [
+          20,
+          205
+        ],
+        "gv_pt_1_name": [
+          60,
+          200
+        ],
+        "gv_pt_1_who": [
+          60,
+          222
+        ],
+        "gv_pt_1_now": [
+          272,
+          210
+        ],
+        "gv_pt_1_nows": [
+          272,
+          210
+        ],
+        "gv_pt_1_dy": [
+          328,
+          211
+        ],
+        "gv_pt_1_dyn": [
+          328,
+          211
+        ],
+        "gv_pt_2_sw": [
+          8,
+          250
+        ],
+        "gv_pt_2_ic": [
+          20,
+          253
+        ],
+        "gv_pt_2_name": [
+          60,
+          248
+        ],
+        "gv_pt_2_who": [
+          60,
+          270
+        ],
+        "gv_pt_2_now": [
+          272,
+          258
+        ],
+        "gv_pt_2_nows": [
+          272,
+          258
+        ],
+        "gv_pt_2_dy": [
+          328,
+          259
+        ],
+        "gv_pt_2_dyn": [
+          328,
+          259
+        ],
+        "gv_pt_3_sw": [
+          8,
+          154
+        ],
+        "gv_pt_3_ic": [
+          20,
+          157
+        ],
+        "gv_pt_3_name": [
+          60,
+          152
+        ],
+        "gv_pt_3_who": [
+          60,
+          174
+        ],
+        "gv_pt_3_now": [
+          272,
+          162
+        ],
+        "gv_pt_3_nows": [
+          272,
+          162
+        ],
+        "gv_pt_3_dy": [
+          328,
+          163
+        ],
+        "gv_pt_3_dyn": [
+          328,
+          163
+        ],
+        "gv_pt_pick": [
+          8,
+          102
+        ]
+      },
+      "fills": {
+        "gv_today_0_0": [
+          0.7240000000000001
+        ],
+        "gv_today_2_1": [
+          0.9980000000000001
+        ],
+        "gv_today_3_2": [
+          1.0
+        ],
+        "gv_today_1_3": [
+          0.995
+        ]
+      },
+      "frames": {
+        "gv_heads_btn": 1,
+        "gv_range_24": 1,
+        "gv_range_60": 2,
+        "gv_range_120": 1
+      },
+      "images": {
+        "gv_face": "GFX_portrait_GER_adolf_hitler",
+        "gv_adv_2_face": "GFX_idea_walther_funk",
+        "gv_adv_3_face": "GFX_portrait_GER_fritz_todt_small",
+        "gv_adv_4_face": "GFX_portrait_GER_konstantin_von_neurath_small",
+        "gv_law_0_pic": "GFX_idea_war_economy",
+        "gv_law_1_pic": "GFX_idea_limited_exports",
+        "gv_law_2_pic": "GFX_idea_limited_conscription"
+      },
+      "_note": "Germany on 24 November 1939, the day the build comes to the user's save: party support back-filled from National Figures' series 30 (the months before November 1939 hold the ruling party only), Heidegger and Mueller without a picture (decision 2), every chief and member a general or an admiral, six upgrades done."
+    },
+    {
+      "name": "mod1440_records_gv_dot_0_24",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_1_24",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_2_24",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_3_24",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_r_24",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_0_60",
+      "skip": true,
+      "only": {
+        "gv_dot0_60": []
+      },
+      "place": {
+        "gv_dot0_60": []
+      }
+    },
+    {
+      "name": "mod1440_records_gv_dot_1_60",
+      "skip": true,
+      "only": {
+        "gv_dot1_60": [
+          46
+        ]
+      },
+      "place": {
+        "gv_dot1_60": [
+          [
+            2,
+            276
+          ]
+        ]
+      }
+    },
+    {
+      "name": "mod1440_records_gv_dot_2_60",
+      "skip": true,
+      "only": {
+        "gv_dot2_60": [
+          46
+        ]
+      },
+      "place": {
+        "gv_dot2_60": [
+          [
+            2,
+            276
+          ]
+        ]
+      }
+    },
+    {
+      "name": "mod1440_records_gv_dot_3_60",
+      "skip": true,
+      "only": {
+        "gv_dot3_60": [
+          46
+        ]
+      },
+      "place": {
+        "gv_dot3_60": [
+          [
+            2,
+            201
+          ]
+        ]
+      }
+    },
+    {
+      "name": "mod1440_records_gv_dot_r_60",
+      "skip": true,
+      "only": {
+        "gv_dotr1_60": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46
+        ],
+        "gv_dotr2_60": [],
+        "gv_dotr3_60": [],
+        "gv_dotr4_60": []
+      },
+      "place": {
+        "gv_dotr1_60": [
+          [
+            2,
+            166
+          ],
+          [
+            2,
+            163
+          ],
+          [
+            2,
+            158
+          ],
+          [
+            2,
+            156
+          ],
+          [
+            2,
+            149
+          ],
+          [
+            2,
+            140
+          ],
+          [
+            2,
+            135
+          ],
+          [
+            2,
+            135
+          ],
+          [
+            2,
+            131
+          ],
+          [
+            2,
+            132
+          ],
+          [
+            2,
+            124
+          ],
+          [
+            2,
+            121
+          ],
+          [
+            2,
+            113
+          ],
+          [
+            2,
+            111
+          ],
+          [
+            2,
+            106
+          ],
+          [
+            2,
+            103
+          ],
+          [
+            2,
+            99
+          ],
+          [
+            2,
+            98
+          ],
+          [
+            2,
+            101
+          ],
+          [
+            2,
+            97
+          ],
+          [
+            2,
+            97
+          ],
+          [
+            2,
+            94
+          ],
+          [
+            2,
+            93
+          ],
+          [
+            2,
+            86
+          ],
+          [
+            2,
+            87
+          ],
+          [
+            2,
+            84
+          ],
+          [
+            2,
+            81
+          ],
+          [
+            2,
+            79
+          ],
+          [
+            2,
+            83
+          ],
+          [
+            2,
+            78
+          ],
+          [
+            2,
+            83
+          ],
+          [
+            2,
+            80
+          ],
+          [
+            2,
+            80
+          ],
+          [
+            2,
+            78
+          ],
+          [
+            2,
+            77
+          ],
+          [
+            2,
+            78
+          ],
+          [
+            2,
+            80
+          ],
+          [
+            2,
+            77
+          ],
+          [
+            2,
+            80
+          ],
+          [
+            2,
+            77
+          ],
+          [
+            2,
+            78
+          ],
+          [
+            2,
+            78
+          ],
+          [
+            2,
+            77
+          ],
+          [
+            2,
+            77
+          ],
+          [
+            2,
+            75
+          ],
+          [
+            2,
+            75
+          ],
+          [
+            2,
+            74
+          ]
+        ],
+        "gv_dotr2_60": [],
+        "gv_dotr3_60": [],
+        "gv_dotr4_60": []
+      }
+    },
+    {
+      "name": "mod1440_records_gv_dot_0_120",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_1_120",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_2_120",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_3_120",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_dot_r_120",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_band_24",
+      "skip": true
+    },
+    {
+      "name": "mod1440_records_gv_band_60",
+      "skip": true,
+      "only": {
+        "gv_cell1_60": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46
+        ],
+        "gv_cell2_60": [],
+        "gv_cell3_60": [],
+        "gv_cell4_60": []
+      }
+    },
+    {
+      "name": "mod1440_records_gv_band_120",
+      "skip": true
     },
     {
       "name": "mod1440_records_fac_row",
@@ -159,8 +1083,73 @@
       "skip": true
     },
     {
+      "name": "mod1440_records_gv_op_row",
+      "skip": true,
+      "only": {
+        "gv_op_home": [
+          2
+        ],
+        "gv_op_net": [
+          0,
+          1,
+          3
+        ],
+        "gv_op_idle": [],
+        "gv_op_where": [
+          0,
+          1,
+          3
+        ],
+        "gv_op_country": [
+          2
+        ],
+        "gv_op_m_build_intel_network": [
+          0,
+          1
+        ],
+        "gv_op_t_build_intel_network": [
+          0,
+          1
+        ],
+        "gv_op_m_quiet_network": [],
+        "gv_op_t_quiet_network": [],
+        "gv_op_m_counter_intelligence": [
+          2
+        ],
+        "gv_op_t_counter_intelligence": [
+          2
+        ],
+        "gv_op_m_root_out_resistance": [],
+        "gv_op_t_root_out_resistance": [],
+        "gv_op_m_boost_ideology": [],
+        "gv_op_t_boost_ideology": [],
+        "gv_op_m_control_trade": [],
+        "gv_op_t_control_trade": [],
+        "gv_op_m_diplomatic_pressure": [],
+        "gv_op_t_diplomatic_pressure": [],
+        "gv_op_m_propaganda": [
+          3
+        ],
+        "gv_op_t_propaganda": [
+          3
+        ],
+        "gv_op_t_none": []
+      }
+    },
+    {
       "name": "mod1440_records_gv_gface_row",
-      "skip": true
+      "skip": true,
+      "images": {
+        "gv_gface": [
+          "GFX_portrait_unknown",
+          "GFX_portrait_GER_erich_raeder",
+          "GFX_portrait_GER_albert_kesselring",
+          "GFX_portrait_GER_heinz_guderian",
+          "GFX_portrait_unknown",
+          "GFX_portrait_unknown",
+          "GFX_portrait_GER_erwin_rommel"
+        ]
+      }
     }
   ],
   "samples": {
@@ -170,112 +1159,288 @@
       "gv_tab_0_n": "1000 lines",
       "gv_tab_3_n": "2 at war",
       "gv_tab_1_n": "128",
-      "gv_leader": "Konstantin von Neurath",
-      "gv_party": "\u00a7YNSDAP\u00a7!, fascist",
+      "gv_leader": "Adolf Hitler",
+      "gv_party": "\u00a7YNSDAP\u00a7!, Nazism",
       "gv_party_long": "Nationalsozialistische Deutsche Arbeiterpartei",
-      "gv_leader_since": "since 30 September, 1944",
-      "gv_election": " 1:00, 5 March, 1933",
-      "gv_next": "in 1460 days",
-      "gv_f_elections": "128",
-      "gv_f_changes": "128",
-      "gv_p_0": "Nationalsozialistische Deutsche Arbeiterpartei",
-      "gv_p_0_pop": "100%",
-      "gv_p_0_who": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_p_1": "Nationalsozialistische Deutsche Arbeiterpartei",
-      "gv_p_1_pop": "100%",
-      "gv_p_1_who": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_p_2": "Nationalsozialistische Deutsche Arbeiterpartei",
-      "gv_p_2_pop": "100%",
-      "gv_p_2_who": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_p_3": "Nationalsozialistische Deutsche Arbeiterpartei",
-      "gv_p_3_pop": "100%",
-      "gv_p_3_who": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_law_0": "Partial Mobilization",
-      "gv_law_1": "Partial Mobilization",
-      "gv_law_2": "Partial Mobilization",
-      "gv_rul_n": "500 since the record began",
-      "gv_rul_0": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_rul_0_g1": "Nationalsozialistische Deutsche Arbeiterpartei, Fascist",
-      "gv_rul_0_g2": "Nationalsozialistische Deutsche Arbeiterpartei, Democratic",
-      "gv_rul_0_g3": "Nationalsozialistische Deutsche Arbeiterpartei, Communist",
-      "gv_rul_0_g4": "Nationalsozialistische Deutsche Arbeiterpartei, Neutral",
-      "gv_rul_0_ta": "30 September, 1944 - 30 September, 1944",
-      "gv_rul_0_tb": "before the record - 30 September, 1944",
-      "gv_rul_0_tc": "since 30 September, 1944",
-      "gv_rul_1": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_rul_1_g1": "Nationalsozialistische Deutsche Arbeiterpartei, Fascist",
-      "gv_rul_1_g2": "Nationalsozialistische Deutsche Arbeiterpartei, Democratic",
-      "gv_rul_1_g3": "Nationalsozialistische Deutsche Arbeiterpartei, Communist",
-      "gv_rul_1_g4": "Nationalsozialistische Deutsche Arbeiterpartei, Neutral",
-      "gv_rul_1_ta": "30 September, 1944 - 30 September, 1944",
-      "gv_rul_1_tb": "before the record - 30 September, 1944",
-      "gv_rul_1_tc": "since 30 September, 1944",
-      "gv_rul_2": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_rul_2_g1": "Nationalsozialistische Deutsche Arbeiterpartei, Fascist",
-      "gv_rul_2_g2": "Nationalsozialistische Deutsche Arbeiterpartei, Democratic",
-      "gv_rul_2_g3": "Nationalsozialistische Deutsche Arbeiterpartei, Communist",
-      "gv_rul_2_g4": "Nationalsozialistische Deutsche Arbeiterpartei, Neutral",
-      "gv_rul_2_ta": "30 September, 1944 - 30 September, 1944",
-      "gv_rul_2_tb": "before the record - 30 September, 1944",
-      "gv_rul_2_tc": "since 30 September, 1944",
-      "gv_rul_3": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_rul_3_g1": "Nationalsozialistische Deutsche Arbeiterpartei, Fascist",
-      "gv_rul_3_g2": "Nationalsozialistische Deutsche Arbeiterpartei, Democratic",
-      "gv_rul_3_g3": "Nationalsozialistische Deutsche Arbeiterpartei, Communist",
-      "gv_rul_3_g4": "Nationalsozialistische Deutsche Arbeiterpartei, Neutral",
-      "gv_rul_3_ta": "30 September, 1944 - 30 September, 1944",
-      "gv_rul_3_tb": "before the record - 30 September, 1944",
-      "gv_rul_3_tc": "since 30 September, 1944",
-      "gv_adv_n": "500 appointed",
-      "gv_adv_0_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_adv_0_role": "Reich Minister of Foreign Affairs",
-      "gv_adv_0_since": "since 30 September, 1944",
-      "gv_adv_1_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_adv_1_role": "Reich Minister of Foreign Affairs",
-      "gv_adv_1_since": "since 30 September, 1944",
-      "gv_adv_2_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_adv_2_role": "Reich Minister of Foreign Affairs",
-      "gv_adv_2_since": "since 30 September, 1944",
-      "gv_adv_3_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_adv_3_role": "Reich Minister of Foreign Affairs",
-      "gv_adv_3_since": "since 30 September, 1944",
-      "gv_hc_n": "7 appointed",
-      "gv_of_0_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_of_0_role": "Reich Minister of Foreign Affairs",
-      "gv_of_0_since": "since 30 September, 1944",
-      "gv_of_1_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_of_1_role": "Reich Minister of Foreign Affairs",
-      "gv_of_1_since": "since 30 September, 1944",
-      "gv_of_2_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_of_2_role": "Reich Minister of Foreign Affairs",
-      "gv_of_2_since": "since 30 September, 1944",
-      "gv_of_3_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_of_3_role": "Reich Minister of Foreign Affairs",
-      "gv_of_3_since": "since 30 September, 1944",
-      "gv_hc_0_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_hc_0_role": "Reich Minister of Foreign Affairs",
-      "gv_hc_0_since": "since 30 September, 1944",
-      "gv_hc_1_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_hc_1_role": "Reich Minister of Foreign Affairs",
-      "gv_hc_1_since": "since 30 September, 1944",
-      "gv_hc_2_name": "\u00a7YKonstantin von Neurath\u00a7!",
-      "gv_hc_2_role": "Reich Minister of Foreign Affairs",
-      "gv_hc_2_since": "since 30 September, 1944",
-      "gv_members_n": "500 members",
-      "gv_faction": "Co-Prosperity Sphere",
-      "gv_faction_lead": "led by \u00a7YThe Czechoslovak Republic\u00a7!",
-      "gv_subjects_n": "500",
-      "gv_capital": "Niederschlesien",
-      "gv_agency": "Intelligence Agency",
-      "gv_f_operatives": "128",
-      "gv_f_appointed": "128",
-      "gv_f_heads": "128"
+      "gv_leader_since": "since 3 September, 1942",
+      "gv_rec": "1422 days",
+      "gv_election": "1:00, 5 March, 1933",
+      "gv_next": "in 1407 days",
+      "gv_support": "72.4%",
+      "gv_stab": "71%",
+      "gv_ws": "62%",
+      "gv_law_0": "\u00a7YWar Economy\u00a7!",
+      "gv_law_1": "\u00a7YLimited Exports\u00a7!",
+      "gv_law_2": "\u00a7YLimited Conscription\u00a7!",
+      "gv_pt_0_name": "Nationalsozialistische Deutsche Arbeiterpartei",
+      "gv_pt_0_who": "\u00a7YAdolf Hitler\u00a7!",
+      "gv_pt_0_now": "72%",
+      "gv_pt_0_nows": "72.4%",
+      "gv_pt_0_dy": "128",
+      "gv_pt_1_name": "Deutsche Zentrumspartei - Sozialdemokratische Partei Deutschlands",
+      "gv_pt_1_who": "\u00a7YKonrad Adenauer\u00a7!",
+      "gv_pt_1_now": "0%",
+      "gv_pt_1_nows": "0.3%",
+      "gv_pt_1_dy": "128",
+      "gv_pt_2_name": "Kommunistische Partei Deutschlands - Kommunistische Partei Opposition",
+      "gv_pt_2_who": "\u00a7YWilhelm Pieck\u00a7!",
+      "gv_pt_2_now": "0%",
+      "gv_pt_2_nows": "0.2%",
+      "gv_pt_2_dy": "128",
+      "gv_pt_3_name": "Deutschnationale Volkspartei",
+      "gv_pt_3_who": "\u00a7YKurt von Hammerstein-Equord\u00a7!",
+      "gv_pt_3_now": "27%",
+      "gv_pt_3_nows": "27.1%",
+      "gv_pt_3_dy": "128",
+      "gv_since_el": "0",
+      "gv_since_ch": "0",
+      "gv_since_hi": "74.1%, 1939.6.1",
+      "gv_since_mo": "47, 1 in full",
+      "gv_year_0": "1937",
+      "gv_year_1": "1938",
+      "gv_year_2": "1939",
+      "gv_year_3": "128",
+      "gv_year_4": "128",
+      "gv_year_5": "128",
+      "gv_year_6": "128",
+      "gv_year_7": "128",
+      "gv_year_8": "128",
+      "gv_year_9": "128",
+      "gv_span_0": "Adolf Hitler",
+      "gv_span_1": "Adolf Hitler",
+      "gv_span_2": "Adolf Hitler",
+      "gv_span_3": "Adolf Hitler",
+      "gv_span_4": "Adolf Hitler",
+      "gv_span_5": "Adolf Hitler",
+      "gv_end_0": "72%",
+      "gv_end_1": "0%",
+      "gv_end_2": "0%",
+      "gv_end_3": "27%",
+      "gv_legend_bf": "\u00a7gBefore 1 November, 1939 the record kept the ruling party only (National Figures, series 30).\u00a7!",
+      "gv_hd_0": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_0_pt1": "DNVP, Fascist",
+      "gv_hd_0_pt2": "DNVP, Democratic",
+      "gv_hd_0_pt3": "DNVP, Communist",
+      "gv_hd_0_pt4": "DNVP, Neutral",
+      "gv_hd_0_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_0_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_0_tc": "since 30 September, 1944",
+      "gv_hd_0_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_0_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_0_stab": "128% to 128%",
+      "gv_hd_0_ws": "128% to 128%",
+      "gv_hd_0_el": "128",
+      "gv_hd_1": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_1_pt1": "DNVP, Fascist",
+      "gv_hd_1_pt2": "DNVP, Democratic",
+      "gv_hd_1_pt3": "DNVP, Communist",
+      "gv_hd_1_pt4": "DNVP, Neutral",
+      "gv_hd_1_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_1_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_1_tc": "since 30 September, 1944",
+      "gv_hd_1_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_1_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_1_stab": "128% to 128%",
+      "gv_hd_1_ws": "128% to 128%",
+      "gv_hd_1_el": "128",
+      "gv_hd_2": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_2_pt1": "DNVP, Fascist",
+      "gv_hd_2_pt2": "DNVP, Democratic",
+      "gv_hd_2_pt3": "DNVP, Communist",
+      "gv_hd_2_pt4": "DNVP, Neutral",
+      "gv_hd_2_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_2_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_2_tc": "since 30 September, 1944",
+      "gv_hd_2_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_2_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_2_stab": "128% to 128%",
+      "gv_hd_2_ws": "128% to 128%",
+      "gv_hd_2_el": "128",
+      "gv_hd_3": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_3_pt1": "DNVP, Fascist",
+      "gv_hd_3_pt2": "DNVP, Democratic",
+      "gv_hd_3_pt3": "DNVP, Communist",
+      "gv_hd_3_pt4": "DNVP, Neutral",
+      "gv_hd_3_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_3_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_3_tc": "since 30 September, 1944",
+      "gv_hd_3_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_3_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_3_stab": "128% to 128%",
+      "gv_hd_3_ws": "128% to 128%",
+      "gv_hd_3_el": "128",
+      "gv_hd_4": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_4_pt1": "DNVP, Fascist",
+      "gv_hd_4_pt2": "DNVP, Democratic",
+      "gv_hd_4_pt3": "DNVP, Communist",
+      "gv_hd_4_pt4": "DNVP, Neutral",
+      "gv_hd_4_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_4_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_4_tc": "since 30 September, 1944",
+      "gv_hd_4_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_4_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_4_stab": "128% to 128%",
+      "gv_hd_4_ws": "128% to 128%",
+      "gv_hd_4_el": "128",
+      "gv_hd_5": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_5_pt1": "DNVP, Fascist",
+      "gv_hd_5_pt2": "DNVP, Democratic",
+      "gv_hd_5_pt3": "DNVP, Communist",
+      "gv_hd_5_pt4": "DNVP, Neutral",
+      "gv_hd_5_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_5_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_5_tc": "since 30 September, 1944",
+      "gv_hd_5_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_5_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_5_stab": "128% to 128%",
+      "gv_hd_5_ws": "128% to 128%",
+      "gv_hd_5_el": "128",
+      "gv_hd_6": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_hd_6_pt1": "DNVP, Fascist",
+      "gv_hd_6_pt2": "DNVP, Democratic",
+      "gv_hd_6_pt3": "DNVP, Communist",
+      "gv_hd_6_pt4": "DNVP, Neutral",
+      "gv_hd_6_ta": "30 September, 1944 \u2013 30 September, 1944",
+      "gv_hd_6_tb": "before the record \u2013 30 September, 1944",
+      "gv_hd_6_tc": "since 30 September, 1944",
+      "gv_hd_6_days": "\u00a7g128 days\u00a7!",
+      "gv_hd_6_rec": "\u00a7g128 days on record\u00a7!",
+      "gv_hd_6_stab": "128% to 128%",
+      "gv_hd_6_ws": "128% to 128%",
+      "gv_hd_6_el": "128",
+      "gv_cabinet_right": "5 in office",
+      "gv_adv_0_name": "\u00a7YMartin Heidegger\u00a7!",
+      "gv_adv_0_role": "Post-Metaphysical Philosopher",
+      "gv_adv_0_since": "since 6 July, 1936",
+      "gv_adv_1_name": "\u00a7YLudwig Mueller\u00a7!",
+      "gv_adv_1_role": "Reichsbischof",
+      "gv_adv_1_since": "since 5 February, 1936",
+      "gv_adv_2_name": "\u00a7YWalther Funk\u00a7!",
+      "gv_adv_2_role": "Reich Minister of Economy",
+      "gv_adv_2_since": "since 15 April, 1936",
+      "gv_adv_3_name": "\u00a7YFritz Todt\u00a7!",
+      "gv_adv_3_role": "Reich Engineer",
+      "gv_adv_3_since": "since 2 March, 1937",
+      "gv_adv_4_name": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_adv_4_role": "Reich Minister of Foreign Affairs",
+      "gv_adv_4_since": "since 1 January, 1936",
+      "gv_high_right": "7 in office",
+      "gv_of_0_name": "\u00a7YWilhelm Keitel\u00a7!",
+      "gv_of_0_role": "Army Drill (Expert)",
+      "gv_of_0_since": "since 4 March, 1936",
+      "gv_of_1_name": "\u00a7YErich Raeder\u00a7!",
+      "gv_of_1_role": "Decisive Battle (Expert)",
+      "gv_of_1_since": "since 8 August, 1936",
+      "gv_of_2_name": "\u00a7YAlbert Kesselring\u00a7!",
+      "gv_of_2_role": "Air Reformer (Expert)",
+      "gv_of_2_since": "since 12 May, 1936",
+      "gv_of_3_name": "\u00a7YHeinz Guderian\u00a7!",
+      "gv_of_3_role": "Blitzkrieg Theorist",
+      "gv_of_3_since": "since 9 December, 1938",
+      "gv_hc_0_name": "\u00a7YHugo Sperrle\u00a7!",
+      "gv_hc_0_role": "Close Air Support (Expert)",
+      "gv_hc_0_since": "since 20 October, 1939",
+      "gv_hc_1_name": "\u00a7YFerdinand Sch\u00f6rner\u00a7!",
+      "gv_hc_1_role": "Infantry (Expert)",
+      "gv_hc_1_since": "since 8 July, 1937",
+      "gv_hc_2_name": "\u00a7YErwin Rommel\u00a7!",
+      "gv_hc_2_role": "Armor (Genius)",
+      "gv_hc_2_since": "since 9 April, 1939",
+      "gv_dl_0_d": "1939.10.20",
+      "gv_dl_0": "Appointed",
+      "gv_dl_0_a": "\u00a7YHugo Sperrle\u00a7!",
+      "gv_dl_0_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_1_d": "1939.4.9",
+      "gv_dl_1": "Appointed",
+      "gv_dl_1_a": "\u00a7YErwin Rommel\u00a7!",
+      "gv_dl_1_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_2_d": "1938.12.9",
+      "gv_dl_2": "Appointed",
+      "gv_dl_2_a": "\u00a7YHeinz Guderian\u00a7!",
+      "gv_dl_2_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_3_d": "1937.7.8",
+      "gv_dl_3": "Appointed",
+      "gv_dl_3_a": "\u00a7YFerdinand Sch\u00f6rner\u00a7!",
+      "gv_dl_3_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_4_d": "1937.3.2",
+      "gv_dl_4": "Appointed",
+      "gv_dl_4_a": "\u00a7YFritz Todt\u00a7!",
+      "gv_dl_4_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_5_d": "1937.3.2",
+      "gv_dl_5": "Left office",
+      "gv_dl_5_a": "\u00a7YHjalmar Schacht\u00a7!",
+      "gv_dl_5_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_6_d": "1936.8.8",
+      "gv_dl_6": "Appointed",
+      "gv_dl_6_a": "\u00a7YErich Raeder\u00a7!",
+      "gv_dl_6_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_dl_7_d": "1936.7.6",
+      "gv_dl_7": "Appointed",
+      "gv_dl_7_a": "\u00a7YMartin Heidegger\u00a7!",
+      "gv_dl_7_b": "\u00a7YKonstantin von Neurath\u00a7!",
+      "gv_realm_right_m1sn": "1 member, 500 subjects",
+      "gv_realm_right_mns1": "500 members, 1 subject",
+      "gv_realm_right_mnsn": "3 members, 2 subjects",
+      "gv_faction": "Axis",
+      "gv_faction_lead": "led by \u00a7YThe German Reich\u00a7!",
+      "gv_sub_head_r": "overlord: \u00a7YKonstantin von Neurath\u00a7!",
+      "gv_ag_name": "Intelligence agency: \u00a7YAbwehr\u00a7!",
+      "gv_ag_since": "founded 12 March, 1937",
+      "gv_up_head_r": "6 of 21 at their highest level",
+      "gv_op_h0": "Operatives  4 of 5",
+      "gv_cr_enc": "50250",
+      "gv_cr_def": "9",
+      "gv_cr_dec": "\u00a7YUnited Kingdom\u00a7!  64%",
+      "gv_cr_brk": "1",
+      "gv_kn_0": "\u00a7YUnited Kingdom\u00a7!",
+      "gv_kn_0_c": "34%",
+      "gv_kn_0_a": "22%",
+      "gv_kn_0_n": "18%",
+      "gv_kn_0_i": "25%",
+      "gv_kn_1": "\u00a7YFrance\u00a7!",
+      "gv_kn_1_c": "41%",
+      "gv_kn_1_a": "36%",
+      "gv_kn_1_n": "12%",
+      "gv_kn_1_i": "28%",
+      "gv_kn_2": "\u00a7YSoviet Union\u00a7!",
+      "gv_kn_2_c": "9%",
+      "gv_kn_2_a": "6%",
+      "gv_kn_2_n": "3%",
+      "gv_kn_2_i": "4%"
     },
     "mod1440_records_fac_row": {
-      "gv_fac_row_name": "Konstantin von Neurath"
+      "gv_fac_row_name": [
+        "German Reich",
+        "German East Indies",
+        "Gau Luxemburg"
+      ]
     },
     "mod1440_records_sub_row": {
-      "gv_sub_row_name": "Konstantin von Neurath"
+      "gv_sub_row_name": [
+        "Gau Luxemburg",
+        "German East Indies"
+      ]
+    },
+    "mod1440_records_gv_op_row": {
+      "gv_op_name": [
+        "\u00a7YErwin Lahousen\u00a7!",
+        "\u00a7YNikolaus Ritter\u00a7!",
+        "\u00a7YHermann Giskes\u00a7!",
+        "\u00a7YPaul Th\u00fcmmel\u00a7!"
+      ],
+      "gv_op_where": [
+        "\u00a7YKent\u00a7!",
+        "\u00a7YIle de France\u00a7!",
+        "\u00a7YMuntenia\u00a7!"
+      ],
+      "gv_op_net": [
+        "\u00a7gnetwork 41%\u00a7!",
+        "\u00a7gnetwork 64%\u00a7!",
+        "\u00a7gnetwork 18%\u00a7!"
+      ],
+      "gv_op_country": [
+        "\u00a7YGerman Reich\u00a7!"
+      ]
     }
   },
   "setup": [
@@ -291,7 +1456,8 @@
   ],
   "captures": [],
   "expect": [
-    "mod1440_records_gv/gv_close"
+    "mod1440_records_gv/gv_close",
+    "mod1440_records_gv/gv_heads_btn"
   ],
   "crop": [
     430,
@@ -300,19 +1466,29 @@
     1240
   ],
   "manual": [
-    "Operatives; an election; a new head of government (a row of the heads card with from and to)"
+    "Several years of play with a change of ruling party and an election (the chart's band and tick, the heads panel's terms); the user's own save of 24 November 1939 for the back-fill"
   ],
   "checklist": [
-    "The flag, the portrait at full size and the ideology icon of the head of government",
-    "Parties: the ruling party's row is lit; the bars are as long as the shares",
-    "Laws: each kind shows the law's own picture and name",
-    "Hire an advisor (console: effect mod1440_chk_hire, tools/check_effects.py): the next day the Cabinet shows his own small portrait, his role and the date",
-    "High command: Fritsch as chief of the army with his portrait and \"Oberkommando des Heeres\"; the vacant offices with the unknown portrait",
-    "Faction members and subjects as flag tiles, four to a row (puppet Denmark: effect mod1440_chk_puppet)",
-    "Heads of government: Hitler, \"before the record began - today\"",
-    "error.log: no line about is_character, has_character or a sprite of an advisor",
-    "E7 with Road to 56, after mod1440_chk_hire and one day: the chief of the army and a member of the high command who are generals (Fritsch if the DLC lets him be hired, Rundstedt) show their army portrait at 48x65 in the place of the advisor's small one, the same face as in the game's commander picker; mod1440_chk_e7_log: 'chiefs 1 ...' and 'members 1 ...'",
-    "E7: a political advisor (Neurath, Todt) and a theorist keep the advisor's small portrait; the head of government and the heads of the record keep their portraits (or the flag box); no unknown man anywhere on the page"
+    "The page in the steel look: seven steel cards (Head of government 540x446 and Party support 1106x446 on top, Cabinet 540x280, Faction and subjects 540x352, High command 540x376, In the War Diary 540x256, Intelligence 560x638), 6 apart; the window's ground, title strip and tabs unchanged",
+    "Head of government: name in hoi_24header, the flag, party and ideology, the portrait at full size (a head with no portrait the game can name: the flag on the dark inset with the group's icon); the banded table of eight rows: Party / In office / On record / Last election / Next election against the politics panel, Party support against its pie, Stability and War support against the top bar. Fix round 1: no Traits strip (the head of government's traits are not shown)",
+    "Fix round 1, the crash: open the Records on the user's save of 24 August 1940 (Road to 56) and click every tab and the Heads of government button: no crash; error.log has no 'Invalid trait ... mod1440_records.txt' and no 'Not a valid value ... mod1440_records.txt' line (the operatives' mission quiet_network is accepted)",
+    "Laws in force: each kind with the law's own picture at 22x22 and its name, as the politics panel's law slots",
+    "Party support, the table: the four parties sorted by support, the ruling party on the lighter plate, Now as the politics panel's pie (hover it), Year a dash until twelve months are recorded; the results bar above it in the parties' colours, largest first, its lengths as the shares (hover each colour)",
+    "The chart, 5 years on the user's save of 24 November 1939 (or a save of the build before, one day played with this build): the ruling party's dots back to January 1936 from National Figures' series 30 (compare the dots' heights with National Figures' graph of 'Ruling party popularity'), the other three only from the first month with this build; the legend 'Before ... the record kept the ruling party only'",
+    "Effect mod1440_chk_gv_months (tools/check_effects.py): made-up months of party support over six years with a change of ruling party and an election; open the page: dots in the parties' colours (democratic blue 70,90,255, fascist brown 160,85,15 on the chart), the ruling party's dots on top, the shares at the lines' ends pushed apart, the years under the plot, the band in the ruling group's colour with the head's name where it fits (hover: name and dates), a white tick at the election; click 2 years, 5 years, 10 years: each redraws at once (the dots move by their y property in list rows: are they at their heights?), the chosen button gold; no stutter while the page is open (fifteen grids of up to 120 dots)",
+    "Heads of government (the button in the Head of government card, frame 2 while open): the panel over Party support, newest first, today's head on the lighter plate, In office with days, Stability and War support 'from to' (compare today's head's second number with the top bar's stability and war support), 'not recorded' for terms before the build, Elections per term; Party support (or the button again) goes back to the chart; effect mod1440_chk_gv_leader: a new row the next day",
+    "Cabinet: five seats of 48, each with portrait, name in yellow, role and 'since'; Heidegger and Mueller (Road to 56) with the unknown leader outline on the dark inset, its tooltip 'No picture...'; hover a name: the role and its effects with the game's names and values (compare with the advisor's own tooltip in the politics panel; Heidegger: Research Speed +5.00%, Daily Fascism Support +0.03, Construction Speed +2.50%)",
+    "The German Reich seat is gone: '5 in office' on the user's save (persons only); effect mod1440_chk_gv_phantom logs every element of political_advisor ('MOD1440 gv phantom: ...'): write down what the country element is (its number, name, whether it is ROOT); error.log has no 'is_character: Invalid Scope' line in mod1440_p_adv_political_advisor_GER after a day",
+    "Hire and dismiss (mod1440_chk_gv_hire, a day, then mod1440_chk_gv_fire, a day): the seat fills with his portrait, role and date, the War Diary card gets 'Appointed' and 'Left office' lines at its top",
+    "High command: seven rows of 48, the four offices then the members; the game's face of each general or admiral (34x46); a vacant office shows the politics panel's own empty slot picture and 'vacant'; hover: the chief's trait and its effects",
+    "In the War Diary: the government's eight newest lines (date, icon, words, person); All its lines opens the War Diary on the Government filter",
+    "Faction and subjects: the faction's name, led by, member flags (four to a row, scrolls), Subjects with the overlord or 'none' (mod1440_chk_puppet: Denmark as a tile)",
+    "Intelligence (mod1440_chk_gv_agency: an agency, two upgrades, an operative): the agency's name and 'founded <date>'; the 21 upgrade pictures, lit at their highest level and dimmed otherwise (compare with the agency's upgrade window; has_done_agency_upgrade of an upgrade with levels is true only at the highest); 'N of 21 at their highest level'",
+    "Operatives: a row per operative with the game's face (image = portrait in a list row with change_scope over the game's operatives array: is it his face, as in the agency's operatives view?), name, code name, the mission's own icon and title, the flag and state of his operation and 'network N%' (compare with the map's intel network coverage of that country); 'at home' for counter-intelligence at home; 'not assigned' without a mission",
+    "Cryptology: 'department active' or 'no department'; Our cipher strength and Cryptology defence level against the agency view (agency_crypto_defense_level, agency_decrypt_strength); Decrypting: the country and its progress against the cryptology tab's bar; Ciphers broken: the War Diary's cipher lines",
+    "What we know of: the enemies at war first, then the majors; Civilian, Army, Navy and Air against the intelligence ledger's values for each (write down whether they read as percent)",
+    "The @<country> forms with a country held in a variable (network_national_coverage@var:, decryption_progress@var:, *_intel@var:): error.log has no line about them after a daily round, and the numbers are not 0 where the game shows some (else the fallback of build.json)",
+    "error.log: no line that names the mod, no 'Could not find sprite type' (GFX_1440p_GV_*, GFX_1440p_SG_face_none_46x47, GFX_1440p_SG_dim_44, GFX_idea_slot_*), no unknown trigger or effect has_done_agency_upgrade (or an 'Invalid' line naming an upgrade, an idea or a mission), is_cryptology_department_active, is_decrypting, operative_leader_mission, is_major, every_operative, is_subject"
   ],
   "teardown": [
     {
@@ -322,6 +1498,3617 @@
     {
       "key": "shift+j",
       "wait": 0.8
+    }
+  ],
+  "states": [
+    {
+      "rows": {
+        "gv_fac_grid": 3,
+        "gv_sub_grid": 2,
+        "gv_op_grid": 4,
+        "gv_of_0_gface_grid": 1,
+        "gv_of_1_gface_grid": 1,
+        "gv_of_2_gface_grid": 1,
+        "gv_of_3_gface_grid": 1,
+        "gv_hc_0_gface_grid": 1,
+        "gv_hc_1_gface_grid": 1,
+        "gv_hc_2_gface_grid": 1,
+        "gv_dots_0_24": 0,
+        "gv_dots_1_24": 0,
+        "gv_dots_2_24": 0,
+        "gv_dots_3_24": 0,
+        "gv_dots_r_24": 0,
+        "gv_band_24": 0,
+        "gv_dots_0_60": 0,
+        "gv_dots_1_60": 0,
+        "gv_dots_2_60": 0,
+        "gv_dots_3_60": 0,
+        "gv_dots_r_60": 0,
+        "gv_band_60": 0,
+        "gv_dots_0_120": 89,
+        "gv_dots_1_120": 89,
+        "gv_dots_2_120": 89,
+        "gv_dots_3_120": 89,
+        "gv_dots_r_120": 89,
+        "gv_band_120": 89
+      },
+      "only": {
+        "mod1440_records_gv_dot_0_120": {
+          "gv_dot0_120": [
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ]
+        },
+        "mod1440_records_gv_dot_1_120": {
+          "gv_dot1_120": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ]
+        },
+        "mod1440_records_gv_dot_2_120": {
+          "gv_dot2_120": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ]
+        },
+        "mod1440_records_gv_dot_3_120": {
+          "gv_dot3_120": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79
+          ]
+        },
+        "mod1440_records_gv_dot_r_120": {
+          "gv_dotr1_120": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79
+          ],
+          "gv_dotr2_120": [],
+          "gv_dotr3_120": [],
+          "gv_dotr4_120": [
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ]
+        },
+        "mod1440_records_gv_band_120": {
+          "gv_cell1_120": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79
+          ],
+          "gv_cell2_120": [],
+          "gv_cell3_120": [],
+          "gv_cell4_120": [
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88
+          ]
+        },
+        "mod1440_records_gv_op_row": {
+          "gv_op_home": [
+            2
+          ],
+          "gv_op_net": [
+            0,
+            1,
+            3
+          ],
+          "gv_op_idle": [],
+          "gv_op_where": [
+            0,
+            1,
+            3
+          ],
+          "gv_op_country": [
+            2
+          ],
+          "gv_op_m_build_intel_network": [
+            0,
+            1
+          ],
+          "gv_op_t_build_intel_network": [
+            0,
+            1
+          ],
+          "gv_op_m_quiet_network": [],
+          "gv_op_t_quiet_network": [],
+          "gv_op_m_counter_intelligence": [
+            2
+          ],
+          "gv_op_t_counter_intelligence": [
+            2
+          ],
+          "gv_op_m_root_out_resistance": [],
+          "gv_op_t_root_out_resistance": [],
+          "gv_op_m_boost_ideology": [],
+          "gv_op_t_boost_ideology": [],
+          "gv_op_m_control_trade": [],
+          "gv_op_t_control_trade": [],
+          "gv_op_m_diplomatic_pressure": [],
+          "gv_op_t_diplomatic_pressure": [],
+          "gv_op_m_propaganda": [
+            3
+          ],
+          "gv_op_t_propaganda": [
+            3
+          ],
+          "gv_op_t_none": []
+        }
+      },
+      "place": {
+        "mod1440_records_gv_dot_0_120": {
+          "gv_dot0_120": [
+            [
+              0,
+              154
+            ],
+            [
+              0,
+              157
+            ],
+            [
+              0,
+              155
+            ],
+            [
+              0,
+              162
+            ],
+            [
+              0,
+              163
+            ],
+            [
+              0,
+              168
+            ],
+            [
+              0,
+              171
+            ],
+            [
+              0,
+              170
+            ],
+            [
+              0,
+              170
+            ]
+          ]
+        },
+        "mod1440_records_gv_dot_1_120": {
+          "gv_dot1_120": [
+            [
+              0,
+              181
+            ],
+            [
+              0,
+              181
+            ],
+            [
+              0,
+              183
+            ],
+            [
+              0,
+              189
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              206
+            ],
+            [
+              0,
+              211
+            ],
+            [
+              0,
+              213
+            ],
+            [
+              0,
+              215
+            ],
+            [
+              0,
+              217
+            ],
+            [
+              0,
+              224
+            ],
+            [
+              0,
+              232
+            ],
+            [
+              0,
+              237
+            ],
+            [
+              0,
+              248
+            ],
+            [
+              0,
+              253
+            ],
+            [
+              0,
+              260
+            ],
+            [
+              0,
+              263
+            ],
+            [
+              0,
+              264
+            ],
+            [
+              0,
+              261
+            ],
+            [
+              0,
+              264
+            ],
+            [
+              0,
+              264
+            ],
+            [
+              0,
+              268
+            ],
+            [
+              0,
+              266
+            ],
+            [
+              0,
+              271
+            ],
+            [
+              0,
+              273
+            ],
+            [
+              0,
+              274
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              272
+            ],
+            [
+              0,
+              270
+            ],
+            [
+              0,
+              267
+            ],
+            [
+              0,
+              267
+            ],
+            [
+              0,
+              264
+            ],
+            [
+              0,
+              261
+            ],
+            [
+              0,
+              259
+            ],
+            [
+              0,
+              253
+            ],
+            [
+              0,
+              255
+            ],
+            [
+              0,
+              256
+            ]
+          ]
+        },
+        "mod1440_records_gv_dot_2_120": {
+          "gv_dot2_120": [
+            [
+              0,
+              247
+            ],
+            [
+              0,
+              253
+            ],
+            [
+              0,
+              254
+            ],
+            [
+              0,
+              252
+            ],
+            [
+              0,
+              255
+            ],
+            [
+              0,
+              257
+            ],
+            [
+              0,
+              262
+            ],
+            [
+              0,
+              261
+            ],
+            [
+              0,
+              261
+            ],
+            [
+              0,
+              260
+            ],
+            [
+              0,
+              264
+            ],
+            [
+              0,
+              263
+            ],
+            [
+              0,
+              270
+            ],
+            [
+              0,
+              266
+            ],
+            [
+              0,
+              270
+            ],
+            [
+              0,
+              272
+            ],
+            [
+              0,
+              272
+            ],
+            [
+              0,
+              272
+            ],
+            [
+              0,
+              273
+            ],
+            [
+              0,
+              273
+            ],
+            [
+              0,
+              274
+            ],
+            [
+              0,
+              274
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              277
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              276
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              275
+            ],
+            [
+              0,
+              274
+            ],
+            [
+              0,
+              274
+            ],
+            [
+              0,
+              272
+            ],
+            [
+              0,
+              271
+            ],
+            [
+              0,
+              270
+            ],
+            [
+              0,
+              270
+            ],
+            [
+              0,
+              270
+            ]
+          ]
+        },
+        "mod1440_records_gv_dot_3_120": {
+          "gv_dot3_120": [
+            [
+              0,
+              237
+            ],
+            [
+              0,
+              235
+            ],
+            [
+              0,
+              235
+            ],
+            [
+              0,
+              234
+            ],
+            [
+              0,
+              230
+            ],
+            [
+              0,
+              228
+            ],
+            [
+              0,
+              223
+            ],
+            [
+              0,
+              222
+            ],
+            [
+              0,
+              223
+            ],
+            [
+              0,
+              222
+            ],
+            [
+              0,
+              219
+            ],
+            [
+              0,
+              215
+            ],
+            [
+              0,
+              211
+            ],
+            [
+              0,
+              207
+            ],
+            [
+              0,
+              201
+            ],
+            [
+              0,
+              195
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              196
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              196
+            ],
+            [
+              0,
+              195
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              199
+            ],
+            [
+              0,
+              195
+            ],
+            [
+              0,
+              196
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              194
+            ],
+            [
+              0,
+              199
+            ],
+            [
+              0,
+              194
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              199
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              200
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              200
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              198
+            ],
+            [
+              0,
+              200
+            ],
+            [
+              0,
+              200
+            ],
+            [
+              0,
+              201
+            ],
+            [
+              0,
+              202
+            ],
+            [
+              0,
+              200
+            ],
+            [
+              0,
+              202
+            ],
+            [
+              0,
+              201
+            ],
+            [
+              0,
+              203
+            ],
+            [
+              0,
+              202
+            ],
+            [
+              0,
+              202
+            ],
+            [
+              0,
+              203
+            ],
+            [
+              0,
+              204
+            ],
+            [
+              0,
+              203
+            ],
+            [
+              0,
+              208
+            ],
+            [
+              0,
+              205
+            ],
+            [
+              0,
+              210
+            ],
+            [
+              0,
+              209
+            ],
+            [
+              0,
+              208
+            ],
+            [
+              0,
+              214
+            ],
+            [
+              0,
+              211
+            ],
+            [
+              0,
+              213
+            ],
+            [
+              0,
+              213
+            ],
+            [
+              0,
+              212
+            ],
+            [
+              0,
+              211
+            ],
+            [
+              0,
+              215
+            ],
+            [
+              0,
+              212
+            ],
+            [
+              0,
+              208
+            ],
+            [
+              0,
+              202
+            ],
+            [
+              0,
+              197
+            ],
+            [
+              0,
+              188
+            ],
+            [
+              0,
+              182
+            ],
+            [
+              0,
+              179
+            ],
+            [
+              0,
+              170
+            ],
+            [
+              0,
+              161
+            ],
+            [
+              0,
+              158
+            ],
+            [
+              0,
+              157
+            ],
+            [
+              0,
+              157
+            ],
+            [
+              0,
+              146
+            ]
+          ]
+        },
+        "mod1440_records_gv_dot_r_120": {
+          "gv_dotr1_120": [
+            [
+              0,
+              167
+            ],
+            [
+              0,
+              164
+            ],
+            [
+              0,
+              159
+            ],
+            [
+              0,
+              157
+            ],
+            [
+              0,
+              150
+            ],
+            [
+              0,
+              141
+            ],
+            [
+              0,
+              136
+            ],
+            [
+              0,
+              136
+            ],
+            [
+              0,
+              132
+            ],
+            [
+              0,
+              133
+            ],
+            [
+              0,
+              125
+            ],
+            [
+              0,
+              122
+            ],
+            [
+              0,
+              114
+            ],
+            [
+              0,
+              112
+            ],
+            [
+              0,
+              107
+            ],
+            [
+              0,
+              104
+            ],
+            [
+              0,
+              100
+            ],
+            [
+              0,
+              99
+            ],
+            [
+              0,
+              102
+            ],
+            [
+              0,
+              98
+            ],
+            [
+              0,
+              98
+            ],
+            [
+              0,
+              95
+            ],
+            [
+              0,
+              94
+            ],
+            [
+              0,
+              87
+            ],
+            [
+              0,
+              88
+            ],
+            [
+              0,
+              85
+            ],
+            [
+              0,
+              82
+            ],
+            [
+              0,
+              80
+            ],
+            [
+              0,
+              84
+            ],
+            [
+              0,
+              79
+            ],
+            [
+              0,
+              84
+            ],
+            [
+              0,
+              81
+            ],
+            [
+              0,
+              81
+            ],
+            [
+              0,
+              79
+            ],
+            [
+              0,
+              78
+            ],
+            [
+              0,
+              79
+            ],
+            [
+              0,
+              81
+            ],
+            [
+              0,
+              78
+            ],
+            [
+              0,
+              81
+            ],
+            [
+              0,
+              78
+            ],
+            [
+              0,
+              79
+            ],
+            [
+              0,
+              79
+            ],
+            [
+              0,
+              78
+            ],
+            [
+              0,
+              78
+            ],
+            [
+              0,
+              76
+            ],
+            [
+              0,
+              76
+            ],
+            [
+              0,
+              78
+            ],
+            [
+              0,
+              75
+            ],
+            [
+              0,
+              76
+            ],
+            [
+              0,
+              74
+            ],
+            [
+              0,
+              76
+            ],
+            [
+              0,
+              75
+            ],
+            [
+              0,
+              74
+            ],
+            [
+              0,
+              73
+            ],
+            [
+              0,
+              74
+            ],
+            [
+              0,
+              69
+            ],
+            [
+              0,
+              72
+            ],
+            [
+              0,
+              67
+            ],
+            [
+              0,
+              68
+            ],
+            [
+              0,
+              69
+            ],
+            [
+              0,
+              64
+            ],
+            [
+              0,
+              67
+            ],
+            [
+              0,
+              65
+            ],
+            [
+              0,
+              65
+            ],
+            [
+              0,
+              66
+            ],
+            [
+              0,
+              67
+            ],
+            [
+              0,
+              63
+            ],
+            [
+              0,
+              65
+            ],
+            [
+              0,
+              70
+            ],
+            [
+              0,
+              76
+            ],
+            [
+              0,
+              81
+            ],
+            [
+              0,
+              91
+            ],
+            [
+              0,
+              98
+            ],
+            [
+              0,
+              101
+            ],
+            [
+              0,
+              111
+            ],
+            [
+              0,
+              120
+            ],
+            [
+              0,
+              124
+            ],
+            [
+              0,
+              124
+            ],
+            [
+              0,
+              125
+            ],
+            [
+              0,
+              139
+            ]
+          ],
+          "gv_dotr2_120": [],
+          "gv_dotr3_120": [],
+          "gv_dotr4_120": [
+            [
+              0,
+              133
+            ],
+            [
+              0,
+              133
+            ],
+            [
+              0,
+              136
+            ],
+            [
+              0,
+              133
+            ],
+            [
+              0,
+              135
+            ],
+            [
+              0,
+              134
+            ],
+            [
+              0,
+              137
+            ],
+            [
+              0,
+              137
+            ],
+            [
+              0,
+              137
+            ]
+          ]
+        },
+        "mod1440_records_gv": {
+          "gv_year_0": [
+            490,
+            340
+          ],
+          "gv_ymark_0": [
+            510,
+            336
+          ],
+          "gv_year_1": [
+            550,
+            340
+          ],
+          "gv_ymark_1": [
+            570,
+            336
+          ],
+          "gv_year_2": [
+            610,
+            340
+          ],
+          "gv_ymark_2": [
+            630,
+            336
+          ],
+          "gv_year_3": [
+            670,
+            340
+          ],
+          "gv_ymark_3": [
+            690,
+            336
+          ],
+          "gv_year_4": [
+            730,
+            340
+          ],
+          "gv_ymark_4": [
+            750,
+            336
+          ],
+          "gv_year_5": [
+            790,
+            340
+          ],
+          "gv_ymark_5": [
+            810,
+            336
+          ],
+          "gv_year_6": [
+            850,
+            340
+          ],
+          "gv_ymark_6": [
+            870,
+            336
+          ],
+          "gv_span_0": [
+            456,
+            366
+          ],
+          "gv_span_1": [
+            851,
+            366
+          ],
+          "gv_span_2": [
+            856,
+            366
+          ],
+          "gv_tick_0": [
+            884,
+            362
+          ],
+          "gv_end_0_sw": [
+            900,
+            225
+          ],
+          "gv_end_0": [
+            909,
+            217
+          ],
+          "gv_end_0_lt": [
+            909,
+            217
+          ],
+          "gv_end_1_sw": [
+            900,
+            307
+          ],
+          "gv_end_1": [
+            909,
+            299
+          ],
+          "gv_end_1_lt": [
+            909,
+            299
+          ],
+          "gv_end_2_sw": [
+            900,
+            325
+          ],
+          "gv_end_2": [
+            909,
+            317
+          ],
+          "gv_end_2_lt": [
+            909,
+            317
+          ],
+          "gv_end_3_sw": [
+            900,
+            192
+          ],
+          "gv_end_3": [
+            909,
+            184
+          ],
+          "gv_end_3_lt": [
+            909,
+            184
+          ],
+          "gv_pt_0_sw": [
+            8,
+            154
+          ],
+          "gv_pt_0_ic": [
+            20,
+            157
+          ],
+          "gv_pt_0_name": [
+            60,
+            152
+          ],
+          "gv_pt_0_who": [
+            60,
+            174
+          ],
+          "gv_pt_0_now": [
+            272,
+            162
+          ],
+          "gv_pt_0_nows": [
+            272,
+            162
+          ],
+          "gv_pt_0_dy": [
+            328,
+            163
+          ],
+          "gv_pt_0_dyn": [
+            328,
+            163
+          ],
+          "gv_pt_1_sw": [
+            8,
+            202
+          ],
+          "gv_pt_1_ic": [
+            20,
+            205
+          ],
+          "gv_pt_1_name": [
+            60,
+            200
+          ],
+          "gv_pt_1_who": [
+            60,
+            222
+          ],
+          "gv_pt_1_now": [
+            272,
+            210
+          ],
+          "gv_pt_1_nows": [
+            272,
+            210
+          ],
+          "gv_pt_1_dy": [
+            328,
+            211
+          ],
+          "gv_pt_1_dyn": [
+            328,
+            211
+          ],
+          "gv_pt_2_sw": [
+            8,
+            250
+          ],
+          "gv_pt_2_ic": [
+            20,
+            253
+          ],
+          "gv_pt_2_name": [
+            60,
+            248
+          ],
+          "gv_pt_2_who": [
+            60,
+            270
+          ],
+          "gv_pt_2_now": [
+            272,
+            258
+          ],
+          "gv_pt_2_nows": [
+            272,
+            258
+          ],
+          "gv_pt_2_dy": [
+            328,
+            259
+          ],
+          "gv_pt_2_dyn": [
+            328,
+            259
+          ],
+          "gv_pt_3_sw": [
+            8,
+            106
+          ],
+          "gv_pt_3_ic": [
+            20,
+            109
+          ],
+          "gv_pt_3_name": [
+            60,
+            104
+          ],
+          "gv_pt_3_who": [
+            60,
+            126
+          ],
+          "gv_pt_3_now": [
+            272,
+            114
+          ],
+          "gv_pt_3_nows": [
+            272,
+            114
+          ],
+          "gv_pt_3_dy": [
+            328,
+            115
+          ],
+          "gv_pt_3_dyn": [
+            328,
+            115
+          ],
+          "gv_pt_pick": [
+            8,
+            102
+          ]
+        }
+      },
+      "hide": {
+        "mod1440_records_gv": [
+          "gv_face",
+          "gv_face_fb_g1",
+          "gv_face_fb_g2",
+          "gv_face_fb_g3",
+          "gv_leader_since_old",
+          "gv_next_none",
+          "gv_hd_title",
+          "gv_heads_back",
+          "gv_heads_newer",
+          "gv_heads_older",
+          "gv_hd_head",
+          "gv_hd_h_who",
+          "gv_hd_h_office",
+          "gv_hd_h_stab",
+          "gv_hd_h_ws",
+          "gv_hd_h_el",
+          "gv_hd_band_2",
+          "gv_hd_band_4",
+          "gv_hd_band_6",
+          "gv_hd_pick",
+          "gv_hd_0_face",
+          "gv_hd_0_fb",
+          "gv_hd_0_fbg_g1",
+          "gv_hd_0_fbg_g2",
+          "gv_hd_0_fbg_g3",
+          "gv_hd_0_fbg_g4",
+          "gv_hd_0",
+          "gv_hd_0_pt1",
+          "gv_hd_0_pt2",
+          "gv_hd_0_pt3",
+          "gv_hd_0_pt4",
+          "gv_hd_0_gi_g1",
+          "gv_hd_0_gi_g2",
+          "gv_hd_0_gi_g3",
+          "gv_hd_0_gi_g4",
+          "gv_hd_0_ta",
+          "gv_hd_0_tb",
+          "gv_hd_0_tc",
+          "gv_hd_0_td",
+          "gv_hd_0_days",
+          "gv_hd_0_rec",
+          "gv_hd_0_stab",
+          "gv_hd_0_stab_nr",
+          "gv_hd_0_ws",
+          "gv_hd_0_ws_nr",
+          "gv_hd_0_el",
+          "gv_hd_1_face",
+          "gv_hd_1_fb",
+          "gv_hd_1_fbg_g1",
+          "gv_hd_1_fbg_g2",
+          "gv_hd_1_fbg_g3",
+          "gv_hd_1_fbg_g4",
+          "gv_hd_1",
+          "gv_hd_1_pt1",
+          "gv_hd_1_pt2",
+          "gv_hd_1_pt3",
+          "gv_hd_1_pt4",
+          "gv_hd_1_gi_g1",
+          "gv_hd_1_gi_g2",
+          "gv_hd_1_gi_g3",
+          "gv_hd_1_gi_g4",
+          "gv_hd_1_ta",
+          "gv_hd_1_tb",
+          "gv_hd_1_tc",
+          "gv_hd_1_td",
+          "gv_hd_1_days",
+          "gv_hd_1_rec",
+          "gv_hd_1_stab",
+          "gv_hd_1_stab_nr",
+          "gv_hd_1_ws",
+          "gv_hd_1_ws_nr",
+          "gv_hd_1_el",
+          "gv_hd_2_face",
+          "gv_hd_2_fb",
+          "gv_hd_2_fbg_g1",
+          "gv_hd_2_fbg_g2",
+          "gv_hd_2_fbg_g3",
+          "gv_hd_2_fbg_g4",
+          "gv_hd_2",
+          "gv_hd_2_pt1",
+          "gv_hd_2_pt2",
+          "gv_hd_2_pt3",
+          "gv_hd_2_pt4",
+          "gv_hd_2_gi_g1",
+          "gv_hd_2_gi_g2",
+          "gv_hd_2_gi_g3",
+          "gv_hd_2_gi_g4",
+          "gv_hd_2_ta",
+          "gv_hd_2_tb",
+          "gv_hd_2_tc",
+          "gv_hd_2_td",
+          "gv_hd_2_days",
+          "gv_hd_2_rec",
+          "gv_hd_2_stab",
+          "gv_hd_2_stab_nr",
+          "gv_hd_2_ws",
+          "gv_hd_2_ws_nr",
+          "gv_hd_2_el",
+          "gv_hd_3_face",
+          "gv_hd_3_fb",
+          "gv_hd_3_fbg_g1",
+          "gv_hd_3_fbg_g2",
+          "gv_hd_3_fbg_g3",
+          "gv_hd_3_fbg_g4",
+          "gv_hd_3",
+          "gv_hd_3_pt1",
+          "gv_hd_3_pt2",
+          "gv_hd_3_pt3",
+          "gv_hd_3_pt4",
+          "gv_hd_3_gi_g1",
+          "gv_hd_3_gi_g2",
+          "gv_hd_3_gi_g3",
+          "gv_hd_3_gi_g4",
+          "gv_hd_3_ta",
+          "gv_hd_3_tb",
+          "gv_hd_3_tc",
+          "gv_hd_3_td",
+          "gv_hd_3_days",
+          "gv_hd_3_rec",
+          "gv_hd_3_stab",
+          "gv_hd_3_stab_nr",
+          "gv_hd_3_ws",
+          "gv_hd_3_ws_nr",
+          "gv_hd_3_el",
+          "gv_hd_4_face",
+          "gv_hd_4_fb",
+          "gv_hd_4_fbg_g1",
+          "gv_hd_4_fbg_g2",
+          "gv_hd_4_fbg_g3",
+          "gv_hd_4_fbg_g4",
+          "gv_hd_4",
+          "gv_hd_4_pt1",
+          "gv_hd_4_pt2",
+          "gv_hd_4_pt3",
+          "gv_hd_4_pt4",
+          "gv_hd_4_gi_g1",
+          "gv_hd_4_gi_g2",
+          "gv_hd_4_gi_g3",
+          "gv_hd_4_gi_g4",
+          "gv_hd_4_ta",
+          "gv_hd_4_tb",
+          "gv_hd_4_tc",
+          "gv_hd_4_td",
+          "gv_hd_4_days",
+          "gv_hd_4_rec",
+          "gv_hd_4_stab",
+          "gv_hd_4_stab_nr",
+          "gv_hd_4_ws",
+          "gv_hd_4_ws_nr",
+          "gv_hd_4_el",
+          "gv_hd_5_face",
+          "gv_hd_5_fb",
+          "gv_hd_5_fbg_g1",
+          "gv_hd_5_fbg_g2",
+          "gv_hd_5_fbg_g3",
+          "gv_hd_5_fbg_g4",
+          "gv_hd_5",
+          "gv_hd_5_pt1",
+          "gv_hd_5_pt2",
+          "gv_hd_5_pt3",
+          "gv_hd_5_pt4",
+          "gv_hd_5_gi_g1",
+          "gv_hd_5_gi_g2",
+          "gv_hd_5_gi_g3",
+          "gv_hd_5_gi_g4",
+          "gv_hd_5_ta",
+          "gv_hd_5_tb",
+          "gv_hd_5_tc",
+          "gv_hd_5_td",
+          "gv_hd_5_days",
+          "gv_hd_5_rec",
+          "gv_hd_5_stab",
+          "gv_hd_5_stab_nr",
+          "gv_hd_5_ws",
+          "gv_hd_5_ws_nr",
+          "gv_hd_5_el",
+          "gv_hd_6_face",
+          "gv_hd_6_fb",
+          "gv_hd_6_fbg_g1",
+          "gv_hd_6_fbg_g2",
+          "gv_hd_6_fbg_g3",
+          "gv_hd_6_fbg_g4",
+          "gv_hd_6",
+          "gv_hd_6_pt1",
+          "gv_hd_6_pt2",
+          "gv_hd_6_pt3",
+          "gv_hd_6_pt4",
+          "gv_hd_6_gi_g1",
+          "gv_hd_6_gi_g2",
+          "gv_hd_6_gi_g3",
+          "gv_hd_6_gi_g4",
+          "gv_hd_6_ta",
+          "gv_hd_6_tb",
+          "gv_hd_6_tc",
+          "gv_hd_6_td",
+          "gv_hd_6_days",
+          "gv_hd_6_rec",
+          "gv_hd_6_stab",
+          "gv_hd_6_stab_nr",
+          "gv_hd_6_ws",
+          "gv_hd_6_ws_nr",
+          "gv_hd_6_el",
+          "gv_hd_note",
+          "gv_year_7",
+          "gv_year_8",
+          "gv_year_9",
+          "gv_ymark_7",
+          "gv_ymark_8",
+          "gv_ymark_9",
+          "gv_span_1",
+          "gv_span_2",
+          "gv_span_3",
+          "gv_span_4",
+          "gv_span_5",
+          "gv_tick_1",
+          "gv_tick_2",
+          "gv_tick_3",
+          "gv_tick_4",
+          "gv_tick_5",
+          "gv_tick_6",
+          "gv_tick_7",
+          "gv_tick_8",
+          "gv_tick_9",
+          "gv_end_0_lt",
+          "gv_end_1_lt",
+          "gv_end_2_lt",
+          "gv_end_3_lt",
+          "gv_legend_bf",
+          "gv_chart_none",
+          "gv_pt_0_nows",
+          "gv_pt_0_dyn",
+          "gv_today_0_0",
+          "gv_today_2_0",
+          "gv_today_3_0",
+          "gv_pt_1_nows",
+          "gv_pt_1_dyn",
+          "gv_today_0_1",
+          "gv_today_1_1",
+          "gv_today_3_1",
+          "gv_pt_2_nows",
+          "gv_pt_2_dyn",
+          "gv_today_0_2",
+          "gv_today_1_2",
+          "gv_today_2_2",
+          "gv_pt_3_nows",
+          "gv_pt_3_dyn",
+          "gv_today_1_3",
+          "gv_today_2_3",
+          "gv_today_3_3",
+          "gv_adv_0_big",
+          "gv_adv_0_since_old",
+          "gv_adv_0_face",
+          "gv_adv_1_big",
+          "gv_adv_1_since_old",
+          "gv_adv_1_face",
+          "gv_adv_2_big",
+          "gv_adv_2_since_old",
+          "gv_adv_2_none",
+          "gv_adv_3_big",
+          "gv_adv_3_since_old",
+          "gv_adv_3_none",
+          "gv_adv_4_big",
+          "gv_adv_4_since_old",
+          "gv_adv_4_none",
+          "gv_adv_none",
+          "gv_of_0_face",
+          "gv_of_0_big",
+          "gv_of_0_none",
+          "gv_of_0_since_old",
+          "gv_of_0_slot",
+          "gv_of_0_vacant",
+          "gv_of_1_face",
+          "gv_of_1_big",
+          "gv_of_1_none",
+          "gv_of_1_since_old",
+          "gv_of_1_slot",
+          "gv_of_1_vacant",
+          "gv_of_2_face",
+          "gv_of_2_big",
+          "gv_of_2_none",
+          "gv_of_2_since_old",
+          "gv_of_2_slot",
+          "gv_of_2_vacant",
+          "gv_of_3_face",
+          "gv_of_3_big",
+          "gv_of_3_none",
+          "gv_of_3_since_old",
+          "gv_of_3_slot",
+          "gv_of_3_vacant",
+          "gv_hc_0_face",
+          "gv_hc_0_big",
+          "gv_hc_0_none",
+          "gv_hc_0_since_old",
+          "gv_hc_1_face",
+          "gv_hc_1_big",
+          "gv_hc_1_none",
+          "gv_hc_1_since_old",
+          "gv_hc_2_face",
+          "gv_hc_2_big",
+          "gv_hc_2_none",
+          "gv_hc_2_since_old",
+          "gv_dl_none",
+          "gv_dl_0_b",
+          "gv_dl_1_b",
+          "gv_dl_2_b",
+          "gv_dl_3_b",
+          "gv_dl_4_b",
+          "gv_dl_5_b",
+          "gv_dl_6_b",
+          "gv_dl_7_b",
+          "gv_faction_none",
+          "gv_sub_none",
+          "gv_sub_head_r",
+          "gv_realm_right_m1s1",
+          "gv_realm_right_m1sn",
+          "gv_realm_right_mns1",
+          "gv_ag_none",
+          "gv_ag_since_old",
+          "gv_op_none",
+          "gv_cr_head_r0",
+          "gv_cr_dec_none",
+          "gv_up_0_dim",
+          "gv_up_1_dim",
+          "gv_up_16_dim",
+          "gv_up_6_dim",
+          "gv_up_7_dim",
+          "gv_up_11_dim"
+        ]
+      },
+      "fills": {
+        "mod1440_records_gv": {
+          "gv_today_1_0": [
+            0.8909999999999999
+          ],
+          "gv_today_2_1": [
+            0.97
+          ],
+          "gv_today_3_2": [
+            1.0
+          ],
+          "gv_today_0_3": [
+            0.505
+          ]
+        }
+      },
+      "frames": {
+        "mod1440_records_gv": {
+          "gv_heads_btn": 1,
+          "gv_range_24": 1,
+          "gv_range_60": 1,
+          "gv_range_120": 2
+        }
+      },
+      "images": {
+        "mod1440_records_gv": {
+          "gv_face": "GFX_portrait_GER_adolf_hitler",
+          "gv_adv_2_face": "GFX_idea_walther_funk",
+          "gv_adv_3_face": "GFX_portrait_GER_fritz_todt_small",
+          "gv_adv_4_face": "GFX_portrait_GER_konstantin_von_neurath_small",
+          "gv_law_0_pic": "GFX_idea_partial_economic_mobilisation",
+          "gv_law_1_pic": "GFX_idea_export_focus",
+          "gv_law_2_pic": "GFX_idea_limited_conscription"
+        },
+        "mod1440_records_gv_gface_row": {
+          "gv_gface": [
+            "GFX_portrait_unknown",
+            "GFX_portrait_GER_erich_raeder",
+            "GFX_portrait_GER_albert_kesselring",
+            "GFX_portrait_GER_heinz_guderian",
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown",
+            "GFX_portrait_GER_erwin_rommel"
+          ]
+        },
+        "mod1440_records_gv_op_row": {
+          "gv_op_face": [
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown"
+          ]
+        }
+      },
+      "samples": {
+        "mod1440_records_gv": {
+          "gv_leader": "Kurt von Hammerstein-Equord",
+          "gv_party": "\u00a7YDNVP\u00a7!, Conservatism",
+          "gv_party_long": "Deutschnationale Volkspartei",
+          "gv_leader_since": "since 3 September, 1942",
+          "gv_rec": "240 days",
+          "gv_election": "1:00, 7 March, 1943",
+          "gv_next": "in 1407 days",
+          "gv_support": "50.0%",
+          "gv_stab": "61%",
+          "gv_ws": "44%",
+          "gv_law_0": "\u00a7YPartial Mobilisation\u00a7!",
+          "gv_law_1": "\u00a7YExport Focus\u00a7!",
+          "gv_law_2": "\u00a7YLimited Conscription\u00a7!",
+          "gv_year_0": "1937",
+          "gv_year_1": "1938",
+          "gv_year_2": "1939",
+          "gv_year_3": "1940",
+          "gv_year_4": "1941",
+          "gv_year_5": "1942",
+          "gv_year_6": "1943",
+          "gv_span_0": "Adolf Hitler",
+          "gv_end_0": "38%",
+          "gv_end_1": "7%",
+          "gv_end_2": "3%",
+          "gv_end_3": "50%",
+          "gv_pt_0_name": "Nationalsozialistische Deutsche Arbeiterpartei",
+          "gv_pt_0_who": "\u00a7YAdolf Hitler\u00a7!",
+          "gv_pt_0_now": "39%",
+          "gv_pt_0_nows": "38.6%",
+          "gv_pt_0_dy": "-16.5",
+          "gv_pt_1_name": "Deutsche Zentrumspartei - Sozialdemokratische Partei Deutschlands",
+          "gv_pt_1_who": "\u00a7YKonrad Adenauer\u00a7!",
+          "gv_pt_1_now": "8%",
+          "gv_pt_1_nows": "7.9%",
+          "gv_pt_1_dy": "+7.0",
+          "gv_pt_2_name": "Kommunistische Partei Deutschlands - Kommunistische Partei Opposition",
+          "gv_pt_2_who": "\u00a7YWilhelm Pieck\u00a7!",
+          "gv_pt_2_now": "3%",
+          "gv_pt_2_nows": "3.0%",
+          "gv_pt_2_dy": "+2.1",
+          "gv_pt_3_name": "Deutschnationale Volkspartei",
+          "gv_pt_3_who": "\u00a7YKurt von Hammerstein-Equord\u00a7!",
+          "gv_pt_3_now": "50%",
+          "gv_pt_3_nows": "50.5%",
+          "gv_pt_3_dy": "+7.5",
+          "gv_since_el": "1",
+          "gv_since_ch": "1",
+          "gv_since_hi": "77.0%, 1941.6.1",
+          "gv_since_mo": "89, 89 in full",
+          "gv_legend_bf": "\u00a7gBefore 1 November, 1939 the record kept the ruling party only (National Figures, series 30).\u00a7!",
+          "gv_adv_0_name": "\u00a7YMartin Heidegger\u00a7!",
+          "gv_adv_0_role": "Post-Metaphysical Philosopher",
+          "gv_adv_0_since": "since 6 July, 1936",
+          "gv_adv_1_name": "\u00a7YLudwig Mueller\u00a7!",
+          "gv_adv_1_role": "Reichsbischof",
+          "gv_adv_1_since": "since 5 February, 1936",
+          "gv_adv_2_name": "\u00a7YWalther Funk\u00a7!",
+          "gv_adv_2_role": "Reich Minister of Economy",
+          "gv_adv_2_since": "since 15 April, 1936",
+          "gv_adv_3_name": "\u00a7YFritz Todt\u00a7!",
+          "gv_adv_3_role": "Reich Engineer",
+          "gv_adv_3_since": "since 2 March, 1937",
+          "gv_adv_4_name": "\u00a7YKonstantin von Neurath\u00a7!",
+          "gv_adv_4_role": "Reich Minister of Foreign Affairs",
+          "gv_adv_4_since": "since 1 January, 1936",
+          "gv_cabinet_right": "5 in office",
+          "gv_hd_0_pt1": "DNVP, Fascist",
+          "gv_hd_0_pt2": "DNVP, Democratic",
+          "gv_hd_0_pt3": "DNVP, Communist",
+          "gv_hd_0_pt4": "DNVP, Neutral",
+          "gv_hd_1_pt1": "DNVP, Fascist",
+          "gv_hd_1_pt2": "DNVP, Democratic",
+          "gv_hd_1_pt3": "DNVP, Communist",
+          "gv_hd_1_pt4": "DNVP, Neutral",
+          "gv_hd_2_pt1": "DNVP, Fascist",
+          "gv_hd_2_pt2": "DNVP, Democratic",
+          "gv_hd_2_pt3": "DNVP, Communist",
+          "gv_hd_2_pt4": "DNVP, Neutral",
+          "gv_hd_3_pt1": "DNVP, Fascist",
+          "gv_hd_3_pt2": "DNVP, Democratic",
+          "gv_hd_3_pt3": "DNVP, Communist",
+          "gv_hd_3_pt4": "DNVP, Neutral",
+          "gv_hd_4_pt1": "DNVP, Fascist",
+          "gv_hd_4_pt2": "DNVP, Democratic",
+          "gv_hd_4_pt3": "DNVP, Communist",
+          "gv_hd_4_pt4": "DNVP, Neutral",
+          "gv_hd_5_pt1": "DNVP, Fascist",
+          "gv_hd_5_pt2": "DNVP, Democratic",
+          "gv_hd_5_pt3": "DNVP, Communist",
+          "gv_hd_5_pt4": "DNVP, Neutral",
+          "gv_hd_6_pt1": "DNVP, Fascist",
+          "gv_hd_6_pt2": "DNVP, Democratic",
+          "gv_hd_6_pt3": "DNVP, Communist",
+          "gv_hd_6_pt4": "DNVP, Neutral",
+          "gv_span_1": "Adolf Hitler",
+          "gv_span_2": "Adolf Hitler",
+          "gv_span_3": "Adolf Hitler",
+          "gv_span_4": "Adolf Hitler",
+          "gv_span_5": "Adolf Hitler",
+          "gv_of_0_name": "\u00a7YWilhelm Keitel\u00a7!",
+          "gv_of_0_role": "Army Drill (Expert)",
+          "gv_of_0_since": "since 4 March, 1936",
+          "gv_of_1_name": "\u00a7YErich Raeder\u00a7!",
+          "gv_of_1_role": "Decisive Battle (Expert)",
+          "gv_of_1_since": "since 8 August, 1936",
+          "gv_of_2_name": "\u00a7YAlbert Kesselring\u00a7!",
+          "gv_of_2_role": "Air Reformer (Expert)",
+          "gv_of_2_since": "since 12 May, 1936",
+          "gv_of_3_name": "\u00a7YHeinz Guderian\u00a7!",
+          "gv_of_3_role": "Blitzkrieg Theorist",
+          "gv_of_3_since": "since 9 December, 1938",
+          "gv_hc_0_name": "\u00a7YHugo Sperrle\u00a7!",
+          "gv_hc_0_role": "Close Air Support (Expert)",
+          "gv_hc_0_since": "since 20 October, 1939",
+          "gv_hc_1_name": "\u00a7YFerdinand Sch\u00f6rner\u00a7!",
+          "gv_hc_1_role": "Infantry (Expert)",
+          "gv_hc_1_since": "since 8 July, 1937",
+          "gv_hc_2_name": "\u00a7YErwin Rommel\u00a7!",
+          "gv_hc_2_role": "Armor (Genius)",
+          "gv_hc_2_since": "since 9 April, 1939",
+          "gv_high_right": "7 in office",
+          "gv_dl_0_d": "1939.10.20",
+          "gv_dl_0": "Appointed",
+          "gv_dl_0_a": "\u00a7YHugo Sperrle\u00a7!",
+          "gv_dl_1_d": "1939.4.9",
+          "gv_dl_1": "Appointed",
+          "gv_dl_1_a": "\u00a7YErwin Rommel\u00a7!",
+          "gv_dl_2_d": "1938.12.9",
+          "gv_dl_2": "Appointed",
+          "gv_dl_2_a": "\u00a7YHeinz Guderian\u00a7!",
+          "gv_dl_3_d": "1937.7.8",
+          "gv_dl_3": "Appointed",
+          "gv_dl_3_a": "\u00a7YFerdinand Sch\u00f6rner\u00a7!",
+          "gv_dl_4_d": "1937.3.2",
+          "gv_dl_4": "Appointed",
+          "gv_dl_4_a": "\u00a7YFritz Todt\u00a7!",
+          "gv_dl_5_d": "1937.3.2",
+          "gv_dl_5": "Left office",
+          "gv_dl_5_a": "\u00a7YHjalmar Schacht\u00a7!",
+          "gv_dl_6_d": "1936.8.8",
+          "gv_dl_6": "Appointed",
+          "gv_dl_6_a": "\u00a7YErich Raeder\u00a7!",
+          "gv_dl_7_d": "1936.7.6",
+          "gv_dl_7": "Appointed",
+          "gv_dl_7_a": "\u00a7YMartin Heidegger\u00a7!",
+          "gv_realm_right_mnsn": "3 members, 2 subjects",
+          "gv_faction": "Axis",
+          "gv_faction_lead": "led by \u00a7YThe German Reich\u00a7!",
+          "gv_ag_name": "Intelligence agency: \u00a7YAbwehr\u00a7!",
+          "gv_ag_since": "founded 12 March, 1937",
+          "gv_up_head_r": "6 of 21 at their highest level",
+          "gv_op_h0": "Operatives  4 of 5",
+          "gv_cr_enc": "50250",
+          "gv_cr_def": "9",
+          "gv_cr_dec": "\u00a7YUnited Kingdom\u00a7!  64%",
+          "gv_cr_brk": "1",
+          "gv_kn_0": "\u00a7YUnited Kingdom\u00a7!",
+          "gv_kn_0_c": "34%",
+          "gv_kn_0_a": "22%",
+          "gv_kn_0_n": "18%",
+          "gv_kn_0_i": "25%",
+          "gv_kn_1": "\u00a7YFrance\u00a7!",
+          "gv_kn_1_c": "41%",
+          "gv_kn_1_a": "36%",
+          "gv_kn_1_n": "12%",
+          "gv_kn_1_i": "28%",
+          "gv_kn_2": "\u00a7YSoviet Union\u00a7!",
+          "gv_kn_2_c": "9%",
+          "gv_kn_2_a": "6%",
+          "gv_kn_2_n": "3%",
+          "gv_kn_2_i": "4%"
+        },
+        "mod1440_records_gv_op_row": {
+          "gv_op_name": [
+            "\u00a7YErwin Lahousen\u00a7!",
+            "\u00a7YNikolaus Ritter\u00a7!",
+            "\u00a7YHermann Giskes\u00a7!",
+            "\u00a7YPaul Th\u00fcmmel\u00a7!"
+          ],
+          "gv_op_country": [
+            "\u00a7YGerman Reich\u00a7!"
+          ],
+          "gv_op_where": [
+            "\u00a7YKent\u00a7!",
+            "\u00a7YIle de France\u00a7!",
+            "\u00a7YMuntenia\u00a7!"
+          ],
+          "gv_op_net": [
+            "\u00a7gnetwork 41%\u00a7!",
+            "\u00a7gnetwork 64%\u00a7!",
+            "\u00a7gnetwork 18%\u00a7!"
+          ]
+        },
+        "mod1440_records_fac_row": {
+          "gv_fac_row_name": [
+            "German Reich",
+            "German East Indies",
+            "Gau Luxemburg"
+          ]
+        },
+        "mod1440_records_sub_row": {
+          "gv_sub_row_name": [
+            "Gau Luxemburg",
+            "German East Indies"
+          ]
+        }
+      },
+      "name": "later",
+      "_note": "A new game on 1 May 1943 at ten years: the conservatives took power in August 1942 (Beck, then Hammerstein-Equord); an election in March 1943 (the tick); the head of government without a portrait (E4's flag box)."
+    },
+    {
+      "rows": {
+        "gv_fac_grid": 3,
+        "gv_sub_grid": 2,
+        "gv_op_grid": 4,
+        "gv_of_0_gface_grid": 1,
+        "gv_of_1_gface_grid": 1,
+        "gv_of_2_gface_grid": 1,
+        "gv_of_3_gface_grid": 1,
+        "gv_hc_0_gface_grid": 1,
+        "gv_hc_1_gface_grid": 1,
+        "gv_hc_2_gface_grid": 1,
+        "gv_dots_0_24": 0,
+        "gv_dots_1_24": 0,
+        "gv_dots_2_24": 0,
+        "gv_dots_3_24": 0,
+        "gv_dots_r_24": 0,
+        "gv_dots_0_60": 0,
+        "gv_dots_1_60": 0,
+        "gv_dots_2_60": 0,
+        "gv_dots_3_60": 0,
+        "gv_dots_r_60": 0,
+        "gv_dots_0_120": 0,
+        "gv_dots_1_120": 0,
+        "gv_dots_2_120": 0,
+        "gv_dots_3_120": 0,
+        "gv_dots_r_120": 0,
+        "gv_band_24": 0,
+        "gv_band_60": 0,
+        "gv_band_120": 0
+      },
+      "only": {
+        "mod1440_records_gv_op_row": {
+          "gv_op_home": [
+            2
+          ],
+          "gv_op_net": [
+            0,
+            1,
+            3
+          ],
+          "gv_op_idle": [],
+          "gv_op_where": [
+            0,
+            1,
+            3
+          ],
+          "gv_op_country": [
+            2
+          ],
+          "gv_op_m_build_intel_network": [
+            0,
+            1
+          ],
+          "gv_op_t_build_intel_network": [
+            0,
+            1
+          ],
+          "gv_op_m_quiet_network": [],
+          "gv_op_t_quiet_network": [],
+          "gv_op_m_counter_intelligence": [
+            2
+          ],
+          "gv_op_t_counter_intelligence": [
+            2
+          ],
+          "gv_op_m_root_out_resistance": [],
+          "gv_op_t_root_out_resistance": [],
+          "gv_op_m_boost_ideology": [],
+          "gv_op_t_boost_ideology": [],
+          "gv_op_m_control_trade": [],
+          "gv_op_t_control_trade": [],
+          "gv_op_m_diplomatic_pressure": [],
+          "gv_op_t_diplomatic_pressure": [],
+          "gv_op_m_propaganda": [
+            3
+          ],
+          "gv_op_t_propaganda": [
+            3
+          ],
+          "gv_op_t_none": []
+        }
+      },
+      "place": {
+        "mod1440_records_gv": {}
+      },
+      "hide": {
+        "mod1440_records_gv": [
+          "gv_face",
+          "gv_face_fb_g1",
+          "gv_face_fb_g2",
+          "gv_face_fb_g3",
+          "gv_leader_since_old",
+          "gv_next_none",
+          "gv_parties_title",
+          "gv_range_24",
+          "gv_range_60",
+          "gv_range_120",
+          "gv_today_bg",
+          "gv_today_3_0",
+          "gv_today_3_1",
+          "gv_today_3_2",
+          "gv_today_3_3",
+          "gv_today_2_0",
+          "gv_today_2_1",
+          "gv_today_2_2",
+          "gv_today_2_3",
+          "gv_today_1_0",
+          "gv_today_1_1",
+          "gv_today_1_2",
+          "gv_today_1_3",
+          "gv_today_0_0",
+          "gv_today_0_1",
+          "gv_today_0_2",
+          "gv_today_0_3",
+          "gv_pt_head",
+          "gv_pt_h0",
+          "gv_pt_h1",
+          "gv_pt_h2",
+          "gv_pt_band_2",
+          "gv_pt_band_4",
+          "gv_pt_pick",
+          "gv_pt_0_sw",
+          "gv_pt_0_ic",
+          "gv_pt_0_name",
+          "gv_pt_0_who",
+          "gv_pt_0_now",
+          "gv_pt_0_nows",
+          "gv_pt_0_dy",
+          "gv_pt_0_dyn",
+          "gv_pt_1_sw",
+          "gv_pt_1_ic",
+          "gv_pt_1_name",
+          "gv_pt_1_who",
+          "gv_pt_1_now",
+          "gv_pt_1_nows",
+          "gv_pt_1_dy",
+          "gv_pt_1_dyn",
+          "gv_pt_2_sw",
+          "gv_pt_2_ic",
+          "gv_pt_2_name",
+          "gv_pt_2_who",
+          "gv_pt_2_now",
+          "gv_pt_2_nows",
+          "gv_pt_2_dy",
+          "gv_pt_2_dyn",
+          "gv_pt_3_sw",
+          "gv_pt_3_ic",
+          "gv_pt_3_name",
+          "gv_pt_3_who",
+          "gv_pt_3_now",
+          "gv_pt_3_nows",
+          "gv_pt_3_dy",
+          "gv_pt_3_dyn",
+          "gv_since_head",
+          "gv_since_head_t",
+          "gv_since_band_2",
+          "gv_since_band_4",
+          "gv_since_el_l",
+          "gv_since_el",
+          "gv_since_ch_l",
+          "gv_since_ch",
+          "gv_since_hi_l",
+          "gv_since_hi",
+          "gv_since_mo_l",
+          "gv_since_mo",
+          "gv_chart_bg",
+          "gv_quarter_1",
+          "gv_quarter_3",
+          "gv_scale_0",
+          "gv_scale_1",
+          "gv_scale_2",
+          "gv_scale_3",
+          "gv_scale_4",
+          "gv_foot",
+          "gv_ymark_0",
+          "gv_year_0",
+          "gv_ymark_1",
+          "gv_year_1",
+          "gv_ymark_2",
+          "gv_year_2",
+          "gv_ymark_3",
+          "gv_year_3",
+          "gv_ymark_4",
+          "gv_year_4",
+          "gv_ymark_5",
+          "gv_year_5",
+          "gv_ymark_6",
+          "gv_year_6",
+          "gv_ymark_7",
+          "gv_year_7",
+          "gv_ymark_8",
+          "gv_year_8",
+          "gv_ymark_9",
+          "gv_year_9",
+          "gv_span_0",
+          "gv_span_1",
+          "gv_span_2",
+          "gv_span_3",
+          "gv_span_4",
+          "gv_span_5",
+          "gv_tick_0",
+          "gv_tick_1",
+          "gv_tick_2",
+          "gv_tick_3",
+          "gv_tick_4",
+          "gv_tick_5",
+          "gv_tick_6",
+          "gv_tick_7",
+          "gv_tick_8",
+          "gv_tick_9",
+          "gv_end_0_sw",
+          "gv_end_0",
+          "gv_end_0_lt",
+          "gv_end_1_sw",
+          "gv_end_1",
+          "gv_end_1_lt",
+          "gv_end_2_sw",
+          "gv_end_2",
+          "gv_end_2_lt",
+          "gv_end_3_sw",
+          "gv_end_3",
+          "gv_end_3_lt",
+          "gv_legend",
+          "gv_legend_bf",
+          "gv_chart_none",
+          "gv_heads_newer",
+          "gv_heads_older",
+          "gv_hd_0_face",
+          "gv_hd_0_rec",
+          "gv_hd_0_ta",
+          "gv_hd_0_tb",
+          "gv_hd_0_td",
+          "gv_hd_0_pt1",
+          "gv_hd_0_pt2",
+          "gv_hd_0_pt3",
+          "gv_hd_0_gi_g1",
+          "gv_hd_0_gi_g2",
+          "gv_hd_0_gi_g3",
+          "gv_hd_0_fbg_g1",
+          "gv_hd_0_fbg_g2",
+          "gv_hd_0_fbg_g3",
+          "gv_hd_0_stab_nr",
+          "gv_hd_0_ws_nr",
+          "gv_hd_1_face",
+          "gv_hd_1_rec",
+          "gv_hd_1_tb",
+          "gv_hd_1_tc",
+          "gv_hd_1_td",
+          "gv_hd_1_pt1",
+          "gv_hd_1_pt2",
+          "gv_hd_1_pt3",
+          "gv_hd_1_gi_g1",
+          "gv_hd_1_gi_g2",
+          "gv_hd_1_gi_g3",
+          "gv_hd_1_fbg_g1",
+          "gv_hd_1_fbg_g2",
+          "gv_hd_1_fbg_g3",
+          "gv_hd_1_stab_nr",
+          "gv_hd_1_ws_nr",
+          "gv_hd_2_fb",
+          "gv_hd_2_days",
+          "gv_hd_2_ta",
+          "gv_hd_2_tc",
+          "gv_hd_2_td",
+          "gv_hd_2_pt2",
+          "gv_hd_2_pt3",
+          "gv_hd_2_pt4",
+          "gv_hd_2_gi_g2",
+          "gv_hd_2_gi_g3",
+          "gv_hd_2_gi_g4",
+          "gv_hd_2_fbg_g1",
+          "gv_hd_2_fbg_g2",
+          "gv_hd_2_fbg_g3",
+          "gv_hd_2_fbg_g4",
+          "gv_hd_2_stab",
+          "gv_hd_2_ws",
+          "gv_hd_3",
+          "gv_hd_3_face",
+          "gv_hd_3_fb",
+          "gv_hd_3_days",
+          "gv_hd_3_rec",
+          "gv_hd_3_el",
+          "gv_hd_3_ta",
+          "gv_hd_3_tb",
+          "gv_hd_3_tc",
+          "gv_hd_3_td",
+          "gv_hd_3_pt1",
+          "gv_hd_3_pt2",
+          "gv_hd_3_pt3",
+          "gv_hd_3_pt4",
+          "gv_hd_3_gi_g1",
+          "gv_hd_3_gi_g2",
+          "gv_hd_3_gi_g3",
+          "gv_hd_3_gi_g4",
+          "gv_hd_3_fbg_g1",
+          "gv_hd_3_fbg_g2",
+          "gv_hd_3_fbg_g3",
+          "gv_hd_3_fbg_g4",
+          "gv_hd_3_stab",
+          "gv_hd_3_stab_nr",
+          "gv_hd_3_ws",
+          "gv_hd_3_ws_nr",
+          "gv_hd_4",
+          "gv_hd_4_face",
+          "gv_hd_4_fb",
+          "gv_hd_4_days",
+          "gv_hd_4_rec",
+          "gv_hd_4_el",
+          "gv_hd_4_ta",
+          "gv_hd_4_tb",
+          "gv_hd_4_tc",
+          "gv_hd_4_td",
+          "gv_hd_4_pt1",
+          "gv_hd_4_pt2",
+          "gv_hd_4_pt3",
+          "gv_hd_4_pt4",
+          "gv_hd_4_gi_g1",
+          "gv_hd_4_gi_g2",
+          "gv_hd_4_gi_g3",
+          "gv_hd_4_gi_g4",
+          "gv_hd_4_fbg_g1",
+          "gv_hd_4_fbg_g2",
+          "gv_hd_4_fbg_g3",
+          "gv_hd_4_fbg_g4",
+          "gv_hd_4_stab",
+          "gv_hd_4_stab_nr",
+          "gv_hd_4_ws",
+          "gv_hd_4_ws_nr",
+          "gv_hd_5",
+          "gv_hd_5_face",
+          "gv_hd_5_fb",
+          "gv_hd_5_days",
+          "gv_hd_5_rec",
+          "gv_hd_5_el",
+          "gv_hd_5_ta",
+          "gv_hd_5_tb",
+          "gv_hd_5_tc",
+          "gv_hd_5_td",
+          "gv_hd_5_pt1",
+          "gv_hd_5_pt2",
+          "gv_hd_5_pt3",
+          "gv_hd_5_pt4",
+          "gv_hd_5_gi_g1",
+          "gv_hd_5_gi_g2",
+          "gv_hd_5_gi_g3",
+          "gv_hd_5_gi_g4",
+          "gv_hd_5_fbg_g1",
+          "gv_hd_5_fbg_g2",
+          "gv_hd_5_fbg_g3",
+          "gv_hd_5_fbg_g4",
+          "gv_hd_5_stab",
+          "gv_hd_5_stab_nr",
+          "gv_hd_5_ws",
+          "gv_hd_5_ws_nr",
+          "gv_hd_6",
+          "gv_hd_6_face",
+          "gv_hd_6_fb",
+          "gv_hd_6_days",
+          "gv_hd_6_rec",
+          "gv_hd_6_el",
+          "gv_hd_6_ta",
+          "gv_hd_6_tb",
+          "gv_hd_6_tc",
+          "gv_hd_6_td",
+          "gv_hd_6_pt1",
+          "gv_hd_6_pt2",
+          "gv_hd_6_pt3",
+          "gv_hd_6_pt4",
+          "gv_hd_6_gi_g1",
+          "gv_hd_6_gi_g2",
+          "gv_hd_6_gi_g3",
+          "gv_hd_6_gi_g4",
+          "gv_hd_6_fbg_g1",
+          "gv_hd_6_fbg_g2",
+          "gv_hd_6_fbg_g3",
+          "gv_hd_6_fbg_g4",
+          "gv_hd_6_stab",
+          "gv_hd_6_stab_nr",
+          "gv_hd_6_ws",
+          "gv_hd_6_ws_nr",
+          "gv_adv_0_big",
+          "gv_adv_0_since_old",
+          "gv_adv_0_face",
+          "gv_adv_1_big",
+          "gv_adv_1_since_old",
+          "gv_adv_1_face",
+          "gv_adv_2_big",
+          "gv_adv_2_since_old",
+          "gv_adv_2_none",
+          "gv_adv_3_big",
+          "gv_adv_3_since_old",
+          "gv_adv_3_none",
+          "gv_adv_4_big",
+          "gv_adv_4_since_old",
+          "gv_adv_4_none",
+          "gv_adv_none",
+          "gv_of_0_face",
+          "gv_of_0_big",
+          "gv_of_0_none",
+          "gv_of_0_since_old",
+          "gv_of_0_slot",
+          "gv_of_0_vacant",
+          "gv_of_1_face",
+          "gv_of_1_big",
+          "gv_of_1_none",
+          "gv_of_1_since_old",
+          "gv_of_1_slot",
+          "gv_of_1_vacant",
+          "gv_of_2_face",
+          "gv_of_2_big",
+          "gv_of_2_none",
+          "gv_of_2_since_old",
+          "gv_of_2_slot",
+          "gv_of_2_vacant",
+          "gv_of_3_face",
+          "gv_of_3_big",
+          "gv_of_3_none",
+          "gv_of_3_since_old",
+          "gv_of_3_slot",
+          "gv_of_3_vacant",
+          "gv_hc_0_face",
+          "gv_hc_0_big",
+          "gv_hc_0_none",
+          "gv_hc_0_since_old",
+          "gv_hc_1_face",
+          "gv_hc_1_big",
+          "gv_hc_1_none",
+          "gv_hc_1_since_old",
+          "gv_hc_2_face",
+          "gv_hc_2_big",
+          "gv_hc_2_none",
+          "gv_hc_2_since_old",
+          "gv_dl_none",
+          "gv_dl_0_b",
+          "gv_dl_1_b",
+          "gv_dl_2_b",
+          "gv_dl_3_b",
+          "gv_dl_4_b",
+          "gv_dl_5_b",
+          "gv_dl_6_b",
+          "gv_dl_7_b",
+          "gv_faction_none",
+          "gv_sub_none",
+          "gv_sub_head_r",
+          "gv_realm_right_m1s1",
+          "gv_realm_right_m1sn",
+          "gv_realm_right_mns1",
+          "gv_ag_none",
+          "gv_ag_since_old",
+          "gv_op_none",
+          "gv_cr_head_r0",
+          "gv_cr_dec_none",
+          "gv_up_0_dim",
+          "gv_up_1_dim",
+          "gv_up_16_dim",
+          "gv_up_6_dim",
+          "gv_up_7_dim",
+          "gv_up_11_dim"
+        ]
+      },
+      "fills": {
+        "mod1440_records_gv": {}
+      },
+      "frames": {
+        "mod1440_records_gv": {
+          "gv_heads_btn": 2,
+          "gv_range_24": 1,
+          "gv_range_60": 1,
+          "gv_range_120": 2
+        }
+      },
+      "images": {
+        "mod1440_records_gv": {
+          "gv_face": "GFX_portrait_GER_adolf_hitler",
+          "gv_adv_2_face": "GFX_idea_walther_funk",
+          "gv_adv_3_face": "GFX_portrait_GER_fritz_todt_small",
+          "gv_adv_4_face": "GFX_portrait_GER_konstantin_von_neurath_small",
+          "gv_law_0_pic": "GFX_idea_partial_economic_mobilisation",
+          "gv_law_1_pic": "GFX_idea_export_focus",
+          "gv_law_2_pic": "GFX_idea_limited_conscription"
+        },
+        "mod1440_records_gv_gface_row": {
+          "gv_gface": [
+            "GFX_portrait_unknown",
+            "GFX_portrait_GER_erich_raeder",
+            "GFX_portrait_GER_albert_kesselring",
+            "GFX_portrait_GER_heinz_guderian",
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown",
+            "GFX_portrait_GER_erwin_rommel"
+          ]
+        },
+        "mod1440_records_gv_op_row": {
+          "gv_op_face": [
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown",
+            "GFX_portrait_unknown"
+          ]
+        }
+      },
+      "samples": {
+        "mod1440_records_gv": {
+          "gv_leader": "Kurt von Hammerstein-Equord",
+          "gv_party": "\u00a7YDNVP\u00a7!, Conservatism",
+          "gv_party_long": "Deutschnationale Volkspartei",
+          "gv_leader_since": "since 3 September, 1942",
+          "gv_rec": "240 days",
+          "gv_election": "1:00, 7 March, 1943",
+          "gv_next": "in 1407 days",
+          "gv_support": "50.0%",
+          "gv_stab": "61%",
+          "gv_ws": "44%",
+          "gv_law_0": "\u00a7YPartial Mobilisation\u00a7!",
+          "gv_law_1": "\u00a7YExport Focus\u00a7!",
+          "gv_law_2": "\u00a7YLimited Conscription\u00a7!",
+          "gv_hd_0": "\u00a7YKurt von Hammerstein-Equord\u00a7!",
+          "gv_hd_0_pt4": "DNVP, Conservatism",
+          "gv_hd_0_tc": "since 3 September, 1942",
+          "gv_hd_0_days": "\u00a7g240 days\u00a7!",
+          "gv_hd_0_stab": "38% to 61%",
+          "gv_hd_0_ws": "71% to 44%",
+          "gv_hd_0_el": "1",
+          "gv_hd_1": "\u00a7YLudwig Beck\u00a7!",
+          "gv_hd_1_pt4": "DNVP, Conservatism",
+          "gv_hd_1_ta": "12 August, 1942 \u2013 3 September, 1942",
+          "gv_hd_1_days": "\u00a7g22 days\u00a7!",
+          "gv_hd_1_stab": "29% to 38%",
+          "gv_hd_1_ws": "78% to 71%",
+          "gv_hd_1_el": "0",
+          "gv_hd_2": "\u00a7YAdolf Hitler\u00a7!",
+          "gv_hd_2_pt1": "NSDAP, Fascist",
+          "gv_hd_2_tb": "before the record \u2013 12 August, 1942",
+          "gv_hd_2_rec": "\u00a7g2415 days on record\u00a7!",
+          "gv_hd_2_el": "0",
+          "gv_adv_0_name": "\u00a7YMartin Heidegger\u00a7!",
+          "gv_adv_0_role": "Post-Metaphysical Philosopher",
+          "gv_adv_0_since": "since 6 July, 1936",
+          "gv_adv_1_name": "\u00a7YLudwig Mueller\u00a7!",
+          "gv_adv_1_role": "Reichsbischof",
+          "gv_adv_1_since": "since 5 February, 1936",
+          "gv_adv_2_name": "\u00a7YWalther Funk\u00a7!",
+          "gv_adv_2_role": "Reich Minister of Economy",
+          "gv_adv_2_since": "since 15 April, 1936",
+          "gv_adv_3_name": "\u00a7YFritz Todt\u00a7!",
+          "gv_adv_3_role": "Reich Engineer",
+          "gv_adv_3_since": "since 2 March, 1937",
+          "gv_adv_4_name": "\u00a7YKonstantin von Neurath\u00a7!",
+          "gv_adv_4_role": "Reich Minister of Foreign Affairs",
+          "gv_adv_4_since": "since 1 January, 1936",
+          "gv_cabinet_right": "5 in office",
+          "gv_hd_0_pt1": "DNVP, Fascist",
+          "gv_hd_0_pt2": "DNVP, Democratic",
+          "gv_hd_0_pt3": "DNVP, Communist",
+          "gv_hd_1_pt1": "DNVP, Fascist",
+          "gv_hd_1_pt2": "DNVP, Democratic",
+          "gv_hd_1_pt3": "DNVP, Communist",
+          "gv_hd_2_pt2": "DNVP, Democratic",
+          "gv_hd_2_pt3": "DNVP, Communist",
+          "gv_hd_2_pt4": "DNVP, Neutral",
+          "gv_hd_3_pt1": "DNVP, Fascist",
+          "gv_hd_3_pt2": "DNVP, Democratic",
+          "gv_hd_3_pt3": "DNVP, Communist",
+          "gv_hd_3_pt4": "DNVP, Neutral",
+          "gv_hd_4_pt1": "DNVP, Fascist",
+          "gv_hd_4_pt2": "DNVP, Democratic",
+          "gv_hd_4_pt3": "DNVP, Communist",
+          "gv_hd_4_pt4": "DNVP, Neutral",
+          "gv_hd_5_pt1": "DNVP, Fascist",
+          "gv_hd_5_pt2": "DNVP, Democratic",
+          "gv_hd_5_pt3": "DNVP, Communist",
+          "gv_hd_5_pt4": "DNVP, Neutral",
+          "gv_hd_6_pt1": "DNVP, Fascist",
+          "gv_hd_6_pt2": "DNVP, Democratic",
+          "gv_hd_6_pt3": "DNVP, Communist",
+          "gv_hd_6_pt4": "DNVP, Neutral",
+          "gv_span_0": "Adolf Hitler",
+          "gv_span_1": "Adolf Hitler",
+          "gv_span_2": "Adolf Hitler",
+          "gv_span_3": "Adolf Hitler",
+          "gv_span_4": "Adolf Hitler",
+          "gv_span_5": "Adolf Hitler",
+          "gv_of_0_name": "\u00a7YWilhelm Keitel\u00a7!",
+          "gv_of_0_role": "Army Drill (Expert)",
+          "gv_of_0_since": "since 4 March, 1936",
+          "gv_of_1_name": "\u00a7YErich Raeder\u00a7!",
+          "gv_of_1_role": "Decisive Battle (Expert)",
+          "gv_of_1_since": "since 8 August, 1936",
+          "gv_of_2_name": "\u00a7YAlbert Kesselring\u00a7!",
+          "gv_of_2_role": "Air Reformer (Expert)",
+          "gv_of_2_since": "since 12 May, 1936",
+          "gv_of_3_name": "\u00a7YHeinz Guderian\u00a7!",
+          "gv_of_3_role": "Blitzkrieg Theorist",
+          "gv_of_3_since": "since 9 December, 1938",
+          "gv_hc_0_name": "\u00a7YHugo Sperrle\u00a7!",
+          "gv_hc_0_role": "Close Air Support (Expert)",
+          "gv_hc_0_since": "since 20 October, 1939",
+          "gv_hc_1_name": "\u00a7YFerdinand Sch\u00f6rner\u00a7!",
+          "gv_hc_1_role": "Infantry (Expert)",
+          "gv_hc_1_since": "since 8 July, 1937",
+          "gv_hc_2_name": "\u00a7YErwin Rommel\u00a7!",
+          "gv_hc_2_role": "Armor (Genius)",
+          "gv_hc_2_since": "since 9 April, 1939",
+          "gv_high_right": "7 in office",
+          "gv_dl_0_d": "1939.10.20",
+          "gv_dl_0": "Appointed",
+          "gv_dl_0_a": "\u00a7YHugo Sperrle\u00a7!",
+          "gv_dl_1_d": "1939.4.9",
+          "gv_dl_1": "Appointed",
+          "gv_dl_1_a": "\u00a7YErwin Rommel\u00a7!",
+          "gv_dl_2_d": "1938.12.9",
+          "gv_dl_2": "Appointed",
+          "gv_dl_2_a": "\u00a7YHeinz Guderian\u00a7!",
+          "gv_dl_3_d": "1937.7.8",
+          "gv_dl_3": "Appointed",
+          "gv_dl_3_a": "\u00a7YFerdinand Sch\u00f6rner\u00a7!",
+          "gv_dl_4_d": "1937.3.2",
+          "gv_dl_4": "Appointed",
+          "gv_dl_4_a": "\u00a7YFritz Todt\u00a7!",
+          "gv_dl_5_d": "1937.3.2",
+          "gv_dl_5": "Left office",
+          "gv_dl_5_a": "\u00a7YHjalmar Schacht\u00a7!",
+          "gv_dl_6_d": "1936.8.8",
+          "gv_dl_6": "Appointed",
+          "gv_dl_6_a": "\u00a7YErich Raeder\u00a7!",
+          "gv_dl_7_d": "1936.7.6",
+          "gv_dl_7": "Appointed",
+          "gv_dl_7_a": "\u00a7YMartin Heidegger\u00a7!",
+          "gv_realm_right_mnsn": "3 members, 2 subjects",
+          "gv_faction": "Axis",
+          "gv_faction_lead": "led by \u00a7YThe German Reich\u00a7!",
+          "gv_ag_name": "Intelligence agency: \u00a7YAbwehr\u00a7!",
+          "gv_ag_since": "founded 12 March, 1937",
+          "gv_up_head_r": "6 of 21 at their highest level",
+          "gv_op_h0": "Operatives  4 of 5",
+          "gv_cr_enc": "50250",
+          "gv_cr_def": "9",
+          "gv_cr_dec": "\u00a7YUnited Kingdom\u00a7!  64%",
+          "gv_cr_brk": "1",
+          "gv_kn_0": "\u00a7YUnited Kingdom\u00a7!",
+          "gv_kn_0_c": "34%",
+          "gv_kn_0_a": "22%",
+          "gv_kn_0_n": "18%",
+          "gv_kn_0_i": "25%",
+          "gv_kn_1": "\u00a7YFrance\u00a7!",
+          "gv_kn_1_c": "41%",
+          "gv_kn_1_a": "36%",
+          "gv_kn_1_n": "12%",
+          "gv_kn_1_i": "28%",
+          "gv_kn_2": "\u00a7YSoviet Union\u00a7!",
+          "gv_kn_2_c": "9%",
+          "gv_kn_2_a": "6%",
+          "gv_kn_2_n": "3%",
+          "gv_kn_2_i": "4%"
+        },
+        "mod1440_records_gv_op_row": {
+          "gv_op_name": [
+            "\u00a7YErwin Lahousen\u00a7!",
+            "\u00a7YNikolaus Ritter\u00a7!",
+            "\u00a7YHermann Giskes\u00a7!",
+            "\u00a7YPaul Th\u00fcmmel\u00a7!"
+          ],
+          "gv_op_country": [
+            "\u00a7YGerman Reich\u00a7!"
+          ],
+          "gv_op_where": [
+            "\u00a7YKent\u00a7!",
+            "\u00a7YIle de France\u00a7!",
+            "\u00a7YMuntenia\u00a7!"
+          ],
+          "gv_op_net": [
+            "\u00a7gnetwork 41%\u00a7!",
+            "\u00a7gnetwork 64%\u00a7!",
+            "\u00a7gnetwork 18%\u00a7!"
+          ]
+        },
+        "mod1440_records_fac_row": {
+          "gv_fac_row_name": [
+            "German Reich",
+            "German East Indies",
+            "Gau Luxemburg"
+          ]
+        },
+        "mod1440_records_sub_row": {
+          "gv_sub_row_name": [
+            "Gau Luxemburg",
+            "German East Indies"
+          ]
+        }
+      },
+      "name": "panel",
+      "_note": "The same day with the heads panel open over Party support: three terms, Hitler's not recorded before the build."
+    }
+  ],
+  "knownCuts": [
+    {
+      "widget": "mod1440_records_gv/gv_party_long",
+      "text": "Nationalsozialistische Deutsche Arbeiterpartei"
+    },
+    {
+      "widget": "mod1440_records_gv/gv_pt_0_name",
+      "text": "Nationalsozialistische Deutsche Arbeiterpartei"
+    },
+    {
+      "widget": "mod1440_records_gv/gv_pt_1_name",
+      "text": "Deutsche Zentrumspartei - Sozialdemokratische Partei Deutschlands"
+    },
+    {
+      "widget": "mod1440_records_gv/gv_pt_2_name",
+      "text": "Kommunistische Partei Deutschlands - Kommunistische Partei Opposition"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_build_intel_network",
+      "text": "Build Intel Network"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_quiet_network",
+      "text": "Quiet Intel Network"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_counter_intelligence",
+      "text": "Counter Intelligence"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_root_out_resistance",
+      "text": "Root Out Resistance"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_diplomatic_pressure",
+      "text": "Diplomatic Pressure"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_control_trade",
+      "text": "Control Trade"
+    },
+    {
+      "widget": "mod1440_records_gv_op_row/gv_op_t_boost_ideology",
+      "text": "Boost Ideology"
+    },
+    {
+      "widget": "mod1440_records_fac_row/gv_fac_row_name",
+      "text": "German East Indies"
+    },
+    {
+      "widget": "mod1440_records_sub_row/gv_sub_row_name",
+      "text": "German East Indies"
     }
   ]
 }

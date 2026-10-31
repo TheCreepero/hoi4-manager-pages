@@ -2100,4 +2100,446 @@ spriteTypes = {
 		tilingCenter = yes
 	}
 	# --- end E2 round 2 ---
+	# --- E3 round 2 --- the Government page of the Records, redesign of 2026-10-30 (scratch/phases/E3/layout.json): its seven
+	# steel cards (cut from the steel bar by tools/stretch_background.py; the heads panel stands on Party support's), the
+	# parties' colours (decision 5: the game's for the swatches and the results bar, lifted for the chart's dots), the band
+	# of who governed, the ticks, the fallback face (decision 2), the plate that dims an upgrade, and the strips, insets,
+	# bands and plates at the page's sizes
+	spriteType = {
+		name = "GFX_1440p_GV_hog"
+		textureFile = "gfx/interface/mod1440/gv_hog.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_GV_parties"
+		textureFile = "gfx/interface/mod1440/gv_parties.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_GV_cabinet"
+		textureFile = "gfx/interface/mod1440/gv_cabinet.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_GV_realm"
+		textureFile = "gfx/interface/mod1440/gv_realm.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_GV_high"
+		textureFile = "gfx/interface/mod1440/gv_high.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_GV_diary"
+		textureFile = "gfx/interface/mod1440/gv_diary.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_GV_intel"
+		textureFile = "gfx/interface/mod1440/gv_intel.dds"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_swatch_fascism"
+		size = { x = 6 y = 40 }
+		textureFile = "gfx/interface/mod1440/gv_colour_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	progressbartype = {
+		name = "GFX_1440p_GV_share_fascism"
+		textureFile1 = "gfx/interface/mod1440/gv_colour_fascism.dds"
+		textureFile2 = "gfx/interface/tiles/tiled_window_transparent.dds"
+		size = { x = 368 y = 16 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+		steps = 100
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_fascism_5"
+		size = { x = 5 y = 5 }
+		textureFile = "gfx/interface/mod1440/gv_dot_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_fascism_6"
+		size = { x = 6 y = 6 }
+		textureFile = "gfx/interface/mod1440/gv_dot_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_fascism_8"
+		size = { x = 8 y = 8 }
+		textureFile = "gfx/interface/mod1440/gv_dot_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_fascism_25"
+		size = { x = 25 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_fascism_10"
+		size = { x = 10 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_fascism_5"
+		size = { x = 5 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_fascism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_swatch_democratic"
+		size = { x = 6 y = 40 }
+		textureFile = "gfx/interface/mod1440/gv_colour_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	progressbartype = {
+		name = "GFX_1440p_GV_share_democratic"
+		textureFile1 = "gfx/interface/mod1440/gv_colour_democratic.dds"
+		textureFile2 = "gfx/interface/tiles/tiled_window_transparent.dds"
+		size = { x = 368 y = 16 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+		steps = 100
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_democratic_5"
+		size = { x = 5 y = 5 }
+		textureFile = "gfx/interface/mod1440/gv_dot_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_democratic_6"
+		size = { x = 6 y = 6 }
+		textureFile = "gfx/interface/mod1440/gv_dot_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_democratic_8"
+		size = { x = 8 y = 8 }
+		textureFile = "gfx/interface/mod1440/gv_dot_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_democratic_25"
+		size = { x = 25 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_democratic_10"
+		size = { x = 10 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_democratic_5"
+		size = { x = 5 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_democratic.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_swatch_communism"
+		size = { x = 6 y = 40 }
+		textureFile = "gfx/interface/mod1440/gv_colour_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	progressbartype = {
+		name = "GFX_1440p_GV_share_communism"
+		textureFile1 = "gfx/interface/mod1440/gv_colour_communism.dds"
+		textureFile2 = "gfx/interface/tiles/tiled_window_transparent.dds"
+		size = { x = 368 y = 16 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+		steps = 100
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_communism_5"
+		size = { x = 5 y = 5 }
+		textureFile = "gfx/interface/mod1440/gv_dot_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_communism_6"
+		size = { x = 6 y = 6 }
+		textureFile = "gfx/interface/mod1440/gv_dot_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_communism_8"
+		size = { x = 8 y = 8 }
+		textureFile = "gfx/interface/mod1440/gv_dot_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_communism_25"
+		size = { x = 25 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_communism_10"
+		size = { x = 10 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_communism_5"
+		size = { x = 5 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_communism.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_swatch_neutrality"
+		size = { x = 6 y = 40 }
+		textureFile = "gfx/interface/mod1440/gv_colour_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	progressbartype = {
+		name = "GFX_1440p_GV_share_neutrality"
+		textureFile1 = "gfx/interface/mod1440/gv_colour_neutrality.dds"
+		textureFile2 = "gfx/interface/tiles/tiled_window_transparent.dds"
+		size = { x = 368 y = 16 }
+		effectFile = "gfx/FX/progress.lua"
+		horizontal = yes
+		steps = 100
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_neutrality_5"
+		size = { x = 5 y = 5 }
+		textureFile = "gfx/interface/mod1440/gv_dot_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_neutrality_6"
+		size = { x = 6 y = 6 }
+		textureFile = "gfx/interface/mod1440/gv_dot_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_dot_neutrality_8"
+		size = { x = 8 y = 8 }
+		textureFile = "gfx/interface/mod1440/gv_dot_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_neutrality_25"
+		size = { x = 25 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_neutrality_10"
+		size = { x = 10 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_band_neutrality_5"
+		size = { x = 5 y = 22 }
+		textureFile = "gfx/interface/mod1440/gv_band_neutrality.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_tick_2x30"
+		size = { x = 2 y = 30 }
+		textureFile = "gfx/interface/mod1440/gv_tick.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_GV_tick_2x6"
+		size = { x = 2 y = 6 }
+		textureFile = "gfx/interface/mod1440/gv_tick.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	spriteType = {
+		name = "GFX_1440p_SG_dim_44"
+		textureFile = "gfx/interface/mod1440/sg_dim_44.dds"
+	}
+	spriteType = {
+		name = "GFX_1440p_SG_face_none_46x47"
+		textureFile = "gfx/interface/mod1440/sg_face_none_46x47.dds"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_line_600x2"
+		size = { x = 600 y = 2 }
+		textureFile = "gfx/interface/navieslist_bar_str.dds"
+		borderSize = { x = 0 y = 0 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_1090x26"
+		size = { x = 1090 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_360x26"
+		size = { x = 360 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_524x26"
+		size = { x = 524 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_head_544x26"
+		size = { x = 544 y = 26 }
+		textureFile = "gfx//interface//tiles//tiled_header_1.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_122x90"
+		size = { x = 122 y = 90 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_156x210"
+		size = { x = 156 y = 210 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_174x28"
+		size = { x = 174 y = 28 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_34x46"
+		size = { x = 34 y = 46 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_384x24"
+		size = { x = 384 y = 24 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_inset_698x394"
+		size = { x = 698 y = 394 }
+		textureFile = "gfx//interface//tiles//tiled_window_thin_border.dds"
+		borderSize = { x = 8 y = 8 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_1090x48"
+		size = { x = 1090 y = 48 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_pick_384x48"
+		size = { x = 384 y = 48 }
+		textureFile = "gfx//interface//tiles//tiled_bg_noframe.dds"
+		borderSize = { x = 12 y = 12 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_1090x48"
+		size = { x = 1090 y = 48 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_360x24"
+		size = { x = 360 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_384x24"
+		size = { x = 384 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_384x48"
+		size = { x = 384 y = 48 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_524x24"
+		size = { x = 524 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_524x48"
+		size = { x = 524 y = 48 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_544x24"
+		size = { x = 544 y = 24 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_544x48"
+		size = { x = 544 y = 48 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	corneredTileSpriteType = {
+		name = "GFX_1440p_SG_stripe_600x70"
+		size = { x = 600 y = 70 }
+		textureFile = "gfx//interface//tiles//black_bg_tile.dds"
+		borderSize = { x = 3 y = 3 }
+		tilingCenter = yes
+	}
+	# --- end E3 round 2 ---
 }
