@@ -1,0 +1,16 @@
+{
+    "testSuites": {
+        "Knowledge": ["*.md", "docs/**", "wiki/**"],
+        "BuildScript": ["tools/HoiModBuild.ps1", "tools/HoiModBuild.json", "common/**", "gfx/**", "interface/**", "localisation/**", "descriptor.mod", "thumbnail.png"],
+        "DesignSystem": ["interface/**", "tools/lint_gui.py", "tools/lint_layout.py", "tools/layout.py", "tools/guiparse.py", "tools/design_exceptions.json", "tools/build_managers.py", "tools/build_records.py"],
+        "GuiInvariants": ["tools/GuiParsing.ps1", "tools/gui-links.json", "interface/**", "gfx/**", "common/**"],
+        "Layout": ["tools/GuiParsing.ps1", "tools/layout.py", "tools/lint_layout.py", "tools/ux_audit.py", "tools/make_design_page.py", "tools/mockup.py", "tools/render_gui.py", "tools/guiparse.py", "tools/stretch_background.py", "tools/phase_notes.py", "tools/crop_capture.py", "tools/examples/**", "wiki/Design-Language.md", "wiki/Phase-Template.md", "interface/**", "gfx/**", "localisation/**"],
+        "PythonParser": ["tools/GuiParsing.ps1", "tools/guiparse.py", "interface/**"],
+        "Renderer": ["tools/GuiParsing.ps1", "tools/render_gui.py", "tools/guiparse.py", "tools/gui-links.json", "tools/scenes/**", "interface/**", "gfx/**", "localisation/**"],
+        "ScreenInvariants": ["build.ps1", "tools/GuiParsing.ps1", "tools/render_gui.py", "tools/guiparse.py", "tools/gui-links.json", "tools/hotkeys.json", "tools/moves.json", "tools/scenes/**", "interface/**", "gfx/**", "localisation/**"],
+        "ScriptedGuis": ["tools/GuiParsing.ps1", "tools/build_managers.py", "tools/build_records.py", "tools/check_effects.py", "tools/check_playset.py", "tools/make_game_tables.py", "tools/guiparse.py", "tools/layout.py", "tools/*_table.py", "tools/scenes/**", "common/**", "interface/**", "gfx/**", "localisation/**"],
+        "Workflow": ["AGENTS.md", "wiki/Workflow.md", "wiki/Home.md", "wiki/_Sidebar.md", "wiki/Phase-Template.md", ".claude/skills/**", ".agents/skills/**", ".claude/agents/**", ".gitignore"],
+        "all": ["tests/requirements.txt"],
+        "none": ["assets/**", "reference/**", "scratch/**", "artifacts/**"]
+    }
+}

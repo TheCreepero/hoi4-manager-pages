@@ -35,7 +35,7 @@ Sections, not pages: your brief carries the handoff shapes you write and names w
 
 ## Gate before you hand back
 
-- During the work, run what you need: `python -I tools/render_gui.py --scene <scene>` (and `--bounds`, `--expand <dropdown>`), `Invoke-Pester` on the test files your change touches. Look at every render with the Read tool.
+- During the work, run what you need: `python -I tools/render_gui.py --scene <scene>` (and `--bounds`, `--expand <dropdown>`), `.\tests\Run-Tests.ps1 -Changed` for the suites your change touches. Look at every render with the Read tool.
 - At the end, once: `powershell -NoProfile -File .\build.ps1 -Check <scene>` for your main scene, and the renders of every other scene you changed. Every test passes. Fix what the render shows before handing back.
 - Read the whole output of the diff check under "In this mod" below: only intended changes.
 - Do not write the phase notes: `build.json` holds what was built, the deviations, what is not seen in game, the exact `tools/Invoke-GameCheck.ps1 <scene> [...]` line (`gameCheck`) and the checker's `checklist`; the orchestrator generates the notes' Build section from it with `tools/phase_notes.py`.
