@@ -32,6 +32,8 @@ from PIL import Image, ImageDraw  # noqa: E402
 REPO_ROOT = gp.REPO_ROOT
 PREVIEW_DIR = os.path.join(REPO_ROOT, "scratch", "previews")
 SCREEN = (2560, 1440)
+# zlib level 1: the same pixels, written several times faster than Pillow's default level 6
+PNG_OPTIONS = {"compress_level": 1}
 
 CONTAINERS = {"containerwindowtype", "windowtype", "expandedwindow", "positiontype_container"}
 TEXTS = {"instanttextboxtype", "textboxtype", "editboxtype"}
@@ -93,6 +95,7 @@ class WindowIndex:
         self.mod = {}
         self.vanilla = {}
         self._roots = {}
+        self._variables = {}
         if not vanilla_only:   # --vanilla: lay the screen out as the game does without the mod
             for path in self._gui_files(os.path.join(mod_dir, "interface")):
                 for w in gp.top_level_windows(self._root(path)):
@@ -135,8 +138,7 @@ class WindowIndex:
                 continue
             for w in gp.top_level_windows(root):
                 index.setdefault(w.name, path)
-        with open(cache_path, "wb") as handle:
-            pickle.dump({"stamp": stamp, "index": index}, handle)
+        gp.save_pickle(cache_path, {"stamp": stamp, "index": index})
         return index
 
     def find(self, name, prefer_file=None):
@@ -161,11 +163,14 @@ class WindowIndex:
     def variables(self, path):
         """@name -> value defined in a .gui file: at file level, or inside a window (naviesview.gui
         defines @nv_tb_btn_y inside its toolbar, and that definition travels with the window)."""
+        if path in self._variables:
+            return self._variables[path]
         out = {}
         for block in self._root(path).walk():
             for child in block.children or []:
                 if child.children is None and child.key.startswith("@") and child.value is not None:
                     out.setdefault(child.key, child.value)
+        self._variables[path] = out
         return out
 
 
@@ -421,10 +426,14 @@ class Renderer:
                 if (sw, sh) == (dw, dh):
                     out.alpha_composite(piece, (dx1, dy1))
                 elif tiling_center and (ci == 1 or ri == 1):
-                    for ty in range(dy1, dy2, sh):
-                        for tx in range(dx1, dx2, sw):
-                            tile = piece.crop((0, 0, min(sw, dx2 - tx), min(sh, dy2 - ty)))
-                            out.alpha_composite(tile, (tx, ty))
+                    # one row of tiles, then rows of it: a few pastes instead of one composite per tile
+                    strip = Image.new("RGBA", (dw, sh))
+                    for tx in range(0, dw, sw):
+                        strip.paste(piece, (tx, 0))
+                    region = Image.new("RGBA", (dw, dh))
+                    for ty in range(0, dh, sh):
+                        region.paste(strip, (0, ty))
+                    out.alpha_composite(region, (dx1, dy1))
                 else:
                     out.alpha_composite(piece.resize((dw, dh), Image.BILINEAR), (dx1, dy1))
         return out
@@ -1184,7 +1193,7 @@ def load_scene(name, mod_dir=REPO_ROOT):
 def save_scaled(img, path, scale):
     if scale != 1:
         img = img.resize((img.width * scale, img.height * scale), Image.NEAREST)
-    img.save(path)
+    img.save(path, **PNG_OPTIONS)
     return path
 
 
@@ -1218,7 +1227,7 @@ def render_single(renderer, name, args):
         renderer.draw_bounds(canvas)
     os.makedirs(PREVIEW_DIR, exist_ok=True)
     out = args.out or os.path.join(PREVIEW_DIR, name + ("_bounds" if args.bounds else "") + ".png")
-    canvas.save(out)
+    canvas.save(out, **PNG_OPTIONS)
     out2 = save_scaled(canvas, out.replace(".png", "@2x.png"), 2) if args.scale == 2 else None
     offset = (400 - x1, 400 - y1)
     return rect, out, out2, offset
@@ -1323,7 +1332,7 @@ def render_scene(renderer, scene, args):
     os.makedirs(PREVIEW_DIR, exist_ok=True)
     state = ("_" + args.state) if getattr(args, "state", None) else ""
     out = args.out or os.path.join(PREVIEW_DIR, scene["screen"] + state + "_scene" + ("_bounds" if args.bounds else "") + ".png")
-    base.save(out)
+    base.save(out, **PNG_OPTIONS)
     crop_out = None
     crop = scene.get("crop")
     if crop:
@@ -1351,7 +1360,26 @@ def print_report(renderer, offset=None):
     print("contents are sample rows from gui-links.json; text wraps on maxWidth only. See wiki/Engine-Facts.md.")
 
 
-def run_batch(path):
+def run_batch_job(job):
+    """One call of a batch in a worker process: (id, everything it printed, exit code)."""
+    import contextlib
+    import io
+    import traceback
+
+    job_id = str(job.get("id", ""))
+    buffer = io.StringIO()
+    with contextlib.redirect_stdout(buffer), contextlib.redirect_stderr(buffer):
+        try:
+            code = main([str(a) for a in job.get("args", [])])
+        except SystemExit as exc:
+            code = exc.code if isinstance(exc.code, int) else 1
+        except Exception:
+            traceback.print_exc(file=buffer)
+            code = 1
+    return job_id, buffer.getvalue(), code
+
+
+def run_batch(path, workers=1):
     """Run the calls listed in a JSON file ([{"id": ..., "args": [...]}, ...]) in this one process.
 
     The textures, fonts, sprite index and window index load once for all of them. Each call prints what it
@@ -1363,6 +1391,16 @@ def run_batch(path):
     with open(path, encoding="utf-8") as handle:
         jobs = json.load(handle)
     out = sys.stdout
+    if workers > 1 and len(jobs) > 1:
+        from concurrent.futures import ProcessPoolExecutor
+
+        # each worker loads the indexes once and keeps its textures; the output keeps the order of the jobs
+        with ProcessPoolExecutor(max_workers=min(workers, len(jobs))) as pool:
+            for job_id, text, code in pool.map(run_batch_job, jobs, chunksize=1):
+                print("=== JOB %s ===" % job_id, file=out)
+                out.write(text)
+                print("=== END %s exit %s ===" % (job_id, code), file=out, flush=True)
+        return 0
     for job in jobs:
         job_id = str(job.get("id", ""))
         print("=== JOB %s ===" % job_id, file=out, flush=True)
@@ -1386,6 +1424,7 @@ def main(argv):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("window", nargs="?", help="top-level window to draw")
     ap.add_argument("--batch", metavar="JOBS.json", help="run every call listed in the file in this one process, and nothing else")
+    ap.add_argument("--workers", type=int, default=1, help="with --batch: run the calls in this many processes")
     ap.add_argument("--scene", help="scene name from tools/scenes/ (or a path)")
     ap.add_argument("--file", help="mod .gui file to take the window from (default: whichever mod file defines it, else vanilla)")
     ap.add_argument("--over", nargs="?", const=True, default=False, help="compose the scene over its screenshot (or the given PNG)")
@@ -1409,7 +1448,7 @@ def main(argv):
     ap.add_argument("--state", metavar="CAPTURE", help="with --scene: draw the state of one of the scene's captures (another tab, an opened dropdown)")
     args = ap.parse_args(argv)
     if args.batch:
-        return run_batch(args.batch)
+        return run_batch(args.batch, args.workers)
     args.background = [int(v) for v in args.background.split(",")]
 
     game_dir = gp.find_game_dir(args.game_dir)

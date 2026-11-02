@@ -91,18 +91,19 @@ Describe 'Texts' {
                 if ($literal -and $literal -cmatch '^[A-Z][A-Z0-9_]+$') { [void]$keys.Add($literal) }
             }
         }
-        # resolve the vanilla keys in one pass over the English localisation
-        $loc = @{}
-        if ($script:GameDir -and $keys.Count) {
-            $pattern = '^\s*(' + (($keys | ForEach-Object { [regex]::Escape($_) }) -join '|') + '):\d*\s*"(.*)"'
-            foreach ($hit in (Select-String -Path (Join-Path $script:GameDir 'localisation\english\*.yml') -Pattern $pattern)) {
-                $loc[$hit.Matches[0].Groups[1].Value] = $hit.Matches[0].Groups[2].Value
-            }
-        }
         # the mod's own texts (the captions of its scripted GUIs) are judged the same way
+        $loc = @{}
         $modLoc = Join-Path $script:RepoRoot 'localisation\english'
         if (Test-Path $modLoc) {
             foreach ($hit in (Select-String -Path (Join-Path $modLoc '*.yml') -Pattern '^\s*([A-Z][A-Z0-9_]+):\d*\s*"(.*)"')) {
+                $loc[$hit.Matches[0].Groups[1].Value] = $hit.Matches[0].Groups[2].Value
+            }
+        }
+        # resolve the vanilla keys in one pass over the English localisation
+        $vanillaKeys = @($keys | Where-Object { -not $loc.ContainsKey($_) })
+        if ($script:GameDir -and $vanillaKeys.Count) {
+            $pattern = '^\s*(' + (($vanillaKeys | ForEach-Object { [regex]::Escape($_) }) -join '|') + '):\d*\s*"(.*)"'
+            foreach ($hit in (Select-String -Path (Join-Path $script:GameDir 'localisation\english\*.yml') -Pattern $pattern)) {
                 $loc[$hit.Matches[0].Groups[1].Value] = $hit.Matches[0].Groups[2].Value
             }
         }

@@ -42,14 +42,36 @@ def load_image(path, mod_dir=REPO_ROOT):
             img = None
     if img is None:
         img = Image.open(path).convert("RGBA")
+        temp_path = "%s.%d.tmp" % (cached, os.getpid())
         try:   # a read-only or missing scratch folder must not stop a render
             os.makedirs(cache_dir, exist_ok=True)
-            img.save(cached + ".tmp", format="PNG")
-            os.replace(cached + ".tmp", cached)
+            img.save(temp_path, format="PNG")
+            os.replace(temp_path, cached)
         except Exception:
-            pass
+            remove_quietly(temp_path)
     _images[path] = img
     return img
+
+
+def remove_quietly(path):
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+
+
+def save_pickle(path, value):
+    """A cache file written through a temp file of this process, so a test file running beside it (tests/Run-Tests.ps1
+    runs them in parallel) never reads half a file; a cache that cannot be written is skipped."""
+    import pickle
+
+    temp_path = "%s.%d.tmp" % (path, os.getpid())
+    try:
+        with open(temp_path, "wb") as handle:
+            pickle.dump(value, handle)
+        os.replace(temp_path, path)
+    except OSError:
+        remove_quietly(temp_path)
 
 
 def memoized(loader):
@@ -366,8 +388,7 @@ def load_sprites(game_dir, mod_dir=REPO_ROOT, verbose=False):
             continue
         for sprite in sprite_declarations(root, path):
             sprites[sprite.name] = sprite
-    with open(cache_path, "wb") as handle:
-        pickle.dump({"stamp": stamp, "sprites": sprites}, handle)
+    save_pickle(cache_path, {"stamp": stamp, "sprites": sprites})
     return sprites
 
 

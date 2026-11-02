@@ -2,7 +2,10 @@
 
     python -I tools/make_game_tables.py            write tools/portraits_table.py, tools/victory_points_table.py and
                                                    tools/equipment_kinds_table.py
-    python -I tools/make_game_tables.py --check    exit 1 when a table on disk differs from the game
+    python -I tools/make_game_tables.py --check    exit 1 when a table on disk differs from the game; a check that
+                                                   passed is remembered in scratch/cache/game-tables-check.json and
+                                                   holds while the game version, this tool, guiparse.py, the tables
+                                                   and the Manager's modifiers report stay the same
     python -I tools/make_game_tables.py --mods     write tools/portraits_mods_table.py (the officers the mods of
                                                    the launcher's playset add) and
                                                    tools/victory_points_mods_table.py (the victory points of a
@@ -40,6 +43,7 @@ character is a certain one (is_character) and who controls a province (province_
 carries these two lists (wiki/Engine-Facts.md, X58 to X60).
 """
 import glob
+import hashlib
 import io
 import json
 import os
@@ -932,11 +936,55 @@ def version(game):
     return "unknown"
 
 
+CHECK_STAMP = os.path.join(ROOT, "scratch", "cache", "game-tables-check.json")
+
+
+def check_key(game):
+    """What the answer of --check depends on: the game's version, this tool and its parser, the tables on disk and
+    the Manager's modifiers report. Reading the game for the check takes about a minute."""
+    digest = hashlib.sha256()
+    settings = os.path.join(game, "launcher-settings.json")
+    digest.update(("%s|%d" % (version(game), os.stat(settings).st_mtime_ns)).encode("utf-8"))
+    tables = sorted(p for p in glob.glob(os.path.join(ROOT, "tools", "*_table.py")) if not p.endswith("_mods_table.py"))
+    for path in [os.path.abspath(__file__), os.path.abspath(guiparse.__file__)] + tables + [MODIFIERS_REPORT]:
+        digest.update(os.path.basename(path).encode("utf-8"))
+        if os.path.isfile(path):
+            with open(path, "rb") as handle:
+                digest.update(hashlib.sha256(handle.read()).digest())
+        else:
+            digest.update(b"missing")
+    return digest.hexdigest()
+
+
+def passed_check_key():
+    try:
+        with io.open(CHECK_STAMP, encoding="utf-8") as handle:
+            return json.load(handle).get("key")
+    except (OSError, ValueError):
+        return None
+
+
+def remember_passed_check(key):
+    try:   # a read-only or missing scratch folder only costs the next check its minute
+        os.makedirs(os.path.dirname(CHECK_STAMP), exist_ok=True)
+        with io.open(CHECK_STAMP + ".tmp", "w", encoding="utf-8", newline="\n") as handle:
+            json.dump({"key": key}, handle)
+        os.replace(CHECK_STAMP + ".tmp", CHECK_STAMP)
+    except OSError:
+        pass
+
+
 def main(argv):
     game = guiparse.find_game_dir()
     if not game or not os.path.isdir(game):
         print("game folder not found: the tables on disk stay as they are")
         return 2
+    key = None
+    if "--check" in argv:
+        key = check_key(game)
+        if key == passed_check_key():
+            print("the tables match the game %s: unchanged since the last check that passed" % version(game))
+            return 0
     if "--mods-leaders" in argv:       # E3 round 2: only the playset's leader traits (part of --mods)
         write_mod_leader_traits(game, os.path.join(os.path.expanduser("~"), "Documents", "Paradox Interactive", "Hearts of Iron IV"))
         return 0
@@ -1005,6 +1053,8 @@ def main(argv):
                 io.open(path, "w", encoding="utf-8", newline="\n").write(content)
                 print("wrote", rel)
     print("%d characters with a portrait, %d victory points" % (len(people), len(points)))
+    if key and not stale:
+        remember_passed_check(key)
     return 1 if ("--check" in argv and stale) else 0
 
 

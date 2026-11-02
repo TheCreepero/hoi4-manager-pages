@@ -116,19 +116,25 @@ BeforeAll {
         'is_decrypting', 'operative_leader_mission', 'is_major', 'is_subject', 'every_operative'
     )
 
+    $script:SkippedCommandSet = [System.Collections.Generic.HashSet[string]]::new([string[]]@($script:ArgumentCommands + $script:WritingCommands), [System.StringComparer]::OrdinalIgnoreCase)
+    $script:AllowedCommandSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$script:AllowedCommands, [System.StringComparer]::OrdinalIgnoreCase)
+
     # Adds to $Into every command of a block that is neither allowed nor an effect of the mod's own.
     function Find-ForeignCommands {
         param($Node, [System.Collections.Generic.List[string]]$Into, [string]$Where)
-        foreach ($child in @($Node.Children)) {
+        $pending = [System.Collections.Generic.Stack[object]]::new()
+        for ($index = $Node.Children.Count - 1; $index -ge 0; $index--) { $pending.Push($Node.Children[$index]) }
+        while ($pending.Count -gt 0) {
+            $child = $pending.Pop()
             $key = [string]$child.Key
-            if ($script:ArgumentCommands -contains $key -or $script:WritingCommands -contains $key) { continue }
-            if ($key -like "$($script:Prefix)*") { continue }
+            if ($script:SkippedCommandSet.Contains($key)) { continue }
+            if ($key.StartsWith($script:Prefix, [System.StringComparison]::OrdinalIgnoreCase)) { continue }
             if ($key -like 'should_have_*_medals_trigger') { continue }   # the game's own scripted triggers for its medals
             # "<number> = { ... }" enters the scope of the state with that number (the state of a victory point)
-            if ($key -match '^[0-9]+$') { if ($null -ne $child.Children) { Find-ForeignCommands -Node $child -Into $Into -Where $Where }; continue }
             # "var:<variable> = { ... }" enters the scope a variable holds (Engine Facts X33): no command of its own
-            if ($key -notlike 'var:*' -and $script:AllowedCommands -notcontains $key) { $Into.Add("$Where line $($child.Line): $key") }
-            if ($null -ne $child.Children) { Find-ForeignCommands -Node $child -Into $Into -Where $Where }
+            if ($key -notmatch '^[0-9]+$' -and -not $key.StartsWith('var:', [System.StringComparison]::OrdinalIgnoreCase) -and -not $script:AllowedCommandSet.Contains($key)) { $Into.Add("$Where line $($child.Line): $key") }
+            $children = $child.Children
+            if ($null -ne $children) { for ($index = $children.Count - 1; $index -ge 0; $index--) { $pending.Push($children[$index]) } }
         }
     }
 }
@@ -148,6 +154,45 @@ Describe 'Scripted GUI files' {
         $output = & $python -I (Join-Path (Join-Path $script:RepoRoot 'tools') 'make_game_tables.py') --check 2>&1
         if (($output -join ' ') -match 'game folder|not found|No such file') { Set-ItResult -Skipped -Because 'the game is not installed'; return }
         $LASTEXITCODE | Should -Be 0 -Because ("the tables are made by the tool from the game: " + ($output -join ' '))
+    }
+
+    It 'remember a passed check only while the game version, the tables and the tool stay the same' {
+        $python = (Get-Command python -ErrorAction SilentlyContinue).Source
+        if (-not $python) { Set-ItResult -Skipped -Because 'Python is not installed'; return }
+        $probe = @'
+import io, os, sys
+sys.path.insert(0, os.path.join(sys.argv[1], 'tools'))
+import make_game_tables as tables
+work = sys.argv[2]
+game = os.path.join(work, 'game')
+os.makedirs(os.path.join(work, 'tools'))
+os.makedirs(game)
+def write(path, text):
+    with io.open(path, 'w', encoding='utf-8') as handle:
+        handle.write(text)
+write(os.path.join(game, 'launcher-settings.json'), '{\n"rawVersion": "1.19.4"\n}\n')
+write(os.path.join(work, 'tools', 'portraits_table.py'), 'PORTRAITS = []\n')
+tables.ROOT = work
+tables.CHECK_STAMP = os.path.join(work, 'scratch', 'cache', 'game-tables-check.json')
+first = tables.check_key(game)
+print('stable', first == tables.check_key(game))
+write(os.path.join(work, 'tools', 'portraits_mods_table.py'), 'MODS = []\n')
+print('mods table ignored', first == tables.check_key(game))
+write(os.path.join(work, 'tools', 'portraits_table.py'), 'PORTRAITS = [1]\n')
+print('table changes it', first != tables.check_key(game))
+write(os.path.join(work, 'tools', 'portraits_table.py'), 'PORTRAITS = []\n')
+print('same table again', first == tables.check_key(game))
+write(os.path.join(game, 'launcher-settings.json'), '{\n"rawVersion": "1.19.5"\n}\n')
+second = tables.check_key(game)
+print('version changes it', first != second)
+print('nothing remembered', tables.passed_check_key() is None)
+tables.remember_passed_check(second)
+print('remembered', tables.passed_check_key() == second)
+'@
+        $probePath = Join-Path $TestDrive 'check_key_probe.py'
+        [System.IO.File]::WriteAllText($probePath, $probe, [System.Text.UTF8Encoding]::new($false))
+        $output = @(& $python -I -B $probePath $script:RepoRoot (Join-Path $TestDrive 'tables') 2>&1 | ForEach-Object { "$_" })
+        $output | Should -Be @('stable True', 'mods table ignored True', 'table changes it True', 'same table again True', 'version changes it True', 'nothing remembered True', 'remembered True') -Because ($output -join "`n")
     }
 
     It 'carry the mod prefix in every file name under common/' {

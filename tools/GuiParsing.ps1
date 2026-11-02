@@ -69,75 +69,189 @@ function Test-GuiFileSyntax {
     return $problems
 }
 
+function Initialize-GuiTextParser {
+    if ('HoiGuiParsing.GuiTextParser' -as [type]) { return }
+    Add-Type -TypeDefinition @'
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Management.Automation;
+using System.Text.RegularExpressions;
+
+namespace HoiGuiParsing
+{
+    public sealed class GuiNode
+    {
+        public string Key { get; set; }
+        public string Value { get; set; }
+        public List<object> Children { get; set; }
+        public int Line { get; set; }
+        public int EndLine { get; set; }
+    }
+
+    public static class GuiTextParser
+    {
+        private static readonly Regex TokenPattern = new Regex("#[^\\r\\n]*|\"[^\"]*\"|[{}=]|[^\\s{}=#\"]+");
+
+        private static GuiNode Leaf(string key, string value, int line, int endLine)
+        {
+            return new GuiNode { Key = key, Value = value, Children = null, Line = line, EndLine = endLine };
+        }
+
+        public static GuiNode Parse(string text)
+        {
+            List<int> lineStarts = new List<int>();
+            lineStarts.Add(0);
+            for (int index = 0; index < text.Length; index++)
+            {
+                if (text[index] == '\n') { lineStarts.Add(index + 1); }
+            }
+            GuiNode root = new GuiNode { Key = "", Value = null, Children = new List<object>(), Line = 1, EndLine = lineStarts.Count };
+            Stack<GuiNode> stack = new Stack<GuiNode>();
+            stack.Push(root);
+            string pendingKey = null;
+            int pendingLine = 0;
+            bool expectValue = false;
+            foreach (Match match in TokenPattern.Matches(text))
+            {
+                string token = match.Value;
+                if (token[0] == '#') { continue; }
+                int lineIndex = lineStarts.BinarySearch(match.Index);
+                if (lineIndex < 0) { lineIndex = ~lineIndex - 1; }
+                int line = lineIndex + 1;
+                GuiNode current = stack.Peek();
+                if (token == "{")
+                {
+                    string key = "";
+                    int keyLine = line;
+                    if (expectValue)
+                    {
+                        key = pendingKey;
+                        keyLine = pendingLine;
+                    }
+                    else if (pendingKey != null)
+                    {
+                        current.Children.Add(Leaf(pendingKey, null, pendingLine, pendingLine));
+                    }
+                    GuiNode node = new GuiNode { Key = key, Value = null, Children = new List<object>(), Line = keyLine, EndLine = keyLine };
+                    current.Children.Add(node);
+                    stack.Push(node);
+                    pendingKey = null;
+                    expectValue = false;
+                }
+                else if (token == "}")
+                {
+                    if (pendingKey != null) { current.Children.Add(Leaf(pendingKey, null, pendingLine, pendingLine)); }
+                    pendingKey = null;
+                    expectValue = false;
+                    if (stack.Count > 1) { stack.Pop().EndLine = line; }
+                }
+                else if (token == "=")
+                {
+                    expectValue = true;
+                }
+                else
+                {
+                    string value = token;
+                    if (value.Length >= 2 && value[0] == '"') { value = value.Substring(1, value.Length - 2); }
+                    if (expectValue)
+                    {
+                        current.Children.Add(Leaf(pendingKey, value, pendingLine, line));
+                        pendingKey = null;
+                        expectValue = false;
+                    }
+                    else
+                    {
+                        if (pendingKey != null) { current.Children.Add(Leaf(pendingKey, null, pendingLine, pendingLine)); }
+                        pendingKey = value;
+                        pendingLine = line;
+                    }
+                }
+            }
+            return root;
+        }
+    }
+
+    public static class GuiPropertyMapper
+    {
+        private static string NameOf(GuiNode node)
+        {
+            if (node == null || node.Children == null) { return null; }
+            foreach (object item in node.Children)
+            {
+                GuiNode child = (GuiNode)item;
+                if (child.Children == null && string.Equals(child.Key, "name", System.StringComparison.OrdinalIgnoreCase)) { return child.Value; }
+            }
+            return null;
+        }
+
+        private static PSObject Entry(string widget, string property, string value, int line)
+        {
+            PSObject entry = new PSObject();
+            entry.Properties.Add(new PSNoteProperty("Widget", widget));
+            entry.Properties.Add(new PSNoteProperty("Property", property));
+            entry.Properties.Add(new PSNoteProperty("Value", value));
+            entry.Properties.Add(new PSNoteProperty("Line", line));
+            return entry;
+        }
+
+        public static OrderedDictionary Map(GuiNode node)
+        {
+            OrderedDictionary map = new OrderedDictionary(System.StringComparer.OrdinalIgnoreCase);
+            string widget = NameOf(node) ?? "";
+            map[(widget + "\t(type)").ToLowerInvariant()] = Entry(widget, "(type)", node.Key.ToLowerInvariant(), node.Line);
+            Add(node, widget, "", map, new Dictionary<string, int>());
+            return map;
+        }
+
+        private static void Add(GuiNode block, string widget, string prefix, OrderedDictionary map, Dictionary<string, int> widgetCounts)
+        {
+            Dictionary<string, int> keyCounts = new Dictionary<string, int>();
+            foreach (object item in block.Children)
+            {
+                GuiNode child = (GuiNode)item;
+                string childName = child.Children != null ? NameOf(child) : null;
+                if (!string.IsNullOrEmpty(childName))
+                {
+                    string path = widget + "/" + childName;
+                    string pathKey = path.ToLowerInvariant();
+                    int seen;
+                    widgetCounts.TryGetValue(pathKey, out seen);
+                    widgetCounts[pathKey] = seen + 1;
+                    if (seen + 1 > 1) { path = path + "#" + (seen + 1); }
+                    map[(path + "\t(type)").ToLowerInvariant()] = Entry(path, "(type)", child.Key.ToLowerInvariant(), child.Line);
+                    Add(child, path, "", map, widgetCounts);
+                    continue;
+                }
+                if (child.Children == null && prefix.Length == 0 && string.Equals(child.Key, "name", System.StringComparison.OrdinalIgnoreCase)) { continue; }
+                string key = child.Key;
+                string countKey = key.ToLowerInvariant();
+                int count;
+                keyCounts.TryGetValue(countKey, out count);
+                keyCounts[countKey] = count + 1;
+                if (count + 1 > 1) { key = key + "#" + (count + 1); }
+                if (child.Children == null)
+                {
+                    string property = prefix + key;
+                    map[(widget + "\t" + property).ToLowerInvariant()] = Entry(widget, property, child.Value ?? "", child.Line);
+                }
+                else
+                {
+                    Add(child, widget, prefix + key + ".", map, widgetCounts);
+                }
+            }
+        }
+    }
+}
+'@
+}
+
 # Parses Clausewitz script into a tree. A block node has Children (a list); a key = value leaf has
 # Children = $null. Line and EndLine are 1-based line numbers of the key and of the closing brace.
 function ConvertFrom-GuiText {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$Text)
 
-    $lineStarts = [System.Collections.Generic.List[int]]::new()
-    $lineStarts.Add(0)
-    foreach ($newline in [regex]::Matches($Text, "\n")) { $lineStarts.Add($newline.Index + 1) }
-
-    $root = [pscustomobject]@{ Key = ''; Value = $null; Children = [System.Collections.Generic.List[object]]::new(); Line = 1; EndLine = $lineStarts.Count }
-    $stack = [System.Collections.Generic.Stack[object]]::new()
-    $stack.Push($root)
-    $pendingKey = $null
-    $pendingLine = 0
-    $expectValue = $false
-
-    foreach ($match in [regex]::Matches($Text, '#[^\r\n]*|"[^"]*"|[{}=]|[^\s{}=#"]+')) {
-        $token = $match.Value
-        if ($token.StartsWith('#')) { continue }
-
-        $lineIndex = $lineStarts.BinarySearch($match.Index)
-        if ($lineIndex -lt 0) { $lineIndex = (-bnot $lineIndex) - 1 }
-        $line = $lineIndex + 1
-        $current = $stack.Peek()
-
-        if ($token -eq '{') {
-            $key = ''
-            $keyLine = $line
-            if ($expectValue) {
-                $key = $pendingKey
-                $keyLine = $pendingLine
-            } elseif ($null -ne $pendingKey) {
-                $current.Children.Add([pscustomobject]@{ Key = $pendingKey; Value = $null; Children = $null; Line = $pendingLine; EndLine = $pendingLine })
-            }
-            $node = [pscustomobject]@{ Key = $key; Value = $null; Children = [System.Collections.Generic.List[object]]::new(); Line = $keyLine; EndLine = $keyLine }
-            $current.Children.Add($node)
-            $stack.Push($node)
-            $pendingKey = $null
-            $expectValue = $false
-        } elseif ($token -eq '}') {
-            if ($null -ne $pendingKey) {
-                $current.Children.Add([pscustomobject]@{ Key = $pendingKey; Value = $null; Children = $null; Line = $pendingLine; EndLine = $pendingLine })
-            }
-            $pendingKey = $null
-            $expectValue = $false
-            if ($stack.Count -gt 1) {
-                $closed = $stack.Pop()
-                $closed.EndLine = $line
-            }
-        } elseif ($token -eq '=') {
-            $expectValue = $true
-        } else {
-            $value = $token
-            if ($value.Length -ge 2 -and $value.StartsWith('"')) { $value = $value.Substring(1, $value.Length - 2) }
-            if ($expectValue) {
-                $current.Children.Add([pscustomobject]@{ Key = $pendingKey; Value = $value; Children = $null; Line = $pendingLine; EndLine = $line })
-                $pendingKey = $null
-                $expectValue = $false
-            } else {
-                if ($null -ne $pendingKey) {
-                    $current.Children.Add([pscustomobject]@{ Key = $pendingKey; Value = $null; Children = $null; Line = $pendingLine; EndLine = $pendingLine })
-                }
-                $pendingKey = $value
-                $pendingLine = $line
-            }
-        }
-    }
-
-    return $root
+    Initialize-GuiTextParser
+    return [HoiGuiParsing.GuiTextParser]::Parse($Text)
 }
 
 function Get-GuiValue {
@@ -252,41 +366,6 @@ function Compare-GuiWidgetPaths {
     }
 }
 
-function Add-GuiProperties {
-    param($Block, [string]$Widget, [string]$Prefix, $Map, $WidgetCounts)
-
-    $keyCounts = @{}
-    foreach ($child in $Block.Children) {
-        $childName = $null
-        if ($null -ne $child.Children) { $childName = Get-GuiValue -Node $child -Key 'name' }
-
-        if ($childName) {
-            $path = "$Widget/$childName"
-            $pathKey = $path.ToLowerInvariant()
-            $WidgetCounts[$pathKey] = 1 + [int]$WidgetCounts[$pathKey]
-            if ($WidgetCounts[$pathKey] -gt 1) { $path = "$path#$($WidgetCounts[$pathKey])" }
-            $Map[("$path`t(type)").ToLowerInvariant()] = [pscustomobject]@{ Widget = $path; Property = '(type)'; Value = $child.Key.ToLowerInvariant(); Line = $child.Line }
-            Add-GuiProperties -Block $child -Widget $path -Prefix '' -Map $Map -WidgetCounts $WidgetCounts
-            continue
-        }
-
-        # the name of a widget is already its path
-        if ($null -eq $child.Children -and -not $Prefix -and $child.Key -ieq 'name') { continue }
-
-        $key = $child.Key
-        $countKey = $key.ToLowerInvariant()
-        $keyCounts[$countKey] = 1 + [int]$keyCounts[$countKey]
-        if ($keyCounts[$countKey] -gt 1) { $key = "$key#$($keyCounts[$countKey])" }
-
-        if ($null -eq $child.Children) {
-            $property = $Prefix + $key
-            $Map[("$Widget`t$property").ToLowerInvariant()] = [pscustomobject]@{ Widget = $Widget; Property = $property; Value = [string]$child.Value; Line = $child.Line }
-        } else {
-            Add-GuiProperties -Block $child -Widget $Widget -Prefix ($Prefix + $key + '.') -Map $Map -WidgetCounts $WidgetCounts
-        }
-    }
-}
-
 # Flattens a window into one entry per property, keyed by widget path and property path.
 # A block with a name is a widget. Unnamed blocks (position, size, slotsize ...) are property groups
 # of the widget around them, so a value reads like "air_wing_toolbar/btn_close  position.x".
@@ -294,11 +373,8 @@ function Add-GuiProperties {
 function Get-GuiPropertyMap {
     param([Parameter(Mandatory)]$Node)
 
-    $map = [ordered]@{}
-    $widget = [string](Get-GuiValue -Node $Node -Key 'name')
-    $map[("$widget`t(type)").ToLowerInvariant()] = [pscustomobject]@{ Widget = $widget; Property = '(type)'; Value = $Node.Key.ToLowerInvariant(); Line = $Node.Line }
-    Add-GuiProperties -Block $Node -Widget $widget -Prefix '' -Map $map -WidgetCounts @{}
-    return $map
+    Initialize-GuiTextParser
+    return [HoiGuiParsing.GuiPropertyMapper]::Map($Node)
 }
 
 # Every difference between two versions of a window, one object per changed, added or removed
@@ -382,7 +458,8 @@ function Invoke-GuiRenderBatch {
         [Parameter(Mandatory)][string]$Python,
         [Parameter(Mandatory)][string]$RenderPy,
         [Parameter(Mandatory)]$Jobs,
-        [Parameter(Mandatory)][string]$JobsPath
+        [Parameter(Mandatory)][string]$JobsPath,
+        [int]$Workers = [Math]::Min(4, [Environment]::ProcessorCount)
     )
 
     $jobsDir = Split-Path -Parent $JobsPath
@@ -390,7 +467,7 @@ function Invoke-GuiRenderBatch {
     $json = ConvertTo-Json -InputObject @($Jobs) -Depth 4
     [System.IO.File]::WriteAllText($JobsPath, $json, [System.Text.UTF8Encoding]::new($false))
 
-    $lines = @(& $Python -I $RenderPy --batch $JobsPath 2>&1 | ForEach-Object { "$_" })
+    $lines = @(& $Python -I $RenderPy --batch $JobsPath --workers $Workers 2>&1 | ForEach-Object { "$_" })
     $results = @{ '*' = @{ Exit = $LASTEXITCODE; Output = $lines } }
     $current = $null
     foreach ($line in $lines) {
