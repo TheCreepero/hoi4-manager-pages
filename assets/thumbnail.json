@@ -1,0 +1,7 @@
+{
+    "version": 1,
+    "family": "interface",
+    "background": {
+        "gamePath": "gfx/loadingscreens/load_6.dds"
+    }
+}
