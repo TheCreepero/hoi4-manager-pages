@@ -7,7 +7,7 @@ This document provides formatting rules, length limits, and reference templates 
 ## Core Rules & Invariants
 
 1. **No Emojis**: Strictly avoid emojis anywhere in the description text.
-2. **Character Limits**: Steam Workshop descriptions have a max limit of ~17,000 raw BBCode characters. Keep bullet points concise and direct.
+2. **Length**: Steam caps descriptions at 8,000 characters of raw BBCode (a longer one fails the upload with "Invalid Parameter"); stay under ~7,500. Keep bullet points concise and direct.
 3. **No Planned Section**: Do not include speculative 'Planned' sections in the public description. List a page only when its phase is marked Done in `wiki/Roadmap.md`.
 4. **Valid Steam BBCode**:
    - Headers: `[h1]Title[/h1]`
@@ -56,7 +56,7 @@ The Records button of the top bar or Shift+J opens a window that writes your cam
 - [b]War Diary:[/b] a dated log of wars, peace, capitulations, annexations, subjects, your faction, every state and victory point taken or lost with the general on the spot, changes of government and your officers' careers. Filters by kind; a button on a line about a place moves the camera there.
 - [b]Officers:[/b] every general and admiral with his portrait in a table you can sort, and a file for each: commissioned, promoted, battles won and lost, states and victory points taken under him, his command (divisions by kind, planning, entrenchment, equipment) and his traits with their effects. An Order of battle view lists your field marshals with the generals under them, worked out once a day from where their troops stand. A retired officer keeps his record. Award him your country's medals from the game, by name and icon: for an officer a record only, with no bonus and no cost.
 - Officers that other mods add are listed as well. Their portraits show for the mods this build knows; from other mods they show the unknown leader.
-- [b]Government:[/b] head of government, parties and their leaders, laws, cabinet, high command, faction and subjects, each name with the day it took office.
+- [b]Government:[/b] head of government, laws, cabinet, high command, faction and subjects, each name with the day it took office and each advisor's traits with their effects. Party support month by month over 2, 5 or 10 years, drawn like a poll tracker with who governed and the elections. Your intelligence agency: its upgrades, your operatives with their missions, your ciphers and what you know of other countries.
 - [b]Wars:[/b] one row per enemy and per finished war, and a file for the war you click: the flags and heads of government of both sides, days, your casualties, states and victory points taken and lost, how it ended.
 - [b]Unit honours[/b] (By Blood Alone): your divisions that stand in an enemy capital when it falls get a line in their own history. A button beside the state view cites the divisions in a state the same way. The Battle honours switch on the War Diary turns the automatic line off.
 - The record starts on the day the mod is first active in a game. Nothing can be typed into a page, and the game gives no page the name of a division or a ship.
