@@ -82,11 +82,16 @@ def without_text(lay):
     return out
 
 
+def rgb_pixels(image):
+    """The (r, g, b) tuples of an RGB image, row by row."""
+    return list(zip(*[iter(image.tobytes())] * 3))
+
+
 def measure(full, ground, box):
     """(text luminance, ground luminance) inside box, or None when no glyph is drawn there."""
     a = full.crop(box).convert("RGB")
     b = ground.crop(box).convert("RGB")
-    pa, pb = list(a.getdata()), list(b.getdata())
+    pa, pb = rgb_pixels(a), rgb_pixels(b)
     lums = sorted(luminance(p) for p in pb)
     if not lums:
         return None
