@@ -280,6 +280,14 @@ Candidate engine facts (for the orchestrator at the close):
 - [x] Scene file and recipe (`tools/scenes/government.json`), reference capture
 - [ ] The tester's judgement
 
+Redesign round, closed 2026-10-31 (the user: "Everything seems good in game"):
+
+- [x] The user's own test in their campaign (Game checks rows 5 to 7); committed and pushed at their request (`b9842ff`).
+- [x] Register: the handoffs' new facts recorded as CRASH-012 (X81, a refused trigger argument crashes when evaluated), SCR-096 (X82, operative missions), SCR-097 (X83, intel in percent points), SCR-098 (X84, encryption strength), SCR-099 (X85, `GetCodeName`), SCR-100 (X86, a text function of 0), SCR-101 (X87, the phantom `political_advisor` element), LOC-018 (X88, trait names with a line break), SCR-102 (X89, the 21 agency upgrades), MODF-004 (X90, texts of generated modifiers). Dropped: the design's "17 upgrades" (21 in the build) and its provisional phantom fact (SCR-101 replaces it). `Export-HoiKnowledge.ps1 -Repo hoi4-manager-pages` run; the audit 0 blocking.
+- [x] `wiki/Scripted-GUIs.md` (the page's row and four value checks), Roadmap, README, Workshop description; `version` 1.3.
+- [ ] Reference capture (`Invoke-GameCheck.ps1 government -SaveReference`): not taken, no launch granted; the user's capture `scratch/phases/E3/checks/user-test-2026-10-31b.jpg` stands for it until then.
+- Open for later rounds: the Officers page's `has_trait` cache (E2, 304 traits) is the CRASH-012 class on a playset that drops a trait; the Road to 56 faces in a companion mod (decision 3).
+
 ## Redesign build (2026-10-16)
 
 Status: built and checked by render and tests; not seen in game. Design, decisions and mock-ups: `scratch/redesign/e-officers-gov/` of the main repository; the renders of the build in `build/`. The page stays in the Records window (user's decision).
